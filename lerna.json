@@ -1,0 +1,9 @@
+{
+  "packages": ["packages/@cdk-cosmos/*", "packages/@cosmos-building-blocks/*"],
+  "version": "0.1.0-alpha.0",
+  "command": {
+    "publish": {
+      "registry": "https://registry.npmjs.org"
+    }
+  }
+}
