@@ -1,6 +1,6 @@
 {
   "name": "@cdk-cosmos/core",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -13,6 +13,9 @@
     "type": "git",
     "url": "https://github.com/cdk-cosmos/cosmos.git",
     "directory": "packages/@cdk-cosmos/core"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsc",
@@ -73,5 +76,5 @@
     "tslint": "^6.0.0",
     "typescript": "^3.7.2"
   },
-  "gitHead": "74bc533f38d503155571b32844d19a668226b25a"
+  "gitHead": "ce22f6c18e8ca6145cae777099e8b2e679b01291"
 }
