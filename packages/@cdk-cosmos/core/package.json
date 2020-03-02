@@ -1,6 +1,6 @@
 {
   "name": "@cdk-cosmos/core",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -25,6 +25,7 @@
     "prepublishOnly": "npm run tslint && npm run test && npm run build"
   },
   "peerDependencies": {
+    "@aws-cdk/aws-cloudformation": "^1.23.0",
     "@aws-cdk/aws-codebuild": "^1.23.0",
     "@aws-cdk/aws-codecommit": "^1.23.0",
     "@aws-cdk/aws-codepipeline": "^1.23.0",
@@ -35,9 +36,8 @@
     "@aws-cdk/aws-elasticloadbalancingv2": "^1.23.0",
     "@aws-cdk/aws-elasticloadbalancingv2-targets": "^1.23.0",
     "@aws-cdk/aws-iam": "^1.23.0",
-    "@aws-cdk/aws-route53": "^1.23.0",
     "@aws-cdk/aws-lambda": "^1.23.0",
-    "@aws-cdk/aws-cloudformation": "^1.23.0",
+    "@aws-cdk/aws-route53": "^1.23.0",
     "@aws-cdk/core": "^1.23.0"
   },
   "devDependencies": {
