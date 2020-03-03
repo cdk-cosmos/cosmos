@@ -51,11 +51,11 @@ export interface ICiCdSolarSystem extends IEcsSolarSystem {}
 
 // Extensions
 
-export interface IPortal<T extends IBubble> {
+export interface IExtension<T extends IBubble> extends IBubble {
   Portal: T;
 }
 
-export interface ICosmosExtension extends IBubble, IPortal<ICosmos> {
+export interface ICosmosExtension extends IExtension<ICosmos> {
   Scope: Construct;
   Version: string;
   Galaxies: Array<IGalaxy | IGalaxyExtension>;
@@ -66,22 +66,22 @@ export interface ICosmosExtension extends IBubble, IPortal<ICosmos> {
   AddSolarSystem(solarSystem: ISolarSystem | ISolarSystemExtension): void;
 }
 
-export interface IGalaxyExtension extends IBubble, IPortal<IGalaxy> {
+export interface IGalaxyExtension extends IExtension<IGalaxy> {
   Cosmos: ICosmosExtension;
   SolarSystems: Array<ISolarSystem | ISolarSystemExtension>;
 
   AddSolarSystem(solarSystem: ISolarSystem | ISolarSystemExtension): void;
 }
 
-export interface ISolarSystemExtension extends IBubble, IPortal<ISolarSystem> {
+export interface ISolarSystemExtension extends IExtension<ISolarSystem> {
   Galaxy: IGalaxyExtension;
 }
 
-export interface IEcsSolarSystemExtension extends IBubble, IPortal<IEcsSolarSystem> {
+export interface IEcsSolarSystemExtension extends IExtension<IEcsSolarSystem> {
   Galaxy: IGalaxyExtension;
 }
 
-export interface ICiCdSolarSystemExtension extends IBubble, IPortal<IEcsSolarSystem> {
+export interface ICiCdSolarSystemExtension extends IExtension<IEcsSolarSystem> {
   Galaxy: IGalaxyExtension;
   DeployProject: IProject;
 }

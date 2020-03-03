@@ -15,7 +15,7 @@ export class CdkCredentialsPlugin implements Plugin {
 }
 
 export class CdkCredentialsProvider implements CredentialProviderSource {
-  name: string = '@carnivalofthecosmos/cdk-credentials-plugin';
+  name: string = 'cdk-credentials-plugin';
   cache: { [key: string]: ChainableTemporaryCredentials } = {};
 
   async isAvailable(): Promise<boolean> {
