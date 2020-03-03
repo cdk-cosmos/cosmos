@@ -14,6 +14,9 @@
     "url": "https://github.com/cdk-cosmos/cosmos.git",
     "directory": "packages/@cdk-cosmos/template"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",

@@ -1,5 +1,5 @@
 {
-  "name": "carnivalofthecosmos-cdk",
+  "name": "cdk-cosmos",
   "private": true,
   "scripts": {
     "link": "lerna link",

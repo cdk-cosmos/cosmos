@@ -74,9 +74,11 @@ export class CosmosStack extends Stack implements ICosmos {
 
   AddGalaxy(galaxy: IGalaxy) {
     this.Galaxies.push(galaxy);
+    galaxy.node.addDependency(this);
   }
   AddSolarSystem(solarSystem: ISolarSystem) {
     this.SolarSystems.push(solarSystem);
+    solarSystem.node.addDependency(this);
   }
 }
 
@@ -129,8 +131,10 @@ export class CosmosExtensionStack extends Stack implements ICosmosExtension {
 
   AddGalaxy(galaxy: IGalaxy | IGalaxyExtension) {
     this.Galaxies.push(galaxy);
+    galaxy.node.addDependency(this);
   }
   AddSolarSystem(solarSystem: ISolarSystem | ISolarSystemExtension) {
     this.SolarSystems.push(solarSystem);
+    solarSystem.node.addDependency(this);
   }
 }
