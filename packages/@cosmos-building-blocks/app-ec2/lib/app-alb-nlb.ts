@@ -1,5 +1,4 @@
 import { CfnOutput, Construct, Fn } from '@aws-cdk/core';
-// import { NestedStack, NestedStackProps } from '@aws-cdk/aws-cloudformation';
 import {
   CfnVPCEndpoint,
   CfnVPCEndpointService,
@@ -44,20 +43,22 @@ export interface AppNlbComboCloudwatchLambdaRuleProps {
   lambdaForUpdatingTargets: IFunction;
   scheduleRate?: string;
   // targetInputText: string;
+  // eslint unhappy about any but that is the type the cdk expects
+  // eslint-disable-next-line
   targetInputObject: any;
 }
 
 export interface AppNlbComboInterfaceVpcEndpointProps {
-  vpcEndpointServiceLoadBalancers: IVpcEndpointServiceLoadBalancer[];
   envName: string;
   exportName?: string;
   port?: number;
   subnetType?: SubnetType;
   vpc: IVpc;
+  vpcEndpointServiceLoadBalancers: IVpcEndpointServiceLoadBalancer[];
   whitelistedPrincipals?: ArnPrincipal[];
 }
 
-export interface NlbEndpointComboProps extends AppProps { 
+export interface NlbEndpointComboProps extends AppProps {
   albDnsAddress: string;
   lambdaForUpdatingTargets: IFunction;
   nlbEndpointVpc?: IVpc;

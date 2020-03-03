@@ -1,7 +1,7 @@
 import { expect as expectCDK, haveResource, SynthUtils } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
 import * as route53 from '@aws-cdk/aws-route53';
-import  = require('../lib/index');
+import * as appEc2 from '../lib/index';
 
 test('Empty Stack', () => {
     const app = new cdk.App();

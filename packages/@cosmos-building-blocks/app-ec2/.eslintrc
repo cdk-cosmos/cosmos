@@ -18,8 +18,10 @@
         "imports": "always-multiline",
         "exports": "always-multiline"
       }],
+      "import/newline-after-import": "off",
       "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
       "import/prefer-default-export": "off",
+      "lines-between-class-members": "off",
       "max-classes-per-file": "off",
       "max-len": ["error", 160],
       "new-cap": ["warn", {
