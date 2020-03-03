@@ -5,7 +5,7 @@ export {
   ISolarSystem,
   IEcsSolarSystem,
   ICiCdSolarSystem,
-  IPortal,
+  IExtension as IPortal,
   ICosmosExtension,
   IGalaxyExtension,
   ISolarSystemExtension,

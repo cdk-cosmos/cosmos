@@ -45,7 +45,6 @@ export class GalaxyStack extends Stack implements IGalaxy {
   AddSolarSystem(solarSystem: ISolarSystem) {
     this.SolarSystems.push(solarSystem);
     this.Cosmos.AddSolarSystem(solarSystem);
-    solarSystem.node.addDependency(this);
   }
 }
 
@@ -88,6 +87,5 @@ export class GalaxyExtensionStack extends Stack implements IGalaxyExtension {
   AddSolarSystem(solarSystem: ISolarSystem | ISolarSystemExtension) {
     this.SolarSystems.push(solarSystem);
     this.Cosmos.AddSolarSystem(solarSystem);
-    solarSystem.node.addDependency(this);
   }
 }

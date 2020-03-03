@@ -111,10 +111,7 @@ export class CiCdSolarSystemStack extends Stack implements ICiCdSolarSystem {
       cdkRepo: CdkRepo,
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', CdkMasterRoleStaticArn, { mutable: false }),
       // deployVpc: this.Vpc,
-      deployEnvs: {
-        NPM_REGISTRY_API_KEY: { value: 'TODO: Remove This' },
-      },
-      deployStacks: [`Core-*`],
+      deployStacks: [`Cosmos-Core-*`],
     });
     this.CdkDeploy = pipeline.Deploy;
 
@@ -160,7 +157,7 @@ export class CiCdSolarSystemExtensionStack extends Stack implements ICiCdSolarSy
   readonly DeployProject: Project;
 
   constructor(galaxy: IGalaxyExtension, props?: StackProps) {
-    super(galaxy.Cosmos.Scope, `Cosmos-App-${galaxy.Cosmos.Name}-Galaxy-${galaxy.Name}-CiCd`, {
+    super(galaxy.Cosmos.Scope, `Cosmos-App-${galaxy.Cosmos.Name}-Galaxy-${galaxy.Name}-SolarSystem-CiCd`, {
       ...props,
       env: {
         account: props?.env?.account || galaxy.account,
