@@ -11,8 +11,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/carnivalofthecosmos/cdk.git",
-    "directory": "packages/@carnivalofthecosmos/template"
+    "url": "https://github.com/cdk-cosmos/cosmos.git",
+    "directory": "packages/@cosmos-building-blocks/app-ec2"
   },
   "scripts": {
     "build": "tsc",

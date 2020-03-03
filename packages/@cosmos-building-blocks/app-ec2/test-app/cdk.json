@@ -1,3 +1,0 @@
-{
-  "app": "npx ts-node src/test-app.ts"
-}
