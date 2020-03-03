@@ -311,6 +311,13 @@ export class NlbEndpointCombo extends Construct {
         ttl: '60',
         // Comment, record_set[:comment]
       });
+
+      // FIXTO:
+      // new CnameRecord(this, 'cname', {
+      //   domainName: endpointdns,
+      //   recordName: props.baseHost,
+      //   zone: zone
+      // }
     }
   }
 }
