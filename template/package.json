@@ -1,6 +1,7 @@
 {
   "name": "@cdk-cosmos/lib-template",
   "version": "0.1.0",
+  "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -24,8 +25,7 @@
     "clean": "rm lib/*.js lib/*.d.ts",
     "format": "prettier --write lib/**/*.ts",
     "lint": "./node_modules/.bin/eslint lib/**/*.ts",
-    "tslint": "tslint -p tsconfig.json",
-    "prepublishOnly": "npm run tslint && npm run test && npm run build"
+    "prepublishOnly": "npm run lint && npm run test && npm run build"
   },
   "peerDependencies": {
     "@aws-cdk/core": "^1.23.0"
