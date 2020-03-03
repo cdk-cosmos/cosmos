@@ -96,6 +96,8 @@ export class AppNlbComboCloudwatchLambdaRule extends Construct {
 
 export class AppAlb extends Construct {
   public readonly albDnsAddress: string;
+  public readonly listener: CfnListener;
+  public readonly internalListener: CfnListener;
 
   constructor(scope: Construct, id: string, props: AppAlbProps) {
     super(scope, id);
@@ -158,10 +160,14 @@ export class AppAlb extends Construct {
       exportName: `${props.envName}-Listener`,
     });
 
+    this.listener = listener;
+
     new CfnOutput(this, 'InternalListenerOutput', {
       value: internalListener.ref,
       exportName: `${props.envName}-InternalListener`,
     });
+
+    this.internalListener = internalListener;
 
     this.albDnsAddress = uiAlb.loadBalancerDnsName;
   }
@@ -169,6 +175,8 @@ export class AppAlb extends Construct {
 
 export class AppNlbComboInterfaceVpcEndpoint extends Construct {
   public readonly interfaceVpcEndpoint: IInterfaceVpcEndpoint;
+  public readonly vpcEndpointId: string;
+  public readonly endpointDns: string;
 
   constructor(scope: Construct, id: string, props: AppNlbComboInterfaceVpcEndpointProps) {
     super(scope, id);
@@ -210,12 +218,16 @@ export class AppNlbComboInterfaceVpcEndpoint extends Construct {
       exportName: `${props.envName}-${exportName}`,
     });
 
+    this.vpcEndpointId = this.interfaceVpcEndpoint.vpcEndpointId;
+
     const cfnVpcEndpoint = this.interfaceVpcEndpoint.node.findChild('Resource') as CfnVPCEndpoint;
 
     new CfnOutput(this, 'ListenerOutput', {
       value: Fn.select(1, Fn.split(':', Fn.select(0, cfnVpcEndpoint.attrDnsEntries))),
       exportName: `${props.envName}-EndpointDns`,
     });
+
+    this.endpointDns = Fn.select(1, Fn.split(':', Fn.select(0, cfnVpcEndpoint.attrDnsEntries)));
   }
 }
 

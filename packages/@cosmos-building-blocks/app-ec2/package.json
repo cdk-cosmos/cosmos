@@ -22,7 +22,7 @@
     "clean": "rm lib/*.js lib/*.d.ts",
     "format": "prettier --write lib/**/*.ts",
     "lint": "./node_modules/.bin/eslint lib/**/*.ts",
-    "prepublishOnly": "npm run lint && npm run test && npm run build"
+    "prepublishOnly": "npm run format && npm run clean && npm run lint && npm run test && npm run build"
   },
   "devDependencies": {
     "@aws-cdk/assert": "^1.26.0",
