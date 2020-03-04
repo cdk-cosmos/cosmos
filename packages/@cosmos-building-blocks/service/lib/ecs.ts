@@ -28,7 +28,6 @@ export interface EcsServiceProps {
   };
 }
 
-// TODO: Split into Generic version and Consumer Version
 export class EcsService extends Construct {
   readonly TaskDefinition: Ec2TaskDefinition;
   readonly Service: Ec2Service;

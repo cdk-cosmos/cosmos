@@ -24,7 +24,7 @@ export interface AppNodePipelineProps {
   codeBranch?: string;
   buildRole?: IRole;
   buildEnvs?: BuildEnvironmentVariables;
-  buildSpec?: { [key: string]: any };
+  buildSpec?: BuildSpec | { [key: string]: any };
 }
 
 export class AppNodePipeline extends Construct {
@@ -55,7 +55,7 @@ export class AppNodePipeline extends Construct {
         repository: codeRepo,
         branchOrRef: codeBranch,
       }),
-      buildSpec: BuildSpec.fromObject(buildSpec),
+      buildSpec: buildSpec instanceof BuildSpec ? buildSpec : BuildSpec.fromObject(buildSpec),
       environment: {
         buildImage: LinuxBuildImage.STANDARD_3_0,
         environmentVariables: buildEnvs,
