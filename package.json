@@ -8,7 +8,43 @@
     "watch": "lerna run watch",
     "clean": "lerna run clean"
   },
+  "workspaces": {
+    "packages": [
+      "packages/@cdk-cosmos/*",
+      "packages/@cosmos-building-blocks/*"
+    ]
+  },
+  "dependencies": {
+    "@cdk-cosmos/cdk-credentials-plugin": "file:packages/@cdk-cosmos/cdk-credentials-plugin",
+    "@cdk-cosmos/core": "file:packages/@cdk-cosmos/core",
+    "@cosmos-building-blocks/pipeline": "file:packages/@cosmos-building-blocks/pipeline",
+    "@cosmos-building-blocks/service": "file:packages/@cosmos-building-blocks/service"
+  },
   "devDependencies": {
-    "lerna": "^3.20.2"
+    "@aws-cdk/assert": "1.23.0",
+    "@aws-cdk/aws-cloudformation": "1.23.0",
+    "@aws-cdk/aws-codebuild": "1.23.0",
+    "@aws-cdk/aws-codecommit": "1.23.0",
+    "@aws-cdk/aws-codepipeline": "1.23.0",
+    "@aws-cdk/aws-codepipeline-actions": "1.23.0",
+    "@aws-cdk/aws-ec2": "1.23.0",
+    "@aws-cdk/aws-ecr": "1.23.0",
+    "@aws-cdk/aws-ecs": "1.23.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "1.23.0",
+    "@aws-cdk/aws-elasticloadbalancingv2-targets": "1.23.0",
+    "@aws-cdk/aws-iam": "1.23.0",
+    "@aws-cdk/aws-lambda": "1.23.0",
+    "@aws-cdk/aws-route53": "1.23.0",
+    "@aws-cdk/core": "1.23.0",
+    "@types/cfn-response": "^1.0.1",
+    "@types/jest": "^24.0.22",
+    "@types/node": "^10.17.5",
+    "aws-cdk": "1.23.0",
+    "jest": "^24.9.0",
+    "lerna": "^3.20.2",
+    "source-map-support": "^0.5.16",
+    "ts-jest": "^24.1.0",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.2"
   }
 }
