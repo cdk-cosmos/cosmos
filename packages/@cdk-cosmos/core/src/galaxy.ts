@@ -1,21 +1,21 @@
 import { Construct, Stack, StackProps } from '@aws-cdk/core';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
-import { ICosmos, IGalaxy, ISolarSystem, ICosmosExtension, IGalaxyExtension } from '.';
-import { ISolarSystemExtension } from './interfaces';
+import { Cosmos, Galaxy, SolarSystem, CosmosExtension, GalaxyExtension } from '.';
+import { SolarSystemExtension } from './interfaces';
 
 export interface GalaxyStackProps extends StackProps {
   cidr: string;
 }
 
-export class GalaxyStack extends Stack implements IGalaxy {
-  readonly Cosmos: ICosmos;
-  readonly SolarSystems: ISolarSystem[];
+export class GalaxyStack extends Stack implements Galaxy {
+  readonly Cosmos: Cosmos;
+  readonly SolarSystems: SolarSystem[];
   readonly Name: string;
   readonly NetworkBuilder: NetworkBuilder;
   readonly CdkCrossAccountRole?: Role;
 
-  constructor(cosmos: ICosmos, name: string, props: GalaxyStackProps) {
+  constructor(cosmos: Cosmos, name: string, props: GalaxyStackProps) {
     super(cosmos.Scope, `Cosmos-Core-Galaxy-${name}`, {
       ...props,
       env: {
@@ -42,33 +42,34 @@ export class GalaxyStack extends Stack implements IGalaxy {
     }
   }
 
-  AddSolarSystem(solarSystem: ISolarSystem) {
+  AddSolarSystem(solarSystem: SolarSystem): void {
     this.SolarSystems.push(solarSystem);
     this.Cosmos.AddSolarSystem(solarSystem);
   }
 }
 
-export class ImportedGalaxy extends Construct implements IGalaxy {
-  readonly Cosmos: ICosmos;
+export class ImportedGalaxy extends Construct implements Galaxy {
+  readonly Cosmos: Cosmos;
   readonly Name: string;
 
-  constructor(scope: Construct, cosmos: ICosmos, name: string) {
+  constructor(scope: Construct, cosmos: Cosmos, name: string) {
     super(scope, `Cosmos-Core-Galaxy-${name}`);
 
     this.Cosmos = cosmos;
     this.Name = name;
   }
 
-  AddSolarSystem() {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  AddSolarSystem(): void {}
 }
 
-export class GalaxyExtensionStack extends Stack implements IGalaxyExtension {
-  readonly Cosmos: ICosmosExtension;
-  readonly SolarSystems: Array<ISolarSystem | ISolarSystemExtension>;
-  readonly Portal: IGalaxy;
+export class GalaxyExtensionStack extends Stack implements GalaxyExtension {
+  readonly Cosmos: CosmosExtension;
+  readonly SolarSystems: Array<SolarSystem | SolarSystemExtension>;
+  readonly Portal: Galaxy;
   readonly Name: string;
 
-  constructor(cosmos: ICosmosExtension, name: string, props?: StackProps) {
+  constructor(cosmos: CosmosExtension, name: string, props?: StackProps) {
     super(cosmos.Scope, `Cosmos-App-${cosmos.Name}-Galaxy-${name}`, {
       ...props,
       env: {
@@ -84,7 +85,7 @@ export class GalaxyExtensionStack extends Stack implements IGalaxyExtension {
     this.Name = name;
   }
 
-  AddSolarSystem(solarSystem: ISolarSystem | ISolarSystemExtension) {
+  AddSolarSystem(solarSystem: SolarSystem | SolarSystemExtension): void {
     this.SolarSystems.push(solarSystem);
     this.Cosmos.AddSolarSystem(solarSystem);
   }

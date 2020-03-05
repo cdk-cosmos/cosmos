@@ -1,19 +1,19 @@
 import { Construct, Stack, StackProps } from '@aws-cdk/core';
 import { IVpc, SubnetType, Vpc, GatewayVpcEndpointAwsService, InterfaceVpcEndpointAwsService } from '@aws-cdk/aws-ec2';
-import { IHostedZone, HostedZone, ZoneDelegationRecord } from '@aws-cdk/aws-route53';
-import { IGalaxy, IGalaxyExtension, ISolarSystem, ISolarSystemExtension, RemoteVpc, RemoteZone } from '.';
+import { IHostedZone, HostedZone } from '@aws-cdk/aws-route53';
+import { Galaxy, GalaxyExtension, SolarSystem, SolarSystemExtension, RemoteVpc, RemoteZone } from '.';
 
 export interface SolarSystemProps extends StackProps {
   cidr?: string;
 }
 
-export class SolarSystemStack extends Stack implements ISolarSystem {
-  readonly Galaxy: IGalaxy;
+export class SolarSystemStack extends Stack implements SolarSystem {
+  readonly Galaxy: Galaxy;
   readonly Name: string;
   readonly Vpc: Vpc;
   readonly Zone: HostedZone;
 
-  constructor(galaxy: IGalaxy, name: string, props?: SolarSystemProps) {
+  constructor(galaxy: Galaxy, name: string, props?: SolarSystemProps) {
     super(galaxy.Cosmos.Scope, `Cosmos-Core-Galaxy-${galaxy.Name}-SolarSystem-${name}`, {
       ...props,
       env: {
@@ -85,13 +85,13 @@ export class SolarSystemStack extends Stack implements ISolarSystem {
   }
 }
 
-export class ImportedSolarSystem extends Construct implements ISolarSystem {
-  readonly Galaxy: IGalaxy;
+export class ImportedSolarSystem extends Construct implements SolarSystem {
+  readonly Galaxy: Galaxy;
   readonly Name: string;
   readonly Vpc: IVpc;
   readonly Zone: IHostedZone;
 
-  constructor(scope: Construct, galaxy: IGalaxy, name: string) {
+  constructor(scope: Construct, galaxy: Galaxy, name: string) {
     super(scope, `Cosmos-Core-Galaxy-${galaxy.Name}-SolarSystem-${name}`);
 
     this.Galaxy = galaxy;
@@ -101,12 +101,12 @@ export class ImportedSolarSystem extends Construct implements ISolarSystem {
   }
 }
 
-export class SolarSystemExtensionStack extends Stack implements ISolarSystemExtension {
-  readonly Galaxy: IGalaxyExtension;
-  readonly Portal: ISolarSystem;
+export class SolarSystemExtensionStack extends Stack implements SolarSystemExtension {
+  readonly Galaxy: GalaxyExtension;
+  readonly Portal: SolarSystem;
   readonly Name: string;
 
-  constructor(galaxy: IGalaxyExtension, name: string, props?: StackProps) {
+  constructor(galaxy: GalaxyExtension, name: string, props?: StackProps) {
     super(galaxy.Cosmos.Scope, `Cosmos-App-${galaxy.Cosmos.Name}-Galaxy-${galaxy.Name}-SolarSystem-${name}`, {
       ...props,
       env: {

@@ -21,11 +21,10 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "clean": "rm lib/*.js lib/*.d.ts",
-    "format": "prettier --write lib/**/*.ts",
-    "lint": "./node_modules/.bin/eslint lib/**/*.ts",
-    "tslint": "tslint -p tsconfig.json",
-    "prepublishOnly": "npm run tslint && npm run test && npm run build"
+    "lint": "eslint . --ext .js,.ts",
+    "format": "prettier --write **/*.ts !**/*.d.ts",
+    "clean": "rm -rf lib",
+    "prepublishOnly": "yarn lint && yarn test && yarn build"
   },
   "peerDependencies": {
     "@aws-cdk/aws-cloudformation": "^1.23.0",

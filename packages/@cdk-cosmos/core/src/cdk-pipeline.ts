@@ -1,4 +1,4 @@
-import { Construct, RemovalPolicy, PhysicalName } from '@aws-cdk/core';
+import { Construct, RemovalPolicy } from '@aws-cdk/core';
 import { Bucket, BucketEncryption } from '@aws-cdk/aws-s3';
 import { IRepository } from '@aws-cdk/aws-codecommit';
 import { Pipeline, Artifact, StageOptions } from '@aws-cdk/aws-codepipeline';
@@ -20,7 +20,7 @@ import {
 } from '@aws-cdk/aws-codebuild';
 import { IRole } from '@aws-cdk/aws-iam';
 import { IVpc } from '@aws-cdk/aws-ec2';
-import { IBubble } from '.';
+import { Bubble } from '.';
 
 export interface BuildEnvironmentVariables {
   [key: string]: BuildEnvironmentVariable;
@@ -74,6 +74,7 @@ export class CdkPipeline extends Construct {
               nodejs: '12',
             },
           },
+          // eslint-disable-next-line @typescript-eslint/camelcase
           pre_build: {
             commands: ['npm ci'],
           },
@@ -147,17 +148,13 @@ export class CdkPipeline extends Construct {
   }
 }
 
-interface ISolarSystem extends IBubble {
-  Galaxy: IBubble & { Cosmos: IBubble & { CdkRepo: IRepository } };
-}
-
 export const addCdkDeployEnvStageToPipeline = (props: {
   pipeline: Pipeline;
   deployProject: IProject;
   deployEnvs?: BuildEnvironmentVariables;
-  solarSystem: ISolarSystem;
+  solarSystem: Bubble & { Galaxy: Bubble & { Cosmos: Bubble & { CdkRepo: IRepository } } };
   isManualApprovalRequired?: boolean;
-}) => {
+}): void => {
   const { pipeline, deployProject, deployEnvs = {}, solarSystem, isManualApprovalRequired = true } = props || {};
   const projectName = solarSystem.Galaxy.Cosmos.Name;
   const accountName = solarSystem.Galaxy.Name;
@@ -201,7 +198,7 @@ export const addCdkDeployEnvStageToPipeline = (props: {
       new ManualApprovalAction({
         actionName: 'CdkApproval',
         runOrder: 1,
-      }),
+      })
     );
   }
 

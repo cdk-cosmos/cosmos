@@ -1,16 +1,16 @@
 export {
-  IBubble,
-  ICosmos,
-  IGalaxy,
-  ISolarSystem,
-  IEcsSolarSystem,
-  ICiCdSolarSystem,
-  IExtension as IPortal,
-  ICosmosExtension,
-  IGalaxyExtension,
-  ISolarSystemExtension,
-  IEcsSolarSystemExtension,
-  ICiCdSolarSystemExtension,
+  Bubble,
+  Cosmos,
+  Galaxy,
+  SolarSystem,
+  EcsSolarSystem,
+  CiCdSolarSystem,
+  Extension,
+  CosmosExtension,
+  GalaxyExtension,
+  SolarSystemExtension,
+  EcsSolarSystemExtension,
+  CiCdSolarSystemExtension,
 } from './interfaces';
 
 export {

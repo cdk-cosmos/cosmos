@@ -1,0 +1,23 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+    "jest": true,
+    "jest/globals": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "prettier", "jest"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
+    // "plugin:jest/recommended"
+    // "plugin:jest/style"
+  ],
+  "rules": {
+    "prettier/prettier": "error"
+  },
+  "ignorePatterns": ["**/lib/*.js", "**/*.d.ts"]
+}

@@ -1,6 +1,5 @@
 import { Stack, StackProps, Construct } from '@aws-cdk/core';
 import { Vpc, SubnetType, InstanceType, IVpc } from '@aws-cdk/aws-ec2';
-import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { HostedZone, ZoneDelegationRecord, IHostedZone } from '@aws-cdk/aws-route53';
 import { Cluster, ICluster } from '@aws-cdk/aws-ecs';
 import {
@@ -15,11 +14,11 @@ import {
 import { Project } from '@aws-cdk/aws-codebuild';
 import { Role } from '@aws-cdk/aws-iam';
 import {
-  IGalaxy,
-  IEcsSolarSystem,
-  ICiCdSolarSystem,
-  IGalaxyExtension,
-  ICiCdSolarSystemExtension,
+  Galaxy,
+  EcsSolarSystem,
+  CiCdSolarSystem,
+  GalaxyExtension,
+  CiCdSolarSystemExtension,
   RemoteVpc,
   RemoteZone,
   RemoteCluster,
@@ -32,8 +31,8 @@ export interface CiCdStackProps extends StackProps {
   cidr: string;
 }
 
-export class CiCdSolarSystemStack extends Stack implements ICiCdSolarSystem {
-  readonly Galaxy: IGalaxy;
+export class CiCdSolarSystemStack extends Stack implements CiCdSolarSystem {
+  readonly Galaxy: Galaxy;
   readonly Name: string;
   readonly Vpc: Vpc;
   readonly Zone: HostedZone;
@@ -42,7 +41,7 @@ export class CiCdSolarSystemStack extends Stack implements ICiCdSolarSystem {
   readonly HttpListener: ApplicationListener;
   readonly CdkDeploy: Project;
 
-  constructor(galaxy: IGalaxy, props: CiCdStackProps) {
+  constructor(galaxy: Galaxy, props: CiCdStackProps) {
     super(galaxy.Cosmos.Scope, `Cosmos-Core-Galaxy-${galaxy.Name}-SolarSystem-CiCd`, {
       ...props,
       env: {
@@ -124,8 +123,8 @@ export class CiCdSolarSystemStack extends Stack implements ICiCdSolarSystem {
   }
 }
 
-export class ImportedCiCdSolarSystem extends Construct implements ICiCdSolarSystem {
-  readonly Galaxy: IGalaxy;
+export class ImportedCiCdSolarSystem extends Construct implements CiCdSolarSystem {
+  readonly Galaxy: Galaxy;
   readonly Name: string;
   readonly Vpc: IVpc;
   readonly Zone: IHostedZone;
@@ -134,7 +133,7 @@ export class ImportedCiCdSolarSystem extends Construct implements ICiCdSolarSyst
   readonly HttpListener: IApplicationListener;
   // readonly CdkDeploy: IProject;
 
-  constructor(scope: Construct, galaxy: IGalaxy) {
+  constructor(scope: Construct, galaxy: Galaxy) {
     super(scope, `Cosmos-Core-Galaxy-${galaxy.Name}-SolarSystem-CiCd`);
 
     this.Galaxy = galaxy;
@@ -149,14 +148,14 @@ export class ImportedCiCdSolarSystem extends Construct implements ICiCdSolarSyst
   }
 }
 
-export class CiCdSolarSystemExtensionStack extends Stack implements ICiCdSolarSystemExtension {
-  readonly Galaxy: IGalaxyExtension;
+export class CiCdSolarSystemExtensionStack extends Stack implements CiCdSolarSystemExtension {
+  readonly Galaxy: GalaxyExtension;
   readonly Name: string;
-  readonly Portal: IEcsSolarSystem;
+  readonly Portal: EcsSolarSystem;
   readonly DeployPipeline: CdkPipeline;
   readonly DeployProject: Project;
 
-  constructor(galaxy: IGalaxyExtension, props?: StackProps) {
+  constructor(galaxy: GalaxyExtension, props?: StackProps) {
     super(galaxy.Cosmos.Scope, `Cosmos-App-${galaxy.Cosmos.Name}-Galaxy-${galaxy.Name}-SolarSystem-CiCd`, {
       ...props,
       env: {

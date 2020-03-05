@@ -14,9 +14,32 @@ import {
 import { IRole } from '@aws-cdk/aws-iam';
 import { NPM_RUN_BUILD, ECR_LOGIN, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION } from './commands';
 
-export interface BuildEnvironmentVariables {
+export type BuildEnvironmentVariables = {
   [key: string]: BuildEnvironmentVariable;
-}
+};
+
+export type BasicBuildSpecObject = {
+  version: '0.2';
+  phases: {
+    install: {
+      'runtime-versions': {
+        nodejs: string;
+      };
+    };
+    pre_build: {
+      commands: string[];
+    };
+    build: {
+      commands: string[];
+    };
+    post_build: {
+      commands: string[];
+    };
+  };
+  env: {
+    'exported-variables': string[];
+  };
+};
 
 export interface AppNodePipelineProps {
   name?: string;
@@ -24,7 +47,7 @@ export interface AppNodePipelineProps {
   codeBranch?: string;
   buildRole?: IRole;
   buildEnvs?: BuildEnvironmentVariables;
-  buildSpec?: BuildSpec | { [key: string]: any };
+  buildSpec?: BuildSpec | BasicBuildSpecObject | {};
 }
 
 export class AppNodePipeline extends Construct {
@@ -96,7 +119,7 @@ export class AppNodePipeline extends Construct {
     });
   }
 
-  static DefaultBuildSpec() {
+  static DefaultBuildSpec(): BasicBuildSpecObject {
     return {
       version: '0.2',
       phases: {
@@ -105,12 +128,14 @@ export class AppNodePipeline extends Construct {
             nodejs: '12',
           },
         },
+        // eslint-disable-next-line @typescript-eslint/camelcase
         pre_build: {
           commands: [ECR_LOGIN, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION],
         },
         build: {
           commands: [NPM_RUN_BUILD],
         },
+        // eslint-disable-next-line @typescript-eslint/camelcase
         post_build: {
           commands: [],
         },
@@ -121,7 +146,7 @@ export class AppNodePipeline extends Construct {
     };
   }
 
-  static DefaultAppBuildVersionStageEnv() {
+  static DefaultAppBuildVersionStageEnv(): BuildEnvironmentVariables {
     return {
       APP_BUILD_VERSION: {
         type: BuildEnvironmentVariableType.PLAINTEXT,

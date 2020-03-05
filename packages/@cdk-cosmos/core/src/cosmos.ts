@@ -1,18 +1,23 @@
+import * as fs from 'fs';
 import { Construct, Stack, StackProps, CfnOutput, Fn, Environment } from '@aws-cdk/core';
 import { HostedZone, IHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
-import package_json from '../package.json';
 import {
-  ICosmos,
-  IGalaxy,
-  ISolarSystem,
-  ICosmosExtension,
+  Cosmos,
+  Galaxy,
+  SolarSystem,
+  CosmosExtension,
   RemoteZone,
   RemoteCodeRepo,
-  ISolarSystemExtension,
-  IGalaxyExtension,
+  SolarSystemExtension,
+  GalaxyExtension,
 } from '.';
+
+const getPackageVersion: () => string = () => {
+  const file = fs.readFileSync('../package.json').toString();
+  return JSON.parse(file).version as string;
+};
 
 export interface CosmosStackProps extends StackProps {
   tld: string;
@@ -20,10 +25,10 @@ export interface CosmosStackProps extends StackProps {
   env: Environment;
 }
 
-export class CosmosStack extends Stack implements ICosmos {
+export class CosmosStack extends Stack implements Cosmos {
   readonly Scope: Construct;
-  readonly Galaxies: IGalaxy[];
-  readonly SolarSystems: ISolarSystem[];
+  readonly Galaxies: Galaxy[];
+  readonly SolarSystems: SolarSystem[];
   readonly Name: string;
   readonly Version: string;
   readonly CdkRepo: Repository;
@@ -40,7 +45,7 @@ export class CosmosStack extends Stack implements ICosmos {
     this.Galaxies = [];
     this.SolarSystems = [];
     this.Name = name;
-    this.Version = package_json.version;
+    this.Version = getPackageVersion();
 
     this.CdkRepo = new Repository(this, 'CdkRepo', {
       repositoryName: `core-cdk-repo`,
@@ -54,7 +59,7 @@ export class CosmosStack extends Stack implements ICosmos {
       roleName: 'Core-CdkMaster-Role',
       assumedBy: new CompositePrincipal(
         new ServicePrincipal('codebuild.amazonaws.com'),
-        new ServicePrincipal('codepipeline.amazonaws.com'),
+        new ServicePrincipal('codepipeline.amazonaws.com')
       ),
     });
     this.CdkMasterRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
@@ -72,15 +77,15 @@ export class CosmosStack extends Stack implements ICosmos {
     RemoteZone.export('CosmosCore', this.RootZone);
   }
 
-  AddGalaxy(galaxy: IGalaxy) {
+  AddGalaxy(galaxy: Galaxy): void {
     this.Galaxies.push(galaxy);
   }
-  AddSolarSystem(solarSystem: ISolarSystem) {
+  AddSolarSystem(solarSystem: SolarSystem): void {
     this.SolarSystems.push(solarSystem);
   }
 }
 
-export class ImportedCosmos extends Construct implements ICosmos {
+export class ImportedCosmos extends Construct implements Cosmos {
   readonly Scope: Construct;
   readonly Name: string;
   readonly Version: string;
@@ -99,15 +104,17 @@ export class ImportedCosmos extends Construct implements ICosmos {
     this.CdkMasterRoleStaticArn = `arn:aws:iam::${account}:role/Core-CdkMaster-Role`;
   }
 
-  AddGalaxy() {}
-  AddSolarSystem() {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  AddGalaxy(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  AddSolarSystem(): void {}
 }
 
-export class CosmosExtensionStack extends Stack implements ICosmosExtension {
+export class CosmosExtensionStack extends Stack implements CosmosExtension {
   readonly Scope: Construct;
-  readonly Galaxies: Array<IGalaxy | IGalaxyExtension>;
-  readonly SolarSystems: Array<ISolarSystem | ISolarSystemExtension>;
-  readonly Portal: ICosmos;
+  readonly Galaxies: Array<Galaxy | GalaxyExtension>;
+  readonly SolarSystems: Array<SolarSystem | SolarSystemExtension>;
+  readonly Portal: Cosmos;
   readonly Name: string;
   readonly Version: string;
   readonly CdkRepo: IRepository;
@@ -120,17 +127,17 @@ export class CosmosExtensionStack extends Stack implements ICosmosExtension {
     this.SolarSystems = [];
     this.Portal = new ImportedCosmos(this, this.account);
     this.Name = name;
-    this.Version = package_json.version;
+    this.Version = getPackageVersion();
 
     this.CdkRepo = new Repository(this, 'CdkRepo', {
       repositoryName: `app-${this.Name}-cdk-repo`.toLocaleLowerCase(),
     });
   }
 
-  AddGalaxy(galaxy: IGalaxy | IGalaxyExtension) {
+  AddGalaxy(galaxy: Galaxy | GalaxyExtension): void {
     this.Galaxies.push(galaxy);
   }
-  AddSolarSystem(solarSystem: ISolarSystem | ISolarSystemExtension) {
+  AddSolarSystem(solarSystem: SolarSystem | SolarSystemExtension): void {
     this.SolarSystems.push(solarSystem);
   }
 }

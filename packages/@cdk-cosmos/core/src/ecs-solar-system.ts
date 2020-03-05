@@ -1,4 +1,4 @@
-import { Construct, Stack, StackProps } from '@aws-cdk/core';
+import { Construct, StackProps } from '@aws-cdk/core';
 import { InstanceType } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster } from '@aws-cdk/aws-ecs';
 import {
@@ -11,10 +11,10 @@ import {
   IApplicationListener,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import {
-  IGalaxy,
-  IGalaxyExtension,
-  IEcsSolarSystem,
-  IEcsSolarSystemExtension,
+  Galaxy,
+  GalaxyExtension,
+  EcsSolarSystem,
+  EcsSolarSystemExtension,
   SolarSystemStack,
   SolarSystemProps,
   ImportedSolarSystem,
@@ -24,16 +24,16 @@ import {
   RemoteApplicationListener,
 } from '.';
 
-// ECS Target AppEnv
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EcsSolarSystemProps extends SolarSystemProps {}
 
-export class EcsSolarSystemStack extends SolarSystemStack implements IEcsSolarSystem {
+export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSystem {
   readonly Cluster: Cluster;
   readonly Alb: ApplicationLoadBalancer;
   readonly HttpListener: ApplicationListener;
   // readonly HttpsListener: ApplicationListener;
 
-  constructor(galaxy: IGalaxy, name: string, props?: EcsSolarSystemProps) {
+  constructor(galaxy: Galaxy, name: string, props?: EcsSolarSystemProps) {
     super(galaxy, name, props);
 
     this.Cluster = new Cluster(this, 'Cluster', {
@@ -74,13 +74,13 @@ export class EcsSolarSystemStack extends SolarSystemStack implements IEcsSolarSy
   }
 }
 
-export class ImportedEcsSolarSystem extends ImportedSolarSystem implements IEcsSolarSystem {
+export class ImportedEcsSolarSystem extends ImportedSolarSystem implements EcsSolarSystem {
   readonly Cluster: ICluster;
   readonly Alb: IApplicationLoadBalancer;
   readonly HttpListener: IApplicationListener;
   // readonly HttpsListener: IApplicationListener;
 
-  constructor(scope: Construct, galaxy: IGalaxy, name: string) {
+  constructor(scope: Construct, galaxy: Galaxy, name: string) {
     super(scope, galaxy, name);
 
     this.Cluster = RemoteCluster.import(this, `Cosmos${this.Galaxy.Name}${this.Name}Core`, 'Cluster', this.Vpc);
@@ -88,15 +88,15 @@ export class ImportedEcsSolarSystem extends ImportedSolarSystem implements IEcsS
     this.HttpListener = RemoteApplicationListener.import(
       this,
       `Cosmos${this.Galaxy.Name}${this.Name}Core`,
-      'HttpListener',
+      'HttpListener'
     );
   }
 }
 
-export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack implements IEcsSolarSystemExtension {
-  readonly Portal: IEcsSolarSystem;
+export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack implements EcsSolarSystemExtension {
+  readonly Portal: EcsSolarSystem;
 
-  constructor(galaxy: IGalaxyExtension, name: string, props?: StackProps) {
+  constructor(galaxy: GalaxyExtension, name: string, props?: StackProps) {
     super(galaxy, name, props);
 
     this.node.tryRemoveChild(this.Portal.node.id);
