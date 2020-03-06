@@ -8,6 +8,7 @@ export interface SolarSystemProps extends StackProps {
 }
 
 export class SolarSystemStack extends Stack implements SolarSystem {
+  readonly Type = 'SolarSystem';
   readonly Galaxy: Galaxy;
   readonly Name: string;
   readonly Vpc: Vpc;
@@ -86,6 +87,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
 }
 
 export class ImportedSolarSystem extends Construct implements SolarSystem {
+  readonly Type = 'SolarSystem';
   readonly Galaxy: Galaxy;
   readonly Name: string;
   readonly Vpc: IVpc;
@@ -102,6 +104,7 @@ export class ImportedSolarSystem extends Construct implements SolarSystem {
 }
 
 export class SolarSystemExtensionStack extends Stack implements SolarSystemExtension {
+  readonly Type = 'SolarSystemExtension';
   readonly Galaxy: GalaxyExtension;
   readonly Portal: SolarSystem;
   readonly Name: string;

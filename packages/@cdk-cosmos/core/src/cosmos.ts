@@ -4,6 +4,8 @@ import { HostedZone, IHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
 import {
+  RESOLVE,
+  PATTERN,
   Cosmos,
   Galaxy,
   SolarSystem,
@@ -26,6 +28,7 @@ export interface CosmosStackProps extends StackProps {
 }
 
 export class CosmosStack extends Stack implements Cosmos {
+  readonly Type = 'Cosmos';
   readonly Scope: Construct;
   readonly Galaxies: Galaxy[];
   readonly SolarSystems: SolarSystem[];
@@ -37,7 +40,7 @@ export class CosmosStack extends Stack implements Cosmos {
   readonly CdkMasterRoleStaticArn: string;
 
   constructor(app: Construct, name: string, props: CosmosStackProps) {
-    super(app, 'Cosmos-Core', props);
+    super(app, RESOLVE(PATTERN.COSMOS, { Type: 'Cosmos', Name: name }), props);
 
     const { tld, rootZone = name.toLowerCase() } = props;
 
@@ -86,6 +89,7 @@ export class CosmosStack extends Stack implements Cosmos {
 }
 
 export class ImportedCosmos extends Construct implements Cosmos {
+  readonly Type = 'Cosmos';
   readonly Scope: Construct;
   readonly Name: string;
   readonly Version: string;
@@ -111,6 +115,7 @@ export class ImportedCosmos extends Construct implements Cosmos {
 }
 
 export class CosmosExtensionStack extends Stack implements CosmosExtension {
+  readonly Type = 'CosmosExtension';
   readonly Scope: Construct;
   readonly Galaxies: Array<Galaxy | GalaxyExtension>;
   readonly SolarSystems: Array<SolarSystem | SolarSystemExtension>;
@@ -120,7 +125,7 @@ export class CosmosExtensionStack extends Stack implements CosmosExtension {
   readonly CdkRepo: IRepository;
 
   constructor(scope: Construct, name: string, props?: StackProps) {
-    super(scope, `Cosmos-App-${name}`, props);
+    super(scope, RESOLVE(PATTERN.COSMOS, { Type: 'CosmosExtension', Name: name }), props);
 
     this.Scope = scope;
     this.Galaxies = [];

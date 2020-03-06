@@ -9,11 +9,13 @@ import { IRole } from '@aws-cdk/aws-iam';
 
 export interface Bubble extends Construct {
   Name: string;
+  Type: string;
   account?: string;
   region?: string;
 }
 
 export interface Cosmos extends Bubble {
+  Type: 'Cosmos';
   Scope: Construct;
   Version: string;
   Galaxies?: Galaxy[];
@@ -27,6 +29,7 @@ export interface Cosmos extends Bubble {
 }
 
 export interface Galaxy extends Bubble {
+  Type: 'Galaxy';
   Cosmos: Cosmos;
   SolarSystems?: SolarSystem[];
   CdkCrossAccountRole?: IRole;
@@ -35,6 +38,7 @@ export interface Galaxy extends Bubble {
 }
 
 export interface SolarSystem extends Bubble {
+  Type: 'SolarSystem';
   Galaxy: Galaxy;
   Vpc: IVpc;
   Zone: IHostedZone;
@@ -57,6 +61,7 @@ export interface Extension<T extends Bubble> extends Bubble {
 }
 
 export interface CosmosExtension extends Extension<Cosmos> {
+  Type: 'CosmosExtension';
   Scope: Construct;
   Version: string;
   Galaxies: Array<Galaxy | GalaxyExtension>;
@@ -68,6 +73,7 @@ export interface CosmosExtension extends Extension<Cosmos> {
 }
 
 export interface GalaxyExtension extends Extension<Galaxy> {
+  Type: 'GalaxyExtension';
   Cosmos: CosmosExtension;
   SolarSystems: Array<SolarSystem | SolarSystemExtension>;
 
@@ -75,14 +81,15 @@ export interface GalaxyExtension extends Extension<Galaxy> {
 }
 
 export interface SolarSystemExtension extends Extension<SolarSystem> {
+  Type: 'SolarSystemExtension';
   Galaxy: GalaxyExtension;
 }
 
-export interface EcsSolarSystemExtension extends Extension<EcsSolarSystem> {
+export interface EcsSolarSystemExtension extends SolarSystemExtension {
   Galaxy: GalaxyExtension;
 }
 
-export interface CiCdSolarSystemExtension extends Extension<EcsSolarSystem> {
+export interface CiCdSolarSystemExtension extends EcsSolarSystemExtension {
   Galaxy: GalaxyExtension;
   DeployProject: IProject;
 }

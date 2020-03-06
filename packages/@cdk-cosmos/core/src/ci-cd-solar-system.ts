@@ -32,6 +32,7 @@ export interface CiCdStackProps extends StackProps {
 }
 
 export class CiCdSolarSystemStack extends Stack implements CiCdSolarSystem {
+  readonly Type = 'SolarSystem';
   readonly Galaxy: Galaxy;
   readonly Name: string;
   readonly Vpc: Vpc;
@@ -124,6 +125,7 @@ export class CiCdSolarSystemStack extends Stack implements CiCdSolarSystem {
 }
 
 export class ImportedCiCdSolarSystem extends Construct implements CiCdSolarSystem {
+  readonly Type = 'SolarSystem';
   readonly Galaxy: Galaxy;
   readonly Name: string;
   readonly Vpc: IVpc;
@@ -149,6 +151,7 @@ export class ImportedCiCdSolarSystem extends Construct implements CiCdSolarSyste
 }
 
 export class CiCdSolarSystemExtensionStack extends Stack implements CiCdSolarSystemExtension {
+  readonly Type = 'SolarSystemExtension';
   readonly Galaxy: GalaxyExtension;
   readonly Name: string;
   readonly Portal: EcsSolarSystem;

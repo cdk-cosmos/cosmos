@@ -9,6 +9,7 @@ export interface GalaxyStackProps extends StackProps {
 }
 
 export class GalaxyStack extends Stack implements Galaxy {
+  readonly Type = 'Galaxy';
   readonly Cosmos: Cosmos;
   readonly SolarSystems: SolarSystem[];
   readonly Name: string;
@@ -49,6 +50,7 @@ export class GalaxyStack extends Stack implements Galaxy {
 }
 
 export class ImportedGalaxy extends Construct implements Galaxy {
+  readonly Type = 'Galaxy';
   readonly Cosmos: Cosmos;
   readonly Name: string;
 
@@ -64,6 +66,7 @@ export class ImportedGalaxy extends Construct implements Galaxy {
 }
 
 export class GalaxyExtensionStack extends Stack implements GalaxyExtension {
+  readonly Type = 'GalaxyExtension';
   readonly Cosmos: CosmosExtension;
   readonly SolarSystems: Array<SolarSystem | SolarSystemExtension>;
   readonly Portal: Galaxy;
