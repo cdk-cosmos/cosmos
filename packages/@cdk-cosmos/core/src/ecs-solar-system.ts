@@ -11,6 +11,8 @@ import {
   IApplicationListener,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import {
+  RESOLVE,
+  PATTERN,
   Galaxy,
   GalaxyExtension,
   EcsSolarSystem,
@@ -38,7 +40,7 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
 
     this.Cluster = new Cluster(this, 'Cluster', {
       vpc: this.Vpc,
-      clusterName: `Core-${this.Galaxy.Name}-${this.Name}-Cluster`,
+      clusterName: RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this),
     });
 
     this.Cluster.addCapacity('Capacity', {
@@ -50,6 +52,7 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
 
     this.Alb = new ApplicationLoadBalancer(this, 'Alb', {
       vpc: this.Vpc,
+      loadBalancerName: RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this),
     });
     this.HttpListener = this.Alb.addListener('HttpListener', {
       protocol: ApplicationProtocol.HTTP,
@@ -68,9 +71,9 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
     //   open: true
     // });
 
-    RemoteCluster.export(`Cosmos${this.Galaxy.Name}${this.Name}Core`, this.Cluster);
-    RemoteAlb.export(`Cosmos${this.Galaxy.Name}${this.Name}Core`, this.Alb);
-    RemoteApplicationListener.export(`Cosmos${this.Galaxy.Name}${this.Name}Core`, this.HttpListener);
+    RemoteCluster.export(this.Cluster, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this));
+    RemoteAlb.export(this.Alb, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this));
+    RemoteApplicationListener.export(this.HttpListener, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener', this));
   }
 }
 
@@ -83,12 +86,11 @@ export class ImportedEcsSolarSystem extends ImportedSolarSystem implements EcsSo
   constructor(scope: Construct, galaxy: Galaxy, name: string) {
     super(scope, galaxy, name);
 
-    this.Cluster = RemoteCluster.import(this, `Cosmos${this.Galaxy.Name}${this.Name}Core`, 'Cluster', this.Vpc);
-    this.Alb = RemoteAlb.import(this, `Cosmos${this.Galaxy.Name}${this.Name}Core`, 'Alb');
+    this.Cluster = RemoteCluster.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this), this.Vpc);
+    this.Alb = RemoteAlb.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this));
     this.HttpListener = RemoteApplicationListener.import(
       this,
-      `Cosmos${this.Galaxy.Name}${this.Name}Core`,
-      'HttpListener'
+      RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener', this)
     );
   }
 }

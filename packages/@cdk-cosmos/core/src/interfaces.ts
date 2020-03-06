@@ -7,15 +7,14 @@ import { IApplicationLoadBalancer, IApplicationListener } from '@aws-cdk/aws-ela
 import { IProject } from '@aws-cdk/aws-codebuild';
 import { IRole } from '@aws-cdk/aws-iam';
 
-export interface Bubble extends Construct {
+export interface Bubble {
   Name: string;
-  Type: string;
   account?: string;
   region?: string;
 }
 
-export interface Cosmos extends Bubble {
-  Type: 'Cosmos';
+export interface Cosmos extends Bubble, Construct {
+  Partition: string;
   Scope: Construct;
   Version: string;
   Galaxies?: Galaxy[];
@@ -28,8 +27,7 @@ export interface Cosmos extends Bubble {
   AddSolarSystem(solarSystem: SolarSystem): void;
 }
 
-export interface Galaxy extends Bubble {
-  Type: 'Galaxy';
+export interface Galaxy extends Bubble, Construct {
   Cosmos: Cosmos;
   SolarSystems?: SolarSystem[];
   CdkCrossAccountRole?: IRole;
@@ -37,8 +35,7 @@ export interface Galaxy extends Bubble {
   AddSolarSystem(solarSystem: SolarSystem): void;
 }
 
-export interface SolarSystem extends Bubble {
-  Type: 'SolarSystem';
+export interface SolarSystem extends Bubble, Construct {
   Galaxy: Galaxy;
   Vpc: IVpc;
   Zone: IHostedZone;
@@ -56,12 +53,12 @@ export interface CiCdSolarSystem extends EcsSolarSystem {}
 
 // Extensions
 
-export interface Extension<T extends Bubble> extends Bubble {
+export interface Extension<T extends Bubble & Construct> extends Bubble, Construct {
   Portal: T;
 }
 
 export interface CosmosExtension extends Extension<Cosmos> {
-  Type: 'CosmosExtension';
+  Partition: string;
   Scope: Construct;
   Version: string;
   Galaxies: Array<Galaxy | GalaxyExtension>;
@@ -73,7 +70,6 @@ export interface CosmosExtension extends Extension<Cosmos> {
 }
 
 export interface GalaxyExtension extends Extension<Galaxy> {
-  Type: 'GalaxyExtension';
   Cosmos: CosmosExtension;
   SolarSystems: Array<SolarSystem | SolarSystemExtension>;
 
@@ -81,7 +77,6 @@ export interface GalaxyExtension extends Extension<Galaxy> {
 }
 
 export interface SolarSystemExtension extends Extension<SolarSystem> {
-  Type: 'SolarSystemExtension';
   Galaxy: GalaxyExtension;
 }
 

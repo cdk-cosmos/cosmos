@@ -12,18 +12,10 @@
     "format": "lerna run format",
     "clean": "lerna run clean"
   },
-  "workspaces": {
-    "packages": [
-      "packages/@cdk-cosmos/*",
-      "packages/@cosmos-building-blocks/*"
-    ]
-  },
-  "dependencies": {
-    "@cdk-cosmos/cdk-credentials-plugin": "file:packages/@cdk-cosmos/cdk-credentials-plugin",
-    "@cdk-cosmos/core": "file:packages/@cdk-cosmos/core",
-    "@cosmos-building-blocks/pipeline": "file:packages/@cosmos-building-blocks/pipeline",
-    "@cosmos-building-blocks/service": "file:packages/@cosmos-building-blocks/service"
-  },
+  "workspaces": [
+    "packages/@cdk-cosmos/*",
+    "packages/@cosmos-building-blocks/*"
+  ],
   "devDependencies": {
     "@aws-cdk/assert": "1.23.0",
     "@aws-cdk/aws-cloudformation": "1.23.0",

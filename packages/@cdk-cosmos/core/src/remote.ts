@@ -12,27 +12,23 @@ import { IRepository as ICodeRepository, Repository as CodeRepository } from '@a
 import { IProject, Project } from '@aws-cdk/aws-codebuild';
 
 export class RemoteZone {
-  static export(namespace: string, zone: IHostedZone & Construct): void {
-    const scope = zone.node.scope as Construct;
-    const exportName = `${namespace}${zone.node.id}`;
-
-    new CfnOutput(scope, 'ZoneId', {
-      exportName: `${exportName}Id`,
+  static export(zone: IHostedZone & Construct, exportName: string): void {
+    new CfnOutput(zone, 'ZoneId', {
+      exportName: `${exportName}-Id`,
       value: zone.hostedZoneId,
     });
 
-    new CfnOutput(scope, 'ZoneName', {
-      exportName: `${exportName}Name`,
+    new CfnOutput(zone, 'ZoneName', {
+      exportName: `${exportName}-Name`,
       value: zone.zoneName,
     });
   }
 
-  static import(scope: Construct, namespace: string, zone: string): IHostedZone {
-    const exportName = `${namespace}${zone}`;
-    const hostedZoneId = Fn.importValue(`${exportName}Id`);
-    const zoneName = Fn.importValue(`${exportName}Name`);
+  static import(scope: Construct, exportName: string): IHostedZone {
+    const hostedZoneId = Fn.importValue(`${exportName}-Id`);
+    const zoneName = Fn.importValue(`${exportName}-Name`);
 
-    return HostedZone.fromHostedZoneAttributes(scope, zone, {
+    return HostedZone.fromHostedZoneAttributes(scope, exportName, {
       hostedZoneId,
       zoneName,
     });
@@ -40,49 +36,46 @@ export class RemoteZone {
 }
 
 export class RemoteVpc {
-  static export(namespace: string, vpc: IVpc & Construct): void {
-    const scope = vpc.node.scope as Construct;
-    const exportName = `${namespace}${vpc.node.id}`;
-
-    new CfnOutput(scope, 'VpcId', {
-      exportName: `${exportName}Id`,
+  static export(vpc: IVpc & Construct, exportName: string): void {
+    new CfnOutput(vpc, 'VpcId', {
+      exportName: `${exportName}-Id`,
       value: vpc.vpcId,
     });
 
-    new CfnOutput(scope, 'VpcAZs', {
-      exportName: `${exportName}AZs`,
+    new CfnOutput(vpc, 'VpcAZs', {
+      exportName: `${exportName}-AZs`,
       value: vpc.availabilityZones.join(','),
     });
 
     if (vpc.isolatedSubnets.length) {
-      new CfnOutput(scope, 'VpcIsolatedSubnets', {
-        exportName: `${exportName}IsolatedSubnetIds`,
+      new CfnOutput(vpc, 'VpcIsolatedSubnets', {
+        exportName: `${exportName}-IsolatedSubnetIds`,
         value: vpc.isolatedSubnets.map(s => s.subnetId).join(','),
       });
-      new CfnOutput(scope, 'VpcIsolatedSubnetRouteTables', {
-        exportName: `${exportName}IsolatedSubnetRouteTableIds`,
+      new CfnOutput(vpc, 'VpcIsolatedSubnetRouteTables', {
+        exportName: `${exportName}-IsolatedSubnetRouteTableIds`,
         value: vpc.isolatedSubnets.map(s => s.routeTable.routeTableId).join(','),
       });
     }
 
     if (vpc.privateSubnets.length) {
-      new CfnOutput(scope, 'VpcPrivateSubnets', {
-        exportName: `${exportName}PrivateSubnetIds`,
+      new CfnOutput(vpc, 'VpcPrivateSubnets', {
+        exportName: `${exportName}-PrivateSubnetIds`,
         value: vpc.privateSubnets.map(s => s.subnetId).join(','),
       });
-      new CfnOutput(scope, 'VpcPrivateSubnetRouteTables', {
-        exportName: `${exportName}PrivateSubnetRouteTableIds`,
+      new CfnOutput(vpc, 'VpcPrivateSubnetRouteTables', {
+        exportName: `${exportName}-PrivateSubnetRouteTableIds`,
         value: vpc.privateSubnets.map(s => s.routeTable.routeTableId).join(','),
       });
     }
 
     if (vpc.publicSubnets.length) {
-      new CfnOutput(scope, 'VpcPublicSubnets', {
-        exportName: `${exportName}PublicSubnetIds`,
+      new CfnOutput(vpc, 'VpcPublicSubnets', {
+        exportName: `${exportName}-PublicSubnetIds`,
         value: vpc.publicSubnets.map(s => s.subnetId).join(','),
       });
-      new CfnOutput(scope, 'VpcPublicSubnetRouteTables', {
-        exportName: `${exportName}PublicSubnetRouteTableIds`,
+      new CfnOutput(vpc, 'VpcPublicSubnetRouteTables', {
+        exportName: `${exportName}-PublicSubnetRouteTableIds`,
         value: vpc.publicSubnets.map(s => s.routeTable.routeTableId).join(','),
       });
     }
@@ -90,25 +83,22 @@ export class RemoteVpc {
 
   static import(
     scope: Construct,
-    namespace: string,
-    vpc: string,
+    exportName: string,
     { hasIsolated = false, hasPrivate = false, hasPublic = false }
   ): IVpc {
-    const exportName = `${namespace}${vpc}`;
+    const vpcId = Fn.importValue(`${exportName}-Id`);
+    const availabilityZones = Fn.split(',', Fn.importValue(`${exportName}-AZs`));
 
-    const vpcId = Fn.importValue(`${exportName}Id`);
-    const availabilityZones = Fn.split(',', Fn.importValue(`${exportName}AZs`));
+    const isolatedSubnetIds = Fn.split(',', Fn.importValue(`${exportName}-IsolatedSubnetIds`));
+    const isolatedSubnetRouteTableIds = Fn.split(',', Fn.importValue(`${exportName}-IsolatedSubnetRouteTableIds`));
 
-    const isolatedSubnetIds = Fn.split(',', Fn.importValue(`${exportName}IsolatedSubnetIds`));
-    const isolatedSubnetRouteTableIds = Fn.split(',', Fn.importValue(`${exportName}IsolatedSubnetRouteTableIds`));
+    const privateSubnetIds = Fn.split(',', Fn.importValue(`${exportName}-PrivateSubnetIds`));
+    const privateSubnetRouteTableIds = Fn.split(',', Fn.importValue(`${exportName}-PrivateSubnetRouteTableIds`));
 
-    const privateSubnetIds = Fn.split(',', Fn.importValue(`${exportName}PrivateSubnetIds`));
-    const privateSubnetRouteTableIds = Fn.split(',', Fn.importValue(`${exportName}PrivateSubnetRouteTableIds`));
+    const publicSubnetIds = Fn.split(',', Fn.importValue(`${exportName}-PublicSubnetIds`));
+    const publicSubnetRouteTableIds = Fn.split(',', Fn.importValue(`${exportName}-PublicSubnetRouteTableIds`));
 
-    const publicSubnetIds = Fn.split(',', Fn.importValue(`${exportName}PublicSubnetIds`));
-    const publicSubnetRouteTableIds = Fn.split(',', Fn.importValue(`${exportName}PublicSubnetRouteTableIds`));
-
-    return Vpc.fromVpcAttributes(scope, vpc, {
+    return Vpc.fromVpcAttributes(scope, exportName, {
       vpcId,
       availabilityZones,
       isolatedSubnetIds: hasIsolated ? isolatedSubnetIds : [],
@@ -122,29 +112,29 @@ export class RemoteVpc {
 }
 
 export class RemoteCluster {
-  static export(namespace: string, cluster: ICluster & Construct): void {
-    const scope = cluster.node.scope as Construct;
-    const exportName = `${namespace}${cluster.node.id}`;
-
-    new CfnOutput(scope, 'ClusterName', {
-      exportName: `${exportName}Name`,
+  static export(cluster: ICluster & Construct, exportName: string): void {
+    new CfnOutput(cluster, 'ClusterName', {
+      exportName: `${exportName}-Name`,
       value: cluster.clusterName,
     });
 
-    new CfnOutput(scope, 'ClusterSecurityGroup', {
-      exportName: `${exportName}SecurityGroup`,
+    new CfnOutput(cluster, 'ClusterSecurityGroup', {
+      exportName: `${exportName}-SecurityGroup`,
       value: cluster.connections.securityGroups[0].securityGroupId,
     });
   }
 
-  static import(scope: Construct, namespace: string, cluster: string, vpc: IVpc): ICluster {
-    const exportName = `${namespace}${cluster}`;
-    const clusterName = Fn.importValue(`${exportName}Name`);
+  static import(scope: Construct, exportName: string, vpc: IVpc): ICluster {
+    const clusterName = Fn.importValue(`${exportName}-Name`);
     const securityGroups = [
-      SecurityGroup.fromSecurityGroupId(scope, `${cluster}SecurityGroup`, Fn.importValue(`${exportName}SecurityGroup`)),
+      SecurityGroup.fromSecurityGroupId(
+        scope,
+        `${exportName}SecurityGroup`,
+        Fn.importValue(`${exportName}-SecurityGroup`)
+      ),
     ];
 
-    return Cluster.fromClusterAttributes(scope, cluster, {
+    return Cluster.fromClusterAttributes(scope, exportName, {
       clusterName,
       vpc,
       securityGroups,
@@ -153,27 +143,23 @@ export class RemoteCluster {
 }
 
 export class RemoteAlb {
-  static export(namespace: string, alb: IApplicationLoadBalancer & Construct): void {
-    const scope = alb.node.scope as Construct;
-    const exportName = `${namespace}${alb.node.id}`;
-
-    new CfnOutput(scope, 'AlbArn', {
-      exportName: `${exportName}Arn`,
+  static export(alb: IApplicationLoadBalancer & Construct, exportName: string): void {
+    new CfnOutput(alb, 'AlbArn', {
+      exportName: `${exportName}-Arn`,
       value: alb.loadBalancerArn,
     });
 
-    new CfnOutput(scope, 'AlbSecurityGroupId', {
-      exportName: `${exportName}SecurityGroupId`,
+    new CfnOutput(alb, 'AlbSecurityGroupId', {
+      exportName: `${exportName}-SecurityGroupId`,
       value: alb.connections.securityGroups[0].securityGroupId,
     });
   }
 
-  static import(scope: Construct, namespace: string, alb: string): IApplicationLoadBalancer {
-    const exportName = `${namespace}${alb}`;
-    const loadBalancerArn = Fn.importValue(`${exportName}Arn`);
-    const securityGroupId = Fn.importValue(`${exportName}SecurityGroupId`);
+  static import(scope: Construct, exportName: string): IApplicationLoadBalancer {
+    const loadBalancerArn = Fn.importValue(`${exportName}-Arn`);
+    const securityGroupId = Fn.importValue(`${exportName}-SecurityGroupId`);
 
-    return ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(scope, alb, {
+    return ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(scope, exportName, {
       loadBalancerArn,
       securityGroupId,
     });
@@ -181,28 +167,27 @@ export class RemoteAlb {
 }
 
 export class RemoteApplicationListener {
-  static export(namespace: string, listener: IApplicationListener & Construct): void {
-    const scope = listener.node.scope as Construct;
-    const exportName = `${namespace}${listener.node.id}`;
-
-    new CfnOutput(scope, 'AlArn', {
-      exportName: `${exportName}Arn`,
+  static export(listener: IApplicationListener & Construct, exportName: string): void {
+    new CfnOutput(listener, 'AlArn', {
+      exportName: `${exportName}-Arn`,
       value: listener.listenerArn,
     });
 
-    new CfnOutput(scope, 'AlSecurityGroupId', {
-      exportName: `${exportName}SecurityGroupId`,
+    new CfnOutput(listener, 'AlSecurityGroupId', {
+      exportName: `${exportName}-SecurityGroupId`,
       value: listener.connections.securityGroups[0].securityGroupId,
     });
   }
 
-  static import(scope: Construct, namespace: string, listener: string): IApplicationListener {
-    const exportName = `${namespace}${listener}`;
-    const listenerArn = Fn.importValue(`${exportName}Arn`);
-    const securityGroupId = Fn.importValue(`${exportName}SecurityGroupId`);
-    const securityGroup = SecurityGroup.fromSecurityGroupId(scope, `${listener}SG`, securityGroupId);
+  static import(scope: Construct, exportName: string): IApplicationListener {
+    const listenerArn = Fn.importValue(`${exportName}-Arn`);
+    const securityGroup = SecurityGroup.fromSecurityGroupId(
+      scope,
+      `${exportName}SecurityGroup`,
+      Fn.importValue(`${exportName}-SecurityGroupId`)
+    );
 
-    return ApplicationListener.fromApplicationListenerAttributes(scope, listener, {
+    return ApplicationListener.fromApplicationListenerAttributes(scope, exportName, {
       listenerArn,
       // securityGroupId,
       securityGroup,
@@ -211,39 +196,31 @@ export class RemoteApplicationListener {
 }
 
 export class RemoteCodeRepo {
-  static export(namespace: string, repo: ICodeRepository & Construct): void {
-    const scope = repo.node.scope as Construct;
-    const exportName = `${namespace}${repo.node.id}`;
-
-    new CfnOutput(scope, 'RepoName', {
-      exportName: `${exportName}Name`,
+  static export(repo: ICodeRepository & Construct, exportName: string): void {
+    new CfnOutput(repo, 'RepoName', {
+      exportName: `${exportName}-Name`,
       value: repo.repositoryName,
     });
   }
 
-  static import(scope: Construct, namespace: string, repo: string): ICodeRepository {
-    const exportName = `${namespace}${repo}`;
-    const repoName = Fn.importValue(`${exportName}Name`);
+  static import(scope: Construct, exportName: string): ICodeRepository {
+    const repoName = Fn.importValue(`${exportName}-Name`);
 
-    return CodeRepository.fromRepositoryName(scope, repo, repoName);
+    return CodeRepository.fromRepositoryName(scope, exportName, repoName);
   }
 }
 
 export class RemoteBuildProject {
-  static export(namespace: string, project: IProject & Construct): void {
-    const scope = project.node.scope as Construct;
-    const exportName = `${namespace}${project.node.id}`;
-
-    new CfnOutput(scope, 'BuildProjectName', {
-      exportName: `${exportName}Name`,
+  static export(project: IProject & Construct, exportName: string): void {
+    new CfnOutput(project, 'BuildProjectName', {
+      exportName: `${exportName}-Name`,
       value: project.projectName,
     });
   }
 
-  static import(scope: Construct, namespace: string, project: string): IProject {
-    const exportName = `${namespace}${project}`;
-    const repoName = Fn.importValue(`${exportName}Name`);
+  static import(scope: Construct, exportName: string): IProject {
+    const repoName = Fn.importValue(`${exportName}-Name`);
 
-    return Project.fromProjectName(scope, project, repoName);
+    return Project.fromProjectName(scope, exportName, repoName);
   }
 }

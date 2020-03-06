@@ -8,7 +8,7 @@ const app = new App();
 const mgtEnvConfig = { account: '1111', region: 'ap-southeast-2' };
 const devEnvConfig = { account: '2222', region: 'ap-southeast-2' };
 
-const cosmos = new CosmosStack(app, 'Core', {
+const cosmos = new CosmosStack(app, 'Demo', {
   tld: 'cosmos.com',
   env: mgtEnvConfig,
 });

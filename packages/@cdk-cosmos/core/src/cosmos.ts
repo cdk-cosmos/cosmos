@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { Construct, Stack, StackProps, CfnOutput, Fn, Environment } from '@aws-cdk/core';
 import { HostedZone, IHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
@@ -16,8 +17,11 @@ import {
   GalaxyExtension,
 } from '.';
 
+const stackName = (partition: string, name: string): string =>
+  RESOLVE(PATTERN.COSMOS, 'Cosmos', { Partition: partition, Name: name });
+
 const getPackageVersion: () => string = () => {
-  const file = fs.readFileSync('../package.json').toString();
+  const file = fs.readFileSync(path.resolve(__dirname, '../package.json')).toString();
   return JSON.parse(file).version as string;
 };
 
@@ -28,7 +32,7 @@ export interface CosmosStackProps extends StackProps {
 }
 
 export class CosmosStack extends Stack implements Cosmos {
-  readonly Type = 'Cosmos';
+  readonly Partition = 'Core';
   readonly Scope: Construct;
   readonly Galaxies: Galaxy[];
   readonly SolarSystems: SolarSystem[];
@@ -40,7 +44,10 @@ export class CosmosStack extends Stack implements Cosmos {
   readonly CdkMasterRoleStaticArn: string;
 
   constructor(app: Construct, name: string, props: CosmosStackProps) {
-    super(app, RESOLVE(PATTERN.COSMOS, { Type: 'Cosmos', Name: name }), props);
+    super(app, stackName('Core', name), {
+      ...props,
+      description: 'Singleton resources for the cosmos, like RootZone, CdkRepo and CdkMasterRole',
+    });
 
     const { tld, rootZone = name.toLowerCase() } = props;
 
@@ -51,7 +58,7 @@ export class CosmosStack extends Stack implements Cosmos {
     this.Version = getPackageVersion();
 
     this.CdkRepo = new Repository(this, 'CdkRepo', {
-      repositoryName: `core-cdk-repo`,
+      repositoryName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Repo', this).toLowerCase(),
     });
 
     this.RootZone = new HostedZone(this, 'RootZone', {
@@ -59,7 +66,7 @@ export class CosmosStack extends Stack implements Cosmos {
     });
 
     this.CdkMasterRole = new Role(this, 'CdkMasterRole', {
-      roleName: 'Core-CdkMaster-Role',
+      roleName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkMaster-Role', this),
       assumedBy: new CompositePrincipal(
         new ServicePrincipal('codebuild.amazonaws.com'),
         new ServicePrincipal('codepipeline.amazonaws.com')
@@ -68,16 +75,16 @@ export class CosmosStack extends Stack implements Cosmos {
     this.CdkMasterRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
     this.CdkMasterRoleStaticArn = `arn:aws:iam::${this.account}:role/Core-CdkMaster-Role`;
 
-    new CfnOutput(this, 'CosmosCoreName', {
-      exportName: `CosmosCoreName`,
+    new CfnOutput(this, 'CosmosName', {
+      exportName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Name', this),
       value: this.Name,
     });
-    new CfnOutput(this, 'CosmosCoreVersion', {
-      exportName: `CosmosCoreVersion`,
+    new CfnOutput(this, 'CosmosVersion', {
+      exportName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Version', this),
       value: this.Version,
     });
-    RemoteCodeRepo.export('CosmosCore', this.CdkRepo);
-    RemoteZone.export('CosmosCore', this.RootZone);
+    RemoteCodeRepo.export(this.CdkRepo, RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkRepo', this));
+    RemoteZone.export(this.RootZone, RESOLVE(PATTERN.SINGLETON_COSMOS, 'RootZone', this));
   }
 
   AddGalaxy(galaxy: Galaxy): void {
@@ -89,7 +96,7 @@ export class CosmosStack extends Stack implements Cosmos {
 }
 
 export class ImportedCosmos extends Construct implements Cosmos {
-  readonly Type = 'Cosmos';
+  readonly Partition = 'Core';
   readonly Scope: Construct;
   readonly Name: string;
   readonly Version: string;
@@ -98,13 +105,13 @@ export class ImportedCosmos extends Construct implements Cosmos {
   readonly CdkMasterRoleStaticArn: string;
 
   constructor(scope: Construct, account: string) {
-    super(scope, 'Cosmos-Core');
+    super(scope, 'CosmosImport');
 
     this.Scope = scope;
-    this.Name = Fn.importValue('CosmosCoreName');
-    this.Version = Fn.importValue('CosmosCoreVersion');
-    this.CdkRepo = RemoteCodeRepo.import(this, 'CosmosCore', 'CdkRepo');
-    this.RootZone = RemoteZone.import(this, 'CosmosCore', 'RootZone');
+    this.Name = Fn.importValue(RESOLVE(PATTERN.SINGLETON_COSMOS, 'Name', this));
+    this.Version = Fn.importValue(RESOLVE(PATTERN.SINGLETON_COSMOS, 'Version', this));
+    this.CdkRepo = RemoteCodeRepo.import(this, RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkRepo', this));
+    this.RootZone = RemoteZone.import(this, RESOLVE(PATTERN.SINGLETON_COSMOS, 'RootZone', this));
     this.CdkMasterRoleStaticArn = `arn:aws:iam::${account}:role/Core-CdkMaster-Role`;
   }
 
@@ -115,7 +122,7 @@ export class ImportedCosmos extends Construct implements Cosmos {
 }
 
 export class CosmosExtensionStack extends Stack implements CosmosExtension {
-  readonly Type = 'CosmosExtension';
+  readonly Partition = 'App';
   readonly Scope: Construct;
   readonly Galaxies: Array<Galaxy | GalaxyExtension>;
   readonly SolarSystems: Array<SolarSystem | SolarSystemExtension>;
@@ -125,7 +132,10 @@ export class CosmosExtensionStack extends Stack implements CosmosExtension {
   readonly CdkRepo: IRepository;
 
   constructor(scope: Construct, name: string, props?: StackProps) {
-    super(scope, RESOLVE(PATTERN.COSMOS, { Type: 'CosmosExtension', Name: name }), props);
+    super(scope, stackName('App', name), {
+      ...props,
+      description: 'Singleton Resources for Application like AppCDKRepo, ECRRepo etc',
+    });
 
     this.Scope = scope;
     this.Galaxies = [];
@@ -135,7 +145,7 @@ export class CosmosExtensionStack extends Stack implements CosmosExtension {
     this.Version = getPackageVersion();
 
     this.CdkRepo = new Repository(this, 'CdkRepo', {
-      repositoryName: `app-${this.Name}-cdk-repo`.toLocaleLowerCase(),
+      repositoryName: RESOLVE(PATTERN.COSMOS, 'Cdk-Repo', this).toLocaleLowerCase(),
     });
   }
 
