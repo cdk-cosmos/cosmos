@@ -44,3 +44,5 @@ export {
 } from './ci-cd-solar-system';
 
 export { CdkPipeline, CdkPipelineProps } from './cdk-pipeline';
+
+export { RESOLVE, PATTERN } from './pattern';

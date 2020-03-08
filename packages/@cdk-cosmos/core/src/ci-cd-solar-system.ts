@@ -14,6 +14,9 @@ import {
 import { Project } from '@aws-cdk/aws-codebuild';
 import { Role } from '@aws-cdk/aws-iam';
 import {
+  RESOLVE,
+  PATTERN,
+  Bubble,
   Galaxy,
   EcsSolarSystem,
   CiCdSolarSystem,
@@ -26,6 +29,9 @@ import {
   RemoteApplicationListener,
   CdkPipeline,
 } from '.';
+
+const stackName = (galaxy: Bubble, name: string): string =>
+  RESOLVE(PATTERN.SOLAR_SYSTEM, 'SolarSystem', { Name: name, Galaxy: galaxy });
 
 export interface CiCdStackProps extends StackProps {
   cidr: string;
@@ -42,7 +48,7 @@ export class CiCdSolarSystemStack extends Stack implements CiCdSolarSystem {
   readonly CdkDeploy: Project;
 
   constructor(galaxy: Galaxy, props: CiCdStackProps) {
-    super(galaxy.Cosmos.Scope, `Cosmos-Core-Galaxy-${galaxy.Name}-SolarSystem-CiCd`, {
+    super(galaxy.Cosmos.Scope, stackName(galaxy, 'CiCd'), {
       ...props,
       env: {
         account: props?.env?.account || galaxy.account,
@@ -72,6 +78,7 @@ export class CiCdSolarSystemStack extends Stack implements CiCdSolarSystem {
     this.Zone = new HostedZone(this, 'Zone', {
       zoneName: `${this.Name}.${rootZoneName}`.toLowerCase(),
     });
+    // TODO:
     new ZoneDelegationRecord(this, 'ZoneDelegation', {
       zone: this.Galaxy.Cosmos.RootZone,
       recordName: this.Zone.zoneName,
@@ -80,7 +87,7 @@ export class CiCdSolarSystemStack extends Stack implements CiCdSolarSystem {
 
     this.Cluster = new Cluster(this, 'Cluster', {
       vpc: this.Vpc,
-      clusterName: `Core-${this.Galaxy.Name}-${this.Name}-Cluster`,
+      clusterName: RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this),
     });
 
     this.Cluster.addCapacity('Capacity', {
@@ -92,6 +99,7 @@ export class CiCdSolarSystemStack extends Stack implements CiCdSolarSystem {
 
     this.Alb = new ApplicationLoadBalancer(this, 'Alb', {
       vpc: this.Vpc,
+      loadBalancerName: RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this),
     });
     this.HttpListener = this.Alb.addListener('HttpListener', {
       protocol: ApplicationProtocol.HTTP,
@@ -106,19 +114,19 @@ export class CiCdSolarSystemStack extends Stack implements CiCdSolarSystem {
 
     const { CdkRepo, CdkMasterRoleStaticArn } = this.Galaxy.Cosmos;
     const pipeline = new CdkPipeline(this, 'CdkPipeline', {
-      name: 'Core-Cdk-Pipeline',
+      name: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Pipeline', this),
       cdkRepo: CdkRepo,
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', CdkMasterRoleStaticArn, { mutable: false }),
       // deployVpc: this.Vpc,
-      deployStacks: [`Cosmos-Core-*`],
+      deployStacks: [RESOLVE(PATTERN.COSMOS, '*', this)],
     });
     this.CdkDeploy = pipeline.Deploy;
 
-    RemoteVpc.export(`Core${this.Galaxy.Name}${this.Name}`, this.Vpc);
-    RemoteZone.export(`Core${this.Galaxy.Name}${this.Name}`, this.Zone);
-    RemoteCluster.export(`Core${this.Galaxy.Name}${this.Name}`, this.Cluster);
-    RemoteAlb.export(`Core${this.Galaxy.Name}${this.Name}`, this.Alb);
-    RemoteApplicationListener.export(`Core${this.Galaxy.Name}${this.Name}`, this.HttpListener);
+    RemoteVpc.export(this.Vpc, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc', this));
+    RemoteZone.export(this.Zone, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone', this));
+    RemoteCluster.export(this.Cluster, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this));
+    RemoteAlb.export(this.Alb, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this));
+    RemoteApplicationListener.export(this.HttpListener, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener', this));
     // RemoteBuildProject.export(`Core${this.Account.Name}${this.Name}`, this.CdkDeploy);
   }
 }
@@ -134,16 +142,19 @@ export class ImportedCiCdSolarSystem extends Construct implements CiCdSolarSyste
   // readonly CdkDeploy: IProject;
 
   constructor(scope: Construct, galaxy: Galaxy) {
-    super(scope, `Cosmos-Core-Galaxy-${galaxy.Name}-SolarSystem-CiCd`);
+    super(scope, 'CiCdImport');
 
     this.Galaxy = galaxy;
     this.Name = 'CiCd';
 
-    this.Vpc = RemoteVpc.import(this, `Core${this.Galaxy.Name}${this.Name}`, 'Vpc', { hasIsolated: true });
-    this.Zone = RemoteZone.import(this, `Core${this.Galaxy.Name}${this.Name}`, 'Zone');
-    this.Cluster = RemoteCluster.import(this, `Core${this.Galaxy.Name}${this.Name}`, 'Cluster', this.Vpc);
-    this.Alb = RemoteAlb.import(this, `Core${this.Galaxy.Name}${this.Name}`, 'Alb');
-    this.HttpListener = RemoteApplicationListener.import(this, `Core${this.Galaxy.Name}${this.Name}`, 'HttpListener');
+    this.Vpc = RemoteVpc.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc', this), { hasIsolated: true });
+    this.Zone = RemoteZone.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone', this));
+    this.Cluster = RemoteCluster.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this), this.Vpc);
+    this.Alb = RemoteAlb.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this));
+    this.HttpListener = RemoteApplicationListener.import(
+      this,
+      RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener', this)
+    );
     // this.CdkDeploy = RemoteBuildProject.import(this, `Core${this.Galaxy.Name}${this.Name}`, 'CdkPipelineDeploy');
   }
 }
@@ -156,7 +167,7 @@ export class CiCdSolarSystemExtensionStack extends Stack implements CiCdSolarSys
   readonly DeployProject: Project;
 
   constructor(galaxy: GalaxyExtension, props?: StackProps) {
-    super(galaxy.Cosmos.Scope, `Cosmos-App-${galaxy.Cosmos.Name}-Galaxy-${galaxy.Name}-SolarSystem-CiCd`, {
+    super(galaxy.Cosmos.Scope, stackName(galaxy, 'CiCd'), {
       ...props,
       env: {
         account: props?.env?.account || galaxy.account,
@@ -175,7 +186,7 @@ export class CiCdSolarSystemExtensionStack extends Stack implements CiCdSolarSys
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', this.Galaxy.Cosmos.Portal.CdkMasterRoleStaticArn, {
         mutable: false,
       }),
-      deployStacks: [`Cosmos-App-${this.Galaxy.Cosmos.Name}-*`],
+      deployStacks: [RESOLVE(PATTERN.COSMOS, '*', this)],
     });
     this.DeployProject = this.DeployPipeline.Deploy;
   }

@@ -7,13 +7,14 @@ import { IApplicationLoadBalancer, IApplicationListener } from '@aws-cdk/aws-ela
 import { IProject } from '@aws-cdk/aws-codebuild';
 import { IRole } from '@aws-cdk/aws-iam';
 
-export interface Bubble extends Construct {
+export interface Bubble {
   Name: string;
   account?: string;
   region?: string;
 }
 
-export interface Cosmos extends Bubble {
+export interface Cosmos extends Bubble, Construct {
+  Partition: string;
   Scope: Construct;
   Version: string;
   Galaxies?: Galaxy[];
@@ -26,7 +27,7 @@ export interface Cosmos extends Bubble {
   AddSolarSystem(solarSystem: SolarSystem): void;
 }
 
-export interface Galaxy extends Bubble {
+export interface Galaxy extends Bubble, Construct {
   Cosmos: Cosmos;
   SolarSystems?: SolarSystem[];
   CdkCrossAccountRole?: IRole;
@@ -34,7 +35,7 @@ export interface Galaxy extends Bubble {
   AddSolarSystem(solarSystem: SolarSystem): void;
 }
 
-export interface SolarSystem extends Bubble {
+export interface SolarSystem extends Bubble, Construct {
   Galaxy: Galaxy;
   Vpc: IVpc;
   Zone: IHostedZone;
@@ -52,11 +53,12 @@ export interface CiCdSolarSystem extends EcsSolarSystem {}
 
 // Extensions
 
-export interface Extension<T extends Bubble> extends Bubble {
+export interface Extension<T extends Bubble & Construct> extends Bubble, Construct {
   Portal: T;
 }
 
 export interface CosmosExtension extends Extension<Cosmos> {
+  Partition: string;
   Scope: Construct;
   Version: string;
   Galaxies: Array<Galaxy | GalaxyExtension>;
@@ -78,11 +80,11 @@ export interface SolarSystemExtension extends Extension<SolarSystem> {
   Galaxy: GalaxyExtension;
 }
 
-export interface EcsSolarSystemExtension extends Extension<EcsSolarSystem> {
+export interface EcsSolarSystemExtension extends SolarSystemExtension {
   Galaxy: GalaxyExtension;
 }
 
-export interface CiCdSolarSystemExtension extends Extension<EcsSolarSystem> {
+export interface CiCdSolarSystemExtension extends EcsSolarSystemExtension {
   Galaxy: GalaxyExtension;
   DeployProject: IProject;
 }

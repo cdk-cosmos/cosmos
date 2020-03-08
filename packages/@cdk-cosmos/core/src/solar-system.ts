@@ -1,7 +1,20 @@
 import { Construct, Stack, StackProps } from '@aws-cdk/core';
 import { IVpc, SubnetType, Vpc, GatewayVpcEndpointAwsService, InterfaceVpcEndpointAwsService } from '@aws-cdk/aws-ec2';
 import { IHostedZone, HostedZone } from '@aws-cdk/aws-route53';
-import { Galaxy, GalaxyExtension, SolarSystem, SolarSystemExtension, RemoteVpc, RemoteZone } from '.';
+import {
+  RESOLVE,
+  PATTERN,
+  Bubble,
+  Galaxy,
+  GalaxyExtension,
+  SolarSystem,
+  SolarSystemExtension,
+  RemoteVpc,
+  RemoteZone,
+} from '.';
+
+const stackName = (galaxy: Bubble, name: string): string =>
+  RESOLVE(PATTERN.SOLAR_SYSTEM, 'SolarSystem', { Name: name, Galaxy: galaxy });
 
 export interface SolarSystemProps extends StackProps {
   cidr?: string;
@@ -14,7 +27,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
   readonly Zone: HostedZone;
 
   constructor(galaxy: Galaxy, name: string, props?: SolarSystemProps) {
-    super(galaxy.Cosmos.Scope, `Cosmos-Core-Galaxy-${galaxy.Name}-SolarSystem-${name}`, {
+    super(galaxy.Cosmos.Scope, stackName(galaxy, name), {
       ...props,
       env: {
         account: props?.env?.account || galaxy.account,
@@ -67,7 +80,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
         service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
       });
 
-      RemoteVpc.export(`Cosmos${this.Galaxy.Name}Core`, this.Vpc);
+      RemoteVpc.export(this.Vpc, RESOLVE(PATTERN.SINGLETON_GALAXY, 'SharedVpc', this));
     }
 
     const rootZoneName = this.Galaxy.Cosmos.RootZone.zoneName;
@@ -81,7 +94,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
     //   nameServers: this.Zone.hostedZoneNameServers as string[],
     // }); // TODO: Cross Account ZoneDelegationRecord
 
-    RemoteZone.export(`Cosmos${this.Galaxy.Name}${this.Name}Core`, this.Zone);
+    RemoteZone.export(this.Zone, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone', this));
   }
 }
 
@@ -92,12 +105,12 @@ export class ImportedSolarSystem extends Construct implements SolarSystem {
   readonly Zone: IHostedZone;
 
   constructor(scope: Construct, galaxy: Galaxy, name: string) {
-    super(scope, `Cosmos-Core-Galaxy-${galaxy.Name}-SolarSystem-${name}`);
+    super(scope, 'SolarSystemImport');
 
     this.Galaxy = galaxy;
     this.Name = name;
-    this.Vpc = RemoteVpc.import(this, `Cosmos${this.Galaxy.Name}Core`, 'SharedVpc', { hasIsolated: true });
-    this.Zone = RemoteZone.import(this, `Cosmos${this.Galaxy.Name}${this.Name}Core`, 'Zone');
+    this.Vpc = RemoteVpc.import(this, RESOLVE(PATTERN.SINGLETON_GALAXY, 'SharedVpc', this), { hasIsolated: true });
+    this.Zone = RemoteZone.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone', this));
   }
 }
 
@@ -107,7 +120,7 @@ export class SolarSystemExtensionStack extends Stack implements SolarSystemExten
   readonly Name: string;
 
   constructor(galaxy: GalaxyExtension, name: string, props?: StackProps) {
-    super(galaxy.Cosmos.Scope, `Cosmos-App-${galaxy.Cosmos.Name}-Galaxy-${galaxy.Name}-SolarSystem-${name}`, {
+    super(galaxy.Cosmos.Scope, stackName(galaxy, name), {
       ...props,
       env: {
         account: props?.env?.account || galaxy.account,

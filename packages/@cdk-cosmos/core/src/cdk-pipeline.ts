@@ -22,9 +22,7 @@ import { IRole } from '@aws-cdk/aws-iam';
 import { IVpc } from '@aws-cdk/aws-ec2';
 import { Bubble } from '.';
 
-export interface BuildEnvironmentVariables {
-  [key: string]: BuildEnvironmentVariable;
-}
+export type BuildEnvironmentVariables = { [key: string]: BuildEnvironmentVariable };
 
 export interface CdkPipelineProps {
   name?: string;
