@@ -65,15 +65,16 @@ export class CosmosStack extends Stack implements Cosmos {
       zoneName: `${rootZone}.${tld}`.toLowerCase(),
     });
 
+    const CdkMasterRoleName = RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkMaster-Role', this);
     this.CdkMasterRole = new Role(this, 'CdkMasterRole', {
-      roleName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkMaster-Role', this),
+      roleName: CdkMasterRoleName,
       assumedBy: new CompositePrincipal(
         new ServicePrincipal('codebuild.amazonaws.com'),
         new ServicePrincipal('codepipeline.amazonaws.com')
       ),
     });
     this.CdkMasterRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
-    this.CdkMasterRoleStaticArn = `arn:aws:iam::${this.account}:role/Core-CdkMaster-Role`;
+    this.CdkMasterRoleStaticArn = `arn:aws:iam::${this.account}:role/${CdkMasterRoleName}`;
 
     new CfnOutput(this, 'CosmosName', {
       exportName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Name', this),
