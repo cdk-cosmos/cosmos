@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { Construct, Stack, StackProps, CfnOutput, Fn, Environment } from '@aws-cdk/core';
 import { Bucket, BucketEncryption } from '@aws-cdk/aws-s3';
 
-export class BootstrapStack extends Stack {
+export class CDKToolkit extends Stack {
   readonly bucket: Bucket;
   constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, {
