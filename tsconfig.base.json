@@ -19,11 +19,7 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
-    "typeRoots": ["./node_modules/@types"],
-    "paths": {
-      "@cdk-cosmos/*": ["packages/@cdk-cosmos/*/src"],
-      "@cosmos-building-blocks/*": ["packages/@cosmos-building-blocks/*/src"]
-    }
+    "typeRoots": ["./node_modules/@types"]
   },
   "exclude": ["./cdk.out", "node_modules"]
 }

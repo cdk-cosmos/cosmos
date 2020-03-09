@@ -1,5 +1,4 @@
-import * as fs from 'fs';
-import { Construct, Stack, StackProps, CfnOutput, Fn, Environment } from '@aws-cdk/core';
+import { Construct, Stack, StackProps, CfnOutput } from '@aws-cdk/core';
 import { Bucket, BucketEncryption } from '@aws-cdk/aws-s3';
 
 export class CDKToolkit extends Stack {

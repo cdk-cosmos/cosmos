@@ -1,11 +1,17 @@
 {
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "packages": ["packages/@cdk-cosmos/*", "packages/@cosmos-building-blocks/*"],
-  "version": "0.1.0-alpha.4",
+  "packages": [
+    "packages/@cdk-cosmos/*",
+    "packages/@cosmos-building-blocks/*"
+  ],
+  "version": "0.1.0-alpha.8",
   "command": {
     "publish": {
-      "ignoreChanges": ["ignored-file", "*.md"],
+      "ignoreChanges": [
+        "ignored-file",
+        "*.md"
+      ],
       "registry": "https://registry.npmjs.org"
     }
   }

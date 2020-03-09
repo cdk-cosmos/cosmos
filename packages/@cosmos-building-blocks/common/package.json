@@ -1,6 +1,6 @@
 {
   "name": "@cosmos-building-blocks/common",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.8",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -47,5 +47,6 @@
     "ts-jest": "^24.1.0",
     "tslint": "^6.0.0",
     "typescript": "^3.7.2"
-  }
+  },
+  "gitHead": "173c051038a3acdaa93d6a37d42b6b0546ffd567"
 }
