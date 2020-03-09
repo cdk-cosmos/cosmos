@@ -2,11 +2,20 @@
 import 'source-map-support/register';
 import { App } from '@aws-cdk/core';
 import { CosmosStack, GalaxyStack, CiCdSolarSystemStack, EcsSolarSystemStack } from '@cdk-cosmos/core';
+import { BootstrapStack } from '@cosmos-building-blocks/common';
 
 const app = new App();
 
 const mgtEnvConfig = { account: '1111', region: 'ap-southeast-2' };
 const devEnvConfig = { account: '2222', region: 'ap-southeast-2' };
+
+const bootstrapMgt = new BootstrapStack(app, 'CDKToolkitMgt', {
+  env: mgtEnvConfig,
+});
+
+const bootstrapDev = new BootstrapStack(app, 'CDKToolkitDev', {
+  env: devEnvConfig,
+});
 
 const cosmos = new CosmosStack(app, 'Demo', {
   tld: 'cosmos.com',
