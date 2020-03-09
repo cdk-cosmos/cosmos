@@ -1,6 +1,6 @@
 {
   "name": "@cosmos-building-blocks/app-ec2",
-  "version": "0.1.0-alpha.4",
+  "version": "0.1.0-alpha.5",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -29,12 +29,12 @@
     "@aws-cdk/aws-ec2": "^1.23.0",
     "@aws-cdk/aws-ecs": "^1.23.0",
     "@aws-cdk/aws-elasticloadbalancingv2": "^1.23.0",
-    "@aws-cdk/aws-events-targets": "^1.23.0",
     "@aws-cdk/aws-events": "^1.23.0",
+    "@aws-cdk/aws-events-targets": "^1.23.0",
     "@aws-cdk/aws-iam": "^1.23.0",
     "@aws-cdk/aws-lambda": "^1.23.0",
-    "@aws-cdk/aws-route53-targets": "^1.23.0",
     "@aws-cdk/aws-route53": "^1.23.0",
+    "@aws-cdk/aws-route53-targets": "^1.23.0",
     "@aws-cdk/aws-s3": "^1.23.0",
     "@aws-cdk/aws-ssm": "^1.23.0",
     "@aws-cdk/core": "^1.23.0"
