@@ -1,6 +1,6 @@
 {
   "name": "@cdk-cosmos/cdk-credentials-plugin",
-  "version": "0.1.0-alpha.7",
+  "version": "0.1.0-alpha.8",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -33,5 +33,5 @@
   "peerDependencies": {
     "aws-cdk": "^1.23.0"
   },
-  "gitHead": "ce22f6c18e8ca6145cae777099e8b2e679b01291"
+  "gitHead": "173c051038a3acdaa93d6a37d42b6b0546ffd567"
 }

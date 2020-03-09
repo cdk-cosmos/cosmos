@@ -1,6 +1,6 @@
 {
   "name": "@cosmos-building-blocks/app-ec2",
-  "version": "0.1.0-alpha.7",
+  "version": "0.1.0-alpha.8",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -38,5 +38,6 @@
     "@aws-cdk/aws-s3": "^1.23.0",
     "@aws-cdk/aws-ssm": "^1.23.0",
     "@aws-cdk/core": "^1.23.0"
-  }
+  },
+  "gitHead": "173c051038a3acdaa93d6a37d42b6b0546ffd567"
 }
