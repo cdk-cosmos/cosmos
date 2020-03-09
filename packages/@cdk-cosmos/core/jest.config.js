@@ -1,12 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const baseConfig = require('../../../jest.base.config');
+
 module.exports = {
-  roots: ['<rootDir>/test'],
-  testMatch: ['**/*.test.ts'],
-  transform: {
-    '^.+\\.ts$': 'ts-jest',
-  },
+  ...baseConfig,
   globals: {
     'ts-jest': {
-      tsConfig: '../../../tsconfig.base.json',
+      tsConfig: '<rootDir>/../../../tsconfig.base.json',
     },
   },
 };
