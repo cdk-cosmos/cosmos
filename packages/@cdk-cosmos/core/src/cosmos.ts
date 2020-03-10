@@ -1,9 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Construct, Stack, StackProps, CfnOutput, Fn, Environment } from '@aws-cdk/core';
+import { Construct, Stack, StackProps, CfnOutput, Fn } from '@aws-cdk/core';
 import { HostedZone, IHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
+import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import {
   RESOLVE,
   PATTERN,
@@ -27,8 +28,8 @@ const getPackageVersion: () => string = () => {
 
 export interface CosmosStackProps extends StackProps {
   tld: string;
+  cidr?: string;
   rootZone?: string;
-  env: Environment;
 }
 
 export class CosmosStack extends Stack implements Cosmos {
@@ -38,6 +39,7 @@ export class CosmosStack extends Stack implements Cosmos {
   readonly SolarSystems: SolarSystem[];
   readonly Name: string;
   readonly Version: string;
+  readonly NetworkBuilder?: NetworkBuilder;
   readonly CdkRepo: Repository;
   readonly RootZone: HostedZone;
   readonly CdkMasterRole: Role;
@@ -49,13 +51,14 @@ export class CosmosStack extends Stack implements Cosmos {
       description: 'Singleton resources for the cosmos, like RootZone, CdkRepo and CdkMasterRole',
     });
 
-    const { tld, rootZone = name.toLowerCase() } = props;
+    const { tld, cidr, rootZone = name.toLowerCase() } = props;
 
     this.Scope = app;
     this.Galaxies = [];
     this.SolarSystems = [];
     this.Name = name;
     this.Version = getPackageVersion();
+    if (cidr) this.NetworkBuilder = new NetworkBuilder(cidr);
 
     this.CdkRepo = new Repository(this, 'CdkRepo', {
       repositoryName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Repo', this).toLowerCase(),
@@ -105,8 +108,10 @@ export class ImportedCosmos extends Construct implements Cosmos {
   readonly RootZone: IHostedZone;
   readonly CdkMasterRoleStaticArn: string;
 
-  constructor(scope: Construct, account: string) {
+  constructor(scope: Construct) {
     super(scope, 'CosmosImport');
+
+    const account = Stack.of(scope).account;
 
     this.Scope = scope;
     this.Name = Fn.importValue(RESOLVE(PATTERN.SINGLETON_COSMOS, 'Name', this));
@@ -141,7 +146,7 @@ export class CosmosExtensionStack extends Stack implements CosmosExtension {
     this.Scope = scope;
     this.Galaxies = [];
     this.SolarSystems = [];
-    this.Portal = new ImportedCosmos(this, this.account);
+    this.Portal = new ImportedCosmos(this);
     this.Name = name;
     this.Version = getPackageVersion();
 

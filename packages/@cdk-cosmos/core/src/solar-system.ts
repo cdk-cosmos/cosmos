@@ -1,5 +1,6 @@
 import { Construct, Stack, StackProps } from '@aws-cdk/core';
 import { IVpc, SubnetType, Vpc, GatewayVpcEndpointAwsService, InterfaceVpcEndpointAwsService } from '@aws-cdk/aws-ec2';
+import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { IHostedZone, HostedZone } from '@aws-cdk/aws-route53';
 import {
   RESOLVE,
@@ -23,6 +24,7 @@ export interface SolarSystemProps extends StackProps {
 export class SolarSystemStack extends Stack implements SolarSystem {
   readonly Galaxy: Galaxy;
   readonly Name: string;
+  readonly NetworkBuilder?: NetworkBuilder;
   readonly Vpc: Vpc;
   readonly Zone: HostedZone;
 
@@ -40,15 +42,19 @@ export class SolarSystemStack extends Stack implements SolarSystem {
     this.Galaxy = galaxy;
     this.Galaxy.AddSolarSystem(this);
     this.Name = name;
+    if (cidr) this.NetworkBuilder = new NetworkBuilder(cidr);
+    else if (this.Galaxy.NetworkBuilder) this.NetworkBuilder = this.Galaxy.NetworkBuilder;
 
     this.Vpc = this.Galaxy.node.tryFindChild('SharedVpc') as Vpc;
     if (!this.Vpc) {
-      if (!cidr) {
-        throw new Error(`Cidr is required for first app env defined in the galaxy (Env: ${this.Name}?).`);
+      if (!this.NetworkBuilder) {
+        throw new Error(
+          `NetworkBuilder not found, please define cidr range here or Galaxy or Cosmos. (System: ${this.Name}).`
+        );
       }
 
       this.Vpc = new Vpc(this.Galaxy, 'SharedVpc', {
-        cidr: cidr,
+        cidr: this.NetworkBuilder.addSubnet(24),
         maxAzs: 3,
         subnetConfiguration: [
           {

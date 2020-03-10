@@ -17,14 +17,14 @@ const stackName = (cosmos: Bubble, name: string): string =>
   RESOLVE(PATTERN.GALAXY, 'Galaxy', { Name: name, Cosmos: cosmos });
 
 export interface GalaxyStackProps extends StackProps {
-  cidr: string;
+  cidr?: string;
 }
 
 export class GalaxyStack extends Stack implements Galaxy {
   readonly Cosmos: Cosmos;
   readonly SolarSystems: SolarSystem[];
   readonly Name: string;
-  readonly NetworkBuilder: NetworkBuilder;
+  readonly NetworkBuilder?: NetworkBuilder;
   readonly CdkCrossAccountRole?: Role;
 
   constructor(cosmos: Cosmos, name: string, props: GalaxyStackProps) {
@@ -42,7 +42,8 @@ export class GalaxyStack extends Stack implements Galaxy {
     this.Cosmos.AddGalaxy(this);
     this.SolarSystems = [];
     this.Name = name;
-    this.NetworkBuilder = new NetworkBuilder(cidr);
+    if (cidr) this.NetworkBuilder = new NetworkBuilder(cidr);
+    else if (this.Cosmos.NetworkBuilder) this.NetworkBuilder = this.Cosmos.NetworkBuilder;
 
     // If cross account then create cross account role
     if (this.Cosmos.account !== this.account) {

@@ -2,6 +2,7 @@ import { Construct } from '@aws-cdk/core';
 import { IHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository } from '@aws-cdk/aws-codecommit';
 import { IVpc } from '@aws-cdk/aws-ec2';
+import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { ICluster } from '@aws-cdk/aws-ecs';
 import { IApplicationLoadBalancer, IApplicationListener } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { IProject } from '@aws-cdk/aws-codebuild';
@@ -9,6 +10,7 @@ import { IRole } from '@aws-cdk/aws-iam';
 
 export interface Bubble {
   Name: string;
+  NetworkBuilder?: NetworkBuilder;
   account?: string;
   region?: string;
 }

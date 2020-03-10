@@ -33,13 +33,13 @@ export class EcsService extends Construct {
   readonly Service: Ec2Service;
   readonly ApplicationTargetGroup: ApplicationTargetGroup;
 
-  constructor(scope: Construct, namespace: string, id: string, props: EcsServiceProps) {
+  constructor(scope: Construct, id: string, props: EcsServiceProps) {
     super(scope, id);
 
     const { vpc, cluster, httpListener, container, service, routing } = props;
 
     this.TaskDefinition = new Ec2TaskDefinition(this, 'Task', {
-      family: `App-${namespace}-${id}-Task`,
+      family: `${id}-Task`,
     });
 
     this.TaskDefinition.addContainer('AppContainer', {
@@ -54,12 +54,12 @@ export class EcsService extends Construct {
     this.Service = new Ec2Service(this, 'Service', {
       desiredCount: 1,
       ...service,
-      serviceName: `App-${namespace}-${id}-Service`,
+      serviceName: `${id}-Service`,
       taskDefinition: this.TaskDefinition,
       cluster: cluster,
     });
 
-    const targetGroupName = `${namespace}-${id}-TG`;
+    const targetGroupName = `${id}-TG`;
     const targetGroup = new ApplicationTargetGroup(this, 'ServiceTargetGroup', {
       vpc: vpc,
       targetGroupName: targetGroupName.length <= 32 ? targetGroupName : undefined, // TODO: Add warning for this case
