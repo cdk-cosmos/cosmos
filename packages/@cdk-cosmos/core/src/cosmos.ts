@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Construct, Stack, StackProps, CfnOutput, Fn, Environment } from '@aws-cdk/core';
+import { Construct, Stack, StackProps, CfnOutput, Fn } from '@aws-cdk/core';
 import { HostedZone, IHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
@@ -108,8 +108,10 @@ export class ImportedCosmos extends Construct implements Cosmos {
   readonly RootZone: IHostedZone;
   readonly CdkMasterRoleStaticArn: string;
 
-  constructor(scope: Construct, account: string) {
+  constructor(scope: Construct) {
     super(scope, 'CosmosImport');
+
+    const account = Stack.of(scope).account;
 
     this.Scope = scope;
     this.Name = Fn.importValue(RESOLVE(PATTERN.SINGLETON_COSMOS, 'Name', this));
@@ -144,7 +146,7 @@ export class CosmosExtensionStack extends Stack implements CosmosExtension {
     this.Scope = scope;
     this.Galaxies = [];
     this.SolarSystems = [];
-    this.Portal = new ImportedCosmos(this, this.account);
+    this.Portal = new ImportedCosmos(this);
     this.Name = name;
     this.Version = getPackageVersion();
 
