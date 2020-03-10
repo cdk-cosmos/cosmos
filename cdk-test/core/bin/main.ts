@@ -26,17 +26,13 @@ const mgtGalaxy = new GalaxyStack(cosmos, 'Mgt', {
   cidr: '10.0.0.0/22',
 });
 
-const ciCd = new CiCdSolarSystemStack(mgtGalaxy, {
-  cidr: mgtGalaxy.NetworkBuilder.addSubnet(24),
-});
+const ciCd = new CiCdSolarSystemStack(mgtGalaxy);
 
 const devGalaxy = new GalaxyStack(cosmos, 'Dev', {
   cidr: '10.0.1.0/22',
   env: devEnvConfig,
 });
 
-const dev = new EcsSolarSystemStack(devGalaxy, 'Dev', {
-  cidr: devGalaxy.NetworkBuilder.addSubnet(24),
-});
+const dev = new EcsSolarSystemStack(devGalaxy, 'Dev');
 
 const tst = new EcsSolarSystemStack(devGalaxy, 'Tst');

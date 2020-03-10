@@ -1,5 +1,6 @@
 import { Stack, StackProps, Construct } from '@aws-cdk/core';
 import { Vpc, SubnetType, InstanceType, IVpc } from '@aws-cdk/aws-ec2';
+import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { HostedZone, ZoneDelegationRecord, IHostedZone } from '@aws-cdk/aws-route53';
 import { Cluster, ICluster } from '@aws-cdk/aws-ecs';
 import {
@@ -34,12 +35,13 @@ const stackName = (galaxy: Bubble, name: string): string =>
   RESOLVE(PATTERN.SOLAR_SYSTEM, 'SolarSystem', { Name: name, Galaxy: galaxy });
 
 export interface CiCdStackProps extends StackProps {
-  cidr: string;
+  cidr?: string;
 }
 
 export class CiCdSolarSystemStack extends Stack implements CiCdSolarSystem {
   readonly Galaxy: Galaxy;
   readonly Name: string;
+  readonly NetworkBuilder?: NetworkBuilder;
   readonly Vpc: Vpc;
   readonly Zone: HostedZone;
   readonly Cluster: Cluster;
@@ -47,7 +49,7 @@ export class CiCdSolarSystemStack extends Stack implements CiCdSolarSystem {
   readonly HttpListener: ApplicationListener;
   readonly CdkDeploy: Project;
 
-  constructor(galaxy: Galaxy, props: CiCdStackProps) {
+  constructor(galaxy: Galaxy, props?: CiCdStackProps) {
     super(galaxy.Cosmos.Scope, stackName(galaxy, 'CiCd'), {
       ...props,
       env: {
@@ -56,14 +58,22 @@ export class CiCdSolarSystemStack extends Stack implements CiCdSolarSystem {
       },
     });
 
-    const { cidr } = props;
+    const { cidr } = props || {};
 
     this.Galaxy = galaxy;
     this.Galaxy.AddSolarSystem(this);
     this.Name = 'CiCd';
+    if (cidr) this.NetworkBuilder = new NetworkBuilder(cidr);
+    else if (this.Galaxy.NetworkBuilder) this.NetworkBuilder = this.Galaxy.NetworkBuilder;
+
+    if (!this.NetworkBuilder) {
+      throw new Error(
+        `NetworkBuilder not found, please define cidr range here or Galaxy or Cosmos. (System: ${this.Name}).`
+      );
+    }
 
     this.Vpc = new Vpc(this, 'Vpc', {
-      cidr: cidr,
+      cidr: this.NetworkBuilder.addSubnet(24),
       maxAzs: 3,
       subnetConfiguration: [
         {
