@@ -41,16 +41,35 @@ const parseScope = (scope: Scope | undefined, params: Dictionary): void => {
   }
 };
 
+export interface ResolveParams {
+  Scope?: Scope;
+  Type?: string | Construct;
+}
+
+export const _RESOLVE: (pattern: string, params: ResolveParams) => string = (pattern, params) => {
+  const { Scope, Type, ...extraParams } = params;
+  const _params: Dictionary = { ...extraParams };
+
+  parseScope(Scope, _params);
+
+  if (Type !== undefined) {
+    _params['Type'] = Type instanceof Construct ? Type.node.id : Type;
+  }
+
+  return parseString(pattern, _params)
+    .replace(/^-|-$/g, '')
+    .trim();
+};
+
 export const RESOLVE: (pattern: string, type: string | Construct, scope: Scope, extraParams?: Dictionary) => string = (
   pattern,
   type,
   scope,
   extraParams = {}
 ) => {
-  const params: Dictionary = { ...extraParams };
-  params['Type'] = type instanceof Construct ? type.node.id : type;
-  parseScope(scope, params);
-  return parseString(pattern, params)
-    .replace(/^-|-$/g, '')
-    .trim();
+  return _RESOLVE(pattern, {
+    ...extraParams,
+    Scope: scope,
+    Type: type,
+  });
 };
