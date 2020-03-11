@@ -5,7 +5,7 @@ name: Publish Packages
 
 on:
   pull_request:
-    branches: [ master, test_release]
+    branches: [ master, test_release ]
     types: [ closed ]
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
     
     runs-on: ubuntu-latest
 
-    if: github.action == 'closed' && github.pull_request.merged == 'true'
+#     if: github.action == 'closed' && github.pull_request.merged == 'true'
     
     steps:
     - uses: actions/checkout@v2
