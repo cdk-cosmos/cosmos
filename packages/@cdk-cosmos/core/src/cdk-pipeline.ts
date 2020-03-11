@@ -20,7 +20,7 @@ import {
 } from '@aws-cdk/aws-codebuild';
 import { IRole } from '@aws-cdk/aws-iam';
 import { IVpc } from '@aws-cdk/aws-ec2';
-import { Bubble } from '.';
+import { RESOLVE, PATTERN, _RESOLVE, SolarSystem, SolarSystemExtension } from '.';
 
 export type BuildEnvironmentVariables = { [key: string]: BuildEnvironmentVariable };
 
@@ -150,13 +150,10 @@ export const addCdkDeployEnvStageToPipeline = (props: {
   pipeline: Pipeline;
   deployProject: IProject;
   deployEnvs?: BuildEnvironmentVariables;
-  solarSystem: Bubble & { Galaxy: Bubble & { Cosmos: Bubble & { CdkRepo: IRepository } } };
+  solarSystem: SolarSystem | SolarSystemExtension;
   isManualApprovalRequired?: boolean;
 }): void => {
   const { pipeline, deployProject, deployEnvs = {}, solarSystem, isManualApprovalRequired = true } = props || {};
-  const projectName = solarSystem.Galaxy.Cosmos.Name;
-  const accountName = solarSystem.Galaxy.Name;
-  const appEnvName = solarSystem.Name;
 
   let cdkSourceRepoAction = pipeline.stages[0].actions.find(x => x.actionProperties.actionName === 'CdkCheckout');
   if (!cdkSourceRepoAction) {
@@ -173,7 +170,7 @@ export const addCdkDeployEnvStageToPipeline = (props: {
   const cdkOutputArtifact = (cdkSourceRepoAction?.actionProperties.outputs as Artifact[])[0];
 
   const deployStage: StageOptions = {
-    stageName: `${accountName}-${appEnvName}`, // TODO: is this confusing ?
+    stageName: _RESOLVE('${Galaxy}-${SolarSystem}', { Scope: solarSystem }), // TODO: is this confusing ?
     actions: [
       new CodeBuildAction({
         actionName: 'CdkDeploy',
@@ -184,7 +181,7 @@ export const addCdkDeployEnvStageToPipeline = (props: {
           ...deployEnvs,
           STACKS: {
             type: BuildEnvironmentVariableType.PLAINTEXT,
-            value: `Cosmos-App-${projectName}-Galaxy-${accountName}-SolarSystem-${appEnvName}`,
+            value: RESOLVE(PATTERN.SOLAR_SYSTEM, 'SolarSystem', solarSystem),
           },
         },
       }),

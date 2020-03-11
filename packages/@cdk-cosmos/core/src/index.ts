@@ -45,4 +45,4 @@ export {
 
 export { CdkPipeline, CdkPipelineProps } from './cdk-pipeline';
 
-export { RESOLVE, PATTERN } from './pattern';
+export { RESOLVE, PATTERN, _RESOLVE, ResolveParams } from './pattern';
