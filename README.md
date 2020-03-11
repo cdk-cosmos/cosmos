@@ -1,4 +1,4 @@
-# Cosmos CDK Packages TEST
+# Cosmos CDK Packages
 
 ## Development
 
