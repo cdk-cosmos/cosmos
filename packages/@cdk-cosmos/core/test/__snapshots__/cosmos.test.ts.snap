@@ -1,6 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Cosmos should be a cosmos 1`] = `
+exports[`Cosmos Extension should match snapshot 1`] = `
+Object {
+  "Description": "Singleton Resources for Application like AppCDKRepo, ECRRepo etc",
+  "Resources": Object {
+    "CdkRepo9606A710": Object {
+      "Properties": Object {
+        "RepositoryName": "app-test-cdk-repo",
+      },
+      "Type": "AWS::CodeCommit::Repository",
+    },
+  },
+}
+`;
+
+exports[`Cosmos should match snapshot 1`] = `
 Object {
   "Description": "Singleton resources for the cosmos, like RootZone, CdkRepo and CdkMasterRole",
   "Outputs": Object {
