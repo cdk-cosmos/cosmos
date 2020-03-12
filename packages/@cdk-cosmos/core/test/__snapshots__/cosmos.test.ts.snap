@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cosmos Extension should match snapshot 1`] = `
+Object {
+  "Description": "Singleton Resources for Application like AppCDKRepo, ECRRepo etc",
+  "Resources": Object {
+    "CdkRepo9606A710": Object {
+      "Properties": Object {
+        "RepositoryName": "app-test-cdk-repo",
+      },
+      "Type": "AWS::CodeCommit::Repository",
+    },
+  },
+}
+`;
+
+exports[`Cosmos should match snapshot 1`] = `
+Object {
+  "Description": "Singleton resources for the cosmos, like RootZone, CdkRepo and CdkMasterRole",
+  "Outputs": Object {
+    "CdkRepoRepoNameEBDD9CD6": Object {
+      "Export": Object {
+        "Name": "Core-CdkRepo-Name",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CdkRepo9606A710",
+          "Name",
+        ],
+      },
+    },
+    "CosmosName": Object {
+      "Export": Object {
+        "Name": "Core-Name",
+      },
+      "Value": "Test",
+    },
+    "CosmosVersion": Object {
+      "Export": Object {
+        "Name": "Core-Version",
+      },
+      "Value": "0.1.1",
+    },
+    "RootZoneZoneId57AFCBDD": Object {
+      "Export": Object {
+        "Name": "Core-RootZone-Id",
+      },
+      "Value": Object {
+        "Ref": "RootZone831A5F27",
+      },
+    },
+    "RootZoneZoneNameD5248AD9": Object {
+      "Export": Object {
+        "Name": "Core-RootZone-Name",
+      },
+      "Value": "test.com",
+    },
+  },
+  "Resources": Object {
+    "CdkMasterRole2FE9B317": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Array [
+                  "codebuild.amazonaws.com",
+                  "codepipeline.amazonaws.com",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AdministratorAccess",
+              ],
+            ],
+          },
+        ],
+        "RoleName": "Core-CdkMaster-Role",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkRepo9606A710": Object {
+      "Properties": Object {
+        "RepositoryName": "core-cdk-repo",
+      },
+      "Type": "AWS::CodeCommit::Repository",
+    },
+    "RootZone831A5F27": Object {
+      "Properties": Object {
+        "Name": "test.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+  },
+}
+`;
