@@ -25,3 +25,5 @@
 `npx lerna bootstrap`
 `npx lerna publish`
 `npx lerna publish --force-publish=*`
+
+`("@?aws-cdk(/.+)?": ".?)([0-9]+.[0-9]+.[0-9]+)(")` -> `$11.27.0$4`
