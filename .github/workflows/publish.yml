@@ -5,34 +5,34 @@ name: Publish Packages
 
 on:
   pull_request:
-    branches: [master]
-    types: [closed]
+    branches: [ master ]
+    types: [ closed ]
 
 jobs:
   publish_patch:
     name: Publish Patch
-
+    
     runs-on: ubuntu-latest
 
     if: github.event.pull_request.merged == true
-
+    
     steps:
-      - uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN_CI }}
+    - uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN_CI }}
 
-      - name: Use Node.js 12.0
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.0
+    - name: Use Node.js 12.0
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.0
 
-      - run: npm i -g yarn
+    - run: npm i -g yarn
 
-      - run: |
-          git config --global user.email "action@github.com.au" && \
-          git config --global user.name "Github Action" && \
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_KEY }}" >> ~/.npmrc
+    - run:  |
+        git config --global user.email "action@github.com.au" && \
+        git config --global user.name "Github Action" && \
+        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_KEY }}" >> ~/.npmrc
 
-      - run: yarn --frozen-lockfile
+    - run: yarn --frozen-lockfile
 
-      - run: yarn lerna publish patch --force-publish=* --yes
+    - run: yarn lerna publish patch --force-publish=* --yes
