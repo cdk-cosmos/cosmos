@@ -1,6 +1,6 @@
 {
   "name": "@cdk-cosmos/cdk-credentials-plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -28,7 +28,7 @@
     "prepublishOnly": "yarn lint && yarn test && yarn build"
   },
   "dependencies": {
-    "@cdk-cosmos/core": "0.1.0"
+    "@cdk-cosmos/core": "^0.1.1"
   },
   "peerDependencies": {
     "aws-cdk": "^1.23.0"
