@@ -39,7 +39,7 @@ Object {
       "Export": Object {
         "Name": "Core-Version",
       },
-      "Value": "0.1.0",
+      "Value": "0.1.1",
     },
     "RootZoneZoneId57AFCBDD": Object {
       "Export": Object {
