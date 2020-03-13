@@ -1,22 +1,12 @@
 import '@aws-cdk/assert/jest';
 import { App } from '@aws-cdk/core';
-import { SynthUtils } from '@aws-cdk/assert';
-import { CloudFormationStackArtifact } from '@aws-cdk/cx-api';
 import { CosmosStack, CosmosExtensionStack } from '../src';
-
-const toHaveResourceId = (stack: CloudFormationStackArtifact, id: string): void => {
-  expect(stack.template.Resources).toHaveProperty(id);
-};
-
-const toHaveResourceCount = (stack: CloudFormationStackArtifact, length: number): void => {
-  expect(Object.keys(stack.template.Resources)).toHaveLength(length);
-};
+import { synthesizeStacks, toHaveResourceId, toHaveResourceCount } from '../../../../src/test';
 
 const app = new App();
 const cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
 const cosmosExtension = new CosmosExtensionStack(app, 'Test');
-const cosmosStack = SynthUtils.synthesize(cosmos);
-const cosmosExtensionStack = SynthUtils.synthesize(cosmosExtension);
+const [cosmosStack, cosmosExtensionStack] = synthesizeStacks(cosmos, cosmosExtension);
 
 describe('Cosmos', () => {
   test('should be a cosmos', () => {
