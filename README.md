@@ -1,5 +1,7 @@
 # Cosmos CDK Packages
 
+![coverage](shields/coverage.svg)
+
 ## Development
 
 ### Packages
