@@ -4,7 +4,7 @@
 
 ### Packages
 
-1. Cone Repo
+1. Clone Repo
 2. Run `yarn` then `yarn link` then `yarn bootstrap`
 
 ### Testing Packages
