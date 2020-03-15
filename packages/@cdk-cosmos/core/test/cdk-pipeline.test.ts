@@ -9,7 +9,7 @@ const stack = new Stack(app, 'Pipeline', {});
 const cdkrepo = new Repository(stack, 'CdkRepo', {
   repositoryName: 'cdk-repo',
 });
-const cdkpipeline = new CdkPipeline(stack, 'CdkPipeline', { cdkRepo: cdkrepo });
+new CdkPipeline(stack, 'CdkPipeline', { cdkRepo: cdkrepo });
 const testStack = SynthUtils.synthesize(stack);
 
 describe('Pipeline', () => {

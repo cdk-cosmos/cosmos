@@ -36,7 +36,7 @@ describe('CICD-Solar-System', () => {
       const prdApp = new App();
       const prdCosmos = new CosmosStack(prdApp, 'Test', { tld: 'com' });
       const prdGalaxy = new GalaxyStack(prdCosmos, 'Prd', {});
-      const prdcicdSolarSystem = new CiCdSolarSystemStack(prdGalaxy, {});
+      new CiCdSolarSystemStack(prdGalaxy, {});
     } catch (error) {
       expect(error.message).toMatch(
         'NetworkBuilder not found, please define cidr range here or Galaxy or Cosmos. (System: CiCd).'
