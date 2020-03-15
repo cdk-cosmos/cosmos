@@ -1,0 +1,1612 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CICD-Solar-System Extension should match snapshot 1`] = `
+Object {
+  "Resources": Object {
+    "CdkPipeline7DE1C2DD": Object {
+      "Properties": Object {
+        "ArtifactStore": Object {
+          "Location": Object {
+            "Ref": "CdkPipelineCdkArtifactBucketBB4756CF",
+          },
+          "Type": "S3",
+        },
+        "Name": "App-Test-Cdk-Pipeline",
+        "RoleArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:aws:iam::",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":role/Core-CdkMaster-Role",
+            ],
+          ],
+        },
+        "Stages": Array [
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "CodeCommit",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "BranchName": "master",
+                  "PollForSourceChanges": false,
+                  "RepositoryName": Object {
+                    "Fn::ImportValue": "App-Test-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710Name171A5E5D",
+                  },
+                },
+                "Name": "CdkCheckout",
+                "OutputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Source",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"App-Test-*\\"}]",
+                  "ProjectName": Object {
+                    "Ref": "CdkPipelineCdkDeploy613E8280",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "Name": "CdkDeploy",
+                "OutputArtifacts": Array [
+                  Object {
+                    "Name": "CdkDeployOutput",
+                  },
+                ],
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Deploy",
+          },
+        ],
+      },
+      "Type": "AWS::CodePipeline::Pipeline",
+    },
+    "CdkPipelineCdkArtifactBucketBB4756CF": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "CdkPipelineCdkDeploy613E8280": Object {
+      "Properties": Object {
+        "Artifacts": Object {
+          "Location": Object {
+            "Ref": "CdkPipelineCdkArtifactBucketBB4756CF",
+          },
+          "Name": "cdk.templates",
+          "NamespaceType": "BUILD_ID",
+          "Packaging": "ZIP",
+          "Path": "CodeBuild",
+          "Type": "S3",
+        },
+        "Environment": Object {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": Array [
+            Object {
+              "Name": "STACKS",
+              "Type": "PLAINTEXT",
+              "Value": "",
+            },
+          ],
+          "Image": "aws/codebuild/standard:3.0",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER",
+        },
+        "Name": "App-Test-Cdk-PipelineDeploy",
+        "ServiceRole": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:aws:iam::",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":role/Core-CdkMaster-Role",
+            ],
+          ],
+        },
+        "Source": Object {
+          "BuildSpec": "{
+  \\"version\\": \\"0.2\\",
+  \\"phases\\": {
+    \\"install\\": {
+      \\"runtime-versions\\": {
+        \\"nodejs\\": \\"12\\"
+      }
+    },
+    \\"pre_build\\": {
+      \\"commands\\": [
+        \\"npm ci\\"
+      ]
+    },
+    \\"build\\": {
+      \\"commands\\": [
+        \\"npx cdk synth \${STACKS}\\",
+        \\"npx cdk deploy --require-approval=never \${STACKS}\\"
+      ]
+    }
+  },
+  \\"artifacts\\": {
+    \\"base-directory\\": \\"cdk.out\\",
+    \\"files\\": [
+      \\"*.template.json\\"
+    ]
+  }
+}",
+          "Location": Object {
+            "Fn::ImportValue": "App-Test-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710CloneUrlHttpF918145B",
+          },
+          "Type": "CODECOMMIT",
+        },
+        "SourceVersion": "master",
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicyC3BBEE2C": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "CdkPipelineCdkDeploy613E8280",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicyC3BBEE2C",
+        "Roles": Array [
+          Object {
+            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy8D3C82EA": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineCdkArtifactBucketBB4756CF",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "CdkPipelineCdkArtifactBucketBB4756CF",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "codecommit:GetBranch",
+                "codecommit:GetCommit",
+                "codecommit:UploadArchive",
+                "codecommit:GetUploadArchiveStatus",
+                "codecommit:CancelUploadArchive",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::ImportValue": "App-Test-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710ArnF2A3B4CE",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy8D3C82EA",
+        "Roles": Array [
+          Object {
+            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;
+
+exports[`CICD-Solar-System should match snapshot 1`] = `
+Object {
+  "Outputs": Object {
+    "AlbAlbArn044BCECB": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-Alb-Arn",
+      },
+      "Value": Object {
+        "Ref": "Alb16C2F182",
+      },
+    },
+    "AlbAlbSecurityGroupIdD444E58A": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-Alb-SecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "AlbSecurityGroup580F65A6",
+          "GroupId",
+        ],
+      },
+    },
+    "AlbHttpListenerAlArn54F636C2": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-HttpListener-Arn",
+      },
+      "Value": Object {
+        "Ref": "AlbHttpListener00C8B33E",
+      },
+    },
+    "AlbHttpListenerAlSecurityGroupIdBB00BCEE": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-HttpListener-SecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "AlbSecurityGroup580F65A6",
+          "GroupId",
+        ],
+      },
+    },
+    "ClusterClusterNameEB26049E": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-Cluster-Name",
+      },
+      "Value": Object {
+        "Ref": "ClusterEB0386A7",
+      },
+    },
+    "ClusterClusterSecurityGroupAAF8FE85": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-Cluster-SecurityGroup",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "ClusterCapacityInstanceSecurityGroup2D6F9ADD",
+          "GroupId",
+        ],
+      },
+    },
+    "VpcVpcAZsB82354D1": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-Vpc-AZs",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            Object {
+              "Fn::Select": Array [
+                0,
+                Object {
+                  "Fn::GetAZs": "",
+                },
+              ],
+            },
+            ",",
+            Object {
+              "Fn::Select": Array [
+                1,
+                Object {
+                  "Fn::GetAZs": "",
+                },
+              ],
+            },
+          ],
+        ],
+      },
+    },
+    "VpcVpcId87CD4CDE": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-Vpc-Id",
+      },
+      "Value": Object {
+        "Ref": "Vpc8378EB38",
+      },
+    },
+    "VpcVpcIsolatedSubnetRouteTablesE7EA80C8": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-Vpc-IsolatedSubnetRouteTableIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            Object {
+              "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
+            },
+            ",",
+            Object {
+              "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
+            },
+          ],
+        ],
+      },
+    },
+    "VpcVpcIsolatedSubnets7975613E": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-Vpc-IsolatedSubnetIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            Object {
+              "Ref": "VpcMainSubnet1Subnet501A7278",
+            },
+            ",",
+            Object {
+              "Ref": "VpcMainSubnet2Subnet4C1ED704",
+            },
+          ],
+        ],
+      },
+    },
+    "ZoneZoneIdD97F9BE1": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-Zone-Id",
+      },
+      "Value": Object {
+        "Ref": "ZoneA5DE4B68",
+      },
+    },
+    "ZoneZoneName61A65788": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-CiCd-Zone-Name",
+      },
+      "Value": "cicd.test.com",
+    },
+  },
+  "Parameters": Object {
+    "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": Object {
+    "Alb16C2F182": Object {
+      "Properties": Object {
+        "Name": "Core-Mgt-CiCd-Alb",
+        "Scheme": "internal",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AlbSecurityGroup580F65A6",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": Array [
+          Object {
+            "Ref": "VpcMainSubnet1Subnet501A7278",
+          },
+          Object {
+            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+          },
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "AlbHttpListener00C8B33E": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "DefaultTargetGroup00992EAD",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "Alb16C2F182",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "AlbSecurityGroup580F65A6": Object {
+      "Properties": Object {
+        "GroupDescription": "Automatically created Security Group for ELB CoreTestMgtCiCdSolarSystemAlb24A93ABC",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "CdkPipeline7DE1C2DD": Object {
+      "Properties": Object {
+        "ArtifactStore": Object {
+          "Location": Object {
+            "Ref": "CdkPipelineCdkArtifactBucketBB4756CF",
+          },
+          "Type": "S3",
+        },
+        "Name": "Core-Cdk-Pipeline",
+        "RoleArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:aws:iam::",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":role/Core-CdkMaster-Role",
+            ],
+          ],
+        },
+        "Stages": Array [
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "CodeCommit",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "BranchName": "master",
+                  "PollForSourceChanges": false,
+                  "RepositoryName": Object {
+                    "Fn::ImportValue": "Core-Test-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710Name171A5E5D",
+                  },
+                },
+                "Name": "CdkCheckout",
+                "OutputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Source",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"Core-Test-*\\"}]",
+                  "ProjectName": Object {
+                    "Ref": "CdkPipelineCdkDeploy613E8280",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "Name": "CdkDeploy",
+                "OutputArtifacts": Array [
+                  Object {
+                    "Name": "CdkDeployOutput",
+                  },
+                ],
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Deploy",
+          },
+        ],
+      },
+      "Type": "AWS::CodePipeline::Pipeline",
+    },
+    "CdkPipelineCdkArtifactBucketBB4756CF": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "CdkPipelineCdkDeploy613E8280": Object {
+      "Properties": Object {
+        "Artifacts": Object {
+          "Location": Object {
+            "Ref": "CdkPipelineCdkArtifactBucketBB4756CF",
+          },
+          "Name": "cdk.templates",
+          "NamespaceType": "BUILD_ID",
+          "Packaging": "ZIP",
+          "Path": "CodeBuild",
+          "Type": "S3",
+        },
+        "Environment": Object {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": Array [
+            Object {
+              "Name": "STACKS",
+              "Type": "PLAINTEXT",
+              "Value": "",
+            },
+          ],
+          "Image": "aws/codebuild/standard:3.0",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER",
+        },
+        "Name": "Core-Cdk-PipelineDeploy",
+        "ServiceRole": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:aws:iam::",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":role/Core-CdkMaster-Role",
+            ],
+          ],
+        },
+        "Source": Object {
+          "BuildSpec": "{
+  \\"version\\": \\"0.2\\",
+  \\"phases\\": {
+    \\"install\\": {
+      \\"runtime-versions\\": {
+        \\"nodejs\\": \\"12\\"
+      }
+    },
+    \\"pre_build\\": {
+      \\"commands\\": [
+        \\"npm ci\\"
+      ]
+    },
+    \\"build\\": {
+      \\"commands\\": [
+        \\"npx cdk synth \${STACKS}\\",
+        \\"npx cdk deploy --require-approval=never \${STACKS}\\"
+      ]
+    }
+  },
+  \\"artifacts\\": {
+    \\"base-directory\\": \\"cdk.out\\",
+    \\"files\\": [
+      \\"*.template.json\\"
+    ]
+  }
+}",
+          "Location": Object {
+            "Fn::ImportValue": "Core-Test-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710CloneUrlHttpF918145B",
+          },
+          "Type": "CODECOMMIT",
+        },
+        "SourceVersion": "master",
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicyC3BBEE2C": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "CdkPipelineCdkDeploy613E8280",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicyC3BBEE2C",
+        "Roles": Array [
+          Object {
+            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy8D3C82EA": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineCdkArtifactBucketBB4756CF",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "CdkPipelineCdkArtifactBucketBB4756CF",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "codecommit:GetBranch",
+                "codecommit:GetCommit",
+                "codecommit:UploadArchive",
+                "codecommit:GetUploadArchiveStatus",
+                "codecommit:CancelUploadArchive",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::ImportValue": "Core-Test-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710ArnF2A3B4CE",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy8D3C82EA",
+        "Roles": Array [
+          Object {
+            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterCapacityASGA6ED330E": Object {
+      "Properties": Object {
+        "DesiredCapacity": "1",
+        "LaunchConfigurationName": Object {
+          "Ref": "ClusterCapacityLaunchConfigC44566A4",
+        },
+        "MaxSize": "5",
+        "MinSize": "1",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Cluster/Capacity",
+          },
+        ],
+        "VPCZoneIdentifier": Array [
+          Object {
+            "Ref": "VpcMainSubnet1Subnet501A7278",
+          },
+          Object {
+            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+          },
+        ],
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "UpdatePolicy": Object {
+        "AutoScalingReplacingUpdate": Object {
+          "WillReplace": true,
+        },
+        "AutoScalingScheduledAction": Object {
+          "IgnoreUnmodifiedGroupSizeProperties": true,
+        },
+      },
+    },
+    "ClusterCapacityDrainECSHookFunctionAllowInvokeCoreTestMgtCiCdSolarSystemClusterCapacityLifecycleHookDrainHookTopic2739DC3F0D347CCB": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "ClusterCapacityDrainECSHookFunctionF75C9A9F",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": Object {
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ClusterCapacityDrainECSHookFunctionF75C9A9F": Object {
+      "DependsOn": Array [
+        "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA",
+        "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "ZipFile": "import boto3, json, os, time
+
+ecs = boto3.client('ecs')
+autoscaling = boto3.client('autoscaling')
+
+
+def lambda_handler(event, context):
+  print(json.dumps(event))
+  cluster = os.environ['CLUSTER']
+  snsTopicArn = event['Records'][0]['Sns']['TopicArn']
+  lifecycle_event = json.loads(event['Records'][0]['Sns']['Message'])
+  instance_id = lifecycle_event.get('EC2InstanceId')
+  if not instance_id:
+    print('Got event without EC2InstanceId: %s', json.dumps(event))
+    return
+
+  instance_arn = container_instance_arn(cluster, instance_id)
+  print('Instance %s has container instance ARN %s' % (lifecycle_event['EC2InstanceId'], instance_arn))
+
+  if not instance_arn:
+    return
+
+  while has_tasks(cluster, instance_arn):
+    time.sleep(10)
+
+  try:
+    print('Terminating instance %s' % instance_id)
+    autoscaling.complete_lifecycle_action(
+        LifecycleActionResult='CONTINUE',
+        **pick(lifecycle_event, 'LifecycleHookName', 'LifecycleActionToken', 'AutoScalingGroupName'))
+  except Exception as e:
+    # Lifecycle action may have already completed.
+    print(str(e))
+
+
+def container_instance_arn(cluster, instance_id):
+  \\"\\"\\"Turn an instance ID into a container instance ARN.\\"\\"\\"
+  arns = ecs.list_container_instances(cluster=cluster, filter='ec2InstanceId==' + instance_id)['containerInstanceArns']
+  if not arns:
+    return None
+  return arns[0]
+
+
+def has_tasks(cluster, instance_arn):
+  \\"\\"\\"Return True if the instance is running tasks for the given cluster.\\"\\"\\"
+  instances = ecs.describe_container_instances(cluster=cluster, containerInstances=[instance_arn])['containerInstances']
+  if not instances:
+    return False
+  instance = instances[0]
+
+  if instance['status'] == 'ACTIVE':
+    # Start draining, then try again later
+    set_container_instance_to_draining(cluster, instance_arn)
+    return True
+
+  tasks = instance['runningTasksCount'] + instance['pendingTasksCount']
+  print('Instance %s has %s tasks' % (instance_arn, tasks))
+
+  return tasks > 0
+
+
+def set_container_instance_to_draining(cluster, instance_arn):
+  ecs.update_container_instances_state(
+      cluster=cluster,
+      containerInstances=[instance_arn], status='DRAINING')
+
+
+def pick(dct, *keys):
+  \\"\\"\\"Pick a subset of a dict.\\"\\"\\"
+  return {k: v for k, v in dct.items() if k in keys}
+",
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "CLUSTER": Object {
+              "Ref": "ClusterEB0386A7",
+            },
+          },
+        },
+        "Handler": "index.lambda_handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.6",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Cluster/Capacity",
+          },
+        ],
+        "Timeout": 310,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Cluster/Capacity",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ec2:DescribeInstances",
+                "ec2:DescribeInstanceAttribute",
+                "ec2:DescribeInstanceStatus",
+                "ec2:DescribeHosts",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "autoscaling:CompleteLifecycleAction",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":autoscaling:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":autoScalingGroup:*:autoScalingGroupName/",
+                    Object {
+                      "Ref": "ClusterCapacityASGA6ED330E",
+                    },
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ecs:DescribeContainerInstances",
+                "ecs:DescribeTasks",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "ecs:ListContainerInstances",
+                "ecs:SubmitContainerStateChange",
+                "ecs:SubmitTaskStateChange",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "ClusterEB0386A7",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ecs:UpdateContainerInstancesState",
+                "ecs:ListTasks",
+              ],
+              "Condition": Object {
+                "ArnEquals": Object {
+                  "ecs:cluster": Object {
+                    "Fn::GetAtt": Array [
+                      "ClusterEB0386A7",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA",
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterCapacityDrainECSHookFunctionTopic49CF7031": Object {
+      "Properties": Object {
+        "Endpoint": Object {
+          "Fn::GetAtt": Array [
+            "ClusterCapacityDrainECSHookFunctionF75C9A9F",
+            "Arn",
+          ],
+        },
+        "Protocol": "lambda",
+        "TopicArn": Object {
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "ClusterCapacityInstanceProfileCD41BDF7": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterCapacityInstanceRole4A69070A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "ClusterCapacityInstanceRole4A69070A": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Cluster/Capacity",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ecs:CreateCluster",
+                "ecs:DeregisterContainerInstance",
+                "ecs:DiscoverPollEndpoint",
+                "ecs:Poll",
+                "ecs:RegisterContainerInstance",
+                "ecs:StartTelemetrySession",
+                "ecs:Submit*",
+                "ecr:GetAuthorizationToken",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D",
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterCapacityInstanceRole4A69070A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterCapacityInstanceSecurityGroup2D6F9ADD": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Test-Mgt-CiCd-SolarSystem/Cluster/Capacity/InstanceSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Cluster/Capacity",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ClusterCapacityLaunchConfigC44566A4": Object {
+      "DependsOn": Array [
+        "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D",
+        "ClusterCapacityInstanceRole4A69070A",
+      ],
+      "Properties": Object {
+        "IamInstanceProfile": Object {
+          "Ref": "ClusterCapacityInstanceProfileCD41BDF7",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t2.medium",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ClusterCapacityInstanceSecurityGroup2D6F9ADD",
+              "GroupId",
+            ],
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "#!/bin/bash
+echo ECS_CLUSTER=",
+                Object {
+                  "Ref": "ClusterEB0386A7",
+                },
+                " >> /etc/ecs/ecs.config
+sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
+sudo service iptables save
+echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "ClusterCapacityLifecycleHookDrainHook9C5B4B9E": Object {
+      "DependsOn": Array [
+        "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B",
+        "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+      ],
+      "Properties": Object {
+        "AutoScalingGroupName": Object {
+          "Ref": "ClusterCapacityASGA6ED330E",
+        },
+        "DefaultResult": "CONTINUE",
+        "HeartbeatTimeout": 300,
+        "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
+        "NotificationTargetARN": Object {
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+        },
+        "RoleARN": Object {
+          "Fn::GetAtt": Array [
+            "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::AutoScaling::LifecycleHook",
+    },
+    "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "autoscaling.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Cluster/Capacity",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B",
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterCapacityLifecycleHookDrainHookTopic1768B95F": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Cluster/Capacity",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::Topic",
+    },
+    "ClusterEB0386A7": Object {
+      "Properties": Object {
+        "ClusterName": "Core-Mgt-CiCd-Cluster",
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "DefaultTargetGroup00992EAD": Object {
+      "Properties": Object {
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetType": "instance",
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "Vpc8378EB38": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.4.0/24",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VpcMainSubnet1RouteTableAssociation735BC7DF": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcMainSubnet1Subnet501A7278",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcMainSubnet1RouteTableB8CBA6F0": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Vpc/MainSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcMainSubnet1Subnet501A7278": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.4.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Vpc/MainSubnet1",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Main",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcMainSubnet2RouteTableAssociationE08931BA": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcMainSubnet2Subnet4C1ED704",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcMainSubnet2RouteTableBE78C2D2": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Vpc/MainSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcMainSubnet2Subnet4C1ED704": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.4.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-CiCd-SolarSystem/Vpc/MainSubnet2",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Main",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ZoneA5DE4B68": Object {
+      "Properties": Object {
+        "Name": "cicd.test.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "ZoneDelegationAE61034B": Object {
+      "Properties": Object {
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "Core-Test-Cosmos:ExportsOutputRefRootZone831A5F27FABD99AF",
+        },
+        "Name": "cicd.test.com.",
+        "ResourceRecords": Object {
+          "Fn::GetAtt": Array [
+            "ZoneA5DE4B68",
+            "NameServers",
+          ],
+        },
+        "TTL": "172800",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;

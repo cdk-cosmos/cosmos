@@ -1,0 +1,700 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ECS-Solar-System Extension should match snapshot 1`] = `Object {}`;
+
+exports[`ECS-Solar-System should match snapshot 1`] = `
+Object {
+  "Outputs": Object {
+    "AlbAlbArn044BCECB": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Alb-Arn",
+      },
+      "Value": Object {
+        "Ref": "Alb16C2F182",
+      },
+    },
+    "AlbAlbSecurityGroupIdD444E58A": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Alb-SecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "AlbSecurityGroup580F65A6",
+          "GroupId",
+        ],
+      },
+    },
+    "AlbHttpListenerAlArn54F636C2": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-HttpListener-Arn",
+      },
+      "Value": Object {
+        "Ref": "AlbHttpListener00C8B33E",
+      },
+    },
+    "AlbHttpListenerAlSecurityGroupIdBB00BCEE": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-HttpListener-SecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "AlbSecurityGroup580F65A6",
+          "GroupId",
+        ],
+      },
+    },
+    "ClusterClusterNameEB26049E": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Cluster-Name",
+      },
+      "Value": Object {
+        "Ref": "ClusterEB0386A7",
+      },
+    },
+    "ClusterClusterSecurityGroupAAF8FE85": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Cluster-SecurityGroup",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "ClusterCapacityInstanceSecurityGroup2D6F9ADD",
+          "GroupId",
+        ],
+      },
+    },
+    "ZoneZoneIdD97F9BE1": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Zone-Id",
+      },
+      "Value": Object {
+        "Ref": "ZoneA5DE4B68",
+      },
+    },
+    "ZoneZoneName61A65788": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Zone-Name",
+      },
+      "Value": "dev.test.com",
+    },
+  },
+  "Parameters": Object {
+    "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": Object {
+    "Alb16C2F182": Object {
+      "Properties": Object {
+        "Name": "Core-Mgt-Dev-Alb",
+        "Scheme": "internal",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AlbSecurityGroup580F65A6",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": Array [
+          Object {
+            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082",
+          },
+          Object {
+            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4",
+          },
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "AlbHttpListener00C8B33E": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "DefaultTargetGroup00992EAD",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "Alb16C2F182",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "AlbSecurityGroup580F65A6": Object {
+      "Properties": Object {
+        "GroupDescription": "Automatically created Security Group for ELB CoreTestMgtDevSolarSystemAlbD8433EC7",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "VpcId": Object {
+          "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ClusterCapacityASGA6ED330E": Object {
+      "Properties": Object {
+        "DesiredCapacity": "1",
+        "LaunchConfigurationName": Object {
+          "Ref": "ClusterCapacityLaunchConfigC44566A4",
+        },
+        "MaxSize": "5",
+        "MinSize": "1",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+          },
+        ],
+        "VPCZoneIdentifier": Array [
+          Object {
+            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082",
+          },
+          Object {
+            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4",
+          },
+        ],
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "UpdatePolicy": Object {
+        "AutoScalingReplacingUpdate": Object {
+          "WillReplace": true,
+        },
+        "AutoScalingScheduledAction": Object {
+          "IgnoreUnmodifiedGroupSizeProperties": true,
+        },
+      },
+    },
+    "ClusterCapacityDrainECSHookFunctionAllowInvokeCoreTestMgtDevSolarSystemClusterCapacityLifecycleHookDrainHookTopicCC9A1D79A98739B1": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "ClusterCapacityDrainECSHookFunctionF75C9A9F",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": Object {
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ClusterCapacityDrainECSHookFunctionF75C9A9F": Object {
+      "DependsOn": Array [
+        "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA",
+        "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "ZipFile": "import boto3, json, os, time
+
+ecs = boto3.client('ecs')
+autoscaling = boto3.client('autoscaling')
+
+
+def lambda_handler(event, context):
+  print(json.dumps(event))
+  cluster = os.environ['CLUSTER']
+  snsTopicArn = event['Records'][0]['Sns']['TopicArn']
+  lifecycle_event = json.loads(event['Records'][0]['Sns']['Message'])
+  instance_id = lifecycle_event.get('EC2InstanceId')
+  if not instance_id:
+    print('Got event without EC2InstanceId: %s', json.dumps(event))
+    return
+
+  instance_arn = container_instance_arn(cluster, instance_id)
+  print('Instance %s has container instance ARN %s' % (lifecycle_event['EC2InstanceId'], instance_arn))
+
+  if not instance_arn:
+    return
+
+  while has_tasks(cluster, instance_arn):
+    time.sleep(10)
+
+  try:
+    print('Terminating instance %s' % instance_id)
+    autoscaling.complete_lifecycle_action(
+        LifecycleActionResult='CONTINUE',
+        **pick(lifecycle_event, 'LifecycleHookName', 'LifecycleActionToken', 'AutoScalingGroupName'))
+  except Exception as e:
+    # Lifecycle action may have already completed.
+    print(str(e))
+
+
+def container_instance_arn(cluster, instance_id):
+  \\"\\"\\"Turn an instance ID into a container instance ARN.\\"\\"\\"
+  arns = ecs.list_container_instances(cluster=cluster, filter='ec2InstanceId==' + instance_id)['containerInstanceArns']
+  if not arns:
+    return None
+  return arns[0]
+
+
+def has_tasks(cluster, instance_arn):
+  \\"\\"\\"Return True if the instance is running tasks for the given cluster.\\"\\"\\"
+  instances = ecs.describe_container_instances(cluster=cluster, containerInstances=[instance_arn])['containerInstances']
+  if not instances:
+    return False
+  instance = instances[0]
+
+  if instance['status'] == 'ACTIVE':
+    # Start draining, then try again later
+    set_container_instance_to_draining(cluster, instance_arn)
+    return True
+
+  tasks = instance['runningTasksCount'] + instance['pendingTasksCount']
+  print('Instance %s has %s tasks' % (instance_arn, tasks))
+
+  return tasks > 0
+
+
+def set_container_instance_to_draining(cluster, instance_arn):
+  ecs.update_container_instances_state(
+      cluster=cluster,
+      containerInstances=[instance_arn], status='DRAINING')
+
+
+def pick(dct, *keys):
+  \\"\\"\\"Pick a subset of a dict.\\"\\"\\"
+  return {k: v for k, v in dct.items() if k in keys}
+",
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "CLUSTER": Object {
+              "Ref": "ClusterEB0386A7",
+            },
+          },
+        },
+        "Handler": "index.lambda_handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.6",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+          },
+        ],
+        "Timeout": 310,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ec2:DescribeInstances",
+                "ec2:DescribeInstanceAttribute",
+                "ec2:DescribeInstanceStatus",
+                "ec2:DescribeHosts",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "autoscaling:CompleteLifecycleAction",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":autoscaling:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":autoScalingGroup:*:autoScalingGroupName/",
+                    Object {
+                      "Ref": "ClusterCapacityASGA6ED330E",
+                    },
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ecs:DescribeContainerInstances",
+                "ecs:DescribeTasks",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "ecs:ListContainerInstances",
+                "ecs:SubmitContainerStateChange",
+                "ecs:SubmitTaskStateChange",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "ClusterEB0386A7",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ecs:UpdateContainerInstancesState",
+                "ecs:ListTasks",
+              ],
+              "Condition": Object {
+                "ArnEquals": Object {
+                  "ecs:cluster": Object {
+                    "Fn::GetAtt": Array [
+                      "ClusterEB0386A7",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA",
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterCapacityDrainECSHookFunctionTopic49CF7031": Object {
+      "Properties": Object {
+        "Endpoint": Object {
+          "Fn::GetAtt": Array [
+            "ClusterCapacityDrainECSHookFunctionF75C9A9F",
+            "Arn",
+          ],
+        },
+        "Protocol": "lambda",
+        "TopicArn": Object {
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "ClusterCapacityInstanceProfileCD41BDF7": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterCapacityInstanceRole4A69070A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "ClusterCapacityInstanceRole4A69070A": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ecs:CreateCluster",
+                "ecs:DeregisterContainerInstance",
+                "ecs:DiscoverPollEndpoint",
+                "ecs:Poll",
+                "ecs:RegisterContainerInstance",
+                "ecs:StartTelemetrySession",
+                "ecs:Submit*",
+                "ecr:GetAuthorizationToken",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D",
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterCapacityInstanceRole4A69070A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterCapacityInstanceSecurityGroup2D6F9ADD": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity/InstanceSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+          },
+        ],
+        "VpcId": Object {
+          "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ClusterCapacityLaunchConfigC44566A4": Object {
+      "DependsOn": Array [
+        "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D",
+        "ClusterCapacityInstanceRole4A69070A",
+      ],
+      "Properties": Object {
+        "IamInstanceProfile": Object {
+          "Ref": "ClusterCapacityInstanceProfileCD41BDF7",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t2.medium",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "ClusterCapacityInstanceSecurityGroup2D6F9ADD",
+              "GroupId",
+            ],
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "#!/bin/bash
+echo ECS_CLUSTER=",
+                Object {
+                  "Ref": "ClusterEB0386A7",
+                },
+                " >> /etc/ecs/ecs.config
+sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
+sudo service iptables save
+echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "ClusterCapacityLifecycleHookDrainHook9C5B4B9E": Object {
+      "DependsOn": Array [
+        "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B",
+        "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+      ],
+      "Properties": Object {
+        "AutoScalingGroupName": Object {
+          "Ref": "ClusterCapacityASGA6ED330E",
+        },
+        "DefaultResult": "CONTINUE",
+        "HeartbeatTimeout": 300,
+        "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
+        "NotificationTargetARN": Object {
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+        },
+        "RoleARN": Object {
+          "Fn::GetAtt": Array [
+            "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::AutoScaling::LifecycleHook",
+    },
+    "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "autoscaling.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B",
+        "Roles": Array [
+          Object {
+            "Ref": "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterCapacityLifecycleHookDrainHookTopic1768B95F": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::Topic",
+    },
+    "ClusterEB0386A7": Object {
+      "Properties": Object {
+        "ClusterName": "Core-Mgt-Dev-Cluster",
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "DefaultTargetGroup00992EAD": Object {
+      "Properties": Object {
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetType": "instance",
+        "VpcId": Object {
+          "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "ZoneA5DE4B68": Object {
+      "Properties": Object {
+        "Name": "dev.test.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+  },
+}
+`;
