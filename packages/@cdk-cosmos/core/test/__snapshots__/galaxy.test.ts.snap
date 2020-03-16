@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Galaxy Extension should match snapshot 1`] = `Object {}`;
+
+exports[`Galaxy should match snapshot 1`] = `Object {}`;

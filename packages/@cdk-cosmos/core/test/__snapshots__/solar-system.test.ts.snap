@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Solar-System Extension should match snapshot 1`] = `Object {}`;
+
+exports[`Solar-System should match snapshot 1`] = `
+Object {
+  "Outputs": Object {
+    "ZoneZoneIdD97F9BE1": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Zone-Id",
+      },
+      "Value": Object {
+        "Ref": "ZoneA5DE4B68",
+      },
+    },
+    "ZoneZoneName61A65788": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Zone-Name",
+      },
+      "Value": "dev.test.com",
+    },
+  },
+  "Resources": Object {
+    "ZoneA5DE4B68": Object {
+      "Properties": Object {
+        "Name": "dev.test.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+  },
+}
+`;
