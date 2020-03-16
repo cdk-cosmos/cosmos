@@ -16,7 +16,8 @@
   },
   "workspaces": [
     "packages/@cdk-cosmos/*",
-    "packages/@cosmos-building-blocks/*"
+    "packages/@cosmos-building-blocks/*",
+    "packages/private/*"
   ],
   "precommit": [
     "lint",

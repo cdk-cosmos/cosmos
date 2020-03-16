@@ -3,6 +3,7 @@ import { Bucket, BucketEncryption } from '@aws-cdk/aws-s3';
 
 export class CDKToolkit extends Stack {
   readonly bucket: Bucket;
+
   constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, {
       description:

@@ -1,0 +1,32 @@
+{
+  "name": "cross-account-stack-ref-handler",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
+    "package.json",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdk-cosmos/cosmos.git",
+    "directory": "packages/private/cross-account-stack-ref-handler"
+  },
+  "scripts": {
+    "build": "parcel build src/index.ts --out-dir lib --target node --bundle-node-modules && yarn bundle",
+    "test": "jest",
+    "format": "prettier --write **/*.ts !**/*.d.ts",
+    "lint": "eslint . --ext .js,.ts",
+    "clean": "rm -rf lib",
+    "prepublishOnly": "yarn lint && yarn test && yarn build",
+    "bundle": "cd lib && rm -f bundle.zip && zip bundle.zip *"
+  },
+  "dependencies": {
+    "parcel-bundler": "^1.12.4",
+    "source-map-support": "^0.5.16"
+  }
+}
