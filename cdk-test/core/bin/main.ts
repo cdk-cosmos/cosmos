@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-import { App, Stack, CfnOutput, Fn } from '@aws-cdk/core';
+import { App, Stack, CfnOutput } from '@aws-cdk/core';
 import { CosmosStack, GalaxyStack, CiCdSolarSystemStack, EcsSolarSystemStack } from '@cdk-cosmos/core';
-import { CDKToolkit, CrossAccountStackReference, CrossAccountStackReferenceFn } from '@cosmos-building-blocks/common';
+import { CDKToolkit, CrossAccountExports, CrossAccountExportsFn } from '@cosmos-building-blocks/common';
 import { Role } from '@aws-cdk/aws-iam';
 
 const app = new App();
 
 const stack = new Stack(app, 'Test');
-const lambda = new CrossAccountStackReferenceFn(stack, 'CrossAccountStackReferenceFn', {
+const lambda = new CrossAccountExportsFn(stack, 'CrossAccountExportsFn', {
   role: Role.fromRoleArn(stack, 'Core-CdkMaster-Role', 'arn:aws:iam::583682874749:role/Core-CdkMaster-Role'),
 });
-const ref = new CrossAccountStackReference(stack, 'TestReference', {
+const ref = new CrossAccountExports(stack, 'TestExports', {
   fn: lambda,
-  exports: 'Core-CdkRepo-Name',
+  exports: ['Core-CdkRepo-Name'],
 });
 new CfnOutput(stack, 'TestOutput', {
-  value: ref.getExport('Core-CdkRepo-Name'),
+  value: ref.get('Core-CdkRepo-Name'),
 });
 
 // const mgtEnvConfig = { account: '1111', region: 'ap-southeast-2' };

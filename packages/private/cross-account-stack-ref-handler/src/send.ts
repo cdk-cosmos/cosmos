@@ -36,7 +36,7 @@ export const send = async (
 ): Promise<void> => {
   try {
     const url = event.ResponseURL;
-    let reason = error ? `Error: ${error.message} \n` : '';
+    let reason = error ? `Error: ${error.message}\n` : '';
     reason += `See the details in CloudWatch Log Stream: ${context.logStreamName}`;
     const data: CloudFormationCustomResourceResponse = {
       Status: status,

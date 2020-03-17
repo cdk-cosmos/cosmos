@@ -1,6 +1,6 @@
 import 'source-map-support/register';
 import { CloudFormationCustomResourceEvent, Context } from 'aws-lambda';
-import { CloudFormation, Credentials, ChainableTemporaryCredentials } from 'aws-sdk';
+import { CloudFormation, ChainableTemporaryCredentials, Credentials } from 'aws-sdk';
 import { send } from './send';
 
 interface Props {
@@ -18,7 +18,7 @@ export const handler = async (event: CloudFormationCustomResourceEvent, context:
   try {
     console.log('Event:', JSON.stringify(event, null, 2));
 
-    const { Exports, ShouldErrorIfNotFound = false, AssumeRolArn } = event.ResourceProperties as Props;
+    const { Exports, ShouldErrorIfNotFound, AssumeRolArn } = event.ResourceProperties as Props;
     const attributes: Attributes = {};
 
     let cred: Credentials | undefined;
@@ -37,7 +37,7 @@ export const handler = async (event: CloudFormationCustomResourceEvent, context:
     const req = await cloudformation.listExports().promise();
     for (const exp of Exports) {
       const ref = req.Exports?.find(x => x.Name === exp);
-      if (!ref && ShouldErrorIfNotFound) throw new Error(`Export ${exp} not found`);
+      if (!ref && ShouldErrorIfNotFound) throw new Error(`Export ${exp} not found.`);
       attributes[exp] = ref?.Value;
     }
 

@@ -21,7 +21,7 @@
     "test": "jest",
     "format": "prettier --write **/*.ts !**/*.d.ts",
     "lint": "eslint . --ext .js,.ts",
-    "clean": "rm -rf lib",
+    "clean": "rm -rf lib && rm -rf .cache",
     "prepublishOnly": "yarn lint && yarn test && yarn build",
     "bundle": "cd lib && rm -f bundle.zip && zip bundle.zip *"
   },

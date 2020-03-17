@@ -1,6 +1,2 @@
 export { CDKToolkit } from './cdktoolkit';
-export {
-  CrossAccountStackReference,
-  CrossAccountStackReferenceProps,
-  CrossAccountStackReferenceFn,
-} from './remote-reference';
+export { CrossAccountExports, CrossAccountExportsFn, CrossAccountExportsProps } from './cross-account-exports';
