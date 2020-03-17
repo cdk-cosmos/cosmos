@@ -10,6 +10,7 @@
     "@aws-cdk/core": "1.23.0",
     "@cdk-cosmos/core": "../../packages/@cdk-cosmos/core",
     "@cosmos-building-blocks/common": "../../packages/@cosmos-building-blocks/common",
+    "@cosmos-building-blocks/transit-gateway": "../../packages/@cosmos-building-blocks/transit-gateway",
     "source-map-support": "^0.5.16"
   },
   "devDependencies": {
