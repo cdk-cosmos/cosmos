@@ -34,8 +34,14 @@ new TgwConnect(testStack, 'MyTgwConnection', {
 });
 const testStacksynth = SynthUtils.synthesize(testStack);
 
-test('should create TGW attachments', () => {
-  expect(testStacksynth).toHaveResource('AWS::Route53Resolver::ResolverRuleAssociation');
-  expect(testStacksynth).toHaveResource('AWS::EC2::TransitGatewayAttachment');
-  expect(testStacksynth).toHaveResource('AWS::EC2::Route');
+describe('Transit Gateway Connection', () => {
+  test('should create TGW attachments', () => {
+    expect(testStacksynth).toHaveResource('AWS::Route53Resolver::ResolverRuleAssociation');
+    expect(testStacksynth).toHaveResource('AWS::EC2::TransitGatewayAttachment');
+    expect(testStacksynth).toHaveResource('AWS::EC2::Route');
+  });
+
+  test('should match snapshot', () => {
+    expect(testStacksynth.template).toMatchSnapshot();
+  });
 });
