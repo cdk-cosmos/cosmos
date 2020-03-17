@@ -25,10 +25,7 @@ export class TgwConnect extends Construct {
 
     const subnetSelect = this.Vpc.selectSubnets();
     for (const subnet of subnetSelect.subnets) {
-      const random = Math.random()
-        .toString(36)
-        .substring(4);
-      new CfnRoute(this, `TGWRoute-${random}`, {
+      new CfnRoute(this, `TGWRoute-${subnet.node.id}`, {
         routeTableId: subnet.routeTable.routeTableId,
         destinationCidrBlock: this.TgwDestinationCidr,
         transitGatewayId: this.TgwId,
