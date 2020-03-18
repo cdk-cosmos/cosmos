@@ -96,6 +96,7 @@ Object {
                 "Service": Array [
                   "codebuild.amazonaws.com",
                   "codepipeline.amazonaws.com",
+                  "lambda.amazonaws.com",
                 ],
               },
             },

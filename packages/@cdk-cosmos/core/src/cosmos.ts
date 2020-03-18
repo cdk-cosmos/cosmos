@@ -97,7 +97,8 @@ export class CosmosStack extends Stack implements Cosmos {
       roleName: CdkMasterRoleName,
       assumedBy: new CompositePrincipal(
         new ServicePrincipal('codebuild.amazonaws.com'),
-        new ServicePrincipal('codepipeline.amazonaws.com')
+        new ServicePrincipal('codepipeline.amazonaws.com'),
+        new ServicePrincipal('lambda.amazonaws.com')
       ),
     });
     this.CdkMasterRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
