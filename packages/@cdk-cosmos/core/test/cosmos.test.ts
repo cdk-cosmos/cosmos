@@ -12,7 +12,7 @@ const toHaveResourceCount = (stack: CloudFormationStackArtifact, length: number)
   expect(Object.keys(stack.template.Resources)).toHaveLength(length);
 };
 
-const app = new App({ context: { '@aws-cdk/core:enableStackNameDuplicates': 'false' } });
+const app = new App();
 const cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
 const cosmosExtension = new CosmosExtensionStack(app, 'Test');
 const cosmosStack = SynthUtils.synthesize(cosmos);
