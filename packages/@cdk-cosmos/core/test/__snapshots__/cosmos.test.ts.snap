@@ -56,7 +56,17 @@ Object {
       "Export": Object {
         "Name": "Core-RootZone-NameServers",
       },
-      "Value": "#{Token[TOKEN.20]}",
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "RootZone831A5F27",
+              "NameServers",
+            ],
+          },
+        ],
+      },
     },
     "RootZoneZoneId57AFCBDD": Object {
       "Export": Object {

@@ -30,10 +30,10 @@ export class CrossAccountZoneDelegationRecord extends Construct {
     const [zoneNameRef, zoneNameServersRef] = this.exports.get();
     this.delegationRecord = new ZoneDelegationRecord(cosmos.Link, `${solarSystem.Name}${id}`, {
       zone: cosmos.RootZone,
-      recordName: zoneNameRef,
+      recordName: zoneNameRef + '.',
       nameServers: Fn.split(',', zoneNameServersRef),
     });
 
-    this.node.addDependency(solarSystem.Zone);
+    cosmos.Link.node.addDependency(solarSystem.Zone);
   }
 }

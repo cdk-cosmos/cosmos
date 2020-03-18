@@ -37,7 +37,7 @@ export class RemoteZone {
     if (zone.hostedZoneNameServers) {
       new Output(zone, 'NameServers', {
         exportName: `${exportName}-NameServers`,
-        value: zone.hostedZoneNameServers.join(','),
+        value: Fn.join(',', zone.hostedZoneNameServers),
       });
     }
   }
@@ -61,7 +61,7 @@ export class RemoteVpc {
     });
     new Output(vpc, 'VpcAZs', {
       exportName: `${exportName}-AZs`,
-      value: vpc.availabilityZones.join(','),
+      value: vpc.availabilityZones.join(','), //FIXME: dont use .join
     });
 
     if (vpc.isolatedSubnets.length) {

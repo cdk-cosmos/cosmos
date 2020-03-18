@@ -489,7 +489,17 @@ Object {
       "Export": Object {
         "Name": "Core-Mgt-CiCd-Zone-NameServers",
       },
-      "Value": "#{Token[TOKEN.119]}",
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "ZoneA5DE4B68",
+              "NameServers",
+            ],
+          },
+        ],
+      },
     },
     "ZoneZoneIdD97F9BE1": Object {
       "Export": Object {
