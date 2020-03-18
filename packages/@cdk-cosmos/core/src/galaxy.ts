@@ -11,6 +11,7 @@ import {
   CosmosExtension,
   GalaxyExtension,
   SolarSystemExtension,
+  isCrossAccount,
 } from '.';
 
 const stackName = (cosmos: Bubble, name: string): string =>
@@ -26,6 +27,7 @@ export class GalaxyStack extends Stack implements Galaxy {
   readonly Name: string;
   readonly NetworkBuilder?: NetworkBuilder;
   readonly CdkCrossAccountRole?: Role;
+  readonly CdkCrossAccountRoleStaticArn?: string;
 
   constructor(cosmos: Cosmos, name: string, props: GalaxyStackProps) {
     super(cosmos.Scope, stackName(cosmos, name), {
@@ -45,13 +47,14 @@ export class GalaxyStack extends Stack implements Galaxy {
     if (cidr) this.NetworkBuilder = new NetworkBuilder(cidr);
     else if (this.Cosmos.NetworkBuilder) this.NetworkBuilder = this.Cosmos.NetworkBuilder;
 
-    // If cross account then create cross account role
-    if (this.Cosmos.account !== this.account) {
+    if (isCrossAccount(this, this.Cosmos)) {
+      const CdkCrossAccountRoleName = RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkCrossAccount-Role', this);
       this.CdkCrossAccountRole = new Role(this, 'CdkCrossAccountRole', {
-        roleName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkCrossAccount-Role', this),
+        roleName: CdkCrossAccountRoleName,
         assumedBy: new ArnPrincipal(this.Cosmos.CdkMasterRoleStaticArn),
       });
       this.CdkCrossAccountRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
+      this.CdkCrossAccountRoleStaticArn = `arn:aws:iam::${this.account}:role/${CdkCrossAccountRoleName}`;
     }
   }
 

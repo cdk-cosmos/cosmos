@@ -28,7 +28,7 @@ export class CdkCredentialsProvider implements CredentialProviderSource {
             RoleSessionName: 'cdk-credentials-provider',
           },
         });
-        await this.getCredentials(cred);
+        await cred.getPromise();
         this.cache[accountId] = cred;
       }
       return true;
@@ -46,19 +46,6 @@ export class CdkCredentialsProvider implements CredentialProviderSource {
     if (!creds) throw new Error('Credentials Not Found.');
 
     return creds;
-  }
-
-  async getCredentials(cred: Credentials): Promise<void> {
-    return new Promise<void>((res, rej) => {
-      const timeout = setTimeout(() => {
-        rej(new Error('TimeOutError'));
-      }, 10000);
-      cred.get(error => {
-        clearTimeout(timeout);
-        if (error) rej(error);
-        res();
-      });
-    });
   }
 }
 

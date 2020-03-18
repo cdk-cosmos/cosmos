@@ -1,0 +1,35 @@
+{
+  "name": "@cosmos-building-blocks/transit-gateway",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
+    "package.json",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdk-cosmos/cosmos.git",
+    "directory": "packages/@cosmos-building-blocks/transit-gateway"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "format": "prettier --write **/*.ts !**/*.d.ts",
+    "lint": "eslint . --ext .js,.ts",
+    "clean": "rm -rf lib",
+    "prepublishOnly": "yarn lint && yarn test && yarn build"
+  },
+  "peerDependencies": {
+    "@aws-cdk/core": "^1.23.0",
+    "@aws-cdk/aws-ec2": "^1.23.0",
+    "@aws-cdk/aws-route53resolver": "^1.23.0"
+  }
+}

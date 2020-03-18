@@ -20,7 +20,7 @@ import {
 } from '@aws-cdk/aws-codebuild';
 import { IRole } from '@aws-cdk/aws-iam';
 import { IVpc } from '@aws-cdk/aws-ec2';
-import { RESOLVE, PATTERN, _RESOLVE, SolarSystem, SolarSystemExtension } from '.';
+import { RESOLVE, PATTERN, _RESOLVE, SolarSystem, SolarSystemExtension } from '..';
 
 export type BuildEnvironmentVariables = { [key: string]: BuildEnvironmentVariable };
 

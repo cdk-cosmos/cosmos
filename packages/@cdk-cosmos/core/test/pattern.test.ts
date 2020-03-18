@@ -1,4 +1,4 @@
-import { RESOLVE } from '../src/pattern';
+import { RESOLVE } from '../src/';
 
 test('Resolve Pattern', () => {
   const scope = { Partition: 'Core', Name: 'Demo' };

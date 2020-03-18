@@ -41,6 +41,33 @@ Object {
       },
       "Value": "0.1.1",
     },
+    "CrossAccountExportsFnFunctionArn4D0D888C": Object {
+      "Export": Object {
+        "Name": "Core-CrossAccountExportsFn-Arn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CrossAccountExportsFnBB7349E9",
+          "Arn",
+        ],
+      },
+    },
+    "RootZoneNameServersC9CDB123": Object {
+      "Export": Object {
+        "Name": "Core-RootZone-NameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "RootZone831A5F27",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
     "RootZoneZoneId57AFCBDD": Object {
       "Export": Object {
         "Name": "Core-RootZone-Id",
@@ -56,6 +83,7 @@ Object {
       "Value": "test.com",
     },
   },
+  "Parameters": Any<Object>,
   "Resources": Object {
     "CdkMasterRole2FE9B317": Object {
       "Properties": Object {
@@ -68,6 +96,7 @@ Object {
                 "Service": Array [
                   "codebuild.amazonaws.com",
                   "codepipeline.amazonaws.com",
+                  "lambda.amazonaws.com",
                 ],
               },
             },
@@ -97,6 +126,27 @@ Object {
         "RepositoryName": "core-cdk-repo",
       },
       "Type": "AWS::CodeCommit::Repository",
+    },
+    "CrossAccountExportsFnBB7349E9": Object {
+      "DependsOn": Array [
+        "CdkMasterRole2FE9B317",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Any<Object>,
+          "S3Key": Any<Object>,
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CdkMasterRole2FE9B317",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
     },
     "RootZone831A5F27": Object {
       "Properties": Object {
