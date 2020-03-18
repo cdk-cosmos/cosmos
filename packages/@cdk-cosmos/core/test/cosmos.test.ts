@@ -12,7 +12,7 @@ const toHaveResourceCount = (stack: CloudFormationStackArtifact, length: number)
   expect(Object.keys(stack.template.Resources)).toHaveLength(length);
 };
 
-const app = new App();
+const app = new App({ context: { '@aws-cdk/core:enableStackNameDuplicates': 'false' } });
 const cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
 const cosmosExtension = new CosmosExtensionStack(app, 'Test');
 const cosmosStack = SynthUtils.synthesize(cosmos);
@@ -45,7 +45,15 @@ describe('Cosmos', () => {
   });
 
   test('should match snapshot', () => {
-    expect(cosmosStack.template).toMatchSnapshot();
+    expect(cosmosStack.template).toMatchSnapshot({
+      // These param change a lot ...
+      Parameters: expect.any(Object),
+      Resources: {
+        CrossAccountExportsFnBB7349E9: {
+          Properties: { Code: { S3Bucket: expect.any(Object), S3Key: expect.any(Object) } },
+        },
+      },
+    });
   });
 });
 

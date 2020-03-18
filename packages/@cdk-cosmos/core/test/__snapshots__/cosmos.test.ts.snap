@@ -73,20 +73,7 @@ Object {
       "Value": "test.com",
     },
   },
-  "Parameters": Object {
-    "AssetParametersffd8df5527faceec5f6666ec8d801eaba2f1a80ebd24b1e8b5eb98cfd527be18ArtifactHashEB8B1C6D": Object {
-      "Description": "Artifact hash for asset \\"ffd8df5527faceec5f6666ec8d801eaba2f1a80ebd24b1e8b5eb98cfd527be18\\"",
-      "Type": "String",
-    },
-    "AssetParametersffd8df5527faceec5f6666ec8d801eaba2f1a80ebd24b1e8b5eb98cfd527be18S3Bucket00A09907": Object {
-      "Description": "S3 bucket for asset \\"ffd8df5527faceec5f6666ec8d801eaba2f1a80ebd24b1e8b5eb98cfd527be18\\"",
-      "Type": "String",
-    },
-    "AssetParametersffd8df5527faceec5f6666ec8d801eaba2f1a80ebd24b1e8b5eb98cfd527be18S3VersionKeyFF957D51": Object {
-      "Description": "S3 key for asset version \\"ffd8df5527faceec5f6666ec8d801eaba2f1a80ebd24b1e8b5eb98cfd527be18\\"",
-      "Type": "String",
-    },
-  },
+  "Parameters": Any<Object>,
   "Resources": Object {
     "CdkMasterRole2FE9B317": Object {
       "Properties": Object {
@@ -135,42 +122,8 @@ Object {
       ],
       "Properties": Object {
         "Code": Object {
-          "S3Bucket": Object {
-            "Ref": "AssetParametersffd8df5527faceec5f6666ec8d801eaba2f1a80ebd24b1e8b5eb98cfd527be18S3Bucket00A09907",
-          },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParametersffd8df5527faceec5f6666ec8d801eaba2f1a80ebd24b1e8b5eb98cfd527be18S3VersionKeyFF957D51",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParametersffd8df5527faceec5f6666ec8d801eaba2f1a80ebd24b1e8b5eb98cfd527be18S3VersionKeyFF957D51",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
+          "S3Bucket": Any<Object>,
+          "S3Key": Any<Object>,
         },
         "Handler": "index.handler",
         "Role": Object {

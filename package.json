@@ -11,7 +11,7 @@
     "lint": "lerna run lint",
     "format": "lerna run format",
     "clean": "lerna run clean",
-    "coverage-shield": "yarn jest && coverage-shield",
+    "test-and-shield": "yarn jest && coverage-shield",
     "git-add": "git add ."
   },
   "workspaces": [
@@ -20,9 +20,10 @@
     "packages/private/*"
   ],
   "precommit": [
+    "clean",
+    "build",
     "lint",
-    "test",
-    "coverage-shield",
+    "test-and-shield",
     "git-add"
   ],
   "devDependencies": {
