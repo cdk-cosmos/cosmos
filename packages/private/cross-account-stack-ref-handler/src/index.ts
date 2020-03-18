@@ -21,24 +21,26 @@ export const handler = async (event: CloudFormationCustomResourceEvent, context:
     const { Exports, ShouldErrorIfNotFound, AssumeRolArn } = event.ResourceProperties as Props;
     const attributes: Attributes = {};
 
-    let cred: Credentials | undefined;
-    if (AssumeRolArn) {
-      cred = new ChainableTemporaryCredentials({
-        params: {
-          RoleArn: AssumeRolArn,
-          RoleSessionName: 'cross-account-stack-ref-handler',
-        },
-      });
-      await cred.getPromise();
-    }
+    if (event.RequestType !== 'Delete') {
+      let cred: Credentials | undefined;
+      if (AssumeRolArn) {
+        cred = new ChainableTemporaryCredentials({
+          params: {
+            RoleArn: AssumeRolArn,
+            RoleSessionName: 'cross-account-stack-ref-handler',
+          },
+        });
+        await cred.getPromise();
+      }
 
-    const cloudformation = new CloudFormation({ credentials: cred });
+      const cloudformation = new CloudFormation({ credentials: cred });
 
-    const req = await cloudformation.listExports().promise();
-    for (const exp of Exports) {
-      const ref = req.Exports?.find(x => x.Name === exp);
-      if (!ref && ShouldErrorIfNotFound) throw new Error(`Export ${exp} not found.`);
-      attributes[exp] = ref?.Value || '';
+      const req = await cloudformation.listExports().promise();
+      for (const exp of Exports) {
+        const ref = req.Exports?.find(x => x.Name === exp);
+        if (!ref && ShouldErrorIfNotFound) throw new Error(`Export ${exp} not found.`);
+        attributes[exp] = ref?.Value || '';
+      }
     }
 
     await send(event, context, 'SUCCESS', attributes, event.LogicalResourceId);
