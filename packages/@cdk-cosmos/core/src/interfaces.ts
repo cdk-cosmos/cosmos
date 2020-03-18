@@ -6,7 +6,7 @@ import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { ICluster } from '@aws-cdk/aws-ecs';
 import { IApplicationLoadBalancer, IApplicationListener } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { IProject } from '@aws-cdk/aws-codebuild';
-import { IRole } from '@aws-cdk/aws-iam';
+import { IFunction } from '@aws-cdk/aws-lambda';
 
 export interface Bubble {
   Name: string;
@@ -18,21 +18,27 @@ export interface Bubble {
 export interface Cosmos extends Bubble, Construct {
   Partition: string;
   Scope: Construct;
-  Version: string;
   Galaxies?: Galaxy[];
   SolarSystems?: SolarSystem[];
+  Version: string;
+  Link?: CosmosLink;
   CdkRepo: IRepository;
   RootZone: IHostedZone;
   CdkMasterRoleStaticArn: string;
+  CrossAccountExportsFn: IFunction;
 
   AddGalaxy(galaxy: Galaxy): void;
   AddSolarSystem(solarSystem: SolarSystem): void;
 }
 
+export interface CosmosLink extends Bubble, Construct {
+  Cosmos: Cosmos;
+}
+
 export interface Galaxy extends Bubble, Construct {
   Cosmos: Cosmos;
   SolarSystems?: SolarSystem[];
-  CdkCrossAccountRole?: IRole;
+  CdkCrossAccountRoleStaticArn?: string;
 
   AddSolarSystem(solarSystem: SolarSystem): void;
 }

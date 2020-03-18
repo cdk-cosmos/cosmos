@@ -56,7 +56,7 @@ test('should successfully send response', async () => {
   expect(request).lastCalledWith({
     Status: 'SUCCESS',
     Reason: 'See the details in CloudWatch Log Stream: undefined',
-    Data: { test: 'test' },
+    Data: { test: 'test', test2: '' },
   });
 
   event.ResourceProperties.ShouldErrorIfNotFound = true;

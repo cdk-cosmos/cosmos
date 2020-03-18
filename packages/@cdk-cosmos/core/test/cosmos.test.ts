@@ -23,7 +23,7 @@ describe('Cosmos', () => {
     expect(cosmosStack.name).toEqual('Core-Test-Cosmos');
     expect(cosmosStack).toHaveOutput({ exportName: 'Core-Name', outputValue: 'Test' });
     expect(cosmosStack).toHaveOutput({ exportName: 'Core-Version' });
-    toHaveResourceCount(cosmosStack, 3);
+    toHaveResourceCount(cosmosStack, 4);
   });
 
   test('should have a RootZone', () => {

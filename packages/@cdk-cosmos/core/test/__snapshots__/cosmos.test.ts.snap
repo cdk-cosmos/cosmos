@@ -41,6 +41,23 @@ Object {
       },
       "Value": "0.1.1",
     },
+    "CrossAccountExportsFnFunctionArn4D0D888C": Object {
+      "Export": Object {
+        "Name": "Core-CrossAccountExportsFn-Arn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CrossAccountExportsFnBB7349E9",
+          "Arn",
+        ],
+      },
+    },
+    "RootZoneNameServersC9CDB123": Object {
+      "Export": Object {
+        "Name": "Core-RootZone-NameServers",
+      },
+      "Value": "#{Token[TOKEN.20]}",
+    },
     "RootZoneZoneId57AFCBDD": Object {
       "Export": Object {
         "Name": "Core-RootZone-Id",
@@ -54,6 +71,20 @@ Object {
         "Name": "Core-RootZone-Name",
       },
       "Value": "test.com",
+    },
+  },
+  "Parameters": Object {
+    "AssetParameters3135d8c42640ddbe5f7fad0d710b2bc6554e40c1027717290ebf741494335b9cArtifactHash88B63440": Object {
+      "Description": "Artifact hash for asset \\"3135d8c42640ddbe5f7fad0d710b2bc6554e40c1027717290ebf741494335b9c\\"",
+      "Type": "String",
+    },
+    "AssetParameters3135d8c42640ddbe5f7fad0d710b2bc6554e40c1027717290ebf741494335b9cS3Bucket97C689AD": Object {
+      "Description": "S3 bucket for asset \\"3135d8c42640ddbe5f7fad0d710b2bc6554e40c1027717290ebf741494335b9c\\"",
+      "Type": "String",
+    },
+    "AssetParameters3135d8c42640ddbe5f7fad0d710b2bc6554e40c1027717290ebf741494335b9cS3VersionKeyD6889829": Object {
+      "Description": "S3 key for asset version \\"3135d8c42640ddbe5f7fad0d710b2bc6554e40c1027717290ebf741494335b9c\\"",
+      "Type": "String",
     },
   },
   "Resources": Object {
@@ -97,6 +128,61 @@ Object {
         "RepositoryName": "core-cdk-repo",
       },
       "Type": "AWS::CodeCommit::Repository",
+    },
+    "CrossAccountExportsFnBB7349E9": Object {
+      "DependsOn": Array [
+        "CdkMasterRole2FE9B317",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters3135d8c42640ddbe5f7fad0d710b2bc6554e40c1027717290ebf741494335b9cS3Bucket97C689AD",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters3135d8c42640ddbe5f7fad0d710b2bc6554e40c1027717290ebf741494335b9cS3VersionKeyD6889829",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters3135d8c42640ddbe5f7fad0d710b2bc6554e40c1027717290ebf741494335b9cS3VersionKeyD6889829",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CdkMasterRole2FE9B317",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
     },
     "RootZone831A5F27": Object {
       "Properties": Object {

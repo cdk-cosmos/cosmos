@@ -1,6 +1,7 @@
 export {
   Bubble,
   Cosmos,
+  CosmosLink,
   Galaxy,
   SolarSystem,
   EcsSolarSystem,
@@ -12,16 +13,6 @@ export {
   EcsSolarSystemExtension,
   CiCdSolarSystemExtension,
 } from './interfaces';
-
-export {
-  RemoteZone,
-  RemoteVpc,
-  RemoteCluster,
-  RemoteAlb,
-  RemoteApplicationListener,
-  RemoteCodeRepo,
-  RemoteBuildProject,
-} from './remote';
 
 export { CosmosStack, CosmosStackProps, ImportedCosmos, CosmosExtensionStack } from './cosmos';
 
@@ -43,6 +34,23 @@ export {
   CiCdSolarSystemExtensionStack,
 } from './ci-cd-solar-system';
 
-export { CdkPipeline, CdkPipelineProps } from './cdk-pipeline';
+export {
+  Output,
+  OutputProps,
+  RemoteZone,
+  RemoteVpc,
+  RemoteCluster,
+  RemoteAlb,
+  RemoteApplicationListener,
+  RemoteCodeRepo,
+  RemoteBuildProject,
+  RemoteFunction,
+} from './helpers/remote';
 
-export { RESOLVE, PATTERN, _RESOLVE, ResolveParams } from './pattern';
+export { CdkPipeline, CdkPipelineProps } from './helpers/cdk-pipeline';
+
+export { RESOLVE, PATTERN, _RESOLVE, ResolveParams } from './helpers/pattern';
+
+export { getParent, getCosmos, getGalaxy, isCrossAccount } from './helpers/utils';
+
+export { CrossAccountZoneDelegationRecord } from './helpers/cross-account';

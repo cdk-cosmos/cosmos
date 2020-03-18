@@ -38,7 +38,7 @@ export const handler = async (event: CloudFormationCustomResourceEvent, context:
     for (const exp of Exports) {
       const ref = req.Exports?.find(x => x.Name === exp);
       if (!ref && ShouldErrorIfNotFound) throw new Error(`Export ${exp} not found.`);
-      attributes[exp] = ref?.Value;
+      attributes[exp] = ref?.Value || '';
     }
 
     await send(event, context, 'SUCCESS', attributes, event.LogicalResourceId);

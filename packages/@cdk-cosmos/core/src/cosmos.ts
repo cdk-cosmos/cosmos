@@ -5,18 +5,22 @@ import { HostedZone, IHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
+import { CrossAccountExportsFn } from '@cosmos-building-blocks/common';
 import {
   RESOLVE,
   PATTERN,
   Cosmos,
-  Galaxy,
-  SolarSystem,
+  CosmosLink,
   CosmosExtension,
+  Galaxy,
+  GalaxyExtension,
+  SolarSystem,
+  SolarSystemExtension,
   RemoteZone,
   RemoteCodeRepo,
-  SolarSystemExtension,
-  GalaxyExtension,
+  RemoteFunction,
 } from '.';
+import { IFunction, Function } from '@aws-cdk/aws-lambda';
 
 const stackName = (partition: string, name: string): string =>
   RESOLVE(PATTERN.COSMOS, 'Cosmos', { Partition: partition, Name: name });
@@ -25,6 +29,21 @@ const getPackageVersion: () => string = () => {
   const file = fs.readFileSync(path.resolve(__dirname, '../package.json')).toString();
   return JSON.parse(file).version as string;
 };
+
+export class CosmosLinkStack extends Stack implements CosmosLink {
+  readonly Cosmos: Cosmos;
+  readonly Name: string;
+
+  constructor(cosmos: Cosmos, props: StackProps) {
+    super(cosmos.Scope, RESOLVE(PATTERN.COSMOS, 'CosmosLink', cosmos), {
+      ...props,
+      description: 'Resources to link the Cosmos, like Route53 zone delegation',
+    });
+
+    this.Cosmos = cosmos;
+    this.Name = 'Link';
+  }
+}
 
 export interface CosmosStackProps extends StackProps {
   tld: string;
@@ -39,11 +58,13 @@ export class CosmosStack extends Stack implements Cosmos {
   readonly SolarSystems: SolarSystem[];
   readonly Name: string;
   readonly Version: string;
+  readonly Link: CosmosLink;
   readonly NetworkBuilder?: NetworkBuilder;
   readonly CdkRepo: Repository;
   readonly RootZone: HostedZone;
   readonly CdkMasterRole: Role;
   readonly CdkMasterRoleStaticArn: string;
+  readonly CrossAccountExportsFn: Function;
 
   constructor(app: Construct, name: string, props: CosmosStackProps) {
     super(app, stackName('Core', name), {
@@ -59,6 +80,9 @@ export class CosmosStack extends Stack implements Cosmos {
     this.Name = name;
     this.Version = getPackageVersion();
     if (cidr) this.NetworkBuilder = new NetworkBuilder(cidr);
+    this.Link = new CosmosLinkStack(this, {
+      env: { account: this.account, region: this.region },
+    });
 
     this.CdkRepo = new Repository(this, 'CdkRepo', {
       repositoryName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Repo', this).toLowerCase(),
@@ -79,6 +103,10 @@ export class CosmosStack extends Stack implements Cosmos {
     this.CdkMasterRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
     this.CdkMasterRoleStaticArn = `arn:aws:iam::${this.account}:role/${CdkMasterRoleName}`;
 
+    this.CrossAccountExportsFn = new CrossAccountExportsFn(this, 'CrossAccountExportsFn', {
+      role: this.CdkMasterRole,
+    });
+
     new CfnOutput(this, 'CosmosName', {
       exportName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Name', this),
       value: this.Name,
@@ -89,6 +117,7 @@ export class CosmosStack extends Stack implements Cosmos {
     });
     RemoteCodeRepo.export(this.CdkRepo, RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkRepo', this));
     RemoteZone.export(this.RootZone, RESOLVE(PATTERN.SINGLETON_COSMOS, 'RootZone', this));
+    RemoteFunction.export(this.CrossAccountExportsFn, RESOLVE(PATTERN.SINGLETON_COSMOS, 'CrossAccountExportsFn', this));
   }
 
   AddGalaxy(galaxy: Galaxy): void {
@@ -107,6 +136,7 @@ export class ImportedCosmos extends Construct implements Cosmos {
   readonly CdkRepo: IRepository;
   readonly RootZone: IHostedZone;
   readonly CdkMasterRoleStaticArn: string;
+  readonly CrossAccountExportsFn: IFunction;
 
   constructor(scope: Construct) {
     super(scope, 'CosmosImport');
@@ -119,6 +149,10 @@ export class ImportedCosmos extends Construct implements Cosmos {
     this.CdkRepo = RemoteCodeRepo.import(this, RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkRepo', this));
     this.RootZone = RemoteZone.import(this, RESOLVE(PATTERN.SINGLETON_COSMOS, 'RootZone', this));
     this.CdkMasterRoleStaticArn = `arn:aws:iam::${account}:role/Core-CdkMaster-Role`;
+    this.CrossAccountExportsFn = RemoteFunction.import(
+      this,
+      RESOLVE(PATTERN.SINGLETON_COSMOS, 'CrossAccountExportsFn', this)
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
