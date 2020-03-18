@@ -61,39 +61,57 @@ export class RemoteVpc {
     });
     new Output(vpc, 'VpcAZs', {
       exportName: `${exportName}-AZs`,
-      value: vpc.availabilityZones.join(','), //FIXME: dont use .join
+      value: Fn.join(',', vpc.availabilityZones),
     });
 
     if (vpc.isolatedSubnets.length) {
       new Output(vpc, 'VpcIsolatedSubnets', {
         exportName: `${exportName}-IsolatedSubnetIds`,
-        value: vpc.isolatedSubnets.map(s => s.subnetId).join(','),
+        value: Fn.join(
+          ',',
+          vpc.isolatedSubnets.map(s => s.subnetId)
+        ),
       });
       new Output(vpc, 'VpcIsolatedSubnetRouteTables', {
         exportName: `${exportName}-IsolatedSubnetRouteTableIds`,
-        value: vpc.isolatedSubnets.map(s => s.routeTable.routeTableId).join(','),
+        value: Fn.join(
+          ',',
+          vpc.isolatedSubnets.map(s => s.routeTable.routeTableId)
+        ),
       });
     }
 
     if (vpc.privateSubnets.length) {
       new Output(vpc, 'VpcPrivateSubnets', {
         exportName: `${exportName}-PrivateSubnetIds`,
-        value: vpc.privateSubnets.map(s => s.subnetId).join(','),
+        value: Fn.join(
+          ',',
+          vpc.privateSubnets.map(s => s.subnetId)
+        ),
       });
       new Output(vpc, 'VpcPrivateSubnetRouteTables', {
         exportName: `${exportName}-PrivateSubnetRouteTableIds`,
-        value: vpc.privateSubnets.map(s => s.routeTable.routeTableId).join(','),
+        value: Fn.join(
+          ',',
+          vpc.privateSubnets.map(s => s.routeTable.routeTableId)
+        ),
       });
     }
 
     if (vpc.publicSubnets.length) {
       new Output(vpc, 'VpcPublicSubnets', {
         exportName: `${exportName}-PublicSubnetIds`,
-        value: vpc.publicSubnets.map(s => s.subnetId).join(','),
+        value: Fn.join(
+          ',',
+          vpc.publicSubnets.map(s => s.subnetId)
+        ),
       });
       new Output(vpc, 'VpcPublicSubnetRouteTables', {
         exportName: `${exportName}-PublicSubnetRouteTableIds`,
-        value: vpc.publicSubnets.map(s => s.routeTable.routeTableId).join(','),
+        value: Fn.join(
+          ',',
+          vpc.publicSubnets.map(s => s.routeTable.routeTableId)
+        ),
       });
     }
   }

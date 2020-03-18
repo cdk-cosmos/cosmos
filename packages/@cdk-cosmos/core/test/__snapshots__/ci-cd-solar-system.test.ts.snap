@@ -416,7 +416,7 @@ Object {
       },
       "Value": Object {
         "Fn::Join": Array [
-          "",
+          ",",
           Array [
             Object {
               "Fn::Select": Array [
@@ -426,7 +426,6 @@ Object {
                 },
               ],
             },
-            ",",
             Object {
               "Fn::Select": Array [
                 1,
@@ -453,12 +452,11 @@ Object {
       },
       "Value": Object {
         "Fn::Join": Array [
-          "",
+          ",",
           Array [
             Object {
               "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
             },
-            ",",
             Object {
               "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
             },
@@ -472,12 +470,11 @@ Object {
       },
       "Value": Object {
         "Fn::Join": Array [
-          "",
+          ",",
           Array [
             Object {
               "Ref": "VpcMainSubnet1Subnet501A7278",
             },
-            ",",
             Object {
               "Ref": "VpcMainSubnet2Subnet4C1ED704",
             },
