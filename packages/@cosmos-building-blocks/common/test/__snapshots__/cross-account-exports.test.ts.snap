@@ -106,7 +106,7 @@ Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
         "Exports": Array [],
-        "RunAt": "1/1/2020, 11:00:00 AM",
+        "RunAt": "2020-01-01T00:00:00.000Z",
         "ServiceToken": Object {
           "Fn::GetAtt": Array [
             "CrossAccountExportsFnBB7349E9",

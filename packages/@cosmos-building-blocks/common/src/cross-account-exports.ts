@@ -57,7 +57,7 @@ export class CrossAccountExports extends Construct {
         exports: this.exports,
         shouldErrorIfNotFound,
         assumeRoleArn,
-        runAt: alwaysUpdate ? new Date(Date.now()).toLocaleString() : undefined,
+        runAt: alwaysUpdate ? new Date(Date.now()).toISOString() : undefined,
       },
     });
   }
