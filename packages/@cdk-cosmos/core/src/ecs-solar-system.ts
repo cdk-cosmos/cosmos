@@ -1,5 +1,5 @@
 import { Construct, StackProps } from '@aws-cdk/core';
-import { InstanceType } from '@aws-cdk/aws-ec2';
+import { InstanceType, SecurityGroup } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
@@ -50,10 +50,18 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
       maxCapacity: 5,
     });
 
+    const AlbSecurityGroup = new SecurityGroup(this, 'SecurityGroup', {
+      vpc: this.Vpc,
+      description: 'SecurityGroup for SolarSystem ALB',
+      allowAllOutbound: true,
+    });
+
     this.Alb = new ApplicationLoadBalancer(this, 'Alb', {
       vpc: this.Vpc,
       loadBalancerName: RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this),
+      securityGroup: AlbSecurityGroup,
     });
+
     this.HttpListener = this.Alb.addListener('HttpListener', {
       protocol: ApplicationProtocol.HTTP,
       defaultTargetGroups: [
