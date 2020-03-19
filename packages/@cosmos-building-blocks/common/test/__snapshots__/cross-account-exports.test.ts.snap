@@ -1,0 +1,155 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot 1`] = `
+Object {
+  "Resources": Object {
+    "CrossAccountExportsFnBB7349E9": Object {
+      "DependsOn": Array [
+        "CrossAccountExportsFnServiceRoleC7F2C6BD",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "MOCK",
+          "S3Key": "MOCK",
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CrossAccountExportsFnServiceRoleC7F2C6BD",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CrossAccountExportsFnServiceRoleC7F2C6BD": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AWSCloudFormationReadOnlyAccess",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CustomFnFE03B841": Object {
+      "DependsOn": Array [
+        "TestRoleARN194013B0",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "MOCK",
+          "S3Key": "MOCK",
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "TestRoleARN194013B0",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "TestExports28BDC79A7": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "Exports": Array [],
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "CrossAccountExportsFnBB7349E9",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::CrossAccountExports",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TestExports3FD94762A": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "Exports": Array [],
+        "RunAt": "1/1/2020, 11:00:00 AM",
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "CrossAccountExportsFnBB7349E9",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::CrossAccountExports",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TestExportsED6808F1": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "Exports": Array [
+          "Test-Export",
+        ],
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "CustomFnFE03B841",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::CrossAccountExports",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TestRoleARN194013B0": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": "*",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+}
+`;
