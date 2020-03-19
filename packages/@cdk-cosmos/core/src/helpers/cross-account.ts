@@ -24,7 +24,7 @@ export class CrossAccountZoneDelegationRecord extends Construct {
     this.exports = new CrossAccountExports(cosmos.Link, `${solarSystem.Name}${id}Exports`, {
       exports: [zoneName.exportName, zoneNameServers.exportName],
       fn: cosmos.CrossAccountExportsFn,
-      assumeRolArn: solarSystem.Galaxy.CdkCrossAccountRoleStaticArn,
+      assumeRoleArn: solarSystem.Galaxy.CdkCrossAccountRoleStaticArn,
     });
 
     const [zoneNameRef, zoneNameServersRef] = this.exports.get();

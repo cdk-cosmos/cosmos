@@ -7,7 +7,7 @@ interface Props {
   ServiceToken: string;
   Exports: string[];
   ShouldErrorIfNotFound?: boolean;
-  AssumeRolArn?: string;
+  AssumeRoleArn?: string;
 }
 
 interface Attributes {
@@ -18,15 +18,15 @@ export const handler = async (event: CloudFormationCustomResourceEvent, context:
   try {
     console.log('Event:', JSON.stringify(event, null, 2));
 
-    const { Exports, ShouldErrorIfNotFound, AssumeRolArn } = event.ResourceProperties as Props;
+    const { Exports, ShouldErrorIfNotFound, AssumeRoleArn } = event.ResourceProperties as Props;
     const attributes: Attributes = {};
 
     if (event.RequestType !== 'Delete') {
       let cred: Credentials | undefined;
-      if (AssumeRolArn) {
+      if (AssumeRoleArn) {
         cred = new ChainableTemporaryCredentials({
           params: {
-            RoleArn: AssumeRolArn,
+            RoleArn: AssumeRoleArn,
             RoleSessionName: 'cross-account-stack-ref-handler',
           },
         });

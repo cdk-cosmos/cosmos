@@ -22,7 +22,7 @@ export class CrossAccountExportsFn extends Function {
 export interface CrossAccountExportsProps {
   exports: string[];
   shouldErrorIfNotFound?: boolean;
-  assumeRolArn?: string;
+  assumeRoleArn?: string;
   fn?: IFunction;
   alwaysUpdate?: boolean;
 }
@@ -35,7 +35,7 @@ export class CrossAccountExports extends Construct {
   constructor(scope: Construct, id: string, props: CrossAccountExportsProps) {
     super(scope, id);
 
-    const { exports, shouldErrorIfNotFound, assumeRolArn, alwaysUpdate = false } = props;
+    const { exports, shouldErrorIfNotFound, assumeRoleArn, alwaysUpdate = false } = props;
     let { fn } = props;
 
     this.exports = exports;
@@ -54,7 +54,7 @@ export class CrossAccountExports extends Construct {
       properties: {
         exports: this.exports,
         shouldErrorIfNotFound,
-        assumeRolArn,
+        assumeRoleArn,
         runAt: alwaysUpdate ? new Date().toLocaleString() : undefined,
       },
     });
