@@ -1,8 +1,8 @@
 import '@aws-cdk/assert/jest';
 import { App, Stack } from '@aws-cdk/core';
-import { SynthUtils } from '@aws-cdk/assert';
 import { Repository } from '@aws-cdk/aws-codecommit';
-import { CdkPipeline } from '../src';
+import { synthesizeStacks } from '../../../../../src/test';
+import { CdkPipeline } from '../../src';
 
 const app = new App();
 const stack = new Stack(app, 'Pipeline', {});
@@ -10,7 +10,7 @@ const cdkrepo = new Repository(stack, 'CdkRepo', {
   repositoryName: 'cdk-repo',
 });
 new CdkPipeline(stack, 'CdkPipeline', { cdkRepo: cdkrepo });
-const testStack = SynthUtils.synthesize(stack);
+const [testStack] = synthesizeStacks(stack);
 
 describe('Pipeline', () => {
   test('should have master cdk pipeline', () => {

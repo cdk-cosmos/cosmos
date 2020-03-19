@@ -1,9 +1,10 @@
 import { Stack, App } from '@aws-cdk/core';
 import { CloudFormationStackArtifact } from '@aws-cdk/cx-api';
 
-export const synthesizeStacks = (...stacks: Stack[]): CloudFormationStackArtifact[] => {
+type SynthesizeStacks = (...stacks: Stack[]) => CloudFormationStackArtifact[];
+export const synthesizeStacks: SynthesizeStacks = (...stacks) => {
   const app = stacks
-    .map(x => x.node.root)
+    .map(x => x && x.node.root)
     .reduce<App | null>((res, item) => {
       if (!(item instanceof App)) return res;
       if (res === null) return item;
@@ -12,7 +13,7 @@ export const synthesizeStacks = (...stacks: Stack[]): CloudFormationStackArtifac
     }, null);
   if (!app) throw new Error('App not found at root of stack.');
   const synth = app.synth();
-  return stacks.map(x => synth.getStackArtifact(x.artifactId));
+  return stacks.map(x => x && synth.getStackArtifact(x.artifactId));
 };
 
 export const toHaveResourceId = (stack: CloudFormationStackArtifact, id: string): void => {

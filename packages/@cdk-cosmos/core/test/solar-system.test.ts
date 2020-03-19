@@ -1,6 +1,6 @@
 import '@aws-cdk/assert/jest';
 import { App } from '@aws-cdk/core';
-import { SynthUtils } from '@aws-cdk/assert';
+import { synthesizeStacks } from '../../../../src/test';
 import {
   CosmosStack,
   CosmosExtensionStack,
@@ -11,51 +11,112 @@ import {
 } from '../src';
 
 const app = new App();
-const cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
-const mgtGalaxy = new GalaxyStack(cosmos, 'Mgt', {});
-const cosmosExtension = new CosmosExtensionStack(app, 'Test', {});
-const mgtGalaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Mgt');
-const solarSystem = new SolarSystemStack(mgtGalaxy, 'Dev', { cidr: '10.0.1.0/22' });
-const solarSystemExtension = new SolarSystemExtensionStack(mgtGalaxyExtension, 'Dev', {});
-const solarSystemStack = SynthUtils.synthesize(solarSystem);
-const mgtGalaxyStack = SynthUtils.synthesize(mgtGalaxy);
-const solarSystemExtensionStack = SynthUtils.synthesize(solarSystemExtension);
+const env = { account: 'account', region: 'region' };
+const env2 = { account: 'account2', region: 'region2' };
+
+const cosmos = new CosmosStack(app, 'Cos', { tld: 'com', cidr: '10.0.1.0/22', env });
+const galaxy = new GalaxyStack(cosmos, 'Gal', { env });
+const solarSystem = new SolarSystemStack(galaxy, 'Sys', { env });
+const solarSystemShared = new SolarSystemStack(galaxy, 'SysShared', { env });
+const galaxy2 = new GalaxyStack(cosmos, 'Gal2', { env: env2 });
+const solarSystem2 = new SolarSystemStack(galaxy2, 'Sys2', { env: env2 });
+
+const cosmosExtension = new CosmosExtensionStack(app, 'Cos', { env });
+const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });
+const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys', { env });
+
+const [galaxyStack, solarSystemStack, solarSystem2Stack, solarSystemExtensionStack, cosmosLinkStack] = synthesizeStacks(
+  galaxy,
+  solarSystem,
+  solarSystem2,
+  solarSystemExtension,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cosmos.Link as any
+);
 
 describe('Solar-System', () => {
-  test('should throw error if no cidr found', () => {
-    try {
-      const prdApp = new App();
-      const prdCosmos = new CosmosStack(prdApp, 'Test', { tld: 'com' });
-      const prdGalaxy = new GalaxyStack(prdCosmos, 'Prd', {});
-      new SolarSystemStack(prdGalaxy, 'Prd', {});
-    } catch (error) {
-      expect(error.message).toMatch(
-        'NetworkBuilder not found, please define cidr range here or Galaxy or Cosmos. (System: Prd).'
-      );
-    }
-  });
   test('should be a solar-system', () => {
-    expect(solarSystemStack.name).toEqual('Core-Test-Mgt-Dev-SolarSystem');
-    expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Mgt-Dev-Zone-Name', outputValue: 'dev.test.com' });
-    expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Mgt-Dev-Zone-Id' });
+    expect(solarSystemStack.name).toEqual('Core-Cos-Gal-Sys-SolarSystem');
+    expect(solarSystemStack).toHaveResource('AWS::Route53::RecordSet');
+    expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Gal-Sys-Zone-Id' });
+    expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Gal-Sys-Zone-Name', outputValue: 'sys.cos.com' });
+    expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Gal-Sys-Zone-NameServers' });
   });
 
   test('should create shared vpc in galaxy', () => {
-    expect(mgtGalaxyStack).toHaveResource('AWS::EC2::VPC');
-    expect(mgtGalaxyStack).toHaveOutput({ exportName: 'Core-Mgt-SharedVpc-Id' });
-    expect(mgtGalaxyStack).toHaveOutput({ exportName: 'Core-Mgt-SharedVpc-AZs' });
-    expect(mgtGalaxyStack).toHaveOutput({ exportName: 'Core-Mgt-SharedVpc-IsolatedSubnetIds' });
-    expect(mgtGalaxyStack).toHaveOutput({ exportName: 'Core-Mgt-SharedVpc-IsolatedSubnetRouteTableIds' });
+    expect(galaxyStack).toHaveResource('AWS::EC2::VPC');
+    expect(galaxyStack).toHaveOutput({ exportName: 'Core-Gal-SharedVpc-Id' });
+    expect(galaxyStack).toHaveOutput({ exportName: 'Core-Gal-SharedVpc-AZs' });
+    expect(galaxyStack).toHaveOutput({ exportName: 'Core-Gal-SharedVpc-IsolatedSubnetIds' });
+    expect(galaxyStack).toHaveOutput({ exportName: 'Core-Gal-SharedVpc-IsolatedSubnetRouteTableIds' });
+    expect(solarSystem.Vpc).toEqual(solarSystemShared.Vpc);
+  });
+
+  test('should inherit env', () => {
+    const app = new App();
+    const cosmos = new CosmosStack(app, 'Test', { tld: 'com', cidr: '10.0.0.0/24', env });
+    const galaxy = new GalaxyStack(cosmos, 'Test', {});
+    const solarSystem = new SolarSystemStack(galaxy, 'Test');
+    expect({ account: solarSystem.account, region: solarSystem.region }).toEqual(env);
+  });
+
+  test('should throw error if no cidr found', () => {
+    expect(() => {
+      const app = new App();
+      const cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
+      const galaxy = new GalaxyStack(cosmos, 'Test', {});
+      new SolarSystemStack(galaxy, 'Test', {});
+    }).toThrowError('NetworkBuilder not found, please define cidr range here or Galaxy or Cosmos. (System: Test)');
+  });
+
+  test('should have cird range', () => {
+    let app = new App();
+    let cosmos = new CosmosStack(app, 'Test', { tld: 'com', cidr: '10.0.0.0/22' });
+    let galaxy = new GalaxyStack(cosmos, 'Test', {});
+    let solarSystem = new SolarSystemStack(galaxy, 'Test');
+    expect(solarSystem.NetworkBuilder?.addSubnet(28)).toEqual('10.0.1.0/28');
+    expect(solarSystem.NetworkBuilder?.addSubnet(28)).toEqual('10.0.1.16/28');
+
+    app = new App();
+    cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
+    galaxy = new GalaxyStack(cosmos, 'Test', {});
+    solarSystem = new SolarSystemStack(galaxy, 'Test', { cidr: '10.0.4.0/22' });
+    expect(solarSystem.NetworkBuilder?.addSubnet(28)).toEqual('10.0.5.0/28');
+  });
+
+  test('should be cross account solar-system', () => {
+    expect(solarSystem2Stack).not.toHaveResource('AWS::Route53::RecordSet');
+    expect(cosmosLinkStack).toHaveResource('Custom::CrossAccountExports');
+    expect(cosmosLinkStack).toHaveResource('AWS::Route53::RecordSet');
+  });
+
+  test('should not link zone', () => {
+    const app = new App();
+    const cosmos = new CosmosStack(app, 'Test', { tld: 'com', cidr: '10.0.0.0/22' });
+    const galaxy = new GalaxyStack(cosmos, 'Test', {});
+    const solarSystem = new SolarSystemStack(galaxy, 'Test', { linkZone: false });
+    const [solarSystemStack] = synthesizeStacks(solarSystem);
+    expect(solarSystemStack).not.toHaveResource('AWS::Route53::RecordSet');
   });
 
   test('should match snapshot', () => {
     expect(solarSystemStack.template).toMatchSnapshot();
+    expect(solarSystem2Stack.template).toMatchSnapshot();
+    expect(cosmosLinkStack.template).toMatchSnapshot();
   });
 });
 
 describe('Solar-System Extension', () => {
   test('should be a solar-system extension', () => {
-    expect(solarSystemExtensionStack.name).toEqual('App-Test-Mgt-Dev-SolarSystem');
+    expect(solarSystemExtensionStack.name).toEqual('App-Cos-Gal-Sys-SolarSystem');
+  });
+
+  test('should inherit env', () => {
+    const app = new App();
+    const cosmos = new CosmosExtensionStack(app, 'Test', { env });
+    const galaxy = new GalaxyExtensionStack(cosmos, 'Test');
+    const sys = new SolarSystemExtensionStack(galaxy, 'Test');
+    expect({ account: sys.account, region: sys.region }).toEqual(env);
   });
 
   test('should match snapshot', () => {

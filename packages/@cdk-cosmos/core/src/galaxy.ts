@@ -75,8 +75,10 @@ export class ImportedGalaxy extends Construct implements Galaxy {
     this.Name = name;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  /* eslint-disable @typescript-eslint/no-empty-function */
+  // istanbul ignore next
   AddSolarSystem(): void {}
+  /* eslint-enable @typescript-eslint/no-empty-function */
 }
 
 export class GalaxyExtensionStack extends Stack implements GalaxyExtension {

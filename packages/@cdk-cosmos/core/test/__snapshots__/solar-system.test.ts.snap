@@ -7,7 +7,7 @@ Object {
   "Outputs": Object {
     "ZoneNameServers105FD0B4": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Zone-NameServers",
+        "Name": "Core-Gal-Sys-Zone-NameServers",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -23,7 +23,7 @@ Object {
     },
     "ZoneZoneIdD97F9BE1": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Zone-Id",
+        "Name": "Core-Gal-Sys-Zone-Id",
       },
       "Value": Object {
         "Ref": "ZoneA5DE4B68",
@@ -31,28 +31,131 @@ Object {
     },
     "ZoneZoneName61A65788": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Zone-Name",
+        "Name": "Core-Gal-Sys-Zone-Name",
       },
-      "Value": "dev.test.com",
+      "Value": "sys.cos.com",
     },
   },
   "Resources": Object {
     "ZoneA5DE4B68": Object {
       "Properties": Object {
-        "Name": "dev.test.com.",
+        "Name": "sys.cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",
     },
     "ZoneDelegationAE61034B": Object {
       "Properties": Object {
         "HostedZoneId": Object {
-          "Fn::ImportValue": "Core-Test-Cosmos:ExportsOutputRefRootZone831A5F27FABD99AF",
+          "Fn::ImportValue": "Core-Cos-Cosmos:ExportsOutputRefRootZone831A5F27FABD99AF",
         },
-        "Name": "dev.test.com.",
+        "Name": "sys.cos.com.",
         "ResourceRecords": Object {
           "Fn::GetAtt": Array [
             "ZoneA5DE4B68",
             "NameServers",
+          ],
+        },
+        "TTL": "172800",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;
+
+exports[`Solar-System should match snapshot 2`] = `
+Object {
+  "Outputs": Object {
+    "ZoneNameServers105FD0B4": Object {
+      "Export": Object {
+        "Name": "Core-Gal2-Sys2-Zone-NameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "ZoneA5DE4B68",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+    "ZoneZoneIdD97F9BE1": Object {
+      "Export": Object {
+        "Name": "Core-Gal2-Sys2-Zone-Id",
+      },
+      "Value": Object {
+        "Ref": "ZoneA5DE4B68",
+      },
+    },
+    "ZoneZoneName61A65788": Object {
+      "Export": Object {
+        "Name": "Core-Gal2-Sys2-Zone-Name",
+      },
+      "Value": "sys2.cos.com",
+    },
+  },
+  "Resources": Object {
+    "ZoneA5DE4B68": Object {
+      "Properties": Object {
+        "Name": "sys2.cos.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+  },
+}
+`;
+
+exports[`Solar-System should match snapshot 3`] = `
+Object {
+  "Description": "Resources to link the Cosmos, like Route53 zone delegation",
+  "Resources": Object {
+    "Sys2ZoneDelegationExports4A9A0633": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "AssumeRolArn": "arn:aws:iam::account2:role/Core-CdkCrossAccount-Role",
+        "Exports": Array [
+          "Core-Gal2-Sys2-Zone-Name",
+          "Core-Gal2-Sys2-Zone-NameServers",
+        ],
+        "ServiceToken": Object {
+          "Fn::ImportValue": "Core-Cos-Cosmos:ExportsOutputFnGetAttCrossAccountExportsFnBB7349E9Arn4A9F03F9",
+        },
+      },
+      "Type": "Custom::CrossAccountExports",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "Sys2ZoneDelegationFCDF4952": Object {
+      "Properties": Object {
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "Core-Cos-Cosmos:ExportsOutputRefRootZone831A5F27FABD99AF",
+        },
+        "Name": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "Sys2ZoneDelegationExports4A9A0633",
+                  "Core-Gal2-Sys2-Zone-Name",
+                ],
+              },
+              ".",
+            ],
+          ],
+        },
+        "ResourceRecords": Object {
+          "Fn::Split": Array [
+            ",",
+            Object {
+              "Fn::GetAtt": Array [
+                "Sys2ZoneDelegationExports4A9A0633",
+                "Core-Gal2-Sys2-Zone-NameServers",
+              ],
+            },
           ],
         },
         "TTL": "172800",
