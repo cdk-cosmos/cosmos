@@ -13,6 +13,9 @@ Object {
       "Type": "AWS::Route53Resolver::ResolverRuleAssociation",
     },
     "MyTgwConnectionTGWRouteMainSubnet1D754DB0E": Object {
+      "DependsOn": Array [
+        "MyTgwConnectionTransitGatewayAttachmentBB73CC5E",
+      ],
       "Properties": Object {
         "DestinationCidrBlock": "10.0.0.0/8",
         "RouteTableId": Object {
@@ -23,6 +26,9 @@ Object {
       "Type": "AWS::EC2::Route",
     },
     "MyTgwConnectionTGWRouteRedisSubnet117AE6F3C": Object {
+      "DependsOn": Array [
+        "MyTgwConnectionTransitGatewayAttachmentBB73CC5E",
+      ],
       "Properties": Object {
         "DestinationCidrBlock": "10.0.0.0/8",
         "RouteTableId": Object {
