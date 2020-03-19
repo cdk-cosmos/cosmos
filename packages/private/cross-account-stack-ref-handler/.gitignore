@@ -1,6 +1,7 @@
 lib
 node_modules
 coverage
+.cache
 
 # CDK asset staging directory
 .cdk.staging

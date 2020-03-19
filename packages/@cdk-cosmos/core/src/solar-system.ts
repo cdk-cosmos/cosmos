@@ -1,7 +1,7 @@
 import { Construct, Stack, StackProps } from '@aws-cdk/core';
 import { IVpc, SubnetType, Vpc, GatewayVpcEndpointAwsService, InterfaceVpcEndpointAwsService } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
-import { IHostedZone, HostedZone } from '@aws-cdk/aws-route53';
+import { IHostedZone, HostedZone, ZoneDelegationRecord } from '@aws-cdk/aws-route53';
 import {
   RESOLVE,
   PATTERN,
@@ -13,12 +13,15 @@ import {
   RemoteVpc,
   RemoteZone,
 } from '.';
+import { isCrossAccount } from './helpers/utils';
+import { CrossAccountZoneDelegationRecord } from './helpers/cross-account';
 
 const stackName = (galaxy: Bubble, name: string): string =>
   RESOLVE(PATTERN.SOLAR_SYSTEM, 'SolarSystem', { Name: name, Galaxy: galaxy });
 
 export interface SolarSystemProps extends StackProps {
   cidr?: string;
+  linkZone?: boolean;
 }
 
 export class SolarSystemStack extends Stack implements SolarSystem {
@@ -37,7 +40,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
       },
     });
 
-    const { cidr } = props || {};
+    const { cidr, linkZone = true } = props || {};
 
     this.Galaxy = galaxy;
     this.Galaxy.AddSolarSystem(this);
@@ -93,14 +96,19 @@ export class SolarSystemStack extends Stack implements SolarSystem {
     this.Zone = new HostedZone(this, 'Zone', {
       zoneName: `${name}.${rootZoneName}`.toLowerCase(),
     });
-
-    // new ZoneDelegationRecord(this, 'ZoneDelegation', {
-    //   zone: this.Account.Project.Zone,
-    //   recordName: this.Zone.zoneName,
-    //   nameServers: this.Zone.hostedZoneNameServers as string[],
-    // }); // TODO: Cross Account ZoneDelegationRecord
-
     RemoteZone.export(this.Zone, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone', this));
+
+    if (linkZone) {
+      if (isCrossAccount(this, this.Galaxy.Cosmos)) {
+        new CrossAccountZoneDelegationRecord(this, 'ZoneDelegation');
+      } else {
+        new ZoneDelegationRecord(this, 'ZoneDelegation', {
+          zone: this.Galaxy.Cosmos.RootZone,
+          recordName: this.Zone.zoneName,
+          nameServers: this.Zone.hostedZoneNameServers as string[],
+        });
+      }
+    }
   }
 }
 

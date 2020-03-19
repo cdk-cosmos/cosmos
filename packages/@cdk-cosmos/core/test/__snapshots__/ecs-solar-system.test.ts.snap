@@ -62,6 +62,22 @@ Object {
         ],
       },
     },
+    "ZoneNameServers105FD0B4": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Zone-NameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "ZoneA5DE4B68",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
     "ZoneZoneIdD97F9BE1": Object {
       "Export": Object {
         "Name": "Core-Mgt-Dev-Zone-Id",
@@ -694,6 +710,23 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Name": "dev.test.com.",
       },
       "Type": "AWS::Route53::HostedZone",
+    },
+    "ZoneDelegationAE61034B": Object {
+      "Properties": Object {
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "Core-Test-Cosmos:ExportsOutputRefRootZone831A5F27FABD99AF",
+        },
+        "Name": "dev.test.com.",
+        "ResourceRecords": Object {
+          "Fn::GetAtt": Array [
+            "ZoneA5DE4B68",
+            "NameServers",
+          ],
+        },
+        "TTL": "172800",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
     },
   },
 }

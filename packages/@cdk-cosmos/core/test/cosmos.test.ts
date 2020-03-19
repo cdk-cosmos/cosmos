@@ -23,7 +23,7 @@ describe('Cosmos', () => {
     expect(cosmosStack.name).toEqual('Core-Test-Cosmos');
     expect(cosmosStack).toHaveOutput({ exportName: 'Core-Name', outputValue: 'Test' });
     expect(cosmosStack).toHaveOutput({ exportName: 'Core-Version' });
-    toHaveResourceCount(cosmosStack, 3);
+    toHaveResourceCount(cosmosStack, 4);
   });
 
   test('should have a RootZone', () => {
@@ -45,7 +45,15 @@ describe('Cosmos', () => {
   });
 
   test('should match snapshot', () => {
-    expect(cosmosStack.template).toMatchSnapshot();
+    expect(cosmosStack.template).toMatchSnapshot({
+      // These param change a lot ...
+      Parameters: expect.any(Object),
+      Resources: {
+        CrossAccountExportsFnBB7349E9: {
+          Properties: { Code: { S3Bucket: expect.any(Object), S3Key: expect.any(Object) } },
+        },
+      },
+    });
   });
 });
 

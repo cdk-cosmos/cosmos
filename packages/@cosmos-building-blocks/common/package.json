@@ -19,16 +19,22 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && yarn copy-files",
     "watch": "tsc -w",
     "test": "jest",
     "format": "prettier --write **/*.ts !**/*.d.ts",
     "lint": "eslint . --ext .js,.ts",
     "clean": "rm -rf lib",
-    "prepublishOnly": "yarn lint && yarn test && yarn build"
+    "prepublishOnly": "yarn lint && yarn test && yarn build",
+    "copy-files": "cp ../../private/cross-account-stack-ref-handler/lib/bundle.zip lib/cross-account-stack-ref-handler.zip"
   },
   "peerDependencies": {
-    "@aws-cdk/core": "^1.23.0"
+    "@aws-cdk/core": "^1.23.0",
+    "@aws-cdk/aws-cloudformation": "^1.23.0",
+    "@aws-cdk/aws-lambda": "^1.23.0"
+  },
+  "devDependencies": {
+    "cross-account-stack-ref-handler": "0.1.0"
   },
   "gitHead": "173c051038a3acdaa93d6a37d42b6b0546ffd567"
 }
