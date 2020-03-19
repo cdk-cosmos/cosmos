@@ -16,6 +16,7 @@ export interface OutputProps extends CfnOutputProps {
   exportName: string;
 }
 
+// TODO: Fix upstream
 export class Output extends CfnOutput {
   readonly exportName: string;
   constructor(scope: Construct, id: string, props: OutputProps) {

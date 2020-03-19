@@ -116,7 +116,7 @@ Object {
     "Sys2ZoneDelegationExports4A9A0633": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "AssumeRolArn": "arn:aws:iam::account2:role/Core-CdkCrossAccount-Role",
+        "AssumeRoleArn": "arn:aws:iam::account2:role/Core-CdkCrossAccount-Role",
         "Exports": Array [
           "Core-Gal2-Sys2-Zone-Name",
           "Core-Gal2-Sys2-Zone-NameServers",

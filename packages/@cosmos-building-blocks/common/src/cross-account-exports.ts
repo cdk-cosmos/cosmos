@@ -13,6 +13,7 @@ export class CrossAccountExportsFn extends Function {
       ...props,
     });
 
+    // istanbul ignore next
     if (!props?.role) {
       this.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSCloudFormationReadOnlyAccess'));
     }
@@ -22,7 +23,7 @@ export class CrossAccountExportsFn extends Function {
 export interface CrossAccountExportsProps {
   exports: string[];
   shouldErrorIfNotFound?: boolean;
-  assumeRolArn?: string;
+  assumeRoleArn?: string;
   fn?: IFunction;
   alwaysUpdate?: boolean;
 }
@@ -30,12 +31,12 @@ export interface CrossAccountExportsProps {
 export class CrossAccountExports extends Construct {
   readonly exports: string[];
   readonly resource: CustomResource;
-  readonly fn?: CrossAccountExportsFn;
+  readonly fn: IFunction;
 
   constructor(scope: Construct, id: string, props: CrossAccountExportsProps) {
     super(scope, id);
 
-    const { exports, shouldErrorIfNotFound, assumeRolArn, alwaysUpdate = false } = props;
+    const { exports, shouldErrorIfNotFound, assumeRoleArn, alwaysUpdate = false } = props;
     let { fn } = props;
 
     this.exports = exports;
@@ -44,9 +45,10 @@ export class CrossAccountExports extends Construct {
       fn = Stack.of(this).node.tryFindChild('CrossAccountExportsFn') as IFunction | undefined;
     }
     if (!fn) {
-      this.fn = new CrossAccountExportsFn(Stack.of(this), 'CrossAccountExportsFn');
-      fn = this.fn;
+      fn = new CrossAccountExportsFn(Stack.of(this), 'CrossAccountExportsFn');
     }
+
+    this.fn = fn;
 
     this.resource = new CustomResource(this, 'Resource', {
       provider: CustomResourceProvider.fromLambda(fn),
@@ -54,8 +56,8 @@ export class CrossAccountExports extends Construct {
       properties: {
         exports: this.exports,
         shouldErrorIfNotFound,
-        assumeRolArn,
-        runAt: alwaysUpdate ? new Date().toLocaleString() : undefined,
+        assumeRoleArn,
+        runAt: alwaysUpdate ? new Date(Date.now()).toISOString() : undefined,
       },
     });
   }

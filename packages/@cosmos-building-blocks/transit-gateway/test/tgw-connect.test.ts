@@ -41,6 +41,36 @@ describe('Transit Gateway Connection', () => {
     expect(testStacksynth).toHaveResource('AWS::EC2::Route');
   });
 
+  test('should not create resolver rule association if prop not passed', () => {
+    const app1 = new App();
+    const testStack1 = new Stack(app1, 'TestStack1');
+    const myvpc = new Vpc(testStack1, 'TestVpc', {
+      cidr: '10.180.7.0/24',
+      maxAzs: 1,
+      subnetConfiguration: [
+        {
+          name: 'Main',
+          subnetType: SubnetType.ISOLATED,
+          cidrMask: 26,
+        },
+        {
+          name: 'Redis',
+          subnetType: SubnetType.ISOLATED,
+          cidrMask: 28,
+        },
+      ],
+    });
+    new TgwConnect(testStack1, 'MyTgwConnection1', {
+      vpc: myvpc,
+      transitGatewayId,
+      tgwDestinationCidr,
+    });
+    const testStack1synth = SynthUtils.synthesize(testStack1);
+    expect(testStack1synth).not.toHaveResource('AWS::Route53Resolver::ResolverRuleAssociation');
+    expect(testStack1synth).toHaveResource('AWS::EC2::TransitGatewayAttachment');
+    expect(testStack1synth).toHaveResource('AWS::EC2::Route');
+  });
+
   test('should match snapshot', () => {
     expect(testStacksynth.template).toMatchSnapshot();
   });

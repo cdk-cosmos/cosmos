@@ -6,7 +6,7 @@ export interface TgwConnectProps {
   vpc: IVpc;
   transitGatewayId: string;
   tgwDestinationCidr: string;
-  resolverRuleId: string;
+  resolverRuleId?: string;
 }
 
 export class TgwConnect extends Construct {
@@ -21,26 +21,29 @@ export class TgwConnect extends Construct {
     this.Vpc = props.vpc;
     this.TgwId = props.transitGatewayId;
     this.TgwDestinationCidr = props.tgwDestinationCidr;
-    this.ResolverRuleId = props.resolverRuleId;
+    this.ResolverRuleId = props.resolverRuleId || 'None';
 
     const subnetSelect = this.Vpc.selectSubnets();
+
+    const tgwAttachment = new CfnTransitGatewayAttachment(this, 'TransitGatewayAttachment', {
+      subnetIds: subnetSelect.subnetIds,
+      transitGatewayId: this.TgwId,
+      vpcId: this.Vpc.vpcId,
+    });
+
     for (const subnet of subnetSelect.subnets) {
       new CfnRoute(this, `TGWRoute-${subnet.node.id}`, {
         routeTableId: subnet.routeTable.routeTableId,
         destinationCidrBlock: this.TgwDestinationCidr,
         transitGatewayId: this.TgwId,
-      });
+      }).addDependsOn(tgwAttachment);
     }
 
-    new CfnResolverRuleAssociation(this, 'ResolverRuleAssociation', {
-      resolverRuleId: this.ResolverRuleId,
-      vpcId: this.Vpc.vpcId,
-    });
-
-    new CfnTransitGatewayAttachment(this, 'TransitGatewayAttachment', {
-      subnetIds: subnetSelect.subnetIds,
-      transitGatewayId: this.TgwId,
-      vpcId: this.Vpc.vpcId,
-    });
+    if (props.resolverRuleId) {
+      new CfnResolverRuleAssociation(this, 'ResolverRuleAssociation', {
+        resolverRuleId: this.ResolverRuleId,
+        vpcId: this.Vpc.vpcId,
+      });
+    }
   }
 }
