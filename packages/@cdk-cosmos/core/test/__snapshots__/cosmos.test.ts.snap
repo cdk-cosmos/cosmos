@@ -33,7 +33,7 @@ Object {
       "Export": Object {
         "Name": "Core-Name",
       },
-      "Value": "Test",
+      "Value": "Cos",
     },
     "CosmosVersion": Object {
       "Export": Object {
@@ -80,10 +80,9 @@ Object {
       "Export": Object {
         "Name": "Core-RootZone-Name",
       },
-      "Value": "test.com",
+      "Value": "cos.com",
     },
   },
-  "Parameters": Any<Object>,
   "Resources": Object {
     "CdkMasterRole2FE9B317": Object {
       "Properties": Object {
@@ -133,8 +132,8 @@ Object {
       ],
       "Properties": Object {
         "Code": Object {
-          "S3Bucket": Any<Object>,
-          "S3Key": Any<Object>,
+          "S3Bucket": "mock-s3BucketName",
+          "S3Key": "mock-s3ObjectKey",
         },
         "Handler": "index.handler",
         "Role": Object {
@@ -150,7 +149,7 @@ Object {
     },
     "RootZone831A5F27": Object {
       "Properties": Object {
-        "Name": "test.com.",
+        "Name": "cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",
     },

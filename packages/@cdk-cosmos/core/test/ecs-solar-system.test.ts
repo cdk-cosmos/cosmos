@@ -1,6 +1,6 @@
 import '@aws-cdk/assert/jest';
 import { App } from '@aws-cdk/core';
-import { SynthUtils } from '@aws-cdk/assert';
+import { synthesizeStacks } from '../../../../src/test';
 import {
   CosmosStack,
   CosmosExtensionStack,
@@ -17,8 +17,10 @@ const cosmosExtension = new CosmosExtensionStack(app, 'Test', {});
 const mgtGalaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Mgt');
 const devEcsSolarSystem = new EcsSolarSystemStack(mgtGalaxy, 'Dev', { cidr: '10.0.1.0/22' });
 const devEcsSolarSystemExtension = new EcsSolarSystemExtensionStack(mgtGalaxyExtension, 'Dev');
-const devEcsSolarSystemStack = SynthUtils.synthesize(devEcsSolarSystem);
-const devEcsSolarSystemExtensionStack = SynthUtils.synthesize(devEcsSolarSystemExtension);
+const [devEcsSolarSystemStack, devEcsSolarSystemExtensionStack] = synthesizeStacks(
+  devEcsSolarSystem,
+  devEcsSolarSystemExtension
+);
 
 describe('ECS-Solar-System', () => {
   test('should be an  ecs-solar-system', () => {

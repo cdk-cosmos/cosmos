@@ -156,10 +156,13 @@ export class ImportedCosmos extends Construct implements Cosmos {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  /* eslint-disable @typescript-eslint/no-empty-function */
+  // istanbul ignore next
   AddGalaxy(): void {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
+  // istanbul ignore next
   AddSolarSystem(): void {}
+  /* eslint-enable @typescript-eslint/no-empty-function */
 }
 
 export class CosmosExtensionStack extends Stack implements CosmosExtension {

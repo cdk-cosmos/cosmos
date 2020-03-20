@@ -6,6 +6,12 @@ module.exports = {
   moduleDirectories: ['node_modules'],
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  setupFiles: [`${__dirname}/src/test/jest.setup.ts`],
+  globals: {
+    'ts-jest': {
+      tsConfig: `${__dirname}/tsconfig.base.json`,
+    },
+  },
   // TODO:
   // coverageThreshold: {
   //   global: {

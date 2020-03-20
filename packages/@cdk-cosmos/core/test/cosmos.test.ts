@@ -1,33 +1,23 @@
 import '@aws-cdk/assert/jest';
 import { App } from '@aws-cdk/core';
-import { SynthUtils } from '@aws-cdk/assert';
-import { CloudFormationStackArtifact } from '@aws-cdk/cx-api';
+import { synthesizeStacks, toHaveResourceId, toHaveResourceCount } from '../../../../src/test';
 import { CosmosStack, CosmosExtensionStack } from '../src';
 
-const toHaveResourceId = (stack: CloudFormationStackArtifact, id: string): void => {
-  expect(stack.template.Resources).toHaveProperty(id);
-};
-
-const toHaveResourceCount = (stack: CloudFormationStackArtifact, length: number): void => {
-  expect(Object.keys(stack.template.Resources)).toHaveLength(length);
-};
-
 const app = new App();
-const cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
+const cosmos = new CosmosStack(app, 'Cos', { tld: 'com', cidr: '10.0.0.0/24' });
 const cosmosExtension = new CosmosExtensionStack(app, 'Test');
-const cosmosStack = SynthUtils.synthesize(cosmos);
-const cosmosExtensionStack = SynthUtils.synthesize(cosmosExtension);
+const [cosmosStack, cosmosExtensionStack] = synthesizeStacks(cosmos, cosmosExtension);
 
 describe('Cosmos', () => {
   test('should be a cosmos', () => {
-    expect(cosmosStack.name).toEqual('Core-Test-Cosmos');
-    expect(cosmosStack).toHaveOutput({ exportName: 'Core-Name', outputValue: 'Test' });
+    expect(cosmosStack.name).toEqual('Core-Cos-Cosmos');
+    expect(cosmosStack).toHaveOutput({ exportName: 'Core-Name', outputValue: 'Cos' });
     expect(cosmosStack).toHaveOutput({ exportName: 'Core-Version' });
     toHaveResourceCount(cosmosStack, 4);
   });
 
   test('should have a RootZone', () => {
-    expect(cosmosStack).toHaveResource('AWS::Route53::HostedZone', { Name: 'test.com.' });
+    expect(cosmosStack).toHaveResource('AWS::Route53::HostedZone', { Name: 'cos.com.' });
     expect(cosmosStack).toHaveOutput({ exportName: 'Core-RootZone-Id' });
     expect(cosmosStack).toHaveOutput({ exportName: 'Core-RootZone-Name' });
     toHaveResourceId(cosmosStack, 'RootZone831A5F27');
@@ -44,16 +34,13 @@ describe('Cosmos', () => {
     toHaveResourceId(cosmosStack, 'CdkMasterRole2FE9B317');
   });
 
+  test('should have cidr range', () => {
+    expect(cosmos.NetworkBuilder?.addSubnet(28)).toEqual('10.0.0.0/28');
+    expect(cosmos.NetworkBuilder?.addSubnet(28)).toEqual('10.0.0.16/28');
+  });
+
   test('should match snapshot', () => {
-    expect(cosmosStack.template).toMatchSnapshot({
-      // These param change a lot ...
-      Parameters: expect.any(Object),
-      Resources: {
-        CrossAccountExportsFnBB7349E9: {
-          Properties: { Code: { S3Bucket: expect.any(Object), S3Key: expect.any(Object) } },
-        },
-      },
-    });
+    expect(cosmosStack.template).toMatchSnapshot();
   });
 });
 

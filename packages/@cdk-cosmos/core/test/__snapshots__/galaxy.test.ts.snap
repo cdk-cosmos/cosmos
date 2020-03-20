@@ -3,3 +3,42 @@
 exports[`Galaxy Extension should match snapshot 1`] = `Object {}`;
 
 exports[`Galaxy should match snapshot 1`] = `Object {}`;
+
+exports[`Galaxy should match snapshot 2`] = `
+Object {
+  "Resources": Object {
+    "CdkCrossAccountRoleF932CF89": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": "arn:aws:iam::account:role/Core-CdkMaster-Role",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AdministratorAccess",
+              ],
+            ],
+          },
+        ],
+        "RoleName": "Core-CdkCrossAccount-Role",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+}
+`;
