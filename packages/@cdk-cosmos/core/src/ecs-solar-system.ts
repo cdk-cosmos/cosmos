@@ -50,7 +50,7 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
       maxCapacity: 5,
     });
 
-    const AlbSecurityGroup = new SecurityGroup(this, 'SecurityGroup', {
+    const AlbSecurityGroup = new SecurityGroup(this, 'AlbSecurityGroup', {
       vpc: this.Vpc,
       description: 'SecurityGroup for SolarSystem ALB',
       allowAllOutbound: true,

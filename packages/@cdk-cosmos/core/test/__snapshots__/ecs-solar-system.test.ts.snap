@@ -19,7 +19,7 @@ Object {
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "SecurityGroupDD263621",
+          "AlbSecurityGroup86A59E99",
           "GroupId",
         ],
       },
@@ -38,7 +38,7 @@ Object {
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "SecurityGroupDD263621",
+          "AlbSecurityGroup86A59E99",
           "GroupId",
         ],
       },
@@ -107,7 +107,7 @@ Object {
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
-              "SecurityGroupDD263621",
+              "AlbSecurityGroup86A59E99",
               "GroupId",
             ],
           },
@@ -141,6 +141,31 @@ Object {
         "Protocol": "HTTP",
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "AlbSecurityGroup86A59E99": Object {
+      "Properties": Object {
+        "GroupDescription": "SecurityGroup for SolarSystem ALB",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "VpcId": Object {
+          "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
     },
     "ClusterCapacityASGA6ED330E": Object {
       "Properties": Object {
@@ -677,31 +702,6 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-    },
-    "SecurityGroupDD263621": Object {
-      "Properties": Object {
-        "GroupDescription": "SecurityGroup for SolarSystem ALB",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow from anyone on port 80",
-            "FromPort": 80,
-            "IpProtocol": "tcp",
-            "ToPort": 80,
-          },
-        ],
-        "VpcId": Object {
-          "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
     },
     "ZoneA5DE4B68": Object {
       "Properties": Object {
