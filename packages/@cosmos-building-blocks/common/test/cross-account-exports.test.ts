@@ -1,35 +1,6 @@
 import '@aws-cdk/assert/jest';
-import { App, Stack, Construct } from '@aws-cdk/core';
+import { App, Stack } from '@aws-cdk/core';
 import { SynthUtils, expect as cdkExpect, countResources } from '@aws-cdk/assert';
-import { IBucket } from '@aws-cdk/aws-s3';
-import { Asset } from '@aws-cdk/aws-s3-assets';
-
-//TODO: Move to common place
-Date.now = jest.fn(() => 1577836800000);
-
-class MockAsset extends Construct implements Asset {
-  isZipArchive = true;
-  s3BucketName = 'MOCK';
-  s3ObjectKey = 'MOCK';
-  s3Url = 'MOCK';
-  assetPath = 'MOCK';
-  sourceHash: 'MOCK';
-  bucket: IBucket = {} as IBucket;
-
-  // eslint-disable-next-line
-  constructor(scope: any, id: any, props: any) {
-    super(scope, id);
-  }
-  // eslint-disable-next-line
-  addResourceMetadata() {}
-  // eslint-disable-next-line
-  grantRead() {}
-}
-
-jest.mock('@aws-cdk/aws-s3-assets/lib/asset', () => ({
-  Asset: MockAsset,
-}));
-
 import { Code } from '@aws-cdk/aws-lambda';
 import { CrossAccountExports, CrossAccountExportsFn } from '../src';
 import { Role, AnyPrincipal } from '@aws-cdk/aws-iam';

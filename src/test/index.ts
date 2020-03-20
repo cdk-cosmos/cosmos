@@ -1,6 +1,8 @@
 import { Stack, App } from '@aws-cdk/core';
 import { CloudFormationStackArtifact } from '@aws-cdk/cx-api';
 
+export { mockProxy, MockCdkAsset } from './mocks';
+
 type SynthesizeStacks = (...stacks: Stack[]) => CloudFormationStackArtifact[];
 export const synthesizeStacks: SynthesizeStacks = (...stacks) => {
   const app = stacks

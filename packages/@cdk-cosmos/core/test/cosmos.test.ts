@@ -40,15 +40,7 @@ describe('Cosmos', () => {
   });
 
   test('should match snapshot', () => {
-    expect(cosmosStack.template).toMatchSnapshot({
-      // These param change a lot ...
-      Parameters: expect.any(Object),
-      Resources: {
-        CrossAccountExportsFnBB7349E9: {
-          Properties: { Code: { S3Bucket: expect.any(Object), S3Key: expect.any(Object) } },
-        },
-      },
-    });
+    expect(cosmosStack.template).toMatchSnapshot();
   });
 });
 
