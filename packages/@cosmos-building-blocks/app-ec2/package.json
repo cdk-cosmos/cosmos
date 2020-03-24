@@ -5,8 +5,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/**/*.js",
-    "lib/**/*.d.ts",
+    "lib/*",
     "package.json",
     "README.md"
   ],
@@ -21,8 +20,7 @@
     "test": "jest",
     "format": "prettier --write **/*.ts !**/*.d.ts",
     "lint": "eslint . --ext .js,.ts",
-    "clean": "rm -rf lib",
-    "prepublishOnly": "yarn lint && yarn test && yarn build"
+    "clean": "rm -rf lib"
   },
   "peerDependencies": {
     "@aws-cdk/aws-cloudformation": "^1.23.0",

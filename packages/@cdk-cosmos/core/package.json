@@ -5,8 +5,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/**/*.js",
-    "lib/**/*.d.ts",
+    "lib/*",
     "package.json",
     "README.md"
   ],
@@ -24,8 +23,7 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.ts",
     "format": "prettier --write **/*.ts !**/*.d.ts",
-    "clean": "rm -rf lib",
-    "prepublishOnly": "yarn lint && yarn test && yarn build"
+    "clean": "rm -rf lib"
   },
   "dependencies": {
     "@cosmos-building-blocks/common": "^0.2.0"

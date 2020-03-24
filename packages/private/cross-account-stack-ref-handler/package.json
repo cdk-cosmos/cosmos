@@ -6,8 +6,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/**/*.js",
-    "lib/**/*.d.ts",
+    "lib/*",
     "package.json",
     "README.md"
   ],
@@ -22,7 +21,6 @@
     "format": "prettier --write **/*.ts !**/*.d.ts",
     "lint": "eslint . --ext .js,.ts",
     "clean": "rm -rf lib && rm -rf .cache",
-    "prepublishOnly": "yarn lint && yarn test && yarn build",
     "bundle": "cd lib && rm -f bundle.zip && zip bundle.zip *"
   },
   "dependencies": {
