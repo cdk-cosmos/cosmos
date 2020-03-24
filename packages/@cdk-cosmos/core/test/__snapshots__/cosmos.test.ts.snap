@@ -39,7 +39,7 @@ Object {
       "Export": Object {
         "Name": "Core-Version",
       },
-      "Value": "0.1.1",
+      "Value": Any<String>,
     },
     "CrossAccountExportsFnFunctionArn4D0D888C": Object {
       "Export": Object {

@@ -40,7 +40,13 @@ describe('Cosmos', () => {
   });
 
   test('should match snapshot', () => {
-    expect(cosmosStack.template).toMatchSnapshot();
+    expect(cosmosStack.template).toMatchSnapshot({
+      Outputs: {
+        CosmosVersion: {
+          Value: expect.any(String),
+        },
+      },
+    });
   });
 });
 
