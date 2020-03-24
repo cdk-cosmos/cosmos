@@ -1,6 +1,6 @@
 {
   "name": "@cosmos-building-blocks/transit-gateway",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -28,8 +28,8 @@
     "prepublishOnly": "yarn lint && yarn test && yarn build"
   },
   "peerDependencies": {
-    "@aws-cdk/core": "^1.23.0",
     "@aws-cdk/aws-ec2": "^1.23.0",
-    "@aws-cdk/aws-route53resolver": "^1.23.0"
+    "@aws-cdk/aws-route53resolver": "^1.23.0",
+    "@aws-cdk/core": "^1.23.0"
   }
 }

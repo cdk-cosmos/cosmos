@@ -1,6 +1,6 @@
 {
   "name": "@cdk-cosmos/core",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -28,7 +28,7 @@
     "prepublishOnly": "yarn lint && yarn test && yarn build"
   },
   "dependencies": {
-    "@cosmos-building-blocks/common": "^0.1.1"
+    "@cosmos-building-blocks/common": "^0.2.0"
   },
   "peerDependencies": {
     "@aws-cdk/aws-cloudformation": "^1.23.0",
