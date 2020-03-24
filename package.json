@@ -12,7 +12,8 @@
     "format": "lerna run format",
     "clean": "lerna run clean",
     "test-and-shield": "yarn jest && coverage-shield",
-    "git-add": "git add ."
+    "git-add": "git add .",
+    "prepublishOnly": "yarn build && yarn lint && yarn test"
   },
   "workspaces": [
     "packages/@cdk-cosmos/*",
