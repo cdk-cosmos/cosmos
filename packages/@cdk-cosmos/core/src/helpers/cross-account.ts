@@ -1,16 +1,23 @@
-import { Construct, Fn } from '@aws-cdk/core';
+import { Construct, Fn, Duration } from '@aws-cdk/core';
 import { ZoneDelegationRecord } from '@aws-cdk/aws-route53';
 import { CrossAccountExports } from '@cosmos-building-blocks/common';
 import { Output } from '..';
 import { SolarSystem } from '../interfaces';
 import { getCosmos } from './utils';
 
+export interface CrossAccountZoneDelegationRecordProps {
+  comment?: string;
+  ttl?: Duration;
+}
+
 export class CrossAccountZoneDelegationRecord extends Construct {
   readonly exports: CrossAccountExports;
   readonly delegationRecord: ZoneDelegationRecord;
 
-  constructor(solarSystem: SolarSystem, id: string) {
+  constructor(solarSystem: SolarSystem, id: string, props?: CrossAccountZoneDelegationRecordProps) {
     super(solarSystem, id);
+
+    const { comment, ttl } = props || {};
 
     const cosmos = getCosmos(solarSystem);
     if (!cosmos.Link) throw new Error('Cosmos does not have a link stack. It is required');
@@ -32,6 +39,8 @@ export class CrossAccountZoneDelegationRecord extends Construct {
       zone: cosmos.RootZone,
       recordName: zoneNameRef + '.',
       nameServers: Fn.split(',', zoneNameServersRef),
+      ttl,
+      comment,
     });
 
     cosmos.Link.node.addDependency(solarSystem.Zone);

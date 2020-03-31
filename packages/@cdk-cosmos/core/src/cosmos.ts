@@ -86,10 +86,12 @@ export class CosmosStack extends Stack implements Cosmos {
 
     this.CdkRepo = new Repository(this, 'CdkRepo', {
       repositoryName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Repo', this).toLowerCase(),
+      description: `Core CDK Repo for ${this.Name} Cosmos.`,
     });
 
     this.RootZone = new HostedZone(this, 'RootZone', {
       zoneName: `${rootZone}.${tld}`.toLowerCase(),
+      comment: `Core TLD Root Zone for ${this.Name} Cosmos.`,
     });
 
     const CdkMasterRoleName = RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkMaster-Role', this);
@@ -190,6 +192,7 @@ export class CosmosExtensionStack extends Stack implements CosmosExtension {
 
     this.CdkRepo = new Repository(this, 'CdkRepo', {
       repositoryName: RESOLVE(PATTERN.COSMOS, 'Cdk-Repo', this).toLocaleLowerCase(),
+      description: `App CDK Repo for ${this.Name} Cosmos.`,
     });
   }
 

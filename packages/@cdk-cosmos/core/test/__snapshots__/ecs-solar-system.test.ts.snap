@@ -705,12 +705,16 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
     },
     "ZoneA5DE4B68": Object {
       "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Zone for Dev SolarSystem",
+        },
         "Name": "dev.test.com.",
       },
       "Type": "AWS::Route53::HostedZone",
     },
     "ZoneDelegationAE61034B": Object {
       "Properties": Object {
+        "Comment": "Core Zone Delegation for Dev SolarSystem.",
         "HostedZoneId": Object {
           "Fn::ImportValue": "Core-Test-Cosmos:ExportsOutputRefRootZone831A5F27FABD99AF",
         },
@@ -721,7 +725,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "NameServers",
           ],
         },
-        "TTL": "172800",
+        "TTL": "1800",
         "Type": "NS",
       },
       "Type": "AWS::Route53::RecordSet",

@@ -94,7 +94,7 @@ describe('Solar-System', () => {
     const app = new App();
     const cosmos = new CosmosStack(app, 'Test', { tld: 'com', cidr: '10.0.0.0/22' });
     const galaxy = new GalaxyStack(cosmos, 'Test', {});
-    const solarSystem = new SolarSystemStack(galaxy, 'Test', { linkZone: false });
+    const solarSystem = new SolarSystemStack(galaxy, 'Test', { zoneProps: { linkZone: false } });
     const [solarSystemStack] = synthesizeStacks(solarSystem);
     expect(solarSystemStack).not.toHaveResource('AWS::Route53::RecordSet');
   });

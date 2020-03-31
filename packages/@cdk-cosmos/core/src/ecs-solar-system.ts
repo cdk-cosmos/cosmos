@@ -27,7 +27,13 @@ import {
 } from '.';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface EcsSolarSystemProps extends SolarSystemProps {}
+export interface EcsSolarSystemProps extends SolarSystemProps {
+  clusterProps?: {
+    desiredCapacity?: number;
+    minCapacity?: number;
+    maxCapacity?: number;
+  };
+}
 
 export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSystem {
   readonly Cluster: Cluster;

@@ -6,6 +6,7 @@ Object {
   "Resources": Object {
     "CdkRepo9606A710": Object {
       "Properties": Object {
+        "RepositoryDescription": "App CDK Repo for Test Cosmos.",
         "RepositoryName": "app-test-cdk-repo",
       },
       "Type": "AWS::CodeCommit::Repository",
@@ -122,6 +123,7 @@ Object {
     },
     "CdkRepo9606A710": Object {
       "Properties": Object {
+        "RepositoryDescription": "Core CDK Repo for Cos Cosmos.",
         "RepositoryName": "core-cdk-repo",
       },
       "Type": "AWS::CodeCommit::Repository",
@@ -149,6 +151,9 @@ Object {
     },
     "RootZone831A5F27": Object {
       "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core TLD Root Zone for Cos Cosmos.",
+        },
         "Name": "cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",

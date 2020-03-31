@@ -39,12 +39,16 @@ Object {
   "Resources": Object {
     "ZoneA5DE4B68": Object {
       "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Zone for Sys SolarSystem",
+        },
         "Name": "sys.cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",
     },
     "ZoneDelegationAE61034B": Object {
       "Properties": Object {
+        "Comment": "Core Zone Delegation for Sys SolarSystem.",
         "HostedZoneId": Object {
           "Fn::ImportValue": "Core-Cos-Cosmos:ExportsOutputRefRootZone831A5F27FABD99AF",
         },
@@ -55,7 +59,7 @@ Object {
             "NameServers",
           ],
         },
-        "TTL": "172800",
+        "TTL": "1800",
         "Type": "NS",
       },
       "Type": "AWS::Route53::RecordSet",
@@ -101,6 +105,9 @@ Object {
   "Resources": Object {
     "ZoneA5DE4B68": Object {
       "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Zone for Sys2 SolarSystem",
+        },
         "Name": "sys2.cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",
@@ -130,6 +137,7 @@ Object {
     },
     "Sys2ZoneDelegationFCDF4952": Object {
       "Properties": Object {
+        "Comment": "Core Zone Delegation for Sys2 SolarSystem.",
         "HostedZoneId": Object {
           "Fn::ImportValue": "Core-Cos-Cosmos:ExportsOutputRefRootZone831A5F27FABD99AF",
         },
@@ -158,7 +166,7 @@ Object {
             },
           ],
         },
-        "TTL": "172800",
+        "TTL": "1800",
         "Type": "NS",
       },
       "Type": "AWS::Route53::RecordSet",
