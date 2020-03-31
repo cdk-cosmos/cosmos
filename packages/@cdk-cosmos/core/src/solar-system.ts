@@ -28,6 +28,7 @@ const stackName = (galaxy: Bubble, name: string): string =>
 
 export interface SolarSystemProps extends StackProps {
   cidr?: string;
+  sharedVpc?: boolean;
   vpcProps?: Partial<VpcProps> & {
     cidrMask?: number;
     subnetMask?: number;
@@ -55,7 +56,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
       },
     });
 
-    const { cidr, vpcProps = {}, zoneProps = {} } = props || {};
+    const { cidr, sharedVpc = true, vpcProps = {}, zoneProps = {} } = props || {};
     const { cidrMask = 24, subnetMask = 26, defaultEndpoints = true } = vpcProps;
     const { linkZone = true, ttl = Duration.minutes(30) } = zoneProps;
 
@@ -65,7 +66,8 @@ export class SolarSystemStack extends Stack implements SolarSystem {
     if (cidr) this.NetworkBuilder = new NetworkBuilder(cidr);
     else if (this.Galaxy.NetworkBuilder) this.NetworkBuilder = this.Galaxy.NetworkBuilder;
 
-    this.Vpc = this.Galaxy.node.tryFindChild('SharedVpc') as Vpc;
+    if (sharedVpc) this.Vpc = this.Galaxy.node.tryFindChild('SharedVpc') as Vpc;
+
     if (!this.Vpc) {
       if (!this.NetworkBuilder) {
         throw new Error(
@@ -73,7 +75,8 @@ export class SolarSystemStack extends Stack implements SolarSystem {
         );
       }
 
-      this.Vpc = new Vpc(this.Galaxy, 'SharedVpc', {
+      this.Vpc = new Vpc(sharedVpc ? this.Galaxy : this, sharedVpc ? 'SharedVpc' : 'Vpc', {
+        maxAzs: 2,
         subnetConfiguration: [
           {
             name: 'Main',
@@ -81,7 +84,6 @@ export class SolarSystemStack extends Stack implements SolarSystem {
             cidrMask: subnetMask,
           },
         ],
-        maxAzs: 2,
         ...vpcProps,
         cidr: this.NetworkBuilder.addSubnet(cidrMask),
       });
@@ -109,7 +111,9 @@ export class SolarSystemStack extends Stack implements SolarSystem {
         });
       }
 
-      RemoteVpc.export(this.Vpc, RESOLVE(PATTERN.SINGLETON_GALAXY, 'SharedVpc', this));
+      sharedVpc
+        ? RemoteVpc.export(this.Vpc, RESOLVE(PATTERN.SINGLETON_GALAXY, 'SharedVpc', this))
+        : RemoteVpc.export(this.Vpc, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc', this));
     }
 
     const rootZoneName = this.Galaxy.Cosmos.RootZone.zoneName;
@@ -144,12 +148,14 @@ export class ImportedSolarSystem extends Construct implements SolarSystem {
   readonly Vpc: IVpc;
   readonly Zone: IHostedZone;
 
-  constructor(scope: Construct, galaxy: Galaxy, name: string) {
+  constructor(scope: Construct, galaxy: Galaxy, name: string, sharedVpc = true) {
     super(scope, 'SolarSystemImport');
 
     this.Galaxy = galaxy;
     this.Name = name;
-    this.Vpc = RemoteVpc.import(this, RESOLVE(PATTERN.SINGLETON_GALAXY, 'SharedVpc', this), { hasIsolated: true });
+    this.Vpc = sharedVpc
+      ? RemoteVpc.import(this, RESOLVE(PATTERN.SINGLETON_GALAXY, 'SharedVpc', this), { hasIsolated: true })
+      : RemoteVpc.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc', this), { hasIsolated: true });
     this.Zone = RemoteZone.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone', this));
   }
 }

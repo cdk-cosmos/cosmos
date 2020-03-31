@@ -1,6 +1,6 @@
 import { Construct, StackProps } from '@aws-cdk/core';
 import { InstanceType, SecurityGroup } from '@aws-cdk/aws-ec2';
-import { Cluster, ICluster } from '@aws-cdk/aws-ecs';
+import { Cluster, ICluster, ClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
   ApplicationListener,
@@ -28,11 +28,8 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EcsSolarSystemProps extends SolarSystemProps {
-  clusterProps?: {
-    desiredCapacity?: number;
-    minCapacity?: number;
-    maxCapacity?: number;
-  };
+  clusterProps?: Partial<ClusterProps>;
+  clusterCapacityProps?: Partial<AddCapacityOptions>;
 }
 
 export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSystem {
@@ -44,8 +41,11 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
   constructor(galaxy: Galaxy, name: string, props?: EcsSolarSystemProps) {
     super(galaxy, name, props);
 
+    const { clusterProps = {}, clusterCapacityProps = {} } = props || {};
+
     this.Cluster = new Cluster(this, 'Cluster', {
       vpc: this.Vpc,
+      ...clusterProps,
       clusterName: RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this),
     });
 
@@ -54,6 +54,7 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
       desiredCapacity: 1,
       minCapacity: 1,
       maxCapacity: 5,
+      ...clusterCapacityProps,
     });
 
     const AlbSecurityGroup = new SecurityGroup(this, 'AlbSecurityGroup', {
@@ -97,8 +98,8 @@ export class ImportedEcsSolarSystem extends ImportedSolarSystem implements EcsSo
   readonly HttpListener: IApplicationListener;
   // readonly HttpsListener: IApplicationListener;
 
-  constructor(scope: Construct, galaxy: Galaxy, name: string) {
-    super(scope, galaxy, name);
+  constructor(scope: Construct, galaxy: Galaxy, name: string, sharedVpc = true) {
+    super(scope, galaxy, name, sharedVpc);
 
     this.Cluster = RemoteCluster.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this), this.Vpc);
     this.Alb = RemoteAlb.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this));
@@ -116,7 +117,6 @@ export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack impl
     super(galaxy, name, props);
 
     this.node.tryRemoveChild(this.Portal.node.id);
-
     this.Portal = new ImportedEcsSolarSystem(this, this.Galaxy.Portal, this.Name);
   }
 }
