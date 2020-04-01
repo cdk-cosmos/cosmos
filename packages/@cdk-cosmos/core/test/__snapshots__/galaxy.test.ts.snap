@@ -1,11 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Galaxy Extension should match snapshot 1`] = `Object {}`;
+exports[`Galaxy Extension should match snapshot 1`] = `
+Object {
+  "Description": "App resources dependant on each Galaxy.",
+}
+`;
 
-exports[`Galaxy should match snapshot 1`] = `Object {}`;
+exports[`Galaxy should match snapshot 1`] = `
+Object {
+  "Description": "Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.",
+}
+`;
 
 exports[`Galaxy should match snapshot 2`] = `
 Object {
+  "Description": "Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.",
   "Resources": Object {
     "CdkCrossAccountRoleF932CF89": Object {
       "Properties": Object {

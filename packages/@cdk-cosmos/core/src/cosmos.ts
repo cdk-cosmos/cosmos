@@ -68,8 +68,8 @@ export class CosmosStack extends Stack implements Cosmos {
 
   constructor(app: Construct, name: string, props: CosmosStackProps) {
     super(app, stackName('Core', name), {
+      description: 'Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole',
       ...props,
-      description: 'Singleton resources for the cosmos, like RootZone, CdkRepo and CdkMasterRole',
     });
 
     const { tld, cidr, rootZone = name.toLowerCase() } = props;
@@ -179,8 +179,8 @@ export class CosmosExtensionStack extends Stack implements CosmosExtension {
 
   constructor(scope: Construct, name: string, props?: StackProps) {
     super(scope, stackName('App', name), {
+      description: 'App Singleton Resources for the Cosmos like CdkRepo and EcrRepo.',
       ...props,
-      description: 'Singleton Resources for Application like AppCDKRepo, ECRRepo etc',
     });
 
     this.Scope = scope;

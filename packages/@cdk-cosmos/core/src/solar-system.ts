@@ -49,6 +49,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
 
   constructor(galaxy: Galaxy, name: string, props?: SolarSystemProps) {
     super(galaxy.Cosmos.Scope, stackName(galaxy, name), {
+      description: 'Resources dependant on each SolarSystem, like Vpc and MainZone.',
       ...props,
       env: {
         account: props?.env?.account || galaxy.account,
@@ -161,6 +162,7 @@ export class SolarSystemExtensionStack extends Stack implements SolarSystemExten
 
   constructor(galaxy: GalaxyExtension, name: string, props?: StackProps) {
     super(galaxy.Cosmos.Scope, stackName(galaxy, name), {
+      description: 'App resources dependant on each SolarSystem, like Services and Databases.',
       ...props,
       env: {
         account: props?.env?.account || galaxy.account,

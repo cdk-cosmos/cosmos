@@ -2,6 +2,7 @@
 
 exports[`CICD-Solar-System Extension should match snapshot 1`] = `
 Object {
+  "Description": "App resources dependant on each SolarSystem, like Services and Databases.",
   "Resources": Object {
     "CdkPipeline7DE1C2DD": Object {
       "Properties": Object {
@@ -322,6 +323,7 @@ Object {
 
 exports[`CICD-Solar-System should match snapshot 1`] = `
 Object {
+  "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
     "AlbAlbArn044BCECB": Object {
       "Export": Object {

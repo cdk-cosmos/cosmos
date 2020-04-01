@@ -1,9 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Solar-System Extension should match snapshot 1`] = `Object {}`;
+exports[`Solar-System Extension should match snapshot 1`] = `
+Object {
+  "Description": "App resources dependant on each SolarSystem, like Services and Databases.",
+}
+`;
 
 exports[`Solar-System should match snapshot 1`] = `
 Object {
+  "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
     "VpcAZs": Object {
       "Export": Object {
@@ -120,6 +125,7 @@ Object {
 
 exports[`Solar-System should match snapshot 2`] = `
 Object {
+  "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
     "VpcAZs": Object {
       "Export": Object {
