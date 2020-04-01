@@ -5,6 +5,56 @@ exports[`Solar-System Extension should match snapshot 1`] = `Object {}`;
 exports[`Solar-System should match snapshot 1`] = `
 Object {
   "Outputs": Object {
+    "VpcAZs": Object {
+      "Export": Object {
+        "Name": "Core-Gal-Sys-Vpc-AZs",
+      },
+      "Value": "dummy1a,dummy1b",
+    },
+    "VpcId": Object {
+      "Export": Object {
+        "Name": "Core-Gal-Sys-Vpc-Id",
+      },
+      "Value": Object {
+        "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+      },
+    },
+    "VpcIsolatedSubnetRouteTables": Object {
+      "Export": Object {
+        "Name": "Core-Gal-Sys-Vpc-IsolatedSubnetRouteTableIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet1RouteTable1A9920A9F8087918",
+            },
+            Object {
+              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet2RouteTable0AD76F684D7351CC",
+            },
+          ],
+        ],
+      },
+    },
+    "VpcIsolatedSubnets": Object {
+      "Export": Object {
+        "Name": "Core-Gal-Sys-Vpc-IsolatedSubnetIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082",
+            },
+            Object {
+              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4",
+            },
+          ],
+        ],
+      },
+    },
     "ZoneNameServers105FD0B4": Object {
       "Export": Object {
         "Name": "Core-Gal-Sys-Zone-NameServers",
@@ -71,6 +121,56 @@ Object {
 exports[`Solar-System should match snapshot 2`] = `
 Object {
   "Outputs": Object {
+    "VpcAZs": Object {
+      "Export": Object {
+        "Name": "Core-Gal2-Sys2-Vpc-AZs",
+      },
+      "Value": "dummy1a,dummy1b",
+    },
+    "VpcId": Object {
+      "Export": Object {
+        "Name": "Core-Gal2-Sys2-Vpc-Id",
+      },
+      "Value": Object {
+        "Ref": "Vpc8378EB38",
+      },
+    },
+    "VpcIsolatedSubnetRouteTables": Object {
+      "Export": Object {
+        "Name": "Core-Gal2-Sys2-Vpc-IsolatedSubnetRouteTableIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
+            },
+            Object {
+              "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
+            },
+          ],
+        ],
+      },
+    },
+    "VpcIsolatedSubnets": Object {
+      "Export": Object {
+        "Name": "Core-Gal2-Sys2-Vpc-IsolatedSubnetIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Ref": "VpcMainSubnet1Subnet501A7278",
+            },
+            Object {
+              "Ref": "VpcMainSubnet2Subnet4C1ED704",
+            },
+          ],
+        ],
+      },
+    },
     "ZoneNameServers105FD0B4": Object {
       "Export": Object {
         "Name": "Core-Gal2-Sys2-Zone-NameServers",
@@ -103,6 +203,590 @@ Object {
     },
   },
   "Resources": Object {
+    "Vpc8378EB38": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.5.0/24",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VpcEcrDockerEndpoint53ED547B": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcEcrDockerEndpointSecurityGroup5D41A216",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ecr.dkr",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcMainSubnet1Subnet501A7278",
+          },
+          Object {
+            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcEcrDockerEndpointSecurityGroup5D41A216": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/EcrDockerEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc8378EB38",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc8378EB38",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcEcrEndpoint0BE46338": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcEcrEndpointSecurityGroup13145954",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ecr.api",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcMainSubnet1Subnet501A7278",
+          },
+          Object {
+            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcEcrEndpointSecurityGroup13145954": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/EcrEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc8378EB38",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc8378EB38",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcEcsAgentEndpoint7C64BE78": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcEcsAgentEndpointSecurityGroup0260F9C0",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ecs-agent",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcMainSubnet1Subnet501A7278",
+          },
+          Object {
+            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcEcsAgentEndpointSecurityGroup0260F9C0": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/EcsAgentEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc8378EB38",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc8378EB38",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcEcsEndpoint81699F6A": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcEcsEndpointSecurityGroup6B2A7280",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ecs",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcMainSubnet1Subnet501A7278",
+          },
+          Object {
+            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcEcsEndpointSecurityGroup6B2A7280": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/EcsEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc8378EB38",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc8378EB38",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcEcsTelemetryEndpointF3189EDA": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcEcsTelemetryEndpointSecurityGroupC8027D56",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ecs-telemetry",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcMainSubnet1Subnet501A7278",
+          },
+          Object {
+            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcEcsTelemetryEndpointSecurityGroupC8027D56": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/EcsTelemetryEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc8378EB38",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc8378EB38",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcMainSubnet1RouteTableAssociation735BC7DF": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcMainSubnet1Subnet501A7278",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcMainSubnet1RouteTableB8CBA6F0": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/MainSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcMainSubnet1Subnet501A7278": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.5.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/MainSubnet1",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Main",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcMainSubnet2RouteTableAssociationE08931BA": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcMainSubnet2Subnet4C1ED704",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcMainSubnet2RouteTableBE78C2D2": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/MainSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcMainSubnet2Subnet4C1ED704": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.5.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/MainSubnet2",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Main",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcS3Gateway0FF2BD16": Object {
+      "Properties": Object {
+        "RouteTableIds": Array [
+          Object {
+            "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
+          },
+          Object {
+            "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".s3",
+            ],
+          ],
+        },
+        "VpcEndpointType": "Gateway",
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
     "ZoneA5DE4B68": Object {
       "Properties": Object {
         "HostedZoneConfig": Object {

@@ -5,7 +5,6 @@ import { Role } from '@aws-cdk/aws-iam';
 import {
   RESOLVE,
   PATTERN,
-  Bubble,
   Galaxy,
   EcsSolarSystem,
   CiCdSolarSystem,
@@ -18,7 +17,6 @@ import {
   CdkPipeline,
   CdkPipelineProps,
 } from '.';
-import {} from './ecs-solar-system';
 
 export interface CiCdStackProps extends EcsSolarSystemProps {
   cdkPipelineProps?: Partial<CdkPipelineProps>;
@@ -28,25 +26,7 @@ export class CiCdSolarSystemStack extends EcsSolarSystemStack implements CiCdSol
   readonly CdkDeploy: Project;
 
   constructor(galaxy: Galaxy, props?: CiCdStackProps) {
-    super(galaxy, 'CiCd', { ...props, sharedVpc: false });
-
-    // super(galaxy.Cosmos.Scope, stackName(galaxy, 'CiCd'), {
-    //   ...props,
-    //   env: {
-    //     account: props?.env?.account || galaxy.account,
-    //     region: props?.env?.region || galaxy.region,
-    //   },
-    // });
-
-    // const { cidr, vpcProps = {}, zoneProps = {}, clusterProps = {}, clusterCapacityProps = {} } = props || {};
-    // const { cidrMask = 24, subnetMask = 26, defaultEndpoints = true } = vpcProps;
-    // const { linkZone = true, ttl = Duration.minutes(30) } = zoneProps;
-
-    // this.Galaxy = galaxy;
-    // this.Galaxy.AddSolarSystem(this);
-    // this.Name = 'CiCd';
-    // if (cidr) this.NetworkBuilder = new NetworkBuilder(cidr);
-    // else if (this.Galaxy.NetworkBuilder) this.NetworkBuilder = this.Galaxy.NetworkBuilder;
+    super(galaxy, 'CiCd', props);
 
     const { cdkPipelineProps = {} } = props || {};
     const { CdkRepo, CdkMasterRoleStaticArn } = this.Galaxy.Cosmos;
@@ -69,7 +49,7 @@ export class ImportedCiCdSolarSystem extends ImportedEcsSolarSystem implements C
   // readonly CdkDeploy: IProject;
 
   constructor(scope: Construct, galaxy: Galaxy) {
-    super(scope, galaxy, 'CiCd', false);
+    super(scope, galaxy, 'CiCd');
 
     // this.CdkDeploy = RemoteBuildProject.import(this, `Core${this.Galaxy.Name}${this.Name}`, 'CdkPipelineDeploy');
   }

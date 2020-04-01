@@ -380,13 +380,13 @@ Object {
         ],
       },
     },
-    "VpcVpcAZsB82354D1": Object {
+    "VpcAZs": Object {
       "Export": Object {
         "Name": "Core-Gal-CiCd-Vpc-AZs",
       },
       "Value": "dummy1a,dummy1b",
     },
-    "VpcVpcId87CD4CDE": Object {
+    "VpcId": Object {
       "Export": Object {
         "Name": "Core-Gal-CiCd-Vpc-Id",
       },
@@ -394,7 +394,7 @@ Object {
         "Ref": "Vpc8378EB38",
       },
     },
-    "VpcVpcIsolatedSubnetRouteTablesE7EA80C8": Object {
+    "VpcIsolatedSubnetRouteTables": Object {
       "Export": Object {
         "Name": "Core-Gal-CiCd-Vpc-IsolatedSubnetRouteTableIds",
       },
@@ -412,7 +412,7 @@ Object {
         ],
       },
     },
-    "VpcVpcIsolatedSubnets7975613E": Object {
+    "VpcIsolatedSubnets": Object {
       "Export": Object {
         "Name": "Core-Gal-CiCd-Vpc-IsolatedSubnetIds",
       },

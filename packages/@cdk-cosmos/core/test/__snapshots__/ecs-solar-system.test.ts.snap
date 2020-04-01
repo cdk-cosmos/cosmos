@@ -62,6 +62,78 @@ Object {
         ],
       },
     },
+    "VpcAZs": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Vpc-AZs",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Fn::Select": Array [
+                0,
+                Object {
+                  "Fn::GetAZs": "",
+                },
+              ],
+            },
+            Object {
+              "Fn::Select": Array [
+                1,
+                Object {
+                  "Fn::GetAZs": "",
+                },
+              ],
+            },
+          ],
+        ],
+      },
+    },
+    "VpcId": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Vpc-Id",
+      },
+      "Value": Object {
+        "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+      },
+    },
+    "VpcIsolatedSubnetRouteTables": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Vpc-IsolatedSubnetRouteTableIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet1RouteTable1A9920A9F8087918",
+            },
+            Object {
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet2RouteTable0AD76F684D7351CC",
+            },
+          ],
+        ],
+      },
+    },
+    "VpcIsolatedSubnets": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Vpc-IsolatedSubnetIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082",
+            },
+            Object {
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4",
+            },
+          ],
+        ],
+      },
+    },
     "ZoneNameServers105FD0B4": Object {
       "Export": Object {
         "Name": "Core-Mgt-Dev-Zone-NameServers",

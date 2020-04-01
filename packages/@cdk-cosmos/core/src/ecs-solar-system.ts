@@ -98,8 +98,8 @@ export class ImportedEcsSolarSystem extends ImportedSolarSystem implements EcsSo
   readonly HttpListener: IApplicationListener;
   // readonly HttpsListener: IApplicationListener;
 
-  constructor(scope: Construct, galaxy: Galaxy, name: string, sharedVpc = true) {
-    super(scope, galaxy, name, sharedVpc);
+  constructor(scope: Construct, galaxy: Galaxy, name: string) {
+    super(scope, galaxy, name);
 
     this.Cluster = RemoteCluster.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this), this.Vpc);
     this.Alb = RemoteAlb.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this));

@@ -12,14 +12,17 @@ import {
 
 const app = new App();
 const cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
-const mgtGalaxy = new GalaxyStack(cosmos, 'Mgt', {});
-const cosmosExtension = new CosmosExtensionStack(app, 'Test', {});
-const mgtGalaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Mgt');
-const devEcsSolarSystem = new EcsSolarSystemStack(mgtGalaxy, 'Dev', { cidr: '10.0.1.0/22' });
-const devEcsSolarSystemExtension = new EcsSolarSystemExtensionStack(mgtGalaxyExtension, 'Dev');
+const galaxy = new GalaxyStack(cosmos, 'Mgt', { cidr: '10.0.1.0/22' });
+const galaxyVpc = galaxy.AddSharedVpc();
+const ecsSolarSystem = new EcsSolarSystemStack(galaxy, 'Dev', { vpc: galaxyVpc });
+
+const cosmosExtension = new CosmosExtensionStack(app, 'Test');
+const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Mgt');
+const ecsSolarSystemExtension = new EcsSolarSystemExtensionStack(galaxyExtension, 'Dev');
+
 const [devEcsSolarSystemStack, devEcsSolarSystemExtensionStack] = synthesizeStacks(
-  devEcsSolarSystem,
-  devEcsSolarSystemExtension
+  ecsSolarSystem,
+  ecsSolarSystemExtension
 );
 
 describe('ECS-Solar-System', () => {

@@ -16,8 +16,8 @@ const env2 = { account: 'account2', region: 'region2' };
 
 const cosmos = new CosmosStack(app, 'Cos', { tld: 'com', cidr: '10.0.1.0/22', env });
 const galaxy = new GalaxyStack(cosmos, 'Gal', { env });
-const solarSystem = new SolarSystemStack(galaxy, 'Sys', { env });
-const solarSystemShared = new SolarSystemStack(galaxy, 'SysShared', { env });
+const galaxyVpc = galaxy.AddSharedVpc();
+const solarSystem = new SolarSystemStack(galaxy, 'Sys', { env, vpc: galaxyVpc });
 const galaxy2 = new GalaxyStack(cosmos, 'Gal2', { env: env2 });
 const solarSystem2 = new SolarSystemStack(galaxy2, 'Sys2', { env: env2 });
 
@@ -38,18 +38,24 @@ describe('Solar-System', () => {
   test('should be a solar-system', () => {
     expect(solarSystemStack.name).toEqual('Core-Cos-Gal-Sys-SolarSystem');
     expect(solarSystemStack).toHaveResource('AWS::Route53::RecordSet');
+
     expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Gal-Sys-Zone-Id' });
     expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Gal-Sys-Zone-Name', outputValue: 'sys.cos.com' });
     expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Gal-Sys-Zone-NameServers' });
+
+    expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Gal-Sys-Vpc-Id' });
+    expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Gal-Sys-Vpc-AZs' });
+    expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Gal-Sys-Vpc-IsolatedSubnetIds' });
+    expect(solarSystemStack).toHaveOutput({ exportName: 'Core-Gal-Sys-Vpc-IsolatedSubnetRouteTableIds' });
+
+    expect(solarSystem2Stack).toHaveOutput({ exportName: 'Core-Gal2-Sys2-Vpc-Id' });
+    expect(solarSystem2Stack).toHaveOutput({ exportName: 'Core-Gal2-Sys2-Vpc-AZs' });
+    expect(solarSystem2Stack).toHaveOutput({ exportName: 'Core-Gal2-Sys2-Vpc-IsolatedSubnetIds' });
+    expect(solarSystem2Stack).toHaveOutput({ exportName: 'Core-Gal2-Sys2-Vpc-IsolatedSubnetRouteTableIds' });
   });
 
   test('should create shared vpc in galaxy', () => {
     expect(galaxyStack).toHaveResource('AWS::EC2::VPC');
-    expect(galaxyStack).toHaveOutput({ exportName: 'Core-Gal-SharedVpc-Id' });
-    expect(galaxyStack).toHaveOutput({ exportName: 'Core-Gal-SharedVpc-AZs' });
-    expect(galaxyStack).toHaveOutput({ exportName: 'Core-Gal-SharedVpc-IsolatedSubnetIds' });
-    expect(galaxyStack).toHaveOutput({ exportName: 'Core-Gal-SharedVpc-IsolatedSubnetRouteTableIds' });
-    expect(solarSystem.Vpc).toEqual(solarSystemShared.Vpc);
   });
 
   test('should inherit env', () => {
@@ -64,9 +70,9 @@ describe('Solar-System', () => {
     expect(() => {
       const app = new App();
       const cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
-      const galaxy = new GalaxyStack(cosmos, 'Test', {});
-      new SolarSystemStack(galaxy, 'Test', {});
-    }).toThrowError('NetworkBuilder not found, please define cidr range here or Galaxy or Cosmos. (System: Test)');
+      const galaxy = new GalaxyStack(cosmos, 'Test');
+      new SolarSystemStack(galaxy, 'Test');
+    }).toThrowError('NetworkBuilder not found, please define cidr range here (SolarSystem: Test) or Galaxy or Cosmos.');
   });
 
   test('should have cird range', () => {

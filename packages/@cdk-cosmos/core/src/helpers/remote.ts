@@ -26,17 +26,17 @@ export class Output extends CfnOutput {
 }
 
 export class RemoteZone {
-  static export(zone: IHostedZone & Construct, exportName: string): void {
-    new Output(zone, 'ZoneId', {
+  static export(zone: IHostedZone & Construct, exportName: string, scope: Construct = zone): void {
+    new Output(scope, 'ZoneId', {
       exportName: `${exportName}-Id`,
       value: zone.hostedZoneId,
     });
-    new Output(zone, 'ZoneName', {
+    new Output(scope, 'ZoneName', {
       exportName: `${exportName}-Name`,
       value: zone.zoneName,
     });
     if (zone.hostedZoneNameServers) {
-      new Output(zone, 'NameServers', {
+      new Output(scope, 'NameServers', {
         exportName: `${exportName}-NameServers`,
         value: Fn.join(',', zone.hostedZoneNameServers),
       });
@@ -55,25 +55,25 @@ export class RemoteZone {
 }
 
 export class RemoteVpc {
-  static export(vpc: IVpc & Construct, exportName: string): void {
-    new Output(vpc, 'VpcId', {
+  static export(vpc: IVpc & Construct, exportName: string, scope: Construct = vpc): void {
+    new Output(scope, 'VpcId', {
       exportName: `${exportName}-Id`,
       value: vpc.vpcId,
     });
-    new Output(vpc, 'VpcAZs', {
+    new Output(scope, 'VpcAZs', {
       exportName: `${exportName}-AZs`,
       value: Fn.join(',', vpc.availabilityZones),
     });
 
     if (vpc.isolatedSubnets.length) {
-      new Output(vpc, 'VpcIsolatedSubnets', {
+      new Output(scope, 'VpcIsolatedSubnets', {
         exportName: `${exportName}-IsolatedSubnetIds`,
         value: Fn.join(
           ',',
           vpc.isolatedSubnets.map(s => s.subnetId)
         ),
       });
-      new Output(vpc, 'VpcIsolatedSubnetRouteTables', {
+      new Output(scope, 'VpcIsolatedSubnetRouteTables', {
         exportName: `${exportName}-IsolatedSubnetRouteTableIds`,
         value: Fn.join(
           ',',
@@ -83,14 +83,14 @@ export class RemoteVpc {
     }
 
     if (vpc.privateSubnets.length) {
-      new Output(vpc, 'VpcPrivateSubnets', {
+      new Output(scope, 'VpcPrivateSubnets', {
         exportName: `${exportName}-PrivateSubnetIds`,
         value: Fn.join(
           ',',
           vpc.privateSubnets.map(s => s.subnetId)
         ),
       });
-      new Output(vpc, 'VpcPrivateSubnetRouteTables', {
+      new Output(scope, 'VpcPrivateSubnetRouteTables', {
         exportName: `${exportName}-PrivateSubnetRouteTableIds`,
         value: Fn.join(
           ',',
@@ -100,14 +100,14 @@ export class RemoteVpc {
     }
 
     if (vpc.publicSubnets.length) {
-      new Output(vpc, 'VpcPublicSubnets', {
+      new Output(scope, 'VpcPublicSubnets', {
         exportName: `${exportName}-PublicSubnetIds`,
         value: Fn.join(
           ',',
           vpc.publicSubnets.map(s => s.subnetId)
         ),
       });
-      new Output(vpc, 'VpcPublicSubnetRouteTables', {
+      new Output(scope, 'VpcPublicSubnetRouteTables', {
         exportName: `${exportName}-PublicSubnetRouteTableIds`,
         value: Fn.join(
           ',',
@@ -148,12 +148,12 @@ export class RemoteVpc {
 }
 
 export class RemoteCluster {
-  static export(cluster: ICluster & Construct, exportName: string): void {
-    new Output(cluster, 'ClusterName', {
+  static export(cluster: ICluster & Construct, exportName: string, scope: Construct = cluster): void {
+    new Output(scope, 'ClusterName', {
       exportName: `${exportName}-Name`,
       value: cluster.clusterName,
     });
-    new Output(cluster, 'ClusterSecurityGroup', {
+    new Output(scope, 'ClusterSecurityGroup', {
       exportName: `${exportName}-SecurityGroup`,
       value: cluster.connections.securityGroups[0].securityGroupId,
     });
@@ -178,12 +178,12 @@ export class RemoteCluster {
 }
 
 export class RemoteAlb {
-  static export(alb: IApplicationLoadBalancer & Construct, exportName: string): void {
-    new Output(alb, 'AlbArn', {
+  static export(alb: IApplicationLoadBalancer & Construct, exportName: string, scope: Construct = alb): void {
+    new Output(scope, 'AlbArn', {
       exportName: `${exportName}-Arn`,
       value: alb.loadBalancerArn,
     });
-    new Output(alb, 'AlbSecurityGroupId', {
+    new Output(scope, 'AlbSecurityGroupId', {
       exportName: `${exportName}-SecurityGroupId`,
       value: alb.connections.securityGroups[0].securityGroupId,
     });
@@ -201,12 +201,12 @@ export class RemoteAlb {
 }
 
 export class RemoteApplicationListener {
-  static export(listener: IApplicationListener & Construct, exportName: string): void {
-    new Output(listener, 'AlArn', {
+  static export(listener: IApplicationListener & Construct, exportName: string, scope: Construct = listener): void {
+    new Output(scope, 'AlArn', {
       exportName: `${exportName}-Arn`,
       value: listener.listenerArn,
     });
-    new Output(listener, 'AlSecurityGroupId', {
+    new Output(scope, 'AlSecurityGroupId', {
       exportName: `${exportName}-SecurityGroupId`,
       value: listener.connections.securityGroups[0].securityGroupId,
     });
@@ -229,8 +229,8 @@ export class RemoteApplicationListener {
 }
 
 export class RemoteCodeRepo {
-  static export(repo: ICodeRepository & Construct, exportName: string): void {
-    new Output(repo, 'RepoName', {
+  static export(repo: ICodeRepository & Construct, exportName: string, scope: Construct = repo): void {
+    new Output(scope, 'RepoName', {
       exportName: `${exportName}-Name`,
       value: repo.repositoryName,
     });
@@ -244,8 +244,8 @@ export class RemoteCodeRepo {
 }
 
 export class RemoteBuildProject {
-  static export(project: IProject & Construct, exportName: string): void {
-    new Output(project, 'BuildProjectName', {
+  static export(project: IProject & Construct, exportName: string, scope: Construct = project): void {
+    new Output(scope, 'BuildProjectName', {
       exportName: `${exportName}-Name`,
       value: project.projectName,
     });
@@ -259,8 +259,8 @@ export class RemoteBuildProject {
 }
 
 export class RemoteFunction {
-  static export(fn: IFunction & Construct, exportName: string): void {
-    new Output(fn, 'FunctionArn', {
+  static export(fn: IFunction & Construct, exportName: string, scope: Construct = fn): void {
+    new Output(scope, 'FunctionArn', {
       exportName: `${exportName}-Arn`,
       value: fn.functionArn,
     });

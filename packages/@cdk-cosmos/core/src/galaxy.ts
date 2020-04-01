@@ -13,6 +13,13 @@ import {
   SolarSystemExtension,
   isCrossAccount,
 } from '.';
+import {
+  VpcProps,
+  Vpc,
+  SubnetType,
+  GatewayVpcEndpointAwsService,
+  InterfaceVpcEndpointAwsService,
+} from '@aws-cdk/aws-ec2';
 
 const stackName = (cosmos: Bubble, name: string): string =>
   RESOLVE(PATTERN.GALAXY, 'Galaxy', { Name: name, Cosmos: cosmos });
@@ -28,17 +35,18 @@ export class GalaxyStack extends Stack implements Galaxy {
   readonly NetworkBuilder?: NetworkBuilder;
   readonly CdkCrossAccountRole?: Role;
   readonly CdkCrossAccountRoleStaticArn?: string;
+  Vpc?: Vpc;
 
-  constructor(cosmos: Cosmos, name: string, props: GalaxyStackProps) {
+  constructor(cosmos: Cosmos, name: string, props?: GalaxyStackProps) {
     super(cosmos.Scope, stackName(cosmos, name), {
       ...props,
       env: {
-        account: props.env?.account || cosmos.account,
-        region: props.env?.region || cosmos.region,
+        account: props?.env?.account || cosmos.account,
+        region: props?.env?.region || cosmos.region,
       },
     });
 
-    const { cidr } = props;
+    const { cidr } = props || {};
 
     this.Cosmos = cosmos;
     this.Cosmos.AddGalaxy(this);
@@ -56,6 +64,57 @@ export class GalaxyStack extends Stack implements Galaxy {
       this.CdkCrossAccountRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
       this.CdkCrossAccountRoleStaticArn = `arn:aws:iam::${this.account}:role/${CdkCrossAccountRoleName}`;
     }
+  }
+
+  AddSharedVpc(
+    props?: Partial<VpcProps> & {
+      cidrMask?: number;
+      subnetMask?: number;
+      defaultEndpoints?: boolean;
+    }
+  ): Vpc {
+    const { cidrMask = 24, subnetMask = 26, defaultEndpoints = true } = props || {};
+
+    if (!this.NetworkBuilder) {
+      throw new Error(`NetworkBuilder not found, please define cidr range here (Galaxy: ${this.Name}) or Cosmos.`);
+    }
+
+    this.Vpc = new Vpc(this, 'SharedVpc', {
+      maxAzs: 2,
+      subnetConfiguration: [
+        {
+          name: 'Main',
+          subnetType: SubnetType.ISOLATED,
+          cidrMask: subnetMask,
+        },
+      ],
+      ...props,
+      cidr: this.NetworkBuilder.addSubnet(cidrMask),
+    });
+
+    if (defaultEndpoints) {
+      this.Vpc.addGatewayEndpoint('S3Gateway', {
+        service: GatewayVpcEndpointAwsService.S3,
+        subnets: [this.Vpc.selectSubnets({ onePerAz: true })],
+      });
+      this.Vpc.addInterfaceEndpoint('EcsEndpoint', {
+        service: InterfaceVpcEndpointAwsService.ECS,
+      });
+      this.Vpc.addInterfaceEndpoint('EcsAgentEndpoint', {
+        service: InterfaceVpcEndpointAwsService.ECS_AGENT,
+      });
+      this.Vpc.addInterfaceEndpoint('EcsTelemetryEndpoint', {
+        service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
+      });
+      this.Vpc.addInterfaceEndpoint('EcrEndpoint', {
+        service: InterfaceVpcEndpointAwsService.ECR,
+      });
+      this.Vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
+        service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
+      });
+    }
+
+    return this.Vpc;
   }
 
   AddSolarSystem(solarSystem: SolarSystem): void {
