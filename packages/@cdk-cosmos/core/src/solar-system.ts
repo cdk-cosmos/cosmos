@@ -1,5 +1,12 @@
-import { Construct, Stack, StackProps } from '@aws-cdk/core';
-import { IVpc, SubnetType, Vpc, GatewayVpcEndpointAwsService, InterfaceVpcEndpointAwsService } from '@aws-cdk/aws-ec2';
+import { Construct, Stack, StackProps, Duration } from '@aws-cdk/core';
+import {
+  IVpc,
+  SubnetType,
+  Vpc,
+  GatewayVpcEndpointAwsService,
+  InterfaceVpcEndpointAwsService,
+  VpcProps,
+} from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { IHostedZone, HostedZone, ZoneDelegationRecord } from '@aws-cdk/aws-route53';
 import {
@@ -21,7 +28,16 @@ const stackName = (galaxy: Bubble, name: string): string =>
 
 export interface SolarSystemProps extends StackProps {
   cidr?: string;
-  linkZone?: boolean;
+  vpc?: Vpc;
+  vpcProps?: Partial<VpcProps> & {
+    cidrMask?: number;
+    subnetMask?: number;
+    defaultEndpoints?: boolean;
+  };
+  zoneProps?: {
+    linkZone?: boolean;
+    ttl?: Duration;
+  };
 }
 
 export class SolarSystemStack extends Stack implements SolarSystem {
@@ -33,6 +49,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
 
   constructor(galaxy: Galaxy, name: string, props?: SolarSystemProps) {
     super(galaxy.Cosmos.Scope, stackName(galaxy, name), {
+      description: 'Resources dependant on each SolarSystem, like Vpc and MainZone.',
       ...props,
       env: {
         account: props?.env?.account || galaxy.account,
@@ -40,7 +57,9 @@ export class SolarSystemStack extends Stack implements SolarSystem {
       },
     });
 
-    const { cidr, linkZone = true } = props || {};
+    const { cidr, vpc, vpcProps = {}, zoneProps = {} } = props || {};
+    const { cidrMask = 24, subnetMask = 26, defaultEndpoints = true } = vpcProps;
+    const { linkZone = true, ttl = Duration.minutes(30) } = zoneProps;
 
     this.Galaxy = galaxy;
     this.Galaxy.AddSolarSystem(this);
@@ -48,64 +67,72 @@ export class SolarSystemStack extends Stack implements SolarSystem {
     if (cidr) this.NetworkBuilder = new NetworkBuilder(cidr);
     else if (this.Galaxy.NetworkBuilder) this.NetworkBuilder = this.Galaxy.NetworkBuilder;
 
-    this.Vpc = this.Galaxy.node.tryFindChild('SharedVpc') as Vpc;
+    if (vpc) this.Vpc = vpc as Vpc;
     if (!this.Vpc) {
       if (!this.NetworkBuilder) {
         throw new Error(
-          `NetworkBuilder not found, please define cidr range here or Galaxy or Cosmos. (System: ${this.Name}).`
+          `NetworkBuilder not found, please define cidr range here (SolarSystem: ${this.Name}) or Galaxy or Cosmos.`
         );
       }
 
-      this.Vpc = new Vpc(this.Galaxy, 'SharedVpc', {
-        cidr: this.NetworkBuilder.addSubnet(24),
-        maxAzs: 3,
+      this.Vpc = new Vpc(this, 'Vpc', {
+        maxAzs: 2,
         subnetConfiguration: [
           {
             name: 'Main',
             subnetType: SubnetType.ISOLATED,
-            cidrMask: 26,
+            cidrMask: subnetMask,
           },
         ],
+        ...vpcProps,
+        cidr: this.NetworkBuilder.addSubnet(cidrMask),
       });
 
-      // TODO: move to internet endpoint Endpoints ?
-      this.Vpc.addGatewayEndpoint('S3Gateway', {
-        service: GatewayVpcEndpointAwsService.S3,
-        subnets: [this.Vpc.selectSubnets({ onePerAz: true })],
-      });
-      this.Vpc.addInterfaceEndpoint('EcsEndpoint', {
-        service: InterfaceVpcEndpointAwsService.ECS,
-      });
-      this.Vpc.addInterfaceEndpoint('EcsAgentEndpoint', {
-        service: InterfaceVpcEndpointAwsService.ECS_AGENT,
-      });
-      this.Vpc.addInterfaceEndpoint('EcsTelemetryEndpoint', {
-        service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
-      });
-      this.Vpc.addInterfaceEndpoint('EcrEndpoint', {
-        service: InterfaceVpcEndpointAwsService.ECR,
-      });
-      this.Vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
-        service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
-      });
-
-      RemoteVpc.export(this.Vpc, RESOLVE(PATTERN.SINGLETON_GALAXY, 'SharedVpc', this));
+      if (defaultEndpoints) {
+        this.Vpc.addGatewayEndpoint('S3Gateway', {
+          service: GatewayVpcEndpointAwsService.S3,
+          subnets: [this.Vpc.selectSubnets({ onePerAz: true })],
+        });
+        this.Vpc.addInterfaceEndpoint('EcsEndpoint', {
+          service: InterfaceVpcEndpointAwsService.ECS,
+        });
+        this.Vpc.addInterfaceEndpoint('EcsAgentEndpoint', {
+          service: InterfaceVpcEndpointAwsService.ECS_AGENT,
+        });
+        this.Vpc.addInterfaceEndpoint('EcsTelemetryEndpoint', {
+          service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
+        });
+        this.Vpc.addInterfaceEndpoint('EcrEndpoint', {
+          service: InterfaceVpcEndpointAwsService.ECR,
+        });
+        this.Vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
+          service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
+        });
+      }
     }
+
+    RemoteVpc.export(this.Vpc, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc', this), this);
 
     const rootZoneName = this.Galaxy.Cosmos.RootZone.zoneName;
     this.Zone = new HostedZone(this, 'Zone', {
       zoneName: `${name}.${rootZoneName}`.toLowerCase(),
+      comment: `Core Main Zone for ${this.Name} SolarSystem`,
     });
     RemoteZone.export(this.Zone, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone', this));
 
     if (linkZone) {
       if (isCrossAccount(this, this.Galaxy.Cosmos)) {
-        new CrossAccountZoneDelegationRecord(this, 'ZoneDelegation');
+        new CrossAccountZoneDelegationRecord(this, 'ZoneDelegation', {
+          ttl,
+          comment: `Core Zone Delegation for ${this.Name} SolarSystem.`,
+        });
       } else {
         new ZoneDelegationRecord(this, 'ZoneDelegation', {
           zone: this.Galaxy.Cosmos.RootZone,
           recordName: this.Zone.zoneName,
           nameServers: this.Zone.hostedZoneNameServers as string[],
+          ttl,
+          comment: `Core Zone Delegation for ${this.Name} SolarSystem.`,
         });
       }
     }
@@ -123,7 +150,7 @@ export class ImportedSolarSystem extends Construct implements SolarSystem {
 
     this.Galaxy = galaxy;
     this.Name = name;
-    this.Vpc = RemoteVpc.import(this, RESOLVE(PATTERN.SINGLETON_GALAXY, 'SharedVpc', this), { hasIsolated: true });
+    this.Vpc = RemoteVpc.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc', this), { hasIsolated: true });
     this.Zone = RemoteZone.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone', this));
   }
 }
@@ -135,6 +162,7 @@ export class SolarSystemExtensionStack extends Stack implements SolarSystemExten
 
   constructor(galaxy: GalaxyExtension, name: string, props?: StackProps) {
     super(galaxy.Cosmos.Scope, stackName(galaxy, name), {
+      description: 'App resources dependant on each SolarSystem, like Services and Databases.',
       ...props,
       env: {
         account: props?.env?.account || galaxy.account,

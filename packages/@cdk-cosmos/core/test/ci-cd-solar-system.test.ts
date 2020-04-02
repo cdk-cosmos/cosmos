@@ -51,7 +51,7 @@ describe('CICD-Solar-System', () => {
       const cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
       const galaxy = new GalaxyStack(cosmos, 'Test', {});
       new CiCdSolarSystemStack(galaxy);
-    }).toThrowError('NetworkBuilder not found, please define cidr range here or Galaxy or Cosmos. (System: CiCd)');
+    }).toThrowError('NetworkBuilder not found, please define cidr range here (SolarSystem: CiCd) or Galaxy or Cosmos.');
   });
 
   test('should have cird range', () => {

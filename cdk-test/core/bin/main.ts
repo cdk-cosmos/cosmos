@@ -4,6 +4,7 @@ import { App } from '@aws-cdk/core';
 import { CosmosStack, GalaxyStack, CiCdSolarSystemStack, EcsSolarSystemStack } from '@cdk-cosmos/core';
 import { CDKToolkit } from '@cosmos-building-blocks/common';
 import { TgwConnect } from '@cosmos-building-blocks/transit-gateway';
+import { Vpc } from '@aws-cdk/aws-ec2';
 
 const app = new App();
 
@@ -33,8 +34,11 @@ const devGalaxy = new GalaxyStack(cosmos, 'Dev', {
   cidr: '10.0.1.0/22',
   env: devEnvConfig,
 });
+const devSharedVpc = devGalaxy.AddSharedVpc();
 
-const dev = new EcsSolarSystemStack(devGalaxy, 'Dev');
+const dev = new EcsSolarSystemStack(devGalaxy, 'Dev', {
+  vpc: devSharedVpc,
+});
 
 // Connect the dev solarsystem to shared TGW
 new TgwConnect(dev.Galaxy, 'MyTgwConnection', {
@@ -45,4 +49,6 @@ new TgwConnect(dev.Galaxy, 'MyTgwConnection', {
 });
 
 // Create Test solarsystem
-const tst = new EcsSolarSystemStack(devGalaxy, 'Tst');
+const tst = new EcsSolarSystemStack(devGalaxy, 'Tst', {
+  vpc: devSharedVpc,
+});

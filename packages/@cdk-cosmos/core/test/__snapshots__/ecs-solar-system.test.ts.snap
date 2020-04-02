@@ -1,9 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ECS-Solar-System Extension should match snapshot 1`] = `Object {}`;
+exports[`ECS-Solar-System Extension should match snapshot 1`] = `
+Object {
+  "Description": "App resources dependant on each SolarSystem, like Services and Databases.",
+}
+`;
 
 exports[`ECS-Solar-System should match snapshot 1`] = `
 Object {
+  "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
     "AlbAlbArn044BCECB": Object {
       "Export": Object {
@@ -59,6 +64,78 @@ Object {
         "Fn::GetAtt": Array [
           "ClusterCapacityInstanceSecurityGroup2D6F9ADD",
           "GroupId",
+        ],
+      },
+    },
+    "VpcAZs": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Vpc-AZs",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Fn::Select": Array [
+                0,
+                Object {
+                  "Fn::GetAZs": "",
+                },
+              ],
+            },
+            Object {
+              "Fn::Select": Array [
+                1,
+                Object {
+                  "Fn::GetAZs": "",
+                },
+              ],
+            },
+          ],
+        ],
+      },
+    },
+    "VpcId": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Vpc-Id",
+      },
+      "Value": Object {
+        "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+      },
+    },
+    "VpcIsolatedSubnetRouteTables": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Vpc-IsolatedSubnetRouteTableIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet1RouteTable1A9920A9F8087918",
+            },
+            Object {
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet2RouteTable0AD76F684D7351CC",
+            },
+          ],
+        ],
+      },
+    },
+    "VpcIsolatedSubnets": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-Vpc-IsolatedSubnetIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082",
+            },
+            Object {
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4",
+            },
+          ],
         ],
       },
     },
@@ -705,12 +782,16 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
     },
     "ZoneA5DE4B68": Object {
       "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Zone for Dev SolarSystem",
+        },
         "Name": "dev.test.com.",
       },
       "Type": "AWS::Route53::HostedZone",
     },
     "ZoneDelegationAE61034B": Object {
       "Properties": Object {
+        "Comment": "Core Zone Delegation for Dev SolarSystem.",
         "HostedZoneId": Object {
           "Fn::ImportValue": "Core-Test-Cosmos:ExportsOutputRefRootZone831A5F27FABD99AF",
         },
@@ -721,7 +802,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "NameServers",
           ],
         },
-        "TTL": "172800",
+        "TTL": "1800",
         "Type": "NS",
       },
       "Type": "AWS::Route53::RecordSet",
