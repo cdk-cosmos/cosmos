@@ -113,6 +113,9 @@ export class GalaxyStack extends Stack implements Galaxy {
       this.Vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
         service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
       });
+      this.Vpc.addInterfaceEndpoint('CloudWatchLogsEndpoint', {
+        service: InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
+      });
     }
 
     return this.Vpc;

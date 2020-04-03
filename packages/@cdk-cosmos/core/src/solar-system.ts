@@ -108,6 +108,9 @@ export class SolarSystemStack extends Stack implements SolarSystem {
         this.Vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
           service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
         });
+        this.Vpc.addInterfaceEndpoint('CloudWatchLogsEndpoint', {
+          service: InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
+        });
       }
     }
 

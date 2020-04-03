@@ -8,6 +8,768 @@ Object {
 
 exports[`Solar-System should match snapshot 1`] = `
 Object {
+  "Description": "Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.",
+  "Outputs": Object {
+    "ExportsOutputRefSharedVpc96F0F6140AE947C7": Object {
+      "Export": Object {
+        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+      },
+      "Value": Object {
+        "Ref": "SharedVpc96F0F614",
+      },
+    },
+    "ExportsOutputRefSharedVpcMainSubnet1RouteTable1A9920A9F8087918": Object {
+      "Export": Object {
+        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet1RouteTable1A9920A9F8087918",
+      },
+      "Value": Object {
+        "Ref": "SharedVpcMainSubnet1RouteTable1A9920A9",
+      },
+    },
+    "ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082": Object {
+      "Export": Object {
+        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082",
+      },
+      "Value": Object {
+        "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+      },
+    },
+    "ExportsOutputRefSharedVpcMainSubnet2RouteTable0AD76F684D7351CC": Object {
+      "Export": Object {
+        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet2RouteTable0AD76F684D7351CC",
+      },
+      "Value": Object {
+        "Ref": "SharedVpcMainSubnet2RouteTable0AD76F68",
+      },
+    },
+    "ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4": Object {
+      "Export": Object {
+        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4",
+      },
+      "Value": Object {
+        "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+      },
+    },
+  },
+  "Resources": Object {
+    "SharedVpc96F0F614": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.4.0/24",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "SharedVpcCloudWatchLogsEndpoint1D67EB6F": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "SharedVpcCloudWatchLogsEndpointSecurityGroup9AFCD3A4",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".logs",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+          },
+          Object {
+            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "SharedVpcCloudWatchLogsEndpointSecurityGroup9AFCD3A4": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal-Galaxy/SharedVpc/CloudWatchLogsEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "SharedVpc96F0F614",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "SharedVpc96F0F614",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "SharedVpcEcrDockerEndpoint3156011A": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "SharedVpcEcrDockerEndpointSecurityGroup041BC8B5",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ecr.dkr",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+          },
+          Object {
+            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "SharedVpcEcrDockerEndpointSecurityGroup041BC8B5": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal-Galaxy/SharedVpc/EcrDockerEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "SharedVpc96F0F614",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "SharedVpc96F0F614",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "SharedVpcEcrEndpointEC349307": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "SharedVpcEcrEndpointSecurityGroup2D339FA4",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ecr.api",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+          },
+          Object {
+            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "SharedVpcEcrEndpointSecurityGroup2D339FA4": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal-Galaxy/SharedVpc/EcrEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "SharedVpc96F0F614",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "SharedVpc96F0F614",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "SharedVpcEcsAgentEndpointF563397C": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "SharedVpcEcsAgentEndpointSecurityGroupF4FDE620",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ecs-agent",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+          },
+          Object {
+            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "SharedVpcEcsAgentEndpointSecurityGroupF4FDE620": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal-Galaxy/SharedVpc/EcsAgentEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "SharedVpc96F0F614",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "SharedVpc96F0F614",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "SharedVpcEcsEndpoint39554E09": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "SharedVpcEcsEndpointSecurityGroup5BBB3ABF",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ecs",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+          },
+          Object {
+            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "SharedVpcEcsEndpointSecurityGroup5BBB3ABF": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal-Galaxy/SharedVpc/EcsEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "SharedVpc96F0F614",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "SharedVpc96F0F614",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "SharedVpcEcsTelemetryEndpoint21E8B9F4": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "SharedVpcEcsTelemetryEndpointSecurityGroup628281C3",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ecs-telemetry",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+          },
+          Object {
+            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "SharedVpcEcsTelemetryEndpointSecurityGroup628281C3": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal-Galaxy/SharedVpc/EcsTelemetryEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "SharedVpc96F0F614",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "SharedVpc96F0F614",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "SharedVpcMainSubnet1RouteTable1A9920A9": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/MainSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "SharedVpcMainSubnet1RouteTableAssociation7969C309": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "SharedVpcMainSubnet1RouteTable1A9920A9",
+        },
+        "SubnetId": Object {
+          "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "SharedVpcMainSubnet1SubnetF95BAF13": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.4.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/MainSubnet1",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Main",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "SharedVpcMainSubnet2RouteTable0AD76F68": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/MainSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "SharedVpcMainSubnet2RouteTableAssociation2CA37D4A": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "SharedVpcMainSubnet2RouteTable0AD76F68",
+        },
+        "SubnetId": Object {
+          "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "SharedVpcMainSubnet2Subnet6A834A71": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.4.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/MainSubnet2",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Main",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "SharedVpcS3Gateway58B8AA14": Object {
+      "Properties": Object {
+        "RouteTableIds": Array [
+          Object {
+            "Ref": "SharedVpcMainSubnet1RouteTable1A9920A9",
+          },
+          Object {
+            "Ref": "SharedVpcMainSubnet2RouteTable0AD76F68",
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".s3",
+            ],
+          ],
+        },
+        "VpcEndpointType": "Gateway",
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+  },
+}
+`;
+
+exports[`Solar-System should match snapshot 2`] = `
+Object {
+  "Description": "Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.",
+  "Resources": Object {
+    "CdkCrossAccountRoleF932CF89": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": "arn:aws:iam::account:role/Core-CdkMaster-Role",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AdministratorAccess",
+              ],
+            ],
+          },
+        ],
+        "RoleName": "Core-CdkCrossAccount-Role",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+}
+`;
+
+exports[`Solar-System should match snapshot 3`] = `
+Object {
   "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
     "VpcAZs": Object {
@@ -123,7 +885,7 @@ Object {
 }
 `;
 
-exports[`Solar-System should match snapshot 2`] = `
+exports[`Solar-System should match snapshot 4`] = `
 Object {
   "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
@@ -223,6 +985,94 @@ Object {
         ],
       },
       "Type": "AWS::EC2::VPC",
+    },
+    "VpcCloudWatchLogsEndpointA6195533": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcCloudWatchLogsEndpointSecurityGroupE044298A",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".logs",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcMainSubnet1Subnet501A7278",
+          },
+          Object {
+            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcCloudWatchLogsEndpointSecurityGroupE044298A": Object {
+      "Properties": Object {
+        "GroupDescription": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc8378EB38",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc8378EB38",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
     },
     "VpcEcrDockerEndpoint53ED547B": Object {
       "Properties": Object {
@@ -806,7 +1656,7 @@ Object {
 }
 `;
 
-exports[`Solar-System should match snapshot 3`] = `
+exports[`Solar-System should match snapshot 5`] = `
 Object {
   "Description": "Resources to link the Cosmos, like Route53 zone delegation",
   "Resources": Object {
