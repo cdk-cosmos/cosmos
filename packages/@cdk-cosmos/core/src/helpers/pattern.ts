@@ -1,4 +1,4 @@
-import { Construct } from '@aws-cdk/core';
+import { Construct } from '@aws-cdk/core/lib/construct';
 
 type Dictionary = { [key: string]: string };
 type Scope = {
@@ -61,15 +61,26 @@ export const _RESOLVE: (pattern: string, params: ResolveParams) => string = (pat
     .trim();
 };
 
-export const RESOLVE: (pattern: string, type: string | Construct, scope: Scope, extraParams?: Dictionary) => string = (
-  pattern,
-  type,
-  scope,
-  extraParams = {}
-) => {
+export const RESOLVE: (
+  pattern: string,
+  type?: string | Construct,
+  scope?: Scope,
+  extraParams?: Dictionary
+) => string = (pattern, type, scope, extraParams = {}) => {
   return _RESOLVE(pattern, {
     ...extraParams,
     Scope: scope,
     Type: type,
   });
+};
+
+declare module '@aws-cdk/core/lib/construct' {
+  interface Construct {
+    RESOLVE: (pattern: string, type?: string | Construct, extraParams?: Dictionary) => string;
+  }
+}
+
+Construct.prototype.RESOLVE = function(pattern, type, extraParams): string {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return RESOLVE(pattern, type, this as any, extraParams);
 };

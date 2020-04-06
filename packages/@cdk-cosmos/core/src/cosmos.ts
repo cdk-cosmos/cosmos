@@ -85,7 +85,7 @@ export class CosmosStack extends Stack implements Cosmos {
     });
 
     this.CdkRepo = new Repository(this, 'CdkRepo', {
-      repositoryName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Repo', this).toLowerCase(),
+      repositoryName: this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Repo').toLowerCase(),
       description: `Core CDK Repo for ${this.Name} Cosmos.`,
     });
 
@@ -94,7 +94,7 @@ export class CosmosStack extends Stack implements Cosmos {
       comment: `Core TLD Root Zone for ${this.Name} Cosmos.`,
     });
 
-    const CdkMasterRoleName = RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkMaster-Role', this);
+    const CdkMasterRoleName = this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkMaster-Role');
     this.CdkMasterRole = new Role(this, 'CdkMasterRole', {
       roleName: CdkMasterRoleName,
       assumedBy: new CompositePrincipal(
@@ -111,16 +111,16 @@ export class CosmosStack extends Stack implements Cosmos {
     });
 
     new CfnOutput(this, 'CosmosName', {
-      exportName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Name', this),
+      exportName: this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'Name'),
       value: this.Name,
     });
     new CfnOutput(this, 'CosmosVersion', {
-      exportName: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Version', this),
+      exportName: this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'Version'),
       value: this.Version,
     });
-    RemoteCodeRepo.export(this.CdkRepo, RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkRepo', this));
-    RemoteZone.export(this.RootZone, RESOLVE(PATTERN.SINGLETON_COSMOS, 'RootZone', this));
-    RemoteFunction.export(this.CrossAccountExportsFn, RESOLVE(PATTERN.SINGLETON_COSMOS, 'CrossAccountExportsFn', this));
+    RemoteCodeRepo.export(this.CdkRepo, this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkRepo'));
+    RemoteZone.export(this.RootZone, this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'RootZone'));
+    RemoteFunction.export(this.CrossAccountExportsFn, this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'CrossAccountExportsFn'));
   }
 
   AddGalaxy(galaxy: Galaxy): void {
@@ -147,14 +147,14 @@ export class ImportedCosmos extends Construct implements Cosmos {
     const account = Stack.of(scope).account;
 
     this.Scope = scope;
-    this.Name = Fn.importValue(RESOLVE(PATTERN.SINGLETON_COSMOS, 'Name', this));
-    this.Version = Fn.importValue(RESOLVE(PATTERN.SINGLETON_COSMOS, 'Version', this));
-    this.CdkRepo = RemoteCodeRepo.import(this, RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkRepo', this));
-    this.RootZone = RemoteZone.import(this, RESOLVE(PATTERN.SINGLETON_COSMOS, 'RootZone', this));
+    this.Name = Fn.importValue(this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'Name'));
+    this.Version = Fn.importValue(this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'Version'));
+    this.CdkRepo = RemoteCodeRepo.import(this, this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkRepo'));
+    this.RootZone = RemoteZone.import(this, this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'RootZone'));
     this.CdkMasterRoleStaticArn = `arn:aws:iam::${account}:role/Core-CdkMaster-Role`;
     this.CrossAccountExportsFn = RemoteFunction.import(
       this,
-      RESOLVE(PATTERN.SINGLETON_COSMOS, 'CrossAccountExportsFn', this)
+      this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'CrossAccountExportsFn')
     );
   }
 
@@ -191,7 +191,7 @@ export class CosmosExtensionStack extends Stack implements CosmosExtension {
     this.Version = getPackageVersion();
 
     this.CdkRepo = new Repository(this, 'CdkRepo', {
-      repositoryName: RESOLVE(PATTERN.COSMOS, 'Cdk-Repo', this).toLocaleLowerCase(),
+      repositoryName: this.RESOLVE(PATTERN.COSMOS, 'Cdk-Repo').toLocaleLowerCase(),
       description: `App CDK Repo for ${this.Name} Cosmos.`,
     });
   }

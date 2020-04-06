@@ -170,7 +170,7 @@ export const addCdkDeployEnvStageToPipeline = (props: {
   const cdkOutputArtifact = (cdkSourceRepoAction?.actionProperties.outputs as Artifact[])[0];
 
   const deployStage: StageOptions = {
-    stageName: _RESOLVE('${Galaxy}-${SolarSystem}', { Scope: solarSystem }), // TODO: is this confusing ?
+    stageName: solarSystem.RESOLVE('${Galaxy}-${SolarSystem}'), // TODO: is this confusing ?
     actions: [
       new CodeBuildAction({
         actionName: 'CdkDeploy',
@@ -181,7 +181,7 @@ export const addCdkDeployEnvStageToPipeline = (props: {
           ...deployEnvs,
           STACKS: {
             type: BuildEnvironmentVariableType.PLAINTEXT,
-            value: RESOLVE(PATTERN.SOLAR_SYSTEM, 'SolarSystem', solarSystem),
+            value: solarSystem.RESOLVE(PATTERN.SOLAR_SYSTEM, 'SolarSystem'),
           },
         },
       }),

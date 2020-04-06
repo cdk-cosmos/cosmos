@@ -11,7 +11,6 @@ import {
   IApplicationListener,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import {
-  RESOLVE,
   PATTERN,
   Galaxy,
   GalaxyExtension,
@@ -46,7 +45,7 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
     this.Cluster = new Cluster(this, 'Cluster', {
       vpc: this.Vpc,
       ...clusterProps,
-      clusterName: RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this),
+      clusterName: this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster'),
     });
 
     this.Cluster.addCapacity('Capacity', {
@@ -65,7 +64,7 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
 
     this.Alb = new ApplicationLoadBalancer(this, 'Alb', {
       vpc: this.Vpc,
-      loadBalancerName: RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this),
+      loadBalancerName: this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'),
       securityGroup: AlbSecurityGroup,
     });
 
@@ -86,9 +85,9 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
     //   open: true
     // });
 
-    RemoteCluster.export(this.Cluster, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this));
-    RemoteAlb.export(this.Alb, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this));
-    RemoteApplicationListener.export(this.HttpListener, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener', this));
+    RemoteCluster.export(this.Cluster, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster'));
+    RemoteAlb.export(this.Alb, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'));
+    RemoteApplicationListener.export(this.HttpListener, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener'));
   }
 }
 
@@ -101,11 +100,11 @@ export class ImportedEcsSolarSystem extends ImportedSolarSystem implements EcsSo
   constructor(scope: Construct, galaxy: Galaxy, name: string) {
     super(scope, galaxy, name);
 
-    this.Cluster = RemoteCluster.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster', this), this.Vpc);
-    this.Alb = RemoteAlb.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb', this));
+    this.Cluster = RemoteCluster.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster'), this.Vpc);
+    this.Alb = RemoteAlb.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'));
     this.HttpListener = RemoteApplicationListener.import(
       this,
-      RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener', this)
+      this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener')
     );
   }
 }

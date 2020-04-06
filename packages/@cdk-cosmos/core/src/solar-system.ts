@@ -114,14 +114,14 @@ export class SolarSystemStack extends Stack implements SolarSystem {
       }
     }
 
-    RemoteVpc.export(this.Vpc, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc', this), this);
+    RemoteVpc.export(this.Vpc, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc'), this);
 
     const rootZoneName = this.Galaxy.Cosmos.RootZone.zoneName;
     this.Zone = new HostedZone(this, 'Zone', {
       zoneName: `${name}.${rootZoneName}`.toLowerCase(),
       comment: `Core Main Zone for ${this.Name} SolarSystem`,
     });
-    RemoteZone.export(this.Zone, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone', this));
+    RemoteZone.export(this.Zone, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone'));
 
     if (linkZone) {
       if (isCrossAccount(this, this.Galaxy.Cosmos)) {
@@ -153,8 +153,8 @@ export class ImportedSolarSystem extends Construct implements SolarSystem {
 
     this.Galaxy = galaxy;
     this.Name = name;
-    this.Vpc = RemoteVpc.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc', this), { hasIsolated: true });
-    this.Zone = RemoteZone.import(this, RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone', this));
+    this.Vpc = RemoteVpc.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc'), { hasIsolated: true });
+    this.Zone = RemoteZone.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone'));
   }
 }
 
