@@ -8,7 +8,13 @@ import {
   VpcProps,
 } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
-import { IHostedZone, HostedZone, ZoneDelegationRecord } from '@aws-cdk/aws-route53';
+import {
+  IPublicHostedZone,
+  IPrivateHostedZone,
+  PublicHostedZone,
+  PrivateHostedZone,
+  ZoneDelegationRecord,
+} from '@aws-cdk/aws-route53';
 import {
   RESOLVE,
   PATTERN,
@@ -45,7 +51,8 @@ export class SolarSystemStack extends Stack implements SolarSystem {
   readonly Name: string;
   readonly NetworkBuilder?: NetworkBuilder;
   readonly Vpc: Vpc;
-  readonly Zone: HostedZone;
+  readonly Zone: PublicHostedZone;
+  readonly PrivateZone: PrivateHostedZone;
 
   constructor(galaxy: Galaxy, name: string, props?: SolarSystemProps) {
     super(galaxy.Cosmos.Scope, stackName(galaxy, name), {
@@ -102,9 +109,6 @@ export class SolarSystemStack extends Stack implements SolarSystem {
         this.Vpc.addInterfaceEndpoint('EcsTelemetryEndpoint', {
           service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
         });
-        this.Vpc.addInterfaceEndpoint('EcrEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECR,
-        });
         this.Vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
           service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
         });
@@ -117,11 +121,17 @@ export class SolarSystemStack extends Stack implements SolarSystem {
     RemoteVpc.export(this.Vpc, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc'), this);
 
     const rootZoneName = this.Galaxy.Cosmos.RootZone.zoneName;
-    this.Zone = new HostedZone(this, 'Zone', {
+    this.Zone = new PublicHostedZone(this, 'Zone', {
       zoneName: `${name}.${rootZoneName}`.toLowerCase(),
       comment: `Core Main Zone for ${this.Name} SolarSystem`,
     });
+    this.PrivateZone = new PrivateHostedZone(this, 'PrivateZone', {
+      vpc: this.Vpc,
+      zoneName: `${name}.internal`.toLowerCase(),
+      comment: `Core Main Private Zone for ${this.Name} SolarSystem`,
+    });
     RemoteZone.export(this.Zone, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone'));
+    RemoteZone.export(this.PrivateZone, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'PrivateZone'));
 
     if (linkZone) {
       if (isCrossAccount(this, this.Galaxy.Cosmos)) {
@@ -146,7 +156,8 @@ export class ImportedSolarSystem extends Construct implements SolarSystem {
   readonly Galaxy: Galaxy;
   readonly Name: string;
   readonly Vpc: IVpc;
-  readonly Zone: IHostedZone;
+  readonly Zone: IPublicHostedZone;
+  readonly PrivateZone: IPrivateHostedZone;
 
   constructor(scope: Construct, galaxy: Galaxy, name: string) {
     super(scope, 'SolarSystemImport');
@@ -155,6 +166,7 @@ export class ImportedSolarSystem extends Construct implements SolarSystem {
     this.Name = name;
     this.Vpc = RemoteVpc.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc'), { hasIsolated: true });
     this.Zone = RemoteZone.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone'));
+    this.PrivateZone = RemoteZone.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'PrivateZone'));
   }
 }
 

@@ -67,6 +67,36 @@ Object {
         ],
       },
     },
+    "PrivateZoneNameServersAF1F1B04": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-PrivateZone-NameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "PrivateZone27242E85",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+    "PrivateZoneZoneId22821223": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-PrivateZone-Id",
+      },
+      "Value": Object {
+        "Ref": "PrivateZone27242E85",
+      },
+    },
+    "PrivateZoneZoneName34E4A3CE": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-PrivateZone-Name",
+      },
+      "Value": "dev.internal",
+    },
     "VpcAZs": Object {
       "Export": Object {
         "Name": "Core-Mgt-Dev-Vpc-AZs",
@@ -779,6 +809,25 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "PrivateZone27242E85": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Private Zone for Dev SolarSystem",
+        },
+        "Name": "dev.internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+            },
+            "VPCRegion": Object {
+              "Ref": "AWS::Region",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
     },
     "ZoneA5DE4B68": Object {
       "Properties": Object {

@@ -243,94 +243,6 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "SharedVpcEcrEndpointEC349307": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "SharedVpcEcrEndpointSecurityGroup2D339FA4",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".ecr.api",
-            ],
-          ],
-        },
-        "SubnetIds": Array [
-          Object {
-            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
-          },
-          Object {
-            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "SharedVpc96F0F614",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "SharedVpcEcrEndpointSecurityGroup2D339FA4": Object {
-      "Properties": Object {
-        "GroupDescription": "Core-Cos-Gal-Galaxy/SharedVpc/EcrEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "SharedVpc96F0F614",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "SharedVpc96F0F614",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Core-Cos-Gal-Galaxy/SharedVpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "SharedVpc96F0F614",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
     "SharedVpcEcsAgentEndpointF563397C": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
@@ -772,6 +684,36 @@ exports[`Solar-System should match snapshot 3`] = `
 Object {
   "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
+    "PrivateZoneNameServersAF1F1B04": Object {
+      "Export": Object {
+        "Name": "Core-Gal-Sys-PrivateZone-NameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "PrivateZone27242E85",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+    "PrivateZoneZoneId22821223": Object {
+      "Export": Object {
+        "Name": "Core-Gal-Sys-PrivateZone-Id",
+      },
+      "Value": Object {
+        "Ref": "PrivateZone27242E85",
+      },
+    },
+    "PrivateZoneZoneName34E4A3CE": Object {
+      "Export": Object {
+        "Name": "Core-Gal-Sys-PrivateZone-Name",
+      },
+      "Value": "sys.internal",
+    },
     "VpcAZs": Object {
       "Export": Object {
         "Name": "Core-Gal-Sys-Vpc-AZs",
@@ -854,6 +796,23 @@ Object {
     },
   },
   "Resources": Object {
+    "PrivateZone27242E85": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Private Zone for Sys SolarSystem",
+        },
+        "Name": "sys.internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+            },
+            "VPCRegion": "region",
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
     "ZoneA5DE4B68": Object {
       "Properties": Object {
         "HostedZoneConfig": Object {
@@ -889,6 +848,36 @@ exports[`Solar-System should match snapshot 4`] = `
 Object {
   "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
+    "PrivateZoneNameServersAF1F1B04": Object {
+      "Export": Object {
+        "Name": "Core-Gal2-Sys2-PrivateZone-NameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "PrivateZone27242E85",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+    "PrivateZoneZoneId22821223": Object {
+      "Export": Object {
+        "Name": "Core-Gal2-Sys2-PrivateZone-Id",
+      },
+      "Value": Object {
+        "Ref": "PrivateZone27242E85",
+      },
+    },
+    "PrivateZoneZoneName34E4A3CE": Object {
+      "Export": Object {
+        "Name": "Core-Gal2-Sys2-PrivateZone-Name",
+      },
+      "Value": "sys2.internal",
+    },
     "VpcAZs": Object {
       "Export": Object {
         "Name": "Core-Gal2-Sys2-Vpc-AZs",
@@ -971,6 +960,23 @@ Object {
     },
   },
   "Resources": Object {
+    "PrivateZone27242E85": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Private Zone for Sys2 SolarSystem",
+        },
+        "Name": "sys2.internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Ref": "Vpc8378EB38",
+            },
+            "VPCRegion": "region2",
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
     "Vpc8378EB38": Object {
       "Properties": Object {
         "CidrBlock": "10.0.5.0/24",
@@ -1115,94 +1121,6 @@ Object {
     "VpcEcrDockerEndpointSecurityGroup5D41A216": Object {
       "Properties": Object {
         "GroupDescription": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/EcrDockerEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "Vpc8378EB38",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "Vpc8378EB38",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcEcrEndpoint0BE46338": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcEcrEndpointSecurityGroup13145954",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".ecr.api",
-            ],
-          ],
-        },
-        "SubnetIds": Array [
-          Object {
-            "Ref": "VpcMainSubnet1Subnet501A7278",
-          },
-          Object {
-            "Ref": "VpcMainSubnet2Subnet4C1ED704",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "VpcEcrEndpointSecurityGroup13145954": Object {
-      "Properties": Object {
-        "GroupDescription": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/EcrEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
