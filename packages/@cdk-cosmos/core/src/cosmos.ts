@@ -52,7 +52,7 @@ export interface CosmosStackProps extends StackProps {
 }
 
 export class CosmosStack extends Stack implements Cosmos {
-  readonly Partition = 'Core';
+  public Partition = 'Core';
   readonly Scope: Construct;
   readonly Galaxies: Galaxy[];
   readonly SolarSystems: SolarSystem[];
@@ -132,7 +132,7 @@ export class CosmosStack extends Stack implements Cosmos {
 }
 
 export class ImportedCosmos extends Construct implements Cosmos {
-  readonly Partition = 'Core';
+  public Partition = 'Core';
   readonly Scope: Construct;
   readonly Name: string;
   readonly Version: string;
@@ -168,7 +168,7 @@ export class ImportedCosmos extends Construct implements Cosmos {
 }
 
 export class CosmosExtensionStack extends Stack implements CosmosExtension {
-  readonly Partition = 'App';
+  public Partition = 'App';
   readonly Scope: Construct;
   readonly Galaxies: Array<Galaxy | GalaxyExtension>;
   readonly SolarSystems: Array<SolarSystem | SolarSystemExtension>;

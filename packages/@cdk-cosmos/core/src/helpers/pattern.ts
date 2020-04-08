@@ -16,6 +16,8 @@ export const PATTERN = {
   GALAXY: '${Partition}-${Cosmos}-${Galaxy}-${Type}',
   SOLAR_SYSTEM: '${Partition}-${Cosmos}-${Galaxy}-${SolarSystem}-${Type}',
   SHORT_SOLAR_SYSTEM: '${Partition}-${Cosmos}-${SolarSystem}-${Type}',
+  DOCKER_TAG: '${Cosmos}/${Type}',
+  LOG_GROUP: '${Partition}/${Cosmos}/${SolarSystem}/${Type}',
 };
 
 const parseString: (template: string, params: Dictionary) => string = (template, params) => {
