@@ -1,5 +1,5 @@
 import { Construct } from '@aws-cdk/core';
-import { IHostedZone } from '@aws-cdk/aws-route53';
+import { IPublicHostedZone, IPrivateHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository } from '@aws-cdk/aws-codecommit';
 import { IVpc } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
@@ -23,7 +23,7 @@ export interface Cosmos extends Bubble, Construct {
   Version: string;
   Link?: CosmosLink;
   CdkRepo: IRepository;
-  RootZone: IHostedZone;
+  RootZone: IPublicHostedZone;
   CdkMasterRoleStaticArn: string;
   CrossAccountExportsFn: IFunction;
 
@@ -46,7 +46,8 @@ export interface Galaxy extends Bubble, Construct {
 export interface SolarSystem extends Bubble, Construct {
   Galaxy: Galaxy;
   Vpc: IVpc;
-  Zone: IHostedZone;
+  Zone: IPublicHostedZone;
+  PrivateZone: IPrivateHostedZone;
 }
 
 export interface EcsSolarSystem extends SolarSystem {

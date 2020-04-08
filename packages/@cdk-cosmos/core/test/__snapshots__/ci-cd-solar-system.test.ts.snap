@@ -382,6 +382,36 @@ Object {
         ],
       },
     },
+    "PrivateZoneNameServersAF1F1B04": Object {
+      "Export": Object {
+        "Name": "Core-Gal-CiCd-PrivateZone-NameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "PrivateZone27242E85",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+    "PrivateZoneZoneId22821223": Object {
+      "Export": Object {
+        "Name": "Core-Gal-CiCd-PrivateZone-Id",
+      },
+      "Value": Object {
+        "Ref": "PrivateZone27242E85",
+      },
+    },
+    "PrivateZoneZoneName34E4A3CE": Object {
+      "Export": Object {
+        "Name": "Core-Gal-CiCd-PrivateZone-Name",
+      },
+      "Value": "cicd.internal",
+    },
     "VpcAZs": Object {
       "Export": Object {
         "Name": "Core-Gal-CiCd-Vpc-AZs",
@@ -1378,6 +1408,23 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
+    "PrivateZone27242E85": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Private Zone for CiCd SolarSystem",
+        },
+        "Name": "cicd.internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Ref": "Vpc8378EB38",
+            },
+            "VPCRegion": "region",
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
     "Vpc8378EB38": Object {
       "Properties": Object {
         "CidrBlock": "10.0.4.0/24",
@@ -1393,13 +1440,13 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::EC2::VPC",
     },
-    "VpcEcrDockerEndpoint53ED547B": Object {
+    "VpcCloudWatchLogsEndpointA6195533": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "VpcEcrDockerEndpointSecurityGroup5D41A216",
+              "VpcCloudWatchLogsEndpointSecurityGroupE044298A",
               "GroupId",
             ],
           },
@@ -1412,7 +1459,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
               Object {
                 "Ref": "AWS::Region",
               },
-              ".ecr.dkr",
+              ".logs",
             ],
           ],
         },
@@ -1431,9 +1478,9 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "VpcEcrDockerEndpointSecurityGroup5D41A216": Object {
+    "VpcCloudWatchLogsEndpointSecurityGroupE044298A": Object {
       "Properties": Object {
-        "GroupDescription": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/EcrDockerEndpoint/SecurityGroup",
+        "GroupDescription": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1481,13 +1528,13 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "VpcEcrEndpoint0BE46338": Object {
+    "VpcEcrDockerEndpoint53ED547B": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "VpcEcrEndpointSecurityGroup13145954",
+              "VpcEcrDockerEndpointSecurityGroup5D41A216",
               "GroupId",
             ],
           },
@@ -1500,7 +1547,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
               Object {
                 "Ref": "AWS::Region",
               },
-              ".ecr.api",
+              ".ecr.dkr",
             ],
           ],
         },
@@ -1519,9 +1566,9 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "VpcEcrEndpointSecurityGroup13145954": Object {
+    "VpcEcrDockerEndpointSecurityGroup5D41A216": Object {
       "Properties": Object {
-        "GroupDescription": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/EcrEndpoint/SecurityGroup",
+        "GroupDescription": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/EcrDockerEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",

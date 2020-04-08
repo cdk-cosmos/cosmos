@@ -18,10 +18,9 @@ export class CdkCredentialsProvider implements CredentialProviderSource {
       // console.log(`Checking if plugin can provide a Credential for ${accountId}`);
 
       if (!this.cache[accountId]?.expired) {
-        const roleName = RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkCrossAccount-Role', {
-          Partition: 'Core',
-          Name: 'Import',
-        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const scope = { Partition: 'Core' } as any;
+        const roleName = RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkCrossAccount-Role', scope);
         const cred = new ChainableTemporaryCredentials({
           params: {
             RoleArn: `arn:aws:iam::${accountId}:role/${roleName}`,

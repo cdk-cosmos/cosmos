@@ -25,8 +25,16 @@ const cosmosExtension = new CosmosExtensionStack(app, 'Cos', { env });
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });
 const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys', { env });
 
-const [galaxyStack, solarSystemStack, solarSystem2Stack, solarSystemExtensionStack, cosmosLinkStack] = synthesizeStacks(
+const [
+  galaxyStack,
+  galaxy2Stack,
+  solarSystemStack,
+  solarSystem2Stack,
+  solarSystemExtensionStack,
+  cosmosLinkStack,
+] = synthesizeStacks(
   galaxy,
+  galaxy2,
   solarSystem,
   solarSystem2,
   solarSystemExtension,
@@ -106,6 +114,8 @@ describe('Solar-System', () => {
   });
 
   test('should match snapshot', () => {
+    expect(galaxyStack.template).toMatchSnapshot();
+    expect(galaxy2Stack.template).toMatchSnapshot();
     expect(solarSystemStack.template).toMatchSnapshot();
     expect(solarSystem2Stack.template).toMatchSnapshot();
     expect(cosmosLinkStack.template).toMatchSnapshot();

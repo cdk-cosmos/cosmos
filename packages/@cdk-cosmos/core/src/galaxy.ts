@@ -57,7 +57,7 @@ export class GalaxyStack extends Stack implements Galaxy {
     else if (this.Cosmos.NetworkBuilder) this.NetworkBuilder = this.Cosmos.NetworkBuilder;
 
     if (isCrossAccount(this, this.Cosmos)) {
-      const CdkCrossAccountRoleName = RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkCrossAccount-Role', this);
+      const CdkCrossAccountRoleName = this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkCrossAccount-Role');
       this.CdkCrossAccountRole = new Role(this, 'CdkCrossAccountRole', {
         roleName: CdkCrossAccountRoleName,
         assumedBy: new ArnPrincipal(this.Cosmos.CdkMasterRoleStaticArn),
@@ -107,11 +107,11 @@ export class GalaxyStack extends Stack implements Galaxy {
       this.Vpc.addInterfaceEndpoint('EcsTelemetryEndpoint', {
         service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
       });
-      this.Vpc.addInterfaceEndpoint('EcrEndpoint', {
-        service: InterfaceVpcEndpointAwsService.ECR,
-      });
       this.Vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
         service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
+      });
+      this.Vpc.addInterfaceEndpoint('CloudWatchLogsEndpoint', {
+        service: InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
       });
     }
 

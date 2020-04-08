@@ -3,7 +3,6 @@ import { Construct, StackProps } from '@aws-cdk/core';
 import { Project } from '@aws-cdk/aws-codebuild';
 import { Role } from '@aws-cdk/aws-iam';
 import {
-  RESOLVE,
   PATTERN,
   Galaxy,
   EcsSolarSystem,
@@ -32,11 +31,11 @@ export class CiCdSolarSystemStack extends EcsSolarSystemStack implements CiCdSol
     const { CdkRepo, CdkMasterRoleStaticArn } = this.Galaxy.Cosmos;
 
     const pipeline = new CdkPipeline(this, 'CdkPipeline', {
-      name: RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Pipeline', this),
+      name: this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Pipeline'),
       cdkRepo: CdkRepo,
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', CdkMasterRoleStaticArn, { mutable: false }),
       // deployVpc: this.Vpc,
-      deployStacks: [RESOLVE(PATTERN.COSMOS, '*', this)],
+      deployStacks: [this.RESOLVE(PATTERN.COSMOS, '*')],
       ...cdkPipelineProps,
     });
     this.CdkDeploy = pipeline.Deploy;
@@ -72,7 +71,7 @@ export class CiCdSolarSystemExtensionStack extends EcsSolarSystemExtensionStack 
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', this.Galaxy.Cosmos.Portal.CdkMasterRoleStaticArn, {
         mutable: false,
       }),
-      deployStacks: [RESOLVE(PATTERN.COSMOS, '*', this)],
+      deployStacks: [this.RESOLVE(PATTERN.COSMOS, '*')],
     });
     this.DeployProject = this.DeployPipeline.Deploy;
   }
