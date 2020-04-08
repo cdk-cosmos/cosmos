@@ -7,14 +7,14 @@
     "cdk": "cdk"
   },
   "dependencies": {
-    "@aws-cdk/core": "1.23.0",
+    "@aws-cdk/core": "1.31.0",
     "@cdk-cosmos/core": "../../packages/@cdk-cosmos/core",
     "source-map-support": "^0.5.16"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.23.0",
+    "@aws-cdk/assert": "1.31.0",
     "@types/node": "^10.17.5",
-    "aws-cdk": "1.23.0",
+    "aws-cdk": "1.31.0",
     "ts-node": "^8.1.0",
     "typescript": "^3.7.2"
   }

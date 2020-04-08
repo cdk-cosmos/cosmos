@@ -23,19 +23,19 @@
     "clean": "rm -rf lib"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-cloudformation": "^1.23.0",
-    "@aws-cdk/aws-ec2": "^1.23.0",
-    "@aws-cdk/aws-ecs": "^1.23.0",
-    "@aws-cdk/aws-elasticloadbalancingv2": "^1.23.0",
-    "@aws-cdk/aws-events": "^1.23.0",
-    "@aws-cdk/aws-events-targets": "^1.23.0",
-    "@aws-cdk/aws-iam": "^1.23.0",
-    "@aws-cdk/aws-lambda": "^1.23.0",
-    "@aws-cdk/aws-route53": "^1.23.0",
-    "@aws-cdk/aws-route53-targets": "^1.23.0",
-    "@aws-cdk/aws-s3": "^1.23.0",
-    "@aws-cdk/aws-ssm": "^1.23.0",
-    "@aws-cdk/core": "^1.23.0"
+    "@aws-cdk/aws-cloudformation": "^1.31.0",
+    "@aws-cdk/aws-ec2": "^1.31.0",
+    "@aws-cdk/aws-ecs": "^1.31.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.31.0",
+    "@aws-cdk/aws-events": "^1.31.0",
+    "@aws-cdk/aws-events-targets": "^1.31.0",
+    "@aws-cdk/aws-iam": "^1.31.0",
+    "@aws-cdk/aws-lambda": "^1.31.0",
+    "@aws-cdk/aws-route53": "^1.31.0",
+    "@aws-cdk/aws-route53-targets": "^1.31.0",
+    "@aws-cdk/aws-s3": "^1.31.0",
+    "@aws-cdk/aws-ssm": "^1.31.0",
+    "@aws-cdk/core": "^1.31.0"
   },
   "gitHead": "173c051038a3acdaa93d6a37d42b6b0546ffd567"
 }
