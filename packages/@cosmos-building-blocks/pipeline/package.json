@@ -26,12 +26,12 @@
     "clean": "rm -rf lib"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-codebuild": "^1.23.0",
-    "@aws-cdk/aws-codecommit": "^1.23.0",
-    "@aws-cdk/aws-codepipeline": "^1.23.0",
-    "@aws-cdk/aws-codepipeline-actions": "^1.23.0",
-    "@aws-cdk/aws-iam": "^1.23.0",
-    "@aws-cdk/core": "^1.23.0"
+    "@aws-cdk/aws-codebuild": "^1.31.0",
+    "@aws-cdk/aws-codecommit": "^1.31.0",
+    "@aws-cdk/aws-codepipeline": "^1.31.0",
+    "@aws-cdk/aws-codepipeline-actions": "^1.31.0",
+    "@aws-cdk/aws-iam": "^1.31.0",
+    "@aws-cdk/core": "^1.31.0"
   },
   "gitHead": "173c051038a3acdaa93d6a37d42b6b0546ffd567"
 }

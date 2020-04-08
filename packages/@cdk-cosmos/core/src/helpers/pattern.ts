@@ -1,4 +1,4 @@
-import { Construct } from '@aws-cdk/core/lib/construct';
+import { Construct } from '@aws-cdk/core/lib/construct-compat';
 
 type Dictionary = { [key: string]: string };
 type Scope = {
@@ -76,7 +76,7 @@ export const RESOLVE: (
   });
 };
 
-declare module '@aws-cdk/core/lib/construct' {
+declare module '@aws-cdk/core/lib/construct-compat' {
   interface Construct {
     RESOLVE: (pattern: string, type?: string | Construct, extraParams?: Dictionary) => string;
   }
