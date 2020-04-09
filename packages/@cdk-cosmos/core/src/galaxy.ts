@@ -93,11 +93,12 @@ export class GalaxyStack extends Stack implements Galaxy {
       cidr: this.NetworkBuilder.addSubnet(cidrMask),
     });
 
+    this.Vpc.addGatewayEndpoint('S3Gateway', {
+      service: GatewayVpcEndpointAwsService.S3,
+      subnets: [this.Vpc.selectSubnets({ subnetType: SubnetType.ISOLATED })],
+    });
+
     if (defaultEndpoints) {
-      this.Vpc.addGatewayEndpoint('S3Gateway', {
-        service: GatewayVpcEndpointAwsService.S3,
-        subnets: [this.Vpc.selectSubnets({ onePerAz: true })],
-      });
       this.Vpc.addInterfaceEndpoint('EcsEndpoint', {
         service: InterfaceVpcEndpointAwsService.ECS,
       });
