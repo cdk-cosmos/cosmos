@@ -2,13 +2,13 @@
 
 exports[`Solar-System Extension should match snapshot 1`] = `
 Object {
-  "Description": "App resources dependant on each SolarSystem, like Services and Databases.",
+  "Description": "Cosmos: App resources dependant on each SolarSystem, like Services and Databases.",
 }
 `;
 
 exports[`Solar-System should match snapshot 1`] = `
 Object {
-  "Description": "Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.",
+  "Description": "Cosmos: Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.",
   "Outputs": Object {
     "ExportsOutputRefSharedVpc96F0F6140AE947C7": Object {
       "Export": Object {
@@ -642,7 +642,7 @@ Object {
 
 exports[`Solar-System should match snapshot 2`] = `
 Object {
-  "Description": "Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.",
+  "Description": "Cosmos: Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.",
   "Resources": Object {
     "CdkCrossAccountRoleF932CF89": Object {
       "Properties": Object {
@@ -682,7 +682,7 @@ Object {
 
 exports[`Solar-System should match snapshot 3`] = `
 Object {
-  "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
+  "Description": "Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
     "PrivateZoneZoneId22821223": Object {
       "Export": Object {
@@ -830,7 +830,7 @@ Object {
 
 exports[`Solar-System should match snapshot 4`] = `
 Object {
-  "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
+  "Description": "Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
     "PrivateZoneZoneId22821223": Object {
       "Export": Object {
@@ -1544,7 +1544,7 @@ Object {
 
 exports[`Solar-System should match snapshot 5`] = `
 Object {
-  "Description": "Resources to link the Cosmos, like Route53 zone delegation",
+  "Description": "Cosmos: Resources to link the Cosmos, like Route53 zone delegation",
   "Resources": Object {
     "Sys2ZoneDelegationExports4A9A0633": Object {
       "DeletionPolicy": "Delete",

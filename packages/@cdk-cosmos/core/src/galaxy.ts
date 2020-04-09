@@ -39,7 +39,7 @@ export class GalaxyStack extends Stack implements Galaxy {
 
   constructor(cosmos: Cosmos, name: string, props?: GalaxyStackProps) {
     super(cosmos.Scope, stackName(cosmos, name), {
-      description: 'Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.',
+      description: 'Cosmos: Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.',
       ...props,
       env: {
         account: props?.env?.account || cosmos.account,
@@ -150,7 +150,7 @@ export class GalaxyExtensionStack extends Stack implements GalaxyExtension {
 
   constructor(cosmos: CosmosExtension, name: string, props?: StackProps) {
     super(cosmos.Scope, stackName(cosmos, name), {
-      description: 'App resources dependant on each Galaxy.',
+      description: 'Cosmos: App resources dependant on each Galaxy.',
       ...props,
       env: {
         account: props?.env?.account || cosmos.account,

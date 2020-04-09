@@ -36,8 +36,8 @@ export class CosmosLinkStack extends Stack implements CosmosLink {
 
   constructor(cosmos: Cosmos, props: StackProps) {
     super(cosmos.Scope, RESOLVE(PATTERN.COSMOS, 'CosmosLink', cosmos), {
+      description: 'Cosmos: Resources to link the Cosmos, like Route53 zone delegation',
       ...props,
-      description: 'Resources to link the Cosmos, like Route53 zone delegation',
     });
 
     this.Cosmos = cosmos;
@@ -49,10 +49,11 @@ export interface CosmosStackProps extends StackProps {
   tld: string;
   cidr?: string;
   rootZone?: string;
+  partition?: string;
 }
 
 export class CosmosStack extends Stack implements Cosmos {
-  public Partition = 'Core';
+  public Partition: string;
   readonly Scope: Construct;
   readonly Galaxies: Galaxy[];
   readonly SolarSystems: SolarSystem[];
@@ -67,13 +68,14 @@ export class CosmosStack extends Stack implements Cosmos {
   readonly CrossAccountExportsFn: Function;
 
   constructor(app: Construct, name: string, props: CosmosStackProps) {
-    super(app, stackName('Core', name), {
-      description: 'Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole',
+    super(app, stackName(props.partition || 'Core', name), {
+      description: 'Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole',
       ...props,
     });
 
     const { tld, cidr, rootZone = name.toLowerCase() } = props;
 
+    this.Partition = props.partition || 'Core';
     this.Scope = app;
     this.Galaxies = [];
     this.SolarSystems = [];
@@ -167,8 +169,12 @@ export class ImportedCosmos extends Construct implements Cosmos {
   /* eslint-enable @typescript-eslint/no-empty-function */
 }
 
+export interface CosmosExtensionStackProps extends StackProps {
+  partition?: string;
+}
+
 export class CosmosExtensionStack extends Stack implements CosmosExtension {
-  public Partition = 'App';
+  public Partition: string;
   readonly Scope: Construct;
   readonly Galaxies: Array<Galaxy | GalaxyExtension>;
   readonly SolarSystems: Array<SolarSystem | SolarSystemExtension>;
@@ -177,12 +183,13 @@ export class CosmosExtensionStack extends Stack implements CosmosExtension {
   readonly Version: string;
   readonly CdkRepo: IRepository;
 
-  constructor(scope: Construct, name: string, props?: StackProps) {
-    super(scope, stackName('App', name), {
-      description: 'App Singleton Resources for the Cosmos like CdkRepo and EcrRepo.',
+  constructor(scope: Construct, name: string, props?: CosmosExtensionStackProps) {
+    super(scope, stackName(props?.partition || 'App', name), {
+      description: 'Cosmos: App Singleton Resources for the Cosmos like CdkRepo and EcrRepo.',
       ...props,
     });
 
+    this.Partition = props?.partition || 'App';
     this.Scope = scope;
     this.Galaxies = [];
     this.SolarSystems = [];
