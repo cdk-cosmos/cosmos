@@ -2,7 +2,7 @@
 
 exports[`Cosmos Extension should match snapshot 1`] = `
 Object {
-  "Description": "App Singleton Resources for the Cosmos like CdkRepo and EcrRepo.",
+  "Description": "Cosmos: App Singleton Resources for the Cosmos like CdkRepo and EcrRepo.",
   "Resources": Object {
     "CdkRepo9606A710": Object {
       "Properties": Object {
@@ -17,7 +17,7 @@ Object {
 
 exports[`Cosmos should match snapshot 1`] = `
 Object {
-  "Description": "Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole",
+  "Description": "Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole",
   "Outputs": Object {
     "CdkRepoRepoNameEBDD9CD6": Object {
       "Export": Object {

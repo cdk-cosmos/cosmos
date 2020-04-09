@@ -2,7 +2,7 @@
 
 exports[`CICD-Solar-System Extension should match snapshot 1`] = `
 Object {
-  "Description": "App resources dependant on each SolarSystem, like Services and Databases.",
+  "Description": "Cosmos: App resources dependant on each SolarSystem, like Services and Databases.",
   "Resources": Object {
     "CdkPipeline7DE1C2DD": Object {
       "Properties": Object {
@@ -127,7 +127,7 @@ Object {
             },
           ],
           "Image": "aws/codebuild/standard:3.0",
-          "PrivilegedMode": false,
+          "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
         "Name": "App-Cos-Cdk-PipelineDeploy",
@@ -323,7 +323,7 @@ Object {
 
 exports[`CICD-Solar-System should match snapshot 1`] = `
 Object {
-  "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
+  "Description": "Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
     "AlbAlbArn044BCECB": Object {
       "Export": Object {
@@ -674,7 +674,7 @@ Object {
             },
           ],
           "Image": "aws/codebuild/standard:3.0",
-          "PrivilegedMode": false,
+          "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
         "Name": "Core-Cdk-PipelineDeploy",
@@ -1189,6 +1189,20 @@ def pick(dct, *keys):
           ],
           "Version": "2012-10-17",
         },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMFullAccess",
+              ],
+            ],
+          },
+        ],
         "Tags": Array [
           Object {
             "Key": "Name",

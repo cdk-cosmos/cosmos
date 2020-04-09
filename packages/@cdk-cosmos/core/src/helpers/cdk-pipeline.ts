@@ -94,6 +94,7 @@ export class CdkPipeline extends Construct {
             value: '',
           },
         },
+        privileged: true,
       },
       artifacts: Artifacts.s3({
         bucket: artifactBucket,

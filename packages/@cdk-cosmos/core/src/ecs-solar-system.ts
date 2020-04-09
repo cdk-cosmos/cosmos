@@ -10,6 +10,7 @@ import {
   IApplicationLoadBalancer,
   IApplicationListener,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
+import { ManagedPolicy } from '@aws-cdk/aws-iam';
 import {
   PATTERN,
   Galaxy,
@@ -48,13 +49,14 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
       clusterName: this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster'),
     });
 
-    this.Cluster.addCapacity('Capacity', {
+    const capacity = this.Cluster.addCapacity('Capacity', {
       instanceType: new InstanceType('t2.medium'),
       desiredCapacity: 1,
       minCapacity: 1,
       maxCapacity: 5,
       ...clusterCapacityProps,
     });
+    capacity.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
 
     const AlbSecurityGroup = new SecurityGroup(this, 'AlbSecurityGroup', {
       vpc: this.Vpc,

@@ -2,13 +2,13 @@
 
 exports[`ECS-Solar-System Extension should match snapshot 1`] = `
 Object {
-  "Description": "App resources dependant on each SolarSystem, like Services and Databases.",
+  "Description": "Cosmos: App resources dependant on each SolarSystem, like Services and Databases.",
 }
 `;
 
 exports[`ECS-Solar-System should match snapshot 1`] = `
 Object {
-  "Description": "Resources dependant on each SolarSystem, like Vpc and MainZone.",
+  "Description": "Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
     "AlbAlbArn044BCECB": Object {
       "Export": Object {
@@ -591,6 +591,20 @@ def pick(dct, *keys):
           ],
           "Version": "2012-10-17",
         },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMFullAccess",
+              ],
+            ],
+          },
+        ],
         "Tags": Array [
           Object {
             "Key": "Name",
