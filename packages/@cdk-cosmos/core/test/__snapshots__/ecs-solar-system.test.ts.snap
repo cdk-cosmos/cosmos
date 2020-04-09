@@ -67,22 +67,6 @@ Object {
         ],
       },
     },
-    "PrivateZoneNameServersAF1F1B04": Object {
-      "Export": Object {
-        "Name": "Core-Mgt-Dev-PrivateZone-NameServers",
-      },
-      "Value": Object {
-        "Fn::Join": Array [
-          ",",
-          Object {
-            "Fn::GetAtt": Array [
-              "PrivateZone27242E85",
-              "NameServers",
-            ],
-          },
-        ],
-      },
-    },
     "PrivateZoneZoneId22821223": Object {
       "Export": Object {
         "Name": "Core-Mgt-Dev-PrivateZone-Id",

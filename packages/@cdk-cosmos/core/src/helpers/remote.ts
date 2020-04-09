@@ -1,5 +1,5 @@
 import { Construct, CfnOutput, CfnOutputProps, Fn } from '@aws-cdk/core';
-import { IHostedZone, HostedZone } from '@aws-cdk/aws-route53';
+import { IHostedZone, HostedZone, PrivateHostedZone } from '@aws-cdk/aws-route53';
 import { IVpc, Vpc, SecurityGroup } from '@aws-cdk/aws-ec2';
 import { ICluster, Cluster } from '@aws-cdk/aws-ecs';
 import {
@@ -35,11 +35,13 @@ export class RemoteZone {
       exportName: `${exportName}-Name`,
       value: zone.zoneName,
     });
-    if (zone.hostedZoneNameServers) {
-      new Output(scope, 'NameServers', {
-        exportName: `${exportName}-NameServers`,
-        value: Fn.join(',', zone.hostedZoneNameServers),
-      });
+    if (!(zone instanceof PrivateHostedZone)) {
+      if (zone.hostedZoneNameServers) {
+        new Output(scope, 'NameServers', {
+          exportName: `${exportName}-NameServers`,
+          value: Fn.join(',', zone.hostedZoneNameServers),
+        });
+      }
     }
   }
 

@@ -95,11 +95,12 @@ export class SolarSystemStack extends Stack implements SolarSystem {
         cidr: this.NetworkBuilder.addSubnet(cidrMask),
       });
 
+      this.Vpc.addGatewayEndpoint('S3Gateway', {
+        service: GatewayVpcEndpointAwsService.S3,
+        subnets: [this.Vpc.selectSubnets({ subnetType: SubnetType.ISOLATED })],
+      });
+
       if (defaultEndpoints) {
-        this.Vpc.addGatewayEndpoint('S3Gateway', {
-          service: GatewayVpcEndpointAwsService.S3,
-          subnets: [this.Vpc.selectSubnets({ onePerAz: true })],
-        });
         this.Vpc.addInterfaceEndpoint('EcsEndpoint', {
           service: InterfaceVpcEndpointAwsService.ECS,
         });
@@ -122,12 +123,12 @@ export class SolarSystemStack extends Stack implements SolarSystem {
 
     const rootZoneName = this.Galaxy.Cosmos.RootZone.zoneName;
     this.Zone = new PublicHostedZone(this, 'Zone', {
-      zoneName: `${name}.${rootZoneName}`.toLowerCase(),
+      zoneName: `${this.Name}.${rootZoneName}`.toLowerCase(),
       comment: `Core Main Zone for ${this.Name} SolarSystem`,
     });
     this.PrivateZone = new PrivateHostedZone(this, 'PrivateZone', {
       vpc: this.Vpc,
-      zoneName: `${name}.internal`.toLowerCase(),
+      zoneName: `${this.Name}.internal`.toLowerCase(),
       comment: `Core Main Private Zone for ${this.Name} SolarSystem`,
     });
     RemoteZone.export(this.Zone, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone'));
