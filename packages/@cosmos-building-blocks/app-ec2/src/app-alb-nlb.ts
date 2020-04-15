@@ -168,6 +168,11 @@ export class AppAlb extends Construct {
       exportName: `${props.envName}-InternalListener`,
     });
 
+    new CfnOutput(this, 'AlbDnsNameOutput', {
+      value: uiAlb.loadBalancerDnsName,
+      exportName: `${props.envName}-ALBDnsNameOutput`,
+    });
+
     this.internalListener = internalListener;
 
     this.albDnsAddress = uiAlb.loadBalancerDnsName;
