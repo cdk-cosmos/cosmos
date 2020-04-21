@@ -1,12 +1,5 @@
 import { Construct, Stack, StackProps, Duration } from '@aws-cdk/core';
-import {
-  IVpc,
-  SubnetType,
-  Vpc,
-  GatewayVpcEndpointAwsService,
-  InterfaceVpcEndpointAwsService,
-  VpcProps,
-} from '@aws-cdk/aws-ec2';
+import { IVpc, SubnetType, Vpc, GatewayVpcEndpointAwsService, VpcProps } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import {
   IPublicHostedZone,
@@ -38,7 +31,6 @@ export interface SolarSystemProps extends StackProps {
   vpcProps?: Partial<VpcProps> & {
     cidrMask?: number;
     subnetMask?: number;
-    defaultEndpoints?: boolean;
   };
   zoneProps?: {
     linkZone?: boolean;
@@ -65,7 +57,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
     });
 
     const { cidr, vpc, vpcProps = {}, zoneProps = {} } = props || {};
-    const { cidrMask = 24, subnetMask = 26, defaultEndpoints = true } = vpcProps;
+    const { cidrMask = 24, subnetMask = 26 } = vpcProps;
     const { linkZone = true, ttl = Duration.minutes(30) } = zoneProps;
 
     this.Galaxy = galaxy;
@@ -75,7 +67,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
     else if (this.Galaxy.NetworkBuilder) this.NetworkBuilder = this.Galaxy.NetworkBuilder;
 
     if (vpc) this.Vpc = vpc as Vpc;
-    if (!this.Vpc) {
+    else {
       if (!this.NetworkBuilder) {
         throw new Error(
           `NetworkBuilder not found, please define cidr range here (SolarSystem: ${this.Name}) or Galaxy or Cosmos.`
@@ -99,24 +91,6 @@ export class SolarSystemStack extends Stack implements SolarSystem {
         service: GatewayVpcEndpointAwsService.S3,
         subnets: [this.Vpc.selectSubnets({ subnetType: SubnetType.ISOLATED })],
       });
-
-      if (defaultEndpoints) {
-        this.Vpc.addInterfaceEndpoint('EcsEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECS,
-        });
-        this.Vpc.addInterfaceEndpoint('EcsAgentEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECS_AGENT,
-        });
-        this.Vpc.addInterfaceEndpoint('EcsTelemetryEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
-        });
-        this.Vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
-        });
-        this.Vpc.addInterfaceEndpoint('CloudWatchLogsEndpoint', {
-          service: InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
-        });
-      }
     }
 
     RemoteVpc.export(this.Vpc, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc'), this);
