@@ -31,12 +31,12 @@ export class CiCdSolarSystemStack extends EcsSolarSystemStack implements CiCdSol
     const { CdkRepo, CdkMasterRoleStaticArn } = this.Galaxy.Cosmos;
 
     const pipeline = new CdkPipeline(this, 'CdkPipeline', {
-      name: this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Pipeline'),
-      cdkRepo: CdkRepo,
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', CdkMasterRoleStaticArn, { mutable: false }),
-      // deployVpc: this.Vpc,
       deployStacks: [this.RESOLVE(PATTERN.COSMOS, '*')],
       ...cdkPipelineProps,
+      name: this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Pipeline'),
+      cdkRepo: CdkRepo,
+      // deployVpc: this.Vpc,
     });
     this.CdkDeploy = pipeline.Deploy;
 

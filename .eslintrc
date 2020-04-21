@@ -13,8 +13,6 @@
     "plugin:@typescript-eslint/recommended",
     "prettier",
     "prettier/@typescript-eslint"
-    // "plugin:jest/recommended"
-    // "plugin:jest/style"
   ],
   "rules": {
     "prettier/prettier": "error"
