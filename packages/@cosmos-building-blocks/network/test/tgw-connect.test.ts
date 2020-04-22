@@ -23,13 +23,14 @@ const myvpc = new Vpc(testStack, 'TestVpc', {
     },
   ],
 });
+
 const gateway = TransitGateway.fromGatewayAttributes(testStack, 'TransitGateway', {
   gatewayId: 'tgw-0d4180d3e7c919164',
 });
 const attachment = new TransitGatewayAttachment(testStack, 'TransitGatewayAttachment', {
   gateway: gateway,
   vpc: myvpc,
-  subnets: [{ subnetType: SubnetType.ISOLATED }],
+  subnets: [{ subnetGroupName: 'Main' }],
 });
 attachment.addRoute('TGWRoute', { destinationCidrBlock: '10.0.0.0/8' });
 

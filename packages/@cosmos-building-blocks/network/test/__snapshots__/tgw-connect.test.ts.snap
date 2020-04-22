@@ -147,9 +147,6 @@ Object {
           Object {
             "Ref": "TestVpcMainSubnet1SubnetC0BB40AC",
           },
-          Object {
-            "Ref": "TestVpcRedisSubnet1Subnet1490AFD4",
-          },
         ],
         "TransitGatewayId": "tgw-0d4180d3e7c919164",
         "VpcId": Object {
@@ -166,19 +163,6 @@ Object {
         "DestinationCidrBlock": "10.0.0.0/8",
         "RouteTableId": Object {
           "Ref": "TestVpcMainSubnet1RouteTable1567AA0E",
-        },
-        "TransitGatewayId": "tgw-0d4180d3e7c919164",
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "TransitGatewayAttachmentTGWRouteRedisSubnet1ED06D725": Object {
-      "DependsOn": Array [
-        "TransitGatewayAttachment610A3027",
-      ],
-      "Properties": Object {
-        "DestinationCidrBlock": "10.0.0.0/8",
-        "RouteTableId": Object {
-          "Ref": "TestVpcRedisSubnet1RouteTableBE392024",
         },
         "TransitGatewayId": "tgw-0d4180d3e7c919164",
       },

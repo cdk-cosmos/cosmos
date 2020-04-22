@@ -47,7 +47,7 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
     const { vpc, vpcProps = {}, clusterProps = {}, clusterCapacityProps = {} } = props || {};
     const { defaultEndpoints = true } = vpcProps;
 
-    // Add endpoints if created Vpc.
+    // Only add endpoints if this component created the Vpc. ie vpc was not passed in as a prop.
     if (!vpc) {
       if (defaultEndpoints) {
         this.Vpc.addInterfaceEndpoint('EcsEndpoint', {
