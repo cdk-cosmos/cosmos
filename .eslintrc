@@ -15,7 +15,9 @@
     "prettier/@typescript-eslint"
   ],
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/no-use-before-define": "off"
   },
   "ignorePatterns": ["**/lib/**/*.js", "**/*.d.ts"]
 }
