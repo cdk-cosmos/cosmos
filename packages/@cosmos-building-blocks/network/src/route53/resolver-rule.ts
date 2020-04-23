@@ -1,10 +1,11 @@
 import { Resource, Construct, ResourceProps, IResolvable, IResource } from '@aws-cdk/core';
 import { CfnResolverRule } from '@aws-cdk/aws-route53resolver';
 import { IVpc } from '@aws-cdk/aws-ec2';
-import { ResolverRuleAssociation } from './resolver-rule-association';
+import { ResolverRuleAssociation, IResolverRuleAssociation } from './resolver-rule-association';
 
 export interface IResolverRule extends IResource {
   ruleId: string;
+  addAssociation(id: string, props: { vpc: IVpc; name?: string }): IResolverRuleAssociation;
 }
 
 abstract class ResolverRuleBase extends Resource implements IResolverRule {

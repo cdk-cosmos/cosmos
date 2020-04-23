@@ -7,6 +7,7 @@ export interface ITransitGatewayAttachment extends IResource {
   gateway: ITransitGateway;
   vpc: IVpc;
   subnets: ISubnet[];
+  addRoute(id: string, props: { destinationCidrBlock: string }): void;
 }
 
 export interface TransitGatewayAttachmentProps {

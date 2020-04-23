@@ -2,7 +2,7 @@ import { SynthUtils } from '@aws-cdk/assert';
 import '@aws-cdk/assert/jest';
 import '@aws-cdk/core';
 import { App, Stack } from '@aws-cdk/core';
-import { Vpc, SubnetType } from '@aws-cdk/aws-ec2';
+import { Vpc, SubnetType, Subnet } from '@aws-cdk/aws-ec2';
 import { TransitGateway, TransitGatewayAttachment, ResolverRule, ResolverRuleAssociation } from '../src';
 
 const app = new App();
@@ -27,8 +27,7 @@ const myvpc = new Vpc(testStack, 'TestVpc', {
 const gateway = TransitGateway.fromGatewayAttributes(testStack, 'TransitGateway', {
   gatewayId: 'tgw-0d4180d3e7c919164',
 });
-const attachment = new TransitGatewayAttachment(testStack, 'TransitGatewayAttachment', {
-  gateway: gateway,
+const attachment = gateway.addAttachment('TransitGatewayAttachment', {
   vpc: myvpc,
   subnets: [{ subnetGroupName: 'Main' }],
 });
@@ -37,8 +36,7 @@ attachment.addRoute('TGWRoute', { destinationCidrBlock: '10.0.0.0/8' });
 const resolver = ResolverRule.fromResolverAttributes(testStack, 'ResolverRule', {
   ruleId: 'rslvr-rr-a5c8a7ee5efb41eab',
 });
-new ResolverRuleAssociation(testStack, 'ResolverRuleAssociation', {
-  resolver: resolver,
+resolver.addAssociation('ResolverRuleAssociation', {
   vpc: myvpc,
 });
 

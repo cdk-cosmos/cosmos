@@ -3,7 +3,7 @@
 exports[`Transit Gateway Connection should match snapshot 1`] = `
 Object {
   "Resources": Object {
-    "ResolverRuleAssociationD48A8437": Object {
+    "ResolverRuleResolverRuleAssociation669E300B": Object {
       "Properties": Object {
         "ResolverRuleId": "rslvr-rr-a5c8a7ee5efb41eab",
         "VPCId": Object {
@@ -141,7 +141,10 @@ Object {
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "TransitGatewayAttachment610A3027": Object {
+    "TransitGatewayTransitGatewayAttachment91E0B600": Object {
+      "DependsOn": Array [
+        "TransitGatewayTransitGatewayAttachmentTGWRouteMainSubnet17BBA6FD6",
+      ],
       "Properties": Object {
         "SubnetIds": Array [
           Object {
@@ -155,9 +158,9 @@ Object {
       },
       "Type": "AWS::EC2::TransitGatewayAttachment",
     },
-    "TransitGatewayAttachmentTGWRouteMainSubnet1788FB4DF": Object {
+    "TransitGatewayTransitGatewayAttachmentTGWRouteMainSubnet17BBA6FD6": Object {
       "DependsOn": Array [
-        "TransitGatewayAttachment610A3027",
+        "TransitGatewayTransitGatewayAttachment91E0B600",
       ],
       "Properties": Object {
         "DestinationCidrBlock": "10.0.0.0/8",

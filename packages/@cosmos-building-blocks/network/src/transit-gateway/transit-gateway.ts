@@ -1,9 +1,10 @@
 import { Construct, Resource, IResource } from '@aws-cdk/core';
 import { CfnTransitGateway, IVpc, SubnetSelection } from '@aws-cdk/aws-ec2';
-import { TransitGatewayAttachment } from './transit-gateway-attachment';
+import { TransitGatewayAttachment, ITransitGatewayAttachment } from './transit-gateway-attachment';
 
 export interface ITransitGateway extends IResource {
   gatewayId: string;
+  addAttachment(id: string, props: { vpc: IVpc; subnets: SubnetSelection[] }): ITransitGatewayAttachment;
 }
 
 abstract class TransitGatewayBase extends Resource implements ITransitGateway {
