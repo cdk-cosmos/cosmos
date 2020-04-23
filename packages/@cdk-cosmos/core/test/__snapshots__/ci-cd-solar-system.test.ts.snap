@@ -121,6 +121,11 @@ Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "EnvironmentVariables": Array [
             Object {
+              "Name": "NPM_KEY",
+              "Type": "PLAINTEXT",
+              "Value": "",
+            },
+            Object {
               "Name": "STACKS",
               "Type": "PLAINTEXT",
               "Value": "",
@@ -143,6 +148,7 @@ Object {
     },
     \\"pre_build\\": {
       \\"commands\\": [
+        \\"echo \\\\\\"//registry.npmjs.org/:_authToken=\${NPM_KEY}\\\\\\" >> ~/.npmrc\\",
         \\"npm ci\\"
       ]
     },
@@ -668,6 +674,11 @@ Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "EnvironmentVariables": Array [
             Object {
+              "Name": "NPM_KEY",
+              "Type": "PLAINTEXT",
+              "Value": "",
+            },
+            Object {
               "Name": "STACKS",
               "Type": "PLAINTEXT",
               "Value": "",
@@ -690,6 +701,7 @@ Object {
     },
     \\"pre_build\\": {
       \\"commands\\": [
+        \\"echo \\\\\\"//registry.npmjs.org/:_authToken=\${NPM_KEY}\\\\\\" >> ~/.npmrc\\",
         \\"npm ci\\"
       ]
     },

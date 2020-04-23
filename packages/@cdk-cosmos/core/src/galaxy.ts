@@ -74,6 +74,7 @@ export class GalaxyStack extends Stack implements Galaxy {
       defaultEndpoints?: boolean;
     }
   ): Vpc {
+    // TODO: Better pattern ??
     const { cidrMask = 24, subnetMask = 26, defaultEndpoints = true } = props || {};
 
     if (!this.NetworkBuilder) {
@@ -95,7 +96,7 @@ export class GalaxyStack extends Stack implements Galaxy {
 
     this.Vpc.addGatewayEndpoint('S3Gateway', {
       service: GatewayVpcEndpointAwsService.S3,
-      subnets: [this.Vpc.selectSubnets({ subnetType: SubnetType.ISOLATED })],
+      subnets: [{ subnetType: SubnetType.ISOLATED }],
     });
 
     if (defaultEndpoints) {

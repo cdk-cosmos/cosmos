@@ -12,7 +12,7 @@ import {
   BuildEnvironmentVariableType,
 } from '@aws-cdk/aws-codebuild';
 import { IRole } from '@aws-cdk/aws-iam';
-import { NPM_RUN_BUILD, ECR_LOGIN, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION } from './commands';
+import { NPM_RUN_BUILD, ECR_LOGIN, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION, NPM_LOGIN } from './commands';
 
 export type BuildEnvironmentVariables = {
   [key: string]: BuildEnvironmentVariable;
@@ -81,7 +81,13 @@ export class AppNodePipeline extends Construct {
       buildSpec: buildSpec instanceof BuildSpec ? buildSpec : BuildSpec.fromObject(buildSpec),
       environment: {
         buildImage: LinuxBuildImage.STANDARD_3_0,
-        environmentVariables: buildEnvs,
+        environmentVariables: {
+          NPM_KEY: {
+            type: BuildEnvironmentVariableType.PLAINTEXT,
+            value: '',
+          },
+          ...buildEnvs,
+        },
         privileged: true,
       },
     });
@@ -130,7 +136,7 @@ export class AppNodePipeline extends Construct {
         },
         // eslint-disable-next-line @typescript-eslint/camelcase
         pre_build: {
-          commands: [ECR_LOGIN, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION],
+          commands: [ECR_LOGIN, NPM_LOGIN, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION],
         },
         build: {
           commands: [NPM_RUN_BUILD],

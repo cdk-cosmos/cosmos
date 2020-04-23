@@ -1,5 +1,5 @@
 {
-  "name": "@cosmos-building-blocks/transit-gateway",
+  "name": "@cosmos-building-blocks/network",
   "version": "0.2.6",
   "license": "Apache-2.0",
   "main": "lib/index.js",
@@ -12,7 +12,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/cdk-cosmos/cosmos.git",
-    "directory": "packages/@cosmos-building-blocks/transit-gateway"
+    "directory": "packages/@cosmos-building-blocks/network"
   },
   "publishConfig": {
     "access": "public"

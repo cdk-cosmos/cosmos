@@ -1,5 +1,5 @@
 import { Construct, StackProps } from '@aws-cdk/core';
-import { InstanceType, SecurityGroup } from '@aws-cdk/aws-ec2';
+import { InstanceType, SecurityGroup, InterfaceVpcEndpointAwsService } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster, ClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
@@ -28,6 +28,9 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EcsSolarSystemProps extends SolarSystemProps {
+  vpcProps?: SolarSystemProps['vpcProps'] & {
+    defaultEndpoints?: boolean;
+  };
   clusterProps?: Partial<ClusterProps>;
   clusterCapacityProps?: Partial<AddCapacityOptions>;
 }
@@ -41,7 +44,29 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
   constructor(galaxy: Galaxy, name: string, props?: EcsSolarSystemProps) {
     super(galaxy, name, props);
 
-    const { clusterProps = {}, clusterCapacityProps = {} } = props || {};
+    const { vpc, vpcProps = {}, clusterProps = {}, clusterCapacityProps = {} } = props || {};
+    const { defaultEndpoints = true } = vpcProps;
+
+    // Only add endpoints if this component created the Vpc. ie vpc was not passed in as a prop.
+    if (!vpc) {
+      if (defaultEndpoints) {
+        this.Vpc.addInterfaceEndpoint('EcsEndpoint', {
+          service: InterfaceVpcEndpointAwsService.ECS,
+        });
+        this.Vpc.addInterfaceEndpoint('EcsAgentEndpoint', {
+          service: InterfaceVpcEndpointAwsService.ECS_AGENT,
+        });
+        this.Vpc.addInterfaceEndpoint('EcsTelemetryEndpoint', {
+          service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
+        });
+        this.Vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
+          service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
+        });
+        this.Vpc.addInterfaceEndpoint('CloudWatchLogsEndpoint', {
+          service: InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
+        });
+      }
+    }
 
     this.Cluster = new Cluster(this, 'Cluster', {
       vpc: this.Vpc,

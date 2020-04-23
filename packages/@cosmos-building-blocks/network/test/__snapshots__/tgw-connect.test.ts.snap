@@ -3,7 +3,7 @@
 exports[`Transit Gateway Connection should match snapshot 1`] = `
 Object {
   "Resources": Object {
-    "MyTgwConnectionResolverRuleAssociation52715D77": Object {
+    "ResolverRuleResolverRuleAssociation669E300B": Object {
       "Properties": Object {
         "ResolverRuleId": "rslvr-rr-a5c8a7ee5efb41eab",
         "VPCId": Object {
@@ -11,49 +11,6 @@ Object {
         },
       },
       "Type": "AWS::Route53Resolver::ResolverRuleAssociation",
-    },
-    "MyTgwConnectionTGWRouteMainSubnet1D754DB0E": Object {
-      "DependsOn": Array [
-        "MyTgwConnectionTransitGatewayAttachmentBB73CC5E",
-      ],
-      "Properties": Object {
-        "DestinationCidrBlock": "10.0.0.0/8",
-        "RouteTableId": Object {
-          "Ref": "TestVpcMainSubnet1RouteTable1567AA0E",
-        },
-        "TransitGatewayId": "tgw-0d4180d3e7c919164",
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "MyTgwConnectionTGWRouteRedisSubnet117AE6F3C": Object {
-      "DependsOn": Array [
-        "MyTgwConnectionTransitGatewayAttachmentBB73CC5E",
-      ],
-      "Properties": Object {
-        "DestinationCidrBlock": "10.0.0.0/8",
-        "RouteTableId": Object {
-          "Ref": "TestVpcRedisSubnet1RouteTableBE392024",
-        },
-        "TransitGatewayId": "tgw-0d4180d3e7c919164",
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "MyTgwConnectionTransitGatewayAttachmentBB73CC5E": Object {
-      "Properties": Object {
-        "SubnetIds": Array [
-          Object {
-            "Ref": "TestVpcMainSubnet1SubnetC0BB40AC",
-          },
-          Object {
-            "Ref": "TestVpcRedisSubnet1Subnet1490AFD4",
-          },
-        ],
-        "TransitGatewayId": "tgw-0d4180d3e7c919164",
-        "VpcId": Object {
-          "Ref": "TestVpcE77CE678",
-        },
-      },
-      "Type": "AWS::EC2::TransitGatewayAttachment",
     },
     "TestVpcE77CE678": Object {
       "Properties": Object {
@@ -183,6 +140,36 @@ Object {
         },
       },
       "Type": "AWS::EC2::Subnet",
+    },
+    "TransitGatewayTransitGatewayAttachment91E0B600": Object {
+      "DependsOn": Array [
+        "TransitGatewayTransitGatewayAttachmentTGWRouteMainSubnet17BBA6FD6",
+      ],
+      "Properties": Object {
+        "SubnetIds": Array [
+          Object {
+            "Ref": "TestVpcMainSubnet1SubnetC0BB40AC",
+          },
+        ],
+        "TransitGatewayId": "tgw-0d4180d3e7c919164",
+        "VpcId": Object {
+          "Ref": "TestVpcE77CE678",
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayAttachment",
+    },
+    "TransitGatewayTransitGatewayAttachmentTGWRouteMainSubnet17BBA6FD6": Object {
+      "DependsOn": Array [
+        "TransitGatewayTransitGatewayAttachment91E0B600",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "10.0.0.0/8",
+        "RouteTableId": Object {
+          "Ref": "TestVpcMainSubnet1RouteTable1567AA0E",
+        },
+        "TransitGatewayId": "tgw-0d4180d3e7c919164",
+      },
+      "Type": "AWS::EC2::Route",
     },
   },
 }

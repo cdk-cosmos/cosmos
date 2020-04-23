@@ -74,7 +74,7 @@ export class CdkPipeline extends Construct {
           },
           // eslint-disable-next-line @typescript-eslint/camelcase
           pre_build: {
-            commands: ['npm ci'],
+            commands: ['echo "//registry.npmjs.org/:_authToken=${NPM_KEY}" >> ~/.npmrc', 'npm ci'],
           },
           build: {
             commands: ['npx cdk synth ${STACKS}', 'npx cdk deploy --require-approval=never ${STACKS}'],
@@ -88,6 +88,10 @@ export class CdkPipeline extends Construct {
       environment: {
         buildImage: LinuxBuildImage.STANDARD_3_0,
         environmentVariables: {
+          NPM_KEY: {
+            type: BuildEnvironmentVariableType.PLAINTEXT,
+            value: '',
+          },
           ...deployEnvs,
           STACKS: {
             type: BuildEnvironmentVariableType.PLAINTEXT,
