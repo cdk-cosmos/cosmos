@@ -1,6 +1,6 @@
 {
   "name": "@cosmos-building-blocks/common",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -32,7 +32,7 @@
     "@aws-cdk/core": "^1.31.0"
   },
   "devDependencies": {
-    "cross-account-stack-ref-handler": "^0.3.0"
+    "cross-account-stack-ref-handler": "^0.3.1"
   },
   "gitHead": "173c051038a3acdaa93d6a37d42b6b0546ffd567"
 }
