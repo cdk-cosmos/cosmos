@@ -44,20 +44,17 @@ export class TransitGatewayAttachment extends Resource implements ITransitGatewa
     });
 
     this.attachmentId = this.resource.ref;
-    this.node.addDependency(this.gateway);
   }
 
   public addRoute(id: string, props: { destinationCidrBlock: string }): void {
     const { destinationCidrBlock } = props;
 
     for (const subnet of this.subnets) {
-      const route = new TransitGatewayRoute(this, `${id}-${subnet.node.id}`, {
+      new TransitGatewayRoute(this, `${id}-${subnet.node.id}`, {
         attachment: this,
         subnet: subnet,
         destinationCidrBlock: destinationCidrBlock,
       });
-
-      route.node.addDependency(this.resource);
     }
   }
 }
@@ -89,8 +86,6 @@ export class TransitGatewayRoute extends Resource {
       transitGatewayId: this.attachment.gateway.gatewayId,
     });
 
-    if (this.node.scope !== this.attachment) {
-      this.resource.node.addDependency(this.attachment);
-    }
+    this.resource.node.addDependency(this.attachment.node.children[0]);
   }
 }

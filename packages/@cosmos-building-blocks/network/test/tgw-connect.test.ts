@@ -1,15 +1,14 @@
-import { SynthUtils } from '@aws-cdk/assert';
 import '@aws-cdk/assert/jest';
-import '@aws-cdk/core';
+import { SynthUtils } from '@aws-cdk/assert';
 import { App, Stack } from '@aws-cdk/core';
-import { Vpc, SubnetType, Subnet } from '@aws-cdk/aws-ec2';
-import { TransitGateway, TransitGatewayAttachment, ResolverRule, ResolverRuleAssociation } from '../src';
+import { Vpc, SubnetType } from '@aws-cdk/aws-ec2';
+import { TransitGateway, ResolverRule } from '../src';
 
 const app = new App();
 const testStack = new Stack(app, 'TestStack');
 const myvpc = new Vpc(testStack, 'TestVpc', {
   cidr: '10.180.7.0/24',
-  maxAzs: 1,
+  maxAzs: 2,
   subnetConfiguration: [
     {
       name: 'Main',
@@ -25,7 +24,7 @@ const myvpc = new Vpc(testStack, 'TestVpc', {
 });
 
 const gateway = TransitGateway.fromGatewayAttributes(testStack, 'TransitGateway', {
-  gatewayId: 'tgw-0d4180d3e7c919164',
+  gatewayId: 'tgw-1234',
 });
 const attachment = gateway.addAttachment('TransitGatewayAttachment', {
   vpc: myvpc,
@@ -34,7 +33,7 @@ const attachment = gateway.addAttachment('TransitGatewayAttachment', {
 attachment.addRoute('TGWRoute', { destinationCidrBlock: '10.0.0.0/8' });
 
 const resolver = ResolverRule.fromResolverAttributes(testStack, 'ResolverRule', {
-  ruleId: 'rslvr-rr-a5c8a7ee5efb41eab',
+  ruleId: 'rslvr-rr-1234',
 });
 resolver.addAssociation('ResolverRuleAssociation', {
   vpc: myvpc,
