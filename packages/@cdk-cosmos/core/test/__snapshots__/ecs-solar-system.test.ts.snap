@@ -126,10 +126,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet1RouteTable1A9920A9F8087918",
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet1RouteTable88DA0EB91721318D",
             },
             Object {
-              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet2RouteTable0AD76F684D7351CC",
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet2RouteTableF83F0115B365CB82",
             },
           ],
         ],
@@ -144,10 +144,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082",
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet1SubnetE53AA4B285750DC9",
             },
             Object {
-              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4",
+              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet2SubnetC518E570A0A41799",
             },
           ],
         ],
@@ -205,10 +205,10 @@ Object {
         ],
         "Subnets": Array [
           Object {
-            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082",
+            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet1SubnetE53AA4B285750DC9",
           },
           Object {
-            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4",
+            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet2SubnetC518E570A0A41799",
           },
         ],
         "Type": "application",
@@ -235,7 +235,7 @@ Object {
     },
     "AlbSecurityGroup86A59E99": Object {
       "Properties": Object {
-        "GroupDescription": "SecurityGroup for SolarSystem ALB",
+        "GroupDescription": "SecurityGroup for ALB.",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -275,10 +275,10 @@ Object {
         ],
         "VPCZoneIdentifier": Array [
           Object {
-            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082",
+            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet1SubnetE53AA4B285750DC9",
           },
           Object {
-            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4",
+            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet2SubnetC518E570A0A41799",
           },
         ],
       },
