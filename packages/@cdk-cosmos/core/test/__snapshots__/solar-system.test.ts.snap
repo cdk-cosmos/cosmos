@@ -18,36 +18,36 @@ Object {
         "Ref": "SharedVpc96F0F614",
       },
     },
-    "ExportsOutputRefSharedVpcMainSubnet1RouteTable1A9920A9F8087918": Object {
+    "ExportsOutputRefSharedVpcAppSubnet1RouteTable88DA0EB91721318D": Object {
       "Export": Object {
-        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet1RouteTable1A9920A9F8087918",
+        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcAppSubnet1RouteTable88DA0EB91721318D",
       },
       "Value": Object {
-        "Ref": "SharedVpcMainSubnet1RouteTable1A9920A9",
+        "Ref": "SharedVpcAppSubnet1RouteTable88DA0EB9",
       },
     },
-    "ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082": Object {
+    "ExportsOutputRefSharedVpcAppSubnet1SubnetE53AA4B285750DC9": Object {
       "Export": Object {
-        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082",
+        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcAppSubnet1SubnetE53AA4B285750DC9",
       },
       "Value": Object {
-        "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+        "Ref": "SharedVpcAppSubnet1SubnetE53AA4B2",
       },
     },
-    "ExportsOutputRefSharedVpcMainSubnet2RouteTable0AD76F684D7351CC": Object {
+    "ExportsOutputRefSharedVpcAppSubnet2RouteTableF83F0115B365CB82": Object {
       "Export": Object {
-        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet2RouteTable0AD76F684D7351CC",
+        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcAppSubnet2RouteTableF83F0115B365CB82",
       },
       "Value": Object {
-        "Ref": "SharedVpcMainSubnet2RouteTable0AD76F68",
+        "Ref": "SharedVpcAppSubnet2RouteTableF83F0115",
       },
     },
-    "ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4": Object {
+    "ExportsOutputRefSharedVpcAppSubnet2SubnetC518E570A0A41799": Object {
       "Export": Object {
-        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4",
+        "Name": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcAppSubnet2SubnetC518E570A0A41799",
       },
       "Value": Object {
-        "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+        "Ref": "SharedVpcAppSubnet2SubnetC518E570",
       },
     },
   },
@@ -66,6 +66,106 @@ Object {
         ],
       },
       "Type": "AWS::EC2::VPC",
+    },
+    "SharedVpcAppSubnet1RouteTable88DA0EB9": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "SharedVpcAppSubnet1RouteTableAssociationFBDBFCBB": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "SharedVpcAppSubnet1RouteTable88DA0EB9",
+        },
+        "SubnetId": Object {
+          "Ref": "SharedVpcAppSubnet1SubnetE53AA4B2",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "SharedVpcAppSubnet1SubnetE53AA4B2": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.4.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/AppSubnet1",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "SharedVpcAppSubnet2RouteTableAssociation99D6F4A4": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "SharedVpcAppSubnet2RouteTableF83F0115",
+        },
+        "SubnetId": Object {
+          "Ref": "SharedVpcAppSubnet2SubnetC518E570",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "SharedVpcAppSubnet2RouteTableF83F0115": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "SharedVpcAppSubnet2SubnetC518E570": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.4.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/AppSubnet2",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc96F0F614",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
     },
     "SharedVpcCloudWatchLogsEndpoint1D67EB6F": Object {
       "Properties": Object {
@@ -92,10 +192,10 @@ Object {
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+            "Ref": "SharedVpcAppSubnet1SubnetE53AA4B2",
           },
           Object {
-            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+            "Ref": "SharedVpcAppSubnet2SubnetC518E570",
           },
         ],
         "VpcEndpointType": "Interface",
@@ -180,10 +280,10 @@ Object {
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+            "Ref": "SharedVpcAppSubnet1SubnetE53AA4B2",
           },
           Object {
-            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+            "Ref": "SharedVpcAppSubnet2SubnetC518E570",
           },
         ],
         "VpcEndpointType": "Interface",
@@ -268,10 +368,10 @@ Object {
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+            "Ref": "SharedVpcAppSubnet1SubnetE53AA4B2",
           },
           Object {
-            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+            "Ref": "SharedVpcAppSubnet2SubnetC518E570",
           },
         ],
         "VpcEndpointType": "Interface",
@@ -356,10 +456,10 @@ Object {
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+            "Ref": "SharedVpcAppSubnet1SubnetE53AA4B2",
           },
           Object {
-            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+            "Ref": "SharedVpcAppSubnet2SubnetC518E570",
           },
         ],
         "VpcEndpointType": "Interface",
@@ -444,10 +544,10 @@ Object {
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
+            "Ref": "SharedVpcAppSubnet1SubnetE53AA4B2",
           },
           Object {
-            "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
+            "Ref": "SharedVpcAppSubnet2SubnetC518E570",
           },
         ],
         "VpcEndpointType": "Interface",
@@ -507,114 +607,14 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "SharedVpcMainSubnet1RouteTable1A9920A9": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/MainSubnet1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "SharedVpc96F0F614",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "SharedVpcMainSubnet1RouteTableAssociation7969C309": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "SharedVpcMainSubnet1RouteTable1A9920A9",
-        },
-        "SubnetId": Object {
-          "Ref": "SharedVpcMainSubnet1SubnetF95BAF13",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "SharedVpcMainSubnet1SubnetF95BAF13": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1a",
-        "CidrBlock": "10.0.4.0/26",
-        "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/MainSubnet1",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Main",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "SharedVpc96F0F614",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "SharedVpcMainSubnet2RouteTable0AD76F68": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/MainSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "SharedVpc96F0F614",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "SharedVpcMainSubnet2RouteTableAssociation2CA37D4A": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "SharedVpcMainSubnet2RouteTable0AD76F68",
-        },
-        "SubnetId": Object {
-          "Ref": "SharedVpcMainSubnet2Subnet6A834A71",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "SharedVpcMainSubnet2Subnet6A834A71": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1b",
-        "CidrBlock": "10.0.4.64/26",
-        "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Core-Cos-Gal-Galaxy/SharedVpc/MainSubnet2",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Main",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "SharedVpc96F0F614",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
     "SharedVpcS3Gateway58B8AA14": Object {
       "Properties": Object {
         "RouteTableIds": Array [
           Object {
-            "Ref": "SharedVpcMainSubnet1RouteTable1A9920A9",
+            "Ref": "SharedVpcAppSubnet1RouteTable88DA0EB9",
           },
           Object {
-            "Ref": "SharedVpcMainSubnet2RouteTable0AD76F68",
+            "Ref": "SharedVpcAppSubnet2RouteTableF83F0115",
           },
         ],
         "ServiceName": Object {
@@ -721,10 +721,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet1RouteTable1A9920A9F8087918",
+              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcAppSubnet1RouteTable88DA0EB91721318D",
             },
             Object {
-              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet2RouteTable0AD76F684D7351CC",
+              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcAppSubnet2RouteTableF83F0115B365CB82",
             },
           ],
         ],
@@ -739,10 +739,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet1SubnetF95BAF138F191082",
+              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcAppSubnet1SubnetE53AA4B285750DC9",
             },
             Object {
-              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcMainSubnet2Subnet6A834A717F3E90E4",
+              "Fn::ImportValue": "Core-Cos-Gal-Galaxy:ExportsOutputRefSharedVpcAppSubnet2SubnetC518E570A0A41799",
             },
           ],
         ],
@@ -869,10 +869,10 @@ Object {
           ",",
           Array [
             Object {
-              "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
+              "Ref": "VpcAppSubnet1RouteTable30EDBD03",
             },
             Object {
-              "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
+              "Ref": "VpcAppSubnet2RouteTable1525EC1E",
             },
           ],
         ],
@@ -887,10 +887,10 @@ Object {
           ",",
           Array [
             Object {
-              "Ref": "VpcMainSubnet1Subnet501A7278",
+              "Ref": "VpcAppSubnet1Subnet7D2CF347",
             },
             Object {
-              "Ref": "VpcMainSubnet2Subnet4C1ED704",
+              "Ref": "VpcAppSubnet2Subnet8D65443B",
             },
           ],
         ],
@@ -960,23 +960,12 @@ Object {
       },
       "Type": "AWS::EC2::VPC",
     },
-    "VpcMainSubnet1RouteTableAssociation735BC7DF": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcMainSubnet1Subnet501A7278",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcMainSubnet1RouteTableB8CBA6F0": Object {
+    "VpcAppSubnet1RouteTable30EDBD03": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/MainSubnet1",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/AppSubnet1",
           },
         ],
         "VpcId": Object {
@@ -985,7 +974,18 @@ Object {
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "VpcMainSubnet1Subnet501A7278": Object {
+    "VpcAppSubnet1RouteTableAssociation95F593A9": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet1RouteTable30EDBD03",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet1Subnet7D2CF347",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet1Subnet7D2CF347": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1a",
         "CidrBlock": "10.0.5.0/26",
@@ -993,11 +993,11 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/MainSubnet1",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/AppSubnet1",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
-            "Value": "Main",
+            "Value": "App",
           },
           Object {
             "Key": "aws-cdk:subnet-type",
@@ -1010,23 +1010,12 @@ Object {
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "VpcMainSubnet2RouteTableAssociationE08931BA": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcMainSubnet2Subnet4C1ED704",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcMainSubnet2RouteTableBE78C2D2": Object {
+    "VpcAppSubnet2RouteTable1525EC1E": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/MainSubnet2",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/AppSubnet2",
           },
         ],
         "VpcId": Object {
@@ -1035,7 +1024,18 @@ Object {
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "VpcMainSubnet2Subnet4C1ED704": Object {
+    "VpcAppSubnet2RouteTableAssociationD8368F88": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet2RouteTable1525EC1E",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet2Subnet8D65443B",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet2Subnet8D65443B": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1b",
         "CidrBlock": "10.0.5.64/26",
@@ -1043,11 +1043,11 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/MainSubnet2",
+            "Value": "Core-Cos-Gal2-Sys2-SolarSystem/Vpc/AppSubnet2",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
-            "Value": "Main",
+            "Value": "App",
           },
           Object {
             "Key": "aws-cdk:subnet-type",
@@ -1064,10 +1064,10 @@ Object {
       "Properties": Object {
         "RouteTableIds": Array [
           Object {
-            "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
+            "Ref": "VpcAppSubnet1RouteTable30EDBD03",
           },
           Object {
-            "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
+            "Ref": "VpcAppSubnet2RouteTable1525EC1E",
           },
         ],
         "ServiceName": Object {

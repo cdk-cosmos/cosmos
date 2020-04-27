@@ -9,6 +9,7 @@ import {
   TargetType,
   IApplicationLoadBalancer,
   IApplicationListener,
+  ApplicationLoadBalancerProps,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { ManagedPolicy } from '@aws-cdk/aws-iam';
 import {
@@ -33,6 +34,7 @@ export interface EcsSolarSystemProps extends SolarSystemProps {
   };
   clusterProps?: Partial<ClusterProps>;
   clusterCapacityProps?: Partial<AddCapacityOptions>;
+  albProps?: Partial<ApplicationLoadBalancerProps>;
 }
 
 export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSystem {
@@ -44,7 +46,7 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
   constructor(galaxy: Galaxy, name: string, props?: EcsSolarSystemProps) {
     super(galaxy, name, props);
 
-    const { vpc, vpcProps = {}, clusterProps = {}, clusterCapacityProps = {} } = props || {};
+    const { vpc, vpcProps = {}, clusterProps = {}, clusterCapacityProps = {}, albProps = {} } = props || {};
     const { defaultEndpoints = true } = vpcProps;
 
     // Only add endpoints if this component created the Vpc. ie vpc was not passed in as a prop.
@@ -75,6 +77,7 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
     });
 
     const capacity = this.Cluster.addCapacity('Capacity', {
+      vpcSubnets: { subnetGroupName: 'App' },
       instanceType: new InstanceType('t2.medium'),
       desiredCapacity: 1,
       minCapacity: 1,
@@ -83,16 +86,20 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
     });
     capacity.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
 
-    const AlbSecurityGroup = new SecurityGroup(this, 'AlbSecurityGroup', {
-      vpc: this.Vpc,
-      description: 'SecurityGroup for SolarSystem ALB',
-      allowAllOutbound: true,
-    });
+    const albSecurityGroup =
+      albProps.securityGroup ||
+      new SecurityGroup(this, 'AlbSecurityGroup', {
+        vpc: this.Vpc,
+        description: 'SecurityGroup for ALB.',
+        allowAllOutbound: true,
+      });
 
     this.Alb = new ApplicationLoadBalancer(this, 'Alb', {
+      vpcSubnets: { subnetGroupName: 'App' },
+      ...albProps,
       vpc: this.Vpc,
+      securityGroup: albSecurityGroup,
       loadBalancerName: this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'),
-      securityGroup: AlbSecurityGroup,
     });
 
     this.HttpListener = this.Alb.addListener('HttpListener', {
@@ -105,6 +112,8 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
         }),
       ],
     });
+
+    // TODO: Add internal http listener on port 81 ?
 
     // TODO: ?
     // this.httpListener = this.alb.addListener("HttpsListener", {

@@ -425,10 +425,10 @@ Object {
           ",",
           Array [
             Object {
-              "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
+              "Ref": "VpcAppSubnet1RouteTable30EDBD03",
             },
             Object {
-              "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
+              "Ref": "VpcAppSubnet2RouteTable1525EC1E",
             },
           ],
         ],
@@ -443,10 +443,10 @@ Object {
           ",",
           Array [
             Object {
-              "Ref": "VpcMainSubnet1Subnet501A7278",
+              "Ref": "VpcAppSubnet1Subnet7D2CF347",
             },
             Object {
-              "Ref": "VpcMainSubnet2Subnet4C1ED704",
+              "Ref": "VpcAppSubnet2Subnet8D65443B",
             },
           ],
         ],
@@ -504,10 +504,10 @@ Object {
         ],
         "Subnets": Array [
           Object {
-            "Ref": "VpcMainSubnet1Subnet501A7278",
+            "Ref": "VpcAppSubnet1Subnet7D2CF347",
           },
           Object {
-            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+            "Ref": "VpcAppSubnet2Subnet8D65443B",
           },
         ],
         "Type": "application",
@@ -534,7 +534,7 @@ Object {
     },
     "AlbSecurityGroup86A59E99": Object {
       "Properties": Object {
-        "GroupDescription": "SecurityGroup for SolarSystem ALB",
+        "GroupDescription": "SecurityGroup for ALB.",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -893,10 +893,10 @@ Object {
         ],
         "VPCZoneIdentifier": Array [
           Object {
-            "Ref": "VpcMainSubnet1Subnet501A7278",
+            "Ref": "VpcAppSubnet1Subnet7D2CF347",
           },
           Object {
-            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+            "Ref": "VpcAppSubnet2Subnet8D65443B",
           },
         ],
       },
@@ -1450,6 +1450,106 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::EC2::VPC",
     },
+    "VpcAppSubnet1RouteTable30EDBD03": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet1RouteTableAssociation95F593A9": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet1RouteTable30EDBD03",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet1Subnet7D2CF347",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet1Subnet7D2CF347": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.4.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/AppSubnet1",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcAppSubnet2RouteTable1525EC1E": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet2RouteTableAssociationD8368F88": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet2RouteTable1525EC1E",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet2Subnet8D65443B",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet2Subnet8D65443B": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.4.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/AppSubnet2",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
     "VpcCloudWatchLogsEndpointA6195533": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
@@ -1475,10 +1575,10 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "VpcMainSubnet1Subnet501A7278",
+            "Ref": "VpcAppSubnet1Subnet7D2CF347",
           },
           Object {
-            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+            "Ref": "VpcAppSubnet2Subnet8D65443B",
           },
         ],
         "VpcEndpointType": "Interface",
@@ -1563,10 +1663,10 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "VpcMainSubnet1Subnet501A7278",
+            "Ref": "VpcAppSubnet1Subnet7D2CF347",
           },
           Object {
-            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+            "Ref": "VpcAppSubnet2Subnet8D65443B",
           },
         ],
         "VpcEndpointType": "Interface",
@@ -1651,10 +1751,10 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "VpcMainSubnet1Subnet501A7278",
+            "Ref": "VpcAppSubnet1Subnet7D2CF347",
           },
           Object {
-            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+            "Ref": "VpcAppSubnet2Subnet8D65443B",
           },
         ],
         "VpcEndpointType": "Interface",
@@ -1739,10 +1839,10 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "VpcMainSubnet1Subnet501A7278",
+            "Ref": "VpcAppSubnet1Subnet7D2CF347",
           },
           Object {
-            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+            "Ref": "VpcAppSubnet2Subnet8D65443B",
           },
         ],
         "VpcEndpointType": "Interface",
@@ -1827,10 +1927,10 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "VpcMainSubnet1Subnet501A7278",
+            "Ref": "VpcAppSubnet1Subnet7D2CF347",
           },
           Object {
-            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+            "Ref": "VpcAppSubnet2Subnet8D65443B",
           },
         ],
         "VpcEndpointType": "Interface",
@@ -1890,114 +1990,14 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "VpcMainSubnet1RouteTableAssociation735BC7DF": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcMainSubnet1Subnet501A7278",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcMainSubnet1RouteTableB8CBA6F0": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/MainSubnet1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcMainSubnet1Subnet501A7278": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1a",
-        "CidrBlock": "10.0.4.0/26",
-        "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/MainSubnet1",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Main",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcMainSubnet2RouteTableAssociationE08931BA": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcMainSubnet2Subnet4C1ED704",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcMainSubnet2RouteTableBE78C2D2": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/MainSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcMainSubnet2Subnet4C1ED704": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1b",
-        "CidrBlock": "10.0.4.64/26",
-        "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/MainSubnet2",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "Main",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc8378EB38",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
     "VpcS3Gateway0FF2BD16": Object {
       "Properties": Object {
         "RouteTableIds": Array [
           Object {
-            "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
+            "Ref": "VpcAppSubnet1RouteTable30EDBD03",
           },
           Object {
-            "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
+            "Ref": "VpcAppSubnet2RouteTable1525EC1E",
           },
         ],
         "ServiceName": Object {

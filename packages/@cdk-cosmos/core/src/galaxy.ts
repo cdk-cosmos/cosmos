@@ -85,7 +85,7 @@ export class GalaxyStack extends Stack implements Galaxy {
       maxAzs: 2,
       subnetConfiguration: [
         {
-          name: 'Main',
+          name: 'App',
           subnetType: SubnetType.ISOLATED,
           cidrMask: subnetMask,
         },

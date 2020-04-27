@@ -78,7 +78,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
         maxAzs: 2,
         subnetConfiguration: [
           {
-            name: 'Main',
+            name: 'App',
             subnetType: SubnetType.ISOLATED,
             cidrMask: subnetMask,
           },
