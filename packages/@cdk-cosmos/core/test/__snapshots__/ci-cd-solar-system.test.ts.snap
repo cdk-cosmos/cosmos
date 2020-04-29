@@ -532,6 +532,30 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
+    "AlbRecord6ECCAA7E": Object {
+      "Properties": Object {
+        "AliasTarget": Object {
+          "DNSName": Object {
+            "Fn::GetAtt": Array [
+              "Alb16C2F182",
+              "DNSName",
+            ],
+          },
+          "HostedZoneId": Object {
+            "Fn::GetAtt": Array [
+              "Alb16C2F182",
+              "CanonicalHostedZoneID",
+            ],
+          },
+        },
+        "HostedZoneId": Object {
+          "Ref": "ZoneA5DE4B68",
+        },
+        "Name": "cicd.cos.com.",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
     "AlbSecurityGroup86A59E99": Object {
       "Properties": Object {
         "GroupDescription": "SecurityGroup for ALB.",

@@ -12,6 +12,8 @@ import {
   ApplicationLoadBalancerProps,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { ManagedPolicy } from '@aws-cdk/aws-iam';
+import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
+import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 import {
   PATTERN,
   Galaxy,
@@ -100,6 +102,11 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
       vpc: this.Vpc,
       securityGroup: albSecurityGroup,
       loadBalancerName: this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'),
+    });
+
+    new ARecord(this, 'AlbRecord', {
+      zone: this.Zone,
+      target: RecordTarget.fromAlias(new LoadBalancerTarget(this.Alb)),
     });
 
     this.HttpListener = this.Alb.addListener('HttpListener', {
