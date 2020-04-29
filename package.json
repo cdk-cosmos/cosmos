@@ -21,9 +21,6 @@
     "packages/private/*"
   ],
   "precommit": [
-    "clean",
-    "build",
-    "lint",
     "test-and-shield",
     "git-add"
   ],
