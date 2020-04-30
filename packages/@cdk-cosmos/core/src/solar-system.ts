@@ -89,7 +89,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
 
       this.Vpc.addGatewayEndpoint('S3Gateway', {
         service: GatewayVpcEndpointAwsService.S3,
-        subnets: [{ subnetType: SubnetType.ISOLATED }],
+        subnets: [{ subnetGroupName: 'App' }],
       });
     }
 

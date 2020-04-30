@@ -9,6 +9,11 @@ import {
   ICluster,
   LogDrivers,
   ContainerDefinition,
+  ScalableTaskCount,
+  CpuUtilizationScalingProps,
+  RequestCountScalingProps,
+  PlacementStrategy,
+  BuiltInAttributes,
 } from '@aws-cdk/aws-ecs';
 import {
   ApplicationTargetGroup,
@@ -20,6 +25,8 @@ import {
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { IVpc } from '@aws-cdk/aws-ec2';
 import { LogGroup } from '@aws-cdk/aws-logs';
+import { EnableScalingProps } from '@aws-cdk/aws-applicationautoscaling';
+import { getRoutingPriority } from './utils';
 
 export interface EcsServiceProps {
   vpc: IVpc;
@@ -28,7 +35,8 @@ export interface EcsServiceProps {
   containerProps: ContainerDefinitionOptions & { port?: PortMapping };
   serviceProps?: Partial<Ec2ServiceProps>;
   targetGroupProps?: Partial<ApplicationTargetGroupProps>;
-  routingProps: Partial<ApplicationListenerRuleProps> & { priority: number };
+  routingProps?: Partial<ApplicationListenerRuleProps>;
+  scalingProps?: EnableScalingProps;
 }
 
 export class EcsService extends Construct {
@@ -38,6 +46,7 @@ export class EcsService extends Construct {
   readonly Service: Ec2Service;
   readonly TargetGroup: ApplicationTargetGroup;
   readonly ListenerRule: ApplicationListenerRule;
+  readonly Scaling?: ScalableTaskCount;
 
   constructor(scope: Construct, id: string, props: EcsServiceProps) {
     super(scope, id);
@@ -50,6 +59,7 @@ export class EcsService extends Construct {
       serviceProps = {},
       targetGroupProps = {},
       routingProps,
+      scalingProps,
     } = props;
 
     this.LogGroup = new LogGroup(this, 'LogGroup', {
@@ -74,6 +84,7 @@ export class EcsService extends Construct {
 
     this.Service = new Ec2Service(this, 'Service', {
       desiredCount: 1,
+      placementStrategies: [PlacementStrategy.spreadAcross(BuiltInAttributes.AVAILABILITY_ZONE)],
       ...serviceProps,
       serviceName: `${id}-Service`,
       taskDefinition: this.TaskDefinition,
@@ -94,10 +105,42 @@ export class EcsService extends Construct {
       deregistrationDelay: Duration.seconds(0),
     });
 
-    this.ListenerRule = new ApplicationListenerRule(this, 'ServiceRule', {
-      ...routingProps,
-      listener: httpListener,
-      targetGroups: [this.TargetGroup],
+    if (routingProps) {
+      this.ListenerRule = new ApplicationListenerRule(this, 'ServiceRule', {
+        priority: getRoutingPriority(routingProps),
+        ...routingProps,
+        listener: httpListener,
+        targetGroups: [this.TargetGroup],
+      });
+    }
+
+    if (scalingProps) {
+      this.Scaling = this.Service.autoScaleTaskCount(scalingProps);
+    }
+  }
+
+  addCpuAutoScaling(props: Partial<CpuUtilizationScalingProps>): void {
+    if (!this.Scaling) throw new Error('Scaling needs to be enabled');
+    this.Scaling.scaleOnCpuUtilization('CpuScaling', {
+      ...props,
+      targetUtilizationPercent: 80,
+    });
+  }
+
+  addMemoryAutoScaling(props: Partial<RequestCountScalingProps>): void {
+    if (!this.Scaling) throw new Error('Scaling needs to be enabled');
+    this.Scaling.scaleOnMemoryUtilization('MemoryScaling', {
+      ...props,
+      targetUtilizationPercent: 80,
+    });
+  }
+
+  addRequestAutoScaling(props: Partial<RequestCountScalingProps>): void {
+    if (!this.Scaling) throw new Error('Scaling needs to be enabled');
+    this.Scaling.scaleOnRequestCount('RequestScaling', {
+      ...props,
+      requestsPerTarget: 500,
+      targetGroup: this.TargetGroup,
     });
   }
 }

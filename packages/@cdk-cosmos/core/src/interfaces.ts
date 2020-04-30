@@ -54,6 +54,7 @@ export interface EcsSolarSystem extends SolarSystem {
   Cluster: ICluster;
   Alb: IApplicationLoadBalancer;
   HttpListener: IApplicationListener;
+  HttpInternalListener: IApplicationListener;
   // HttpsListener: IApplicationListener;
 }
 
