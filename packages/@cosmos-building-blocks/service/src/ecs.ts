@@ -123,7 +123,7 @@ export class EcsService extends Construct {
     if (!this.Scaling) throw new Error('Scaling needs to be enabled');
     this.Scaling.scaleOnCpuUtilization('CpuScaling', {
       ...props,
-      targetUtilizationPercent: 80,
+      targetUtilizationPercent: 50,
     });
   }
 
@@ -131,7 +131,7 @@ export class EcsService extends Construct {
     if (!this.Scaling) throw new Error('Scaling needs to be enabled');
     this.Scaling.scaleOnMemoryUtilization('MemoryScaling', {
       ...props,
-      targetUtilizationPercent: 80,
+      targetUtilizationPercent: 50,
     });
   }
 

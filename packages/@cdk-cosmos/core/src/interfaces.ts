@@ -7,6 +7,7 @@ import { ICluster } from '@aws-cdk/aws-ecs';
 import { IApplicationLoadBalancer, IApplicationListener } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { IProject } from '@aws-cdk/aws-codebuild';
 import { IFunction } from '@aws-cdk/aws-lambda';
+import { SolarSystemStack } from './solar-system';
 
 export interface Bubble {
   Name: string;
@@ -58,8 +59,10 @@ export interface EcsSolarSystem extends SolarSystem {
   // HttpsListener: IApplicationListener;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface CiCdSolarSystem extends EcsSolarSystem {}
+export interface CiCdSolarSystem extends SolarSystem {
+  readonly CdkDeploy?: IProject;
+}
+export interface CiCdEcsSolarSystem extends CiCdSolarSystem, EcsSolarSystem {}
 
 // Extensions
 
@@ -94,7 +97,11 @@ export interface EcsSolarSystemExtension extends SolarSystemExtension {
   Galaxy: GalaxyExtension;
 }
 
-export interface CiCdSolarSystemExtension extends EcsSolarSystemExtension {
+export interface CiCdSolarSystemExtension extends SolarSystemExtension {
+  Galaxy: GalaxyExtension;
+  DeployProject: IProject;
+}
+export interface CiCdEcsSolarSystemExtension extends CiCdSolarSystemExtension, EcsSolarSystemExtension {
   Galaxy: GalaxyExtension;
   DeployProject: IProject;
 }

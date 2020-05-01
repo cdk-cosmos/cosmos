@@ -1,6 +1,6 @@
 import { Construct, StackProps } from '@aws-cdk/core';
 import { InstanceType, SecurityGroup, InterfaceVpcEndpointAwsService } from '@aws-cdk/aws-ec2';
-import { Cluster, ICluster, ClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
+import { Cluster, ICluster, ClusterProps, AddCapacityOptions, CpuUtilizationScalingProps } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
   ApplicationListener,
@@ -27,7 +27,9 @@ import {
   RemoteCluster,
   RemoteAlb,
   RemoteApplicationListener,
+  SolarSystemExtensionStackProps,
 } from '.';
+import { ImportedSolarSystemProps } from './solar-system';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EcsSolarSystemProps extends SolarSystemProps {
@@ -35,7 +37,7 @@ export interface EcsSolarSystemProps extends SolarSystemProps {
     defaultEndpoints?: boolean;
   };
   clusterProps?: Partial<ClusterProps>;
-  clusterCapacityProps?: Partial<AddCapacityOptions> & { enableCpuScaling: boolean; cpuScalingTarget: number };
+  clusterCapacityProps?: Partial<AddCapacityOptions>;
   albProps?: Partial<ApplicationLoadBalancerProps>;
 }
 
@@ -51,13 +53,7 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
   constructor(galaxy: Galaxy, name: string, props?: EcsSolarSystemProps) {
     super(galaxy, name, props);
 
-    const {
-      vpc,
-      vpcProps = {},
-      clusterProps = {},
-      clusterCapacityProps = { enableCpuScaling: true, cpuScalingTarget: 80 },
-      albProps = {},
-    } = props || {};
+    const { vpc, vpcProps = {}, clusterProps = {}, clusterCapacityProps = {}, albProps = {} } = props || {};
     const { defaultEndpoints = true } = vpcProps;
 
     // Only add endpoints if this component created the Vpc. ie vpc was not passed in as a prop.
@@ -92,15 +88,9 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
       instanceType: new InstanceType('t3.medium'),
       minCapacity: 1,
       maxCapacity: 5,
-      spotInstanceDraining: true,
-      spotPrice: '0.02',
       ...clusterCapacityProps,
     });
-    if (clusterCapacityProps.enableCpuScaling) {
-      this.ClusterAutoScalingGroup.scaleOnCpuUtilization('CpuScaling', {
-        targetUtilizationPercent: clusterCapacityProps.cpuScalingTarget,
-      });
-    }
+
     this.ClusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
 
     const albSecurityGroup =
@@ -155,6 +145,15 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
       this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpInternalListener')
     );
   }
+
+  addCpuAutoScaling(props: Partial<CpuUtilizationScalingProps>): void {
+    this.ClusterAutoScalingGroup.scaleOnCpuUtilization('CpuScaling', {
+      ...props,
+      targetUtilizationPercent: 50,
+    });
+  }
+
+  // TODO: addMemoryScaling when monitory and metrics task is done (custom metric needed ?)
 }
 
 export class ImportedEcsSolarSystem extends ImportedSolarSystem implements EcsSolarSystem {
@@ -164,8 +163,8 @@ export class ImportedEcsSolarSystem extends ImportedSolarSystem implements EcsSo
   readonly HttpInternalListener: IApplicationListener;
   // readonly HttpsListener: IApplicationListener;
 
-  constructor(scope: Construct, galaxy: Galaxy, name: string) {
-    super(scope, galaxy, name);
+  constructor(scope: Construct, galaxy: Galaxy, props: ImportedSolarSystemProps) {
+    super(scope, galaxy, props);
 
     this.Cluster = RemoteCluster.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster'), this.Vpc);
     this.Alb = RemoteAlb.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'));
@@ -183,10 +182,13 @@ export class ImportedEcsSolarSystem extends ImportedSolarSystem implements EcsSo
 export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack implements EcsSolarSystemExtension {
   readonly Portal: EcsSolarSystem;
 
-  constructor(galaxy: GalaxyExtension, name: string, props?: StackProps) {
+  constructor(galaxy: GalaxyExtension, name: string, props?: SolarSystemExtensionStackProps) {
     super(galaxy, name, props);
 
     this.node.tryRemoveChild(this.Portal.node.id);
-    this.Portal = new ImportedEcsSolarSystem(this, this.Galaxy.Portal, this.Name);
+    this.Portal = new ImportedEcsSolarSystem(this, this.Galaxy.Portal, {
+      name: this.Name,
+      vpcProps: props?.vpcProps,
+    });
   }
 }

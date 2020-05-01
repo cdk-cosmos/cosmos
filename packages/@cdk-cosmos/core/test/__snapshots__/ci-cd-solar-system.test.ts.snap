@@ -1370,7 +1370,6 @@ def pick(dct, *keys):
             ],
           },
         ],
-        "SpotPrice": "0.02",
         "UserData": Object {
           "Fn::Base64": Object {
             "Fn::Join": Array [
@@ -1384,8 +1383,7 @@ echo ECS_CLUSTER=",
                 " >> /etc/ecs/ecs.config
 sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
 sudo service iptables save
-echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config
-echo ECS_ENABLE_SPOT_INSTANCE_DRAINING=true >> /etc/ecs/ecs.config",
+echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
               ],
             ],
           },
@@ -1473,21 +1471,6 @@ echo ECS_ENABLE_SPOT_INSTANCE_DRAINING=true >> /etc/ecs/ecs.config",
         ],
       },
       "Type": "AWS::SNS::Topic",
-    },
-    "ClusterCapacityScalingPolicyCpuScalingD2BA3728": Object {
-      "Properties": Object {
-        "AutoScalingGroupName": Object {
-          "Ref": "ClusterCapacityASGA6ED330E",
-        },
-        "PolicyType": "TargetTrackingScaling",
-        "TargetTrackingConfiguration": Object {
-          "PredefinedMetricSpecification": Object {
-            "PredefinedMetricType": "ASGAverageCPUUtilization",
-          },
-          "TargetValue": 80,
-        },
-      },
-      "Type": "AWS::AutoScaling::ScalingPolicy",
     },
     "ClusterEB0386A7": Object {
       "Properties": Object {
