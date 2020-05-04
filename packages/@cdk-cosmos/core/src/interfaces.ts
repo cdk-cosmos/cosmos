@@ -7,7 +7,6 @@ import { ICluster } from '@aws-cdk/aws-ecs';
 import { IApplicationLoadBalancer, IApplicationListener } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { IProject } from '@aws-cdk/aws-codebuild';
 import { IFunction } from '@aws-cdk/aws-lambda';
-import { SolarSystemStack } from './solar-system';
 
 export interface Bubble {
   Name: string;

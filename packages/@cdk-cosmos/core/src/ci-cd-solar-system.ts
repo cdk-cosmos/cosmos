@@ -1,5 +1,3 @@
-import { Construct, StackProps } from '@aws-cdk/core';
-
 import { Project } from '@aws-cdk/aws-codebuild';
 import { Role } from '@aws-cdk/aws-iam';
 import {

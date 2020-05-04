@@ -1,4 +1,4 @@
-import { Construct, StackProps } from '@aws-cdk/core';
+import { Construct } from '@aws-cdk/core';
 import { InstanceType, SecurityGroup, InterfaceVpcEndpointAwsService } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster, ClusterProps, AddCapacityOptions, CpuUtilizationScalingProps } from '@aws-cdk/aws-ecs';
 import {
