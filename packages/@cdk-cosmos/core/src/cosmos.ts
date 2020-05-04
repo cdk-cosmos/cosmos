@@ -6,6 +6,7 @@ import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { CrossAccountExportsFn } from '@cosmos-building-blocks/common';
+import { IFunction, Function } from '@aws-cdk/aws-lambda';
 import {
   RESOLVE,
   PATTERN,
@@ -20,30 +21,6 @@ import {
   RemoteCodeRepo,
   RemoteFunction,
 } from '.';
-import { IFunction, Function } from '@aws-cdk/aws-lambda';
-
-const stackName = (partition: string, name: string): string =>
-  RESOLVE(PATTERN.COSMOS, 'Cosmos', { Partition: partition, Name: name });
-
-const getPackageVersion: () => string = () => {
-  const file = fs.readFileSync(path.resolve(__dirname, '../package.json')).toString();
-  return JSON.parse(file).version as string;
-};
-
-export class CosmosLinkStack extends Stack implements CosmosLink {
-  readonly Cosmos: Cosmos;
-  readonly Name: string;
-
-  constructor(cosmos: Cosmos, props: StackProps) {
-    super(cosmos.Scope, RESOLVE(PATTERN.COSMOS, 'CosmosLink', cosmos), {
-      description: 'Cosmos: Resources to link the Cosmos, like Route53 zone delegation',
-      ...props,
-    });
-
-    this.Cosmos = cosmos;
-    this.Name = 'Link';
-  }
-}
 
 export interface CosmosStackProps extends StackProps {
   tld: string;
@@ -90,6 +67,7 @@ export class CosmosStack extends Stack implements Cosmos {
       repositoryName: this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Repo').toLowerCase(),
       description: `Core CDK Repo for ${this.Name} Cosmos.`,
     });
+    this.CdkRepo.Pattern = PATTERN.SINGLETON_COSMOS;
 
     this.RootZone = new HostedZone(this, 'RootZone', {
       zoneName: `${rootZone}.${tld}`.toLowerCase(),
@@ -130,6 +108,21 @@ export class CosmosStack extends Stack implements Cosmos {
   }
   AddSolarSystem(solarSystem: SolarSystem): void {
     this.SolarSystems.push(solarSystem);
+  }
+}
+
+export class CosmosLinkStack extends Stack implements CosmosLink {
+  readonly Cosmos: Cosmos;
+  readonly Name: string;
+
+  constructor(cosmos: Cosmos, props: StackProps) {
+    super(cosmos.Scope, RESOLVE(PATTERN.COSMOS, 'CosmosLink', cosmos), {
+      description: 'Cosmos: Resources to link the Cosmos, like Route53 zone delegation',
+      ...props,
+    });
+
+    this.Cosmos = cosmos;
+    this.Name = 'Link';
   }
 }
 
@@ -210,3 +203,11 @@ export class CosmosExtensionStack extends Stack implements CosmosExtension {
     this.SolarSystems.push(solarSystem);
   }
 }
+
+const stackName = (partition: string, name: string): string =>
+  RESOLVE(PATTERN.COSMOS, 'Cosmos', { Partition: partition, Name: name });
+
+const getPackageVersion: () => string = () => {
+  const file = fs.readFileSync(path.resolve(__dirname, '../package.json')).toString();
+  return JSON.parse(file).version as string;
+};
