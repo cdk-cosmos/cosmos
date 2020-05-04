@@ -1,21 +1,22 @@
 import '@aws-cdk/assert/jest';
-import { App } from '@aws-cdk/core';
+import { App, Stack } from '@aws-cdk/core';
 import { synthesizeStacks } from '../../../../src/test';
-import { BaseStack } from '../src/pocket';
+import { BaseStack } from '../src/base';
 import { Bucket } from '@aws-cdk/aws-s3';
 
 const app = new App();
 
-const stack = new BaseStack(app, 'Devops');
-stack.node.type = 'Cosmos';
-stack.setPrefix('Core');
-stack.setSuffix('v1');
+const stack = new BaseStack(app, 'Devops', {
+  type: 'Cosmos',
+  partition: 'Core',
+});
 
-const bucket = new Bucket(stack, 'Bucket');
-// bucket.node.pattern=""
+new Bucket(stack, 'Bucket');
+new Bucket(stack, 'Bucket2');
 
 const [synth] = synthesizeStacks(stack);
 
 test('should be a stack', () => {
+  console.log(synth.stackName);
   expect(synth.template).toMatchSnapshot();
 });

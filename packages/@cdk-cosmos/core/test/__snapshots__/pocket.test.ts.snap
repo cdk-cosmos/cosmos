@@ -3,7 +3,12 @@
 exports[`should be a stack 1`] = `
 Object {
   "Resources": Object {
-    "CoreDevopsBucketv1DBB47708": Object {
+    "Bucket": Object {
+      "DeletionPolicy": "Retain",
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "Bucket2": Object {
       "DeletionPolicy": "Retain",
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",

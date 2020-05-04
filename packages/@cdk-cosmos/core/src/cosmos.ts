@@ -67,7 +67,6 @@ export class CosmosStack extends Stack implements Cosmos {
       repositoryName: this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Repo').toLowerCase(),
       description: `Core CDK Repo for ${this.Name} Cosmos.`,
     });
-    this.CdkRepo.Pattern = PATTERN.SINGLETON_COSMOS;
 
     this.RootZone = new HostedZone(this, 'RootZone', {
       zoneName: `${rootZone}.${tld}`.toLowerCase(),
