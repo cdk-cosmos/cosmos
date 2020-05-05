@@ -52,17 +52,17 @@ export class EcsService extends Construct {
       routingProps,
     } = props;
 
-    this.LogGroup = new LogGroup(this, 'LogGroup', {
-      logGroupName: `${id}-Logs`.replace('-', '/'),
+    this.LogGroup = new LogGroup(this, 'Logs', {
+      // logGroupName: `${id}-Logs`.replace('-', '/'),
     });
 
     this.TaskDefinition = new Ec2TaskDefinition(this, 'Task', {
-      family: `${id}-Task`,
+      // family: `${id}-Task`,
     });
 
-    this.Container = this.TaskDefinition.addContainer('AppContainer', {
+    this.Container = this.TaskDefinition.addContainer('Container', {
       memoryLimitMiB: 256,
-      logging: LogDrivers.awsLogs({ logGroup: this.LogGroup, streamPrefix: `AppContainer` }),
+      logging: LogDrivers.awsLogs({ logGroup: this.LogGroup, streamPrefix: `Container` }),
       ...containerProps,
     });
 
@@ -75,20 +75,20 @@ export class EcsService extends Construct {
     this.Service = new Ec2Service(this, 'Service', {
       desiredCount: 1,
       ...serviceProps,
-      serviceName: `${id}-Service`,
+      // serviceName: `${id}-Service`,
       taskDefinition: this.TaskDefinition,
       cluster: cluster,
     });
 
-    const targetGroupName = `${id}-TG`;
+    // const targetGroupName = `${id}-TG`;
     this.TargetGroup = new ApplicationTargetGroup(this, 'ServiceTargetGroup', {
       ...targetGroupProps,
       vpc: vpc,
-      targetGroupName: targetGroupName.length <= 32 ? targetGroupName : undefined,
+      // targetGroupName: targetGroupName.length <= 32 ? targetGroupName : undefined,
       protocol: ApplicationProtocol.HTTP,
       targets: [
         this.Service.loadBalancerTarget({
-          containerName: 'AppContainer',
+          containerName: 'Container',
         }),
       ],
       deregistrationDelay: Duration.seconds(0),

@@ -58,7 +58,7 @@ export class AppNodePipeline extends Construct {
     super(scope, id);
 
     const {
-      name = id,
+      // name = id,
       codeRepo,
       codeBranch = 'master',
       buildRole = undefined,
@@ -72,7 +72,7 @@ export class AppNodePipeline extends Construct {
     });
 
     this.Build = new Project(this, 'Build', {
-      projectName: `${name}Build`,
+      // projectName: `${name}Build`,
       role: buildRole,
       source: Source.codeCommit({
         repository: codeRepo,
@@ -95,7 +95,7 @@ export class AppNodePipeline extends Construct {
     const sourceOutput = new Artifact('CodeOutput');
 
     this.Pipeline = new Pipeline(this, 'Pipeline', {
-      pipelineName: name,
+      // pipelineName: name,
       artifactBucket: artifactBucket,
       stages: [
         {

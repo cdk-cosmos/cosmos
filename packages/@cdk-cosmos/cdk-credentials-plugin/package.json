@@ -25,9 +25,6 @@
     "format": "prettier --write **/*.ts !**/*.d.ts",
     "clean": "rm -rf lib"
   },
-  "dependencies": {
-    "@cdk-cosmos/core": "^0.3.2"
-  },
   "peerDependencies": {
     "aws-cdk": "^1.31.0"
   },
