@@ -1,5 +1,11 @@
 import { Construct } from '@aws-cdk/core';
-import { VpcProps, Vpc, SubnetType, GatewayVpcEndpointAwsService } from '@aws-cdk/aws-ec2';
+import {
+  VpcProps,
+  Vpc,
+  SubnetType,
+  GatewayVpcEndpointAwsService,
+  InterfaceVpcEndpointAwsService,
+} from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 
 export interface CoreVpcProps extends Partial<VpcProps> {
@@ -30,4 +36,27 @@ export class CoreVpc extends Vpc {
       subnets: [{ subnetGroupName: 'App' }],
     });
   }
+}
+
+export function addEcsEndpoints(vpc: Vpc): void {
+  vpc.addInterfaceEndpoint('EcsEndpoint', {
+    service: InterfaceVpcEndpointAwsService.ECS,
+    subnets: { subnetGroupName: 'App' },
+  });
+  vpc.addInterfaceEndpoint('EcsAgentEndpoint', {
+    service: InterfaceVpcEndpointAwsService.ECS_AGENT,
+    subnets: { subnetGroupName: 'App' },
+  });
+  vpc.addInterfaceEndpoint('EcsTelemetryEndpoint', {
+    service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
+    subnets: { subnetGroupName: 'App' },
+  });
+  vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
+    service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
+    subnets: { subnetGroupName: 'App' },
+  });
+  vpc.addInterfaceEndpoint('CloudWatchLogsEndpoint', {
+    service: InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
+    subnets: { subnetGroupName: 'App' },
+  });
 }

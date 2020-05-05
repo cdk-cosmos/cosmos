@@ -6,7 +6,7 @@ Object {
   "Outputs": Object {
     "ExportsOutputRefSharedVpc": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:CosGalExportsOutputRefSharedVpcCD9A3AB4",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
       },
       "Value": Object {
         "Ref": "SharedVpc",
@@ -14,7 +14,7 @@ Object {
     },
     "ExportsOutputRefSharedVpcAppSubnet1RouteTable": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:CosGalExportsOutputRefSharedVpcAppSubnet1RouteTableD56D8725",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1RouteTable4F065E1D",
       },
       "Value": Object {
         "Ref": "SharedVpcAppSubnet1RouteTable",
@@ -22,7 +22,7 @@ Object {
     },
     "ExportsOutputRefSharedVpcAppSubnet1Subnet": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:CosGalExportsOutputRefSharedVpcAppSubnet1Subnet34DDCA74",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
       },
       "Value": Object {
         "Ref": "SharedVpcAppSubnet1Subnet",
@@ -30,7 +30,7 @@ Object {
     },
     "ExportsOutputRefSharedVpcAppSubnet2RouteTable": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:CosGalExportsOutputRefSharedVpcAppSubnet2RouteTable567EB6BD",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2RouteTable885CD303",
       },
       "Value": Object {
         "Ref": "SharedVpcAppSubnet2RouteTable",
@@ -38,7 +38,7 @@ Object {
     },
     "ExportsOutputRefSharedVpcAppSubnet2Subnet": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:CosGalExportsOutputRefSharedVpcAppSubnet2SubnetEDD1191C",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
       },
       "Value": Object {
         "Ref": "SharedVpcAppSubnet2Subnet",
@@ -55,7 +55,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal/Gal/SharedVpc",
+            "Value": "Cos/Gal/SharedVpc",
           },
         ],
       },
@@ -66,7 +66,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal/Gal/SharedVpc/AppSubnet1",
+            "Value": "Cos/Gal/SharedVpc/AppSubnet1",
           },
         ],
         "VpcId": Object {
@@ -94,7 +94,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal/Gal/SharedVpc/AppSubnet1",
+            "Value": "Cos/Gal/SharedVpc/AppSubnet1",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -116,7 +116,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal/Gal/SharedVpc/AppSubnet2",
+            "Value": "Cos/Gal/SharedVpc/AppSubnet2",
           },
         ],
         "VpcId": Object {
@@ -144,7 +144,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal/Gal/SharedVpc/AppSubnet2",
+            "Value": "Cos/Gal/SharedVpc/AppSubnet2",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -201,7 +201,7 @@ Object {
     },
     "SharedVpcCloudWatchLogsEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Cos/Gal/Gal/SharedVpc/CloudWatchLogsEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/SharedVpc/CloudWatchLogsEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -240,7 +240,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal/Gal/SharedVpc",
+            "Value": "Cos/Gal/SharedVpc",
           },
         ],
         "VpcId": Object {
@@ -289,7 +289,7 @@ Object {
     },
     "SharedVpcEcrDockerEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Cos/Gal/Gal/SharedVpc/EcrDockerEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/SharedVpc/EcrDockerEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -328,7 +328,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal/Gal/SharedVpc",
+            "Value": "Cos/Gal/SharedVpc",
           },
         ],
         "VpcId": Object {
@@ -377,7 +377,7 @@ Object {
     },
     "SharedVpcEcsAgentEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Cos/Gal/Gal/SharedVpc/EcsAgentEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/SharedVpc/EcsAgentEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -416,7 +416,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal/Gal/SharedVpc",
+            "Value": "Cos/Gal/SharedVpc",
           },
         ],
         "VpcId": Object {
@@ -465,7 +465,7 @@ Object {
     },
     "SharedVpcEcsEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Cos/Gal/Gal/SharedVpc/EcsEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/SharedVpc/EcsEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -504,7 +504,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal/Gal/SharedVpc",
+            "Value": "Cos/Gal/SharedVpc",
           },
         ],
         "VpcId": Object {
@@ -553,7 +553,7 @@ Object {
     },
     "SharedVpcEcsTelemetryEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Cos/Gal/Gal/SharedVpc/EcsTelemetryEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/SharedVpc/EcsTelemetryEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -592,7 +592,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal/Gal/SharedVpc",
+            "Value": "Cos/Gal/SharedVpc",
           },
         ],
         "VpcId": Object {
@@ -703,7 +703,7 @@ Object {
         "Name": "CoreGalSysVpcId",
       },
       "Value": Object {
-        "Fn::ImportValue": "CoreCosGalGalaxy:CosGalExportsOutputRefSharedVpcCD9A3AB4",
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
       },
     },
     "VpcIsolatedSubnetRouteTables": Object {
@@ -715,10 +715,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:CosGalExportsOutputRefSharedVpcAppSubnet1RouteTableD56D8725",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1RouteTable4F065E1D",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:CosGalExportsOutputRefSharedVpcAppSubnet2RouteTable567EB6BD",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2RouteTable885CD303",
             },
           ],
         ],
@@ -733,10 +733,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:CosGalExportsOutputRefSharedVpcAppSubnet1Subnet34DDCA74",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:CosGalExportsOutputRefSharedVpcAppSubnet2SubnetEDD1191C",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
             },
           ],
         ],
@@ -783,7 +783,7 @@ Object {
         "VPCs": Array [
           Object {
             "VPCId": Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:CosGalExportsOutputRefSharedVpcCD9A3AB4",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
             },
             "VPCRegion": "region",
           },
@@ -948,7 +948,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal2/Gal2/Sys2/Sys2/Vpc",
+            "Value": "Cos/Gal2/Sys2/Vpc",
           },
         ],
       },
@@ -959,7 +959,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal2/Gal2/Sys2/Sys2/Vpc/AppSubnet1",
+            "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet1",
           },
         ],
         "VpcId": Object {
@@ -987,7 +987,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal2/Gal2/Sys2/Sys2/Vpc/AppSubnet1",
+            "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet1",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -1009,7 +1009,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal2/Gal2/Sys2/Sys2/Vpc/AppSubnet2",
+            "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet2",
           },
         ],
         "VpcId": Object {
@@ -1037,7 +1037,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Cos/Cos/Gal2/Gal2/Sys2/Sys2/Vpc/AppSubnet2",
+            "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet2",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -1157,6 +1157,6 @@ Object {
 
 exports[`SolarSystem Extension should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos: App resources dependant on each SolarSystem, like Services and Databases.",
+  "Description": "Cosmos Extension: App resources dependant on each SolarSystem, like Services and Databases.",
 }
 `;

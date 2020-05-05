@@ -2,7 +2,7 @@
 
 exports[`ECS-Solar-System Extension should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos: App resources dependant on each SolarSystem, like Services and Databases.",
+  "Description": "Cosmos Extension: App resources dependant on each SolarSystem, like Services and Databases.",
 }
 `;
 
@@ -10,80 +10,80 @@ exports[`ECS-Solar-System should match snapshot 1`] = `
 Object {
   "Description": "Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.",
   "Outputs": Object {
-    "AlbAlbArn044BCECB": Object {
+    "AlbAlbArn": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Alb-Arn",
+        "Name": "CoreGalSysAlbArn",
       },
       "Value": Object {
-        "Ref": "Alb16C2F182",
+        "Ref": "Alb",
       },
     },
-    "AlbAlbSecurityGroupIdD444E58A": Object {
+    "AlbAlbSecurityGroupId": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Alb-SecurityGroupId",
+        "Name": "CoreGalSysAlbSecurityGroupId",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "AlbSecurityGroup86A59E99",
+          "AlbSecurityGroup",
           "GroupId",
         ],
       },
     },
-    "AlbHttpListenerAlArn54F636C2": Object {
+    "AlbHttpListenerAlArn": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-HttpListener-Arn",
+        "Name": "CoreGalSysHttpListenerArn",
       },
       "Value": Object {
-        "Ref": "AlbHttpListener00C8B33E",
+        "Ref": "AlbHttpListener",
       },
     },
-    "AlbHttpListenerAlSecurityGroupIdBB00BCEE": Object {
+    "AlbHttpListenerAlSecurityGroupId": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-HttpListener-SecurityGroupId",
+        "Name": "CoreGalSysHttpListenerSecurityGroupId",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "AlbSecurityGroup86A59E99",
+          "AlbSecurityGroup",
           "GroupId",
         ],
       },
     },
-    "ClusterClusterNameEB26049E": Object {
+    "ClusterClusterName": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Cluster-Name",
+        "Name": "CoreGalSysClusterName",
       },
       "Value": Object {
-        "Ref": "ClusterEB0386A7",
+        "Ref": "Cluster",
       },
     },
-    "ClusterClusterSecurityGroupAAF8FE85": Object {
+    "ClusterClusterSecurityGroup": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Cluster-SecurityGroup",
+        "Name": "CoreGalSysClusterSecurityGroup",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "ClusterCapacityInstanceSecurityGroup2D6F9ADD",
+          "ClusterCapacityInstanceSecurityGroup",
           "GroupId",
         ],
       },
     },
-    "PrivateZoneZoneId22821223": Object {
+    "PrivateZoneZoneId": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-PrivateZone-Id",
+        "Name": "CoreGalSysPrivateZoneId",
       },
       "Value": Object {
-        "Ref": "PrivateZone27242E85",
+        "Ref": "PrivateZone",
       },
     },
-    "PrivateZoneZoneName34E4A3CE": Object {
+    "PrivateZoneZoneName": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-PrivateZone-Name",
+        "Name": "CoreGalSysPrivateZoneName",
       },
-      "Value": "dev.internal",
+      "Value": "sys.internal",
     },
     "VpcAZs": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Vpc-AZs",
+        "Name": "CoreGalSysVpcAZs",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -111,25 +111,25 @@ Object {
     },
     "VpcId": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Vpc-Id",
+        "Name": "CoreGalSysVpcId",
       },
       "Value": Object {
-        "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
       },
     },
     "VpcIsolatedSubnetRouteTables": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Vpc-IsolatedSubnetRouteTableIds",
+        "Name": "CoreGalSysVpcIsolatedSubnetRouteTableIds",
       },
       "Value": Object {
         "Fn::Join": Array [
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet1RouteTable88DA0EB91721318D",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1RouteTable4F065E1D",
             },
             Object {
-              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet2RouteTableF83F0115B365CB82",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2RouteTable885CD303",
             },
           ],
         ],
@@ -137,51 +137,51 @@ Object {
     },
     "VpcIsolatedSubnets": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Vpc-IsolatedSubnetIds",
+        "Name": "CoreGalSysVpcIsolatedSubnetIds",
       },
       "Value": Object {
         "Fn::Join": Array [
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet1SubnetE53AA4B285750DC9",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
             },
             Object {
-              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet2SubnetC518E570A0A41799",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
             },
           ],
         ],
       },
     },
-    "ZoneNameServers105FD0B4": Object {
+    "ZoneNameServers": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Zone-NameServers",
+        "Name": "CoreGalSysZoneNameServers",
       },
       "Value": Object {
         "Fn::Join": Array [
           ",",
           Object {
             "Fn::GetAtt": Array [
-              "ZoneA5DE4B68",
+              "Zone",
               "NameServers",
             ],
           },
         ],
       },
     },
-    "ZoneZoneIdD97F9BE1": Object {
+    "ZoneZoneId": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Zone-Id",
+        "Name": "CoreGalSysZoneId",
       },
       "Value": Object {
-        "Ref": "ZoneA5DE4B68",
+        "Ref": "Zone",
       },
     },
-    "ZoneZoneName61A65788": Object {
+    "ZoneZoneName": Object {
       "Export": Object {
-        "Name": "Core-Mgt-Dev-Zone-Name",
+        "Name": "CoreGalSysZoneName",
       },
-      "Value": "dev.test.com",
+      "Value": "sys.cos.com",
     },
   },
   "Parameters": Object {
@@ -191,73 +191,73 @@ Object {
     },
   },
   "Resources": Object {
-    "Alb16C2F182": Object {
+    "Alb": Object {
       "Properties": Object {
-        "Name": "Core-Mgt-Dev-Alb",
+        "Name": "CoreGalSysAlb",
         "Scheme": "internal",
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
-              "AlbSecurityGroup86A59E99",
+              "AlbSecurityGroup",
               "GroupId",
             ],
           },
         ],
         "Subnets": Array [
           Object {
-            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet1SubnetE53AA4B285750DC9",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
           },
           Object {
-            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet2SubnetC518E570A0A41799",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
           },
         ],
         "Type": "application",
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
     },
-    "AlbHttpListener00C8B33E": Object {
+    "AlbHttpListener": Object {
       "Properties": Object {
         "DefaultActions": Array [
           Object {
             "TargetGroupArn": Object {
-              "Ref": "DefaultTargetGroup00992EAD",
+              "Ref": "DefaultTargetGroup",
             },
             "Type": "forward",
           },
         ],
         "LoadBalancerArn": Object {
-          "Ref": "Alb16C2F182",
+          "Ref": "Alb",
         },
         "Port": 80,
         "Protocol": "HTTP",
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
-    "AlbRecord6ECCAA7E": Object {
+    "AlbRecord": Object {
       "Properties": Object {
         "AliasTarget": Object {
           "DNSName": Object {
             "Fn::GetAtt": Array [
-              "Alb16C2F182",
+              "Alb",
               "DNSName",
             ],
           },
           "HostedZoneId": Object {
             "Fn::GetAtt": Array [
-              "Alb16C2F182",
+              "Alb",
               "CanonicalHostedZoneID",
             ],
           },
         },
         "HostedZoneId": Object {
-          "Ref": "ZoneA5DE4B68",
+          "Ref": "Zone",
         },
-        "Name": "dev.test.com.",
+        "Name": "sys.cos.com.",
         "Type": "A",
       },
       "Type": "AWS::Route53::RecordSet",
     },
-    "AlbSecurityGroup86A59E99": Object {
+    "AlbSecurityGroup": Object {
       "Properties": Object {
         "GroupDescription": "SecurityGroup for ALB.",
         "SecurityGroupEgress": Array [
@@ -277,16 +277,22 @@ Object {
           },
         ],
         "VpcId": Object {
-          "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "ClusterCapacityASGA6ED330E": Object {
+    "Cluster": Object {
+      "Properties": Object {
+        "ClusterName": "CoreGalSysCluster",
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "ClusterCapacityASG": Object {
       "Properties": Object {
         "DesiredCapacity": "1",
         "LaunchConfigurationName": Object {
-          "Ref": "ClusterCapacityLaunchConfigC44566A4",
+          "Ref": "ClusterCapacityLaunchConfig",
         },
         "MaxSize": "5",
         "MinSize": "1",
@@ -294,15 +300,15 @@ Object {
           Object {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
         "VPCZoneIdentifier": Array [
           Object {
-            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet1SubnetE53AA4B285750DC9",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
           },
           Object {
-            "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpcAppSubnet2SubnetC518E570A0A41799",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
           },
         ],
       },
@@ -316,26 +322,10 @@ Object {
         },
       },
     },
-    "ClusterCapacityDrainECSHookFunctionAllowInvokeCoreTestMgtDevSolarSystemClusterCapacityLifecycleHookDrainHookTopicCC9A1D79A98739B1": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "ClusterCapacityDrainECSHookFunctionF75C9A9F",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": Object {
-          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "ClusterCapacityDrainECSHookFunctionF75C9A9F": Object {
+    "ClusterCapacityDrainECSHookFunction": Object {
       "DependsOn": Array [
-        "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA",
-        "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+        "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicy",
+        "ClusterCapacityDrainECSHookFunctionServiceRole",
       ],
       "Properties": Object {
         "Code": Object {
@@ -414,14 +404,14 @@ def pick(dct, *keys):
         "Environment": Object {
           "Variables": Object {
             "CLUSTER": Object {
-              "Ref": "ClusterEB0386A7",
+              "Ref": "Cluster",
             },
           },
         },
         "Handler": "index.lambda_handler",
         "Role": Object {
           "Fn::GetAtt": Array [
-            "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+            "ClusterCapacityDrainECSHookFunctionServiceRole",
             "Arn",
           ],
         },
@@ -429,14 +419,30 @@ def pick(dct, *keys):
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
         "Timeout": 310,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB": Object {
+    "ClusterCapacityDrainECSHookFunctionAllowInvokeCosGalSysClusterCapacityLifecycleHookDrainHookTopic2C16A780": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "ClusterCapacityDrainECSHookFunction",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": Object {
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ClusterCapacityDrainECSHookFunctionServiceRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -467,13 +473,13 @@ def pick(dct, *keys):
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA": Object {
+    "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -508,7 +514,7 @@ def pick(dct, *keys):
                     },
                     ":autoScalingGroup:*:autoScalingGroupName/",
                     Object {
-                      "Ref": "ClusterCapacityASGA6ED330E",
+                      "Ref": "ClusterCapacityASG",
                     },
                   ],
                 ],
@@ -531,7 +537,7 @@ def pick(dct, *keys):
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "ClusterEB0386A7",
+                  "Cluster",
                   "Arn",
                 ],
               },
@@ -545,7 +551,7 @@ def pick(dct, *keys):
                 "ArnEquals": Object {
                   "ecs:cluster": Object {
                     "Fn::GetAtt": Array [
-                      "ClusterEB0386A7",
+                      "Cluster",
                       "Arn",
                     ],
                   },
@@ -557,41 +563,41 @@ def pick(dct, *keys):
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA",
+        "PolicyName": "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+            "Ref": "ClusterCapacityDrainECSHookFunctionServiceRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ClusterCapacityDrainECSHookFunctionTopic49CF7031": Object {
+    "ClusterCapacityDrainECSHookFunctionTopic": Object {
       "Properties": Object {
         "Endpoint": Object {
           "Fn::GetAtt": Array [
-            "ClusterCapacityDrainECSHookFunctionF75C9A9F",
+            "ClusterCapacityDrainECSHookFunction",
             "Arn",
           ],
         },
         "Protocol": "lambda",
         "TopicArn": Object {
-          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
         },
       },
       "Type": "AWS::SNS::Subscription",
     },
-    "ClusterCapacityInstanceProfileCD41BDF7": Object {
+    "ClusterCapacityInstanceProfile": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityInstanceRole4A69070A",
+            "Ref": "ClusterCapacityInstanceRole",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "ClusterCapacityInstanceRole4A69070A": Object {
+    "ClusterCapacityInstanceRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -632,13 +638,13 @@ def pick(dct, *keys):
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D": Object {
+    "ClusterCapacityInstanceRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -661,18 +667,18 @@ def pick(dct, *keys):
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D",
+        "PolicyName": "ClusterCapacityInstanceRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityInstanceRole4A69070A",
+            "Ref": "ClusterCapacityInstanceRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ClusterCapacityInstanceSecurityGroup2D6F9ADD": Object {
+    "ClusterCapacityInstanceSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity/InstanceSecurityGroup",
+        "GroupDescription": "Cos/Gal/Sys/Cluster/Capacity/InstanceSecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -683,23 +689,23 @@ def pick(dct, *keys):
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
         "VpcId": Object {
-          "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "ClusterCapacityLaunchConfigC44566A4": Object {
+    "ClusterCapacityLaunchConfig": Object {
       "DependsOn": Array [
-        "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D",
-        "ClusterCapacityInstanceRole4A69070A",
+        "ClusterCapacityInstanceRoleDefaultPolicy",
+        "ClusterCapacityInstanceRole",
       ],
       "Properties": Object {
         "IamInstanceProfile": Object {
-          "Ref": "ClusterCapacityInstanceProfileCD41BDF7",
+          "Ref": "ClusterCapacityInstanceProfile",
         },
         "ImageId": Object {
           "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter",
@@ -708,7 +714,7 @@ def pick(dct, *keys):
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
-              "ClusterCapacityInstanceSecurityGroup2D6F9ADD",
+              "ClusterCapacityInstanceSecurityGroup",
               "GroupId",
             ],
           },
@@ -721,7 +727,7 @@ def pick(dct, *keys):
                 "#!/bin/bash
 echo ECS_CLUSTER=",
                 Object {
-                  "Ref": "ClusterEB0386A7",
+                  "Ref": "Cluster",
                 },
                 " >> /etc/ecs/ecs.config
 sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
@@ -734,31 +740,31 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
-    "ClusterCapacityLifecycleHookDrainHook9C5B4B9E": Object {
+    "ClusterCapacityLifecycleHookDrainHook": Object {
       "DependsOn": Array [
-        "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B",
-        "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+        "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy",
+        "ClusterCapacityLifecycleHookDrainHookRole",
       ],
       "Properties": Object {
         "AutoScalingGroupName": Object {
-          "Ref": "ClusterCapacityASGA6ED330E",
+          "Ref": "ClusterCapacityASG",
         },
         "DefaultResult": "CONTINUE",
         "HeartbeatTimeout": 300,
         "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
         "NotificationTargetARN": Object {
-          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
         },
         "RoleARN": Object {
           "Fn::GetAtt": Array [
-            "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+            "ClusterCapacityLifecycleHookDrainHookRole",
             "Arn",
           ],
         },
       },
       "Type": "AWS::AutoScaling::LifecycleHook",
     },
-    "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9": Object {
+    "ClusterCapacityLifecycleHookDrainHookRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -775,13 +781,13 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B": Object {
+    "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -789,59 +795,53 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
               "Action": "sns:Publish",
               "Effect": "Allow",
               "Resource": Object {
-                "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+                "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B",
+        "PolicyName": "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+            "Ref": "ClusterCapacityLifecycleHookDrainHookRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ClusterCapacityLifecycleHookDrainHookTopic1768B95F": Object {
+    "ClusterCapacityLifecycleHookDrainHookTopic": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Test-Mgt-Dev-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
       },
       "Type": "AWS::SNS::Topic",
     },
-    "ClusterEB0386A7": Object {
-      "Properties": Object {
-        "ClusterName": "Core-Mgt-Dev-Cluster",
-      },
-      "Type": "AWS::ECS::Cluster",
-    },
-    "DefaultTargetGroup00992EAD": Object {
+    "DefaultTargetGroup": Object {
       "Properties": Object {
         "Port": 80,
         "Protocol": "HTTP",
         "TargetType": "instance",
         "VpcId": Object {
-          "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
         },
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
-    "PrivateZone27242E85": Object {
+    "PrivateZone": Object {
       "Properties": Object {
         "HostedZoneConfig": Object {
-          "Comment": "Core Main Private Zone for Dev SolarSystem",
+          "Comment": "Core Main Private Zone for Sys SolarSystem",
         },
-        "Name": "dev.internal.",
+        "Name": "sys.internal.",
         "VPCs": Array [
           Object {
             "VPCId": Object {
-              "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
             },
             "VPCRegion": Object {
               "Ref": "AWS::Region",
@@ -851,25 +851,25 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::Route53::HostedZone",
     },
-    "ZoneA5DE4B68": Object {
+    "Zone": Object {
       "Properties": Object {
         "HostedZoneConfig": Object {
-          "Comment": "Core Main Zone for Dev SolarSystem",
+          "Comment": "Core Main Zone for Sys SolarSystem",
         },
-        "Name": "dev.test.com.",
+        "Name": "sys.cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",
     },
-    "ZoneDelegationAE61034B": Object {
+    "ZoneDelegation": Object {
       "Properties": Object {
-        "Comment": "Core Zone Delegation for Dev SolarSystem.",
+        "Comment": "Core Zone Delegation for Sys SolarSystem.",
         "HostedZoneId": Object {
-          "Fn::ImportValue": "Core-Test-Cosmos:ExportsOutputRefRootZone831A5F27FABD99AF",
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputRefRootZone2F3E9CEF",
         },
-        "Name": "dev.test.com.",
+        "Name": "sys.cos.com.",
         "ResourceRecords": Object {
           "Fn::GetAtt": Array [
-            "ZoneA5DE4B68",
+            "Zone",
             "NameServers",
           ],
         },

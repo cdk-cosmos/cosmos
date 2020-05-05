@@ -11,18 +11,13 @@
 //   CiCdSolarSystemExtension,
 // } from './interfaces';
 
-export { CosmosCoreStack, CosmosCoreProps, CosmosExtensionStack } from './cosmos';
+export { CosmosCoreStack, CosmosCoreStackProps, CosmosExtensionStack } from './cosmos';
 
 export { GalaxyCoreStack, GalaxyCoreStackProps, GalaxyExtensionStack } from './galaxy';
 
-export { SolarSystemCoreStack, SolarSystemCoreProps, SolarSystemExtensionStack } from './solar-system';
+export { SolarSystemCoreStack, SolarSystemCoreStackProps, SolarSystemExtensionStack } from './solar-system';
 
-// export {
-//   EcsSolarSystemStack,
-//   EcsSolarSystemProps,
-//   ImportedEcsSolarSystem,
-//   EcsSolarSystemExtensionStack,
-// } from './ecs-solar-system';
+export { EcsSolarSystemCoreStack, EcsSolarSystemCoreProps, EcsSolarSystemExtensionStack } from './ecs-solar-system';
 
 // export {
 //   CiCdSolarSystemStack,

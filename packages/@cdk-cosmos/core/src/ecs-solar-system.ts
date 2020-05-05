@@ -1,5 +1,5 @@
 import { Construct, StackProps } from '@aws-cdk/core';
-import { InstanceType, SecurityGroup, InterfaceVpcEndpointAwsService } from '@aws-cdk/aws-ec2';
+import { InstanceType, SecurityGroup } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster, ClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
@@ -14,24 +14,31 @@ import {
 import { ManagedPolicy } from '@aws-cdk/aws-iam';
 import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
+import { IGalaxyCore, IGalaxyExtension } from './galaxy';
 import {
-  PATTERN,
-  Galaxy,
-  GalaxyExtension,
-  EcsSolarSystem,
-  EcsSolarSystemExtension,
-  SolarSystemStack,
-  SolarSystemProps,
-  ImportedSolarSystem,
+  ISolarSystemCore,
+  ISolarSystemExtension,
+  SolarSystemCoreStack,
+  SolarSystemCoreStackProps,
+  ImportedSolarSystemCore,
   SolarSystemExtensionStack,
-  RemoteCluster,
-  RemoteAlb,
-  RemoteApplicationListener,
-} from '.';
+} from './solar-system';
+import { CoreVpcProps, addEcsEndpoints } from './components/core-vpc';
+import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from './helpers/remote';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface EcsSolarSystemProps extends SolarSystemProps {
-  vpcProps?: SolarSystemProps['vpcProps'] & {
+export interface IEcsSolarSystemCore extends ISolarSystemCore {
+  cluster: ICluster;
+  alb: IApplicationLoadBalancer;
+  httpListener: IApplicationListener;
+  // HttpsListener: IApplicationListener;
+}
+
+export interface IEcsSolarSystemExtension extends ISolarSystemExtension {
+  portal: IEcsSolarSystemCore;
+}
+
+export interface EcsSolarSystemCoreProps extends SolarSystemCoreStackProps {
+  vpcProps?: Partial<CoreVpcProps> & {
     defaultEndpoints?: boolean;
   };
   clusterProps?: Partial<ClusterProps>;
@@ -39,46 +46,30 @@ export interface EcsSolarSystemProps extends SolarSystemProps {
   albProps?: Partial<ApplicationLoadBalancerProps>;
 }
 
-export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSystem {
-  readonly Cluster: Cluster;
-  readonly Alb: ApplicationLoadBalancer;
-  readonly HttpListener: ApplicationListener;
+export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEcsSolarSystemCore {
+  readonly cluster: Cluster;
+  readonly alb: ApplicationLoadBalancer;
+  readonly httpListener: ApplicationListener;
   // readonly HttpsListener: ApplicationListener;
 
-  constructor(galaxy: Galaxy, name: string, props?: EcsSolarSystemProps) {
-    super(galaxy, name, props);
+  constructor(galaxy: IGalaxyCore, id: string, props?: EcsSolarSystemCoreProps) {
+    super(galaxy, id, props);
 
-    const { vpc, vpcProps = {}, clusterProps = {}, clusterCapacityProps = {}, albProps = {} } = props || {};
+    const { vpcProps = {}, clusterProps = {}, clusterCapacityProps = {}, albProps = {} } = props || {};
     const { defaultEndpoints = true } = vpcProps;
 
-    // Only add endpoints if this component created the Vpc. ie vpc was not passed in as a prop.
-    if (!vpc) {
-      if (defaultEndpoints) {
-        this.Vpc.addInterfaceEndpoint('EcsEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECS,
-        });
-        this.Vpc.addInterfaceEndpoint('EcsAgentEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECS_AGENT,
-        });
-        this.Vpc.addInterfaceEndpoint('EcsTelemetryEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
-        });
-        this.Vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
-        });
-        this.Vpc.addInterfaceEndpoint('CloudWatchLogsEndpoint', {
-          service: InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
-        });
-      }
+    // Only add endpoints if this component owens the Vpc.
+    if (this.vpc.node.scope === this) {
+      if (defaultEndpoints) addEcsEndpoints(this.vpc);
     }
 
-    this.Cluster = new Cluster(this, 'Cluster', {
-      vpc: this.Vpc,
+    this.cluster = new Cluster(this, 'Cluster', {
+      vpc: this.vpc,
       ...clusterProps,
-      clusterName: this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster'),
+      clusterName: this.singletonId('Cluster'),
     });
 
-    const capacity = this.Cluster.addCapacity('Capacity', {
+    const capacity = this.cluster.addCapacity('Capacity', {
       vpcSubnets: { subnetGroupName: 'App' },
       instanceType: new InstanceType('t2.medium'),
       desiredCapacity: 1,
@@ -91,29 +82,29 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
     const albSecurityGroup =
       albProps.securityGroup ||
       new SecurityGroup(this, 'AlbSecurityGroup', {
-        vpc: this.Vpc,
+        vpc: this.vpc,
         description: 'SecurityGroup for ALB.',
         allowAllOutbound: true,
       });
 
-    this.Alb = new ApplicationLoadBalancer(this, 'Alb', {
+    this.alb = new ApplicationLoadBalancer(this, 'Alb', {
       vpcSubnets: { subnetGroupName: 'App' },
       ...albProps,
-      vpc: this.Vpc,
+      vpc: this.vpc,
       securityGroup: albSecurityGroup,
-      loadBalancerName: this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'),
+      loadBalancerName: this.singletonId('Alb'),
     });
 
     new ARecord(this, 'AlbRecord', {
-      zone: this.Zone,
-      target: RecordTarget.fromAlias(new LoadBalancerTarget(this.Alb)),
+      zone: this.zone,
+      target: RecordTarget.fromAlias(new LoadBalancerTarget(this.alb)),
     });
 
-    this.HttpListener = this.Alb.addListener('HttpListener', {
+    this.httpListener = this.alb.addListener('HttpListener', {
       protocol: ApplicationProtocol.HTTP,
       defaultTargetGroups: [
         new ApplicationTargetGroup(this, 'DefaultTargetGroup', {
-          vpc: this.Vpc,
+          vpc: this.vpc,
           protocol: ApplicationProtocol.HTTP,
           targetType: TargetType.INSTANCE,
         }),
@@ -128,37 +119,34 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
     //   open: true
     // });
 
-    RemoteCluster.export(this.Cluster, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster'));
-    RemoteAlb.export(this.Alb, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'));
-    RemoteApplicationListener.export(this.HttpListener, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener'));
+    RemoteCluster.export(this.cluster, this.singletonId('Cluster'));
+    RemoteAlb.export(this.alb, this.singletonId('Alb'));
+    RemoteApplicationListener.export(this.httpListener, this.singletonId('HttpListener'));
   }
 }
 
-export class ImportedEcsSolarSystem extends ImportedSolarSystem implements EcsSolarSystem {
-  readonly Cluster: ICluster;
-  readonly Alb: IApplicationLoadBalancer;
-  readonly HttpListener: IApplicationListener;
+export class ImportedEcsSolarSystemCore extends ImportedSolarSystemCore implements IEcsSolarSystemCore {
+  readonly cluster: ICluster;
+  readonly alb: IApplicationLoadBalancer;
+  readonly httpListener: IApplicationListener;
   // readonly HttpsListener: IApplicationListener;
 
-  constructor(scope: Construct, galaxy: Galaxy, name: string) {
-    super(scope, galaxy, name);
+  constructor(scope: Construct, id: string, galaxy: IGalaxyCore) {
+    super(scope, id, galaxy);
 
-    this.Cluster = RemoteCluster.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster'), this.Vpc);
-    this.Alb = RemoteAlb.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'));
-    this.HttpListener = RemoteApplicationListener.import(
-      this,
-      this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener')
-    );
+    this.cluster = RemoteCluster.import(this, this.singletonId('Cluster'), this.vpc);
+    this.alb = RemoteAlb.import(this, this.singletonId('Alb'));
+    this.httpListener = RemoteApplicationListener.import(this, this.singletonId('HttpListener'));
   }
 }
 
-export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack implements EcsSolarSystemExtension {
-  readonly Portal: EcsSolarSystem;
+export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack implements IEcsSolarSystemExtension {
+  readonly portal: IEcsSolarSystemCore;
 
-  constructor(galaxy: GalaxyExtension, name: string, props?: StackProps) {
-    super(galaxy, name, props);
+  constructor(galaxy: IGalaxyExtension, id: string, props?: StackProps) {
+    super(galaxy, id, props);
 
-    this.node.tryRemoveChild(this.Portal.node.id);
-    this.Portal = new ImportedEcsSolarSystem(this, this.Galaxy.Portal, this.Name);
+    this.node.tryRemoveChild(this.portal.node.id);
+    this.portal = new ImportedEcsSolarSystemCore(this, 'Default', this.galaxy.portal);
   }
 }

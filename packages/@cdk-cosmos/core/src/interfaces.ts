@@ -14,25 +14,10 @@ export interface IBubble {
   // region?: string;
 }
 
-export interface EcsSolarSystem extends SolarSystem {
-  Cluster: ICluster;
-  Alb: IApplicationLoadBalancer;
-  HttpListener: IApplicationListener;
-  // HttpsListener: IApplicationListener;
-}
-
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CiCdSolarSystem extends EcsSolarSystem {}
 
 // Extensions
-
-export interface SolarSystemExtension extends Extension<SolarSystem> {
-  Galaxy: GalaxyExtension;
-}
-
-export interface EcsSolarSystemExtension extends SolarSystemExtension {
-  Galaxy: GalaxyExtension;
-}
 
 export interface CiCdSolarSystemExtension extends EcsSolarSystemExtension {
   Galaxy: GalaxyExtension;

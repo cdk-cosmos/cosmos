@@ -7,7 +7,7 @@ import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { CrossAccountExportsFn } from '@cosmos-building-blocks/common';
 import { IFunction, Function } from '@aws-cdk/aws-lambda';
-import { BaseStack, BaseConstruct, BaseStackProps, COSMOS_PARTITION } from './base';
+import { BaseStack, BaseStackProps, COSMOS_PARTITION } from './base';
 import { RemoteZone, RemoteCodeRepo, RemoteFunction } from './helpers/remote';
 
 export interface ICosmosCore extends Construct {
@@ -20,12 +20,22 @@ export interface ICosmosCore extends Construct {
   networkBuilder?: NetworkBuilder;
 }
 
-export interface CosmosCoreProps {
+export interface ICosmosCoreLink extends Construct {
+  cosmos: ICosmosCore;
+}
+
+export interface ICosmosExtension extends Construct {
+  portal: ICosmosCore;
+  libVersion: string;
+  cdkRepo: IRepository;
+}
+
+export interface CosmosCoreStackProps extends Partial<BaseStackProps> {
   tld: string;
   cidr?: string;
 }
 
-export class CosmosCore extends BaseConstruct implements ICosmosCore {
+export class CosmosCoreStack extends BaseStack implements ICosmosCore {
   readonly libVersion: string;
   readonly link: ICosmosCoreLink;
   readonly cdkRepo: Repository;
@@ -34,8 +44,10 @@ export class CosmosCore extends BaseConstruct implements ICosmosCore {
   readonly cdkMasterRoleStaticArn: string;
   readonly crossAccountExportsFn: Function;
 
-  constructor(scope: Construct, id: string, props: CosmosCoreProps) {
+  constructor(scope: Construct, id: string, props: CosmosCoreStackProps) {
     super(scope, id, {
+      description: 'Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole',
+      partition: 'Core',
       ...props,
       type: 'Cosmos',
     });
@@ -107,37 +119,7 @@ export class ImportedCosmosCore extends Construct implements ICosmosCore {
   }
 }
 
-export interface ICosmosExtension extends Construct {
-  portal: ICosmosCore;
-  libVersion: string;
-  cdkRepo: IRepository;
-}
-
-export class CosmosExtension extends BaseConstruct implements ICosmosExtension {
-  readonly portal: ICosmosCore;
-  readonly libVersion: string;
-  readonly cdkRepo: IRepository;
-
-  constructor(scope: Construct, id: string) {
-    super(scope, id, {
-      type: 'Cosmos',
-    });
-
-    this.portal = new ImportedCosmosCore(this, 'Default');
-    this.libVersion = getPackageVersion();
-
-    this.cdkRepo = new Repository(this, 'CdkRepo', {
-      repositoryName: this.generateId('Cdk-Repo', '-').toLowerCase(),
-      description: `App CDK Repo for ${id} Cosmos.`,
-    });
-  }
-}
-
-export interface ICosmosCoreLink extends Construct {
-  cosmos: ICosmosCore;
-}
-
-export class CosmosLinkStack extends BaseStack<never> implements ICosmosCoreLink {
+export class CosmosLinkStack extends BaseStack implements ICosmosCoreLink {
   readonly cosmos: ICosmosCore;
 
   constructor(cosmos: ICosmosCore, props?: StackProps) {
@@ -151,23 +133,10 @@ export class CosmosLinkStack extends BaseStack<never> implements ICosmosCoreLink
   }
 }
 
-export interface CosmosCoreStackProps extends CosmosCoreProps, Partial<BaseStackProps> {}
-
-export class CosmosCoreStack extends BaseStack<CosmosCore> {
-  constructor(scope: Construct, id: string, props: CosmosCoreStackProps) {
-    super(scope, id, {
-      description: 'Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole',
-      partition: 'Core',
-      ...props,
-      type: 'Cosmos',
-    });
-
-    this._resource = new CosmosCore(this, id, props);
-  }
-}
-
-export class CosmosExtensionStack extends BaseStack<CosmosExtension> {
+export class CosmosExtensionStack extends BaseStack implements ICosmosExtension {
   readonly portal: ICosmosCore;
+  readonly libVersion: string;
+  readonly cdkRepo: IRepository;
 
   constructor(scope: Construct, id: string, props?: Partial<BaseStackProps>) {
     super(scope, id, {
@@ -176,8 +145,13 @@ export class CosmosExtensionStack extends BaseStack<CosmosExtension> {
       type: 'Cosmos',
     });
 
-    this._resource = new CosmosExtension(this, id);
-    this.portal = this.resource.portal;
+    this.portal = new ImportedCosmosCore(this, 'Default');
+    this.libVersion = getPackageVersion();
+
+    this.cdkRepo = new Repository(this, 'CdkRepo', {
+      repositoryName: this.generateId('Cdk-Repo', '-').toLowerCase(),
+      description: `App CDK Repo for ${id} Cosmos.`,
+    });
   }
 }
 

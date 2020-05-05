@@ -1,4 +1,4 @@
-import { Construct, StackProps, Duration } from '@aws-cdk/core';
+import { Construct, Duration } from '@aws-cdk/core';
 import { IVpc, Vpc } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import {
@@ -9,8 +9,8 @@ import {
   ZoneDelegationRecord,
 } from '@aws-cdk/aws-route53';
 import { isCrossAccount } from './helpers/utils';
-import { BaseStack, BaseConstruct, BaseStackProps, COSMOS_PARTITION, PATTERN } from './base';
-import { IGalaxyCore, GalaxyCoreStack, IGalaxyExtension, GalaxyExtensionStack } from './galaxy';
+import { BaseStack, BaseStackProps, COSMOS_PARTITION } from './base';
+import { IGalaxyCore, IGalaxyExtension } from './galaxy';
 import { CoreVpc, CoreVpcProps } from './components/core-vpc';
 import { CrossAccountZoneDelegationRecord } from './helpers/cross-account';
 import { RemoteVpc, RemoteZone } from './helpers/remote';
@@ -23,7 +23,12 @@ export interface ISolarSystemCore extends Construct {
   networkBuilder?: NetworkBuilder;
 }
 
-export interface SolarSystemCoreProps extends StackProps {
+export interface ISolarSystemExtension extends Construct {
+  galaxy: IGalaxyExtension;
+  portal: ISolarSystemCore;
+}
+
+export interface SolarSystemCoreStackProps extends Partial<BaseStackProps> {
   cidr?: string;
   vpc?: Vpc;
   vpcProps?: Partial<CoreVpcProps>;
@@ -33,14 +38,15 @@ export interface SolarSystemCoreProps extends StackProps {
   };
 }
 
-export class SolarSystemCore extends BaseConstruct implements ISolarSystemCore {
+export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore {
   readonly galaxy: IGalaxyCore;
   readonly vpc: Vpc;
   readonly zone: PublicHostedZone;
   readonly privateZone: PrivateHostedZone;
 
-  constructor(scope: Construct, id: string, galaxy: IGalaxyCore, props?: SolarSystemCoreProps) {
-    super(scope, id, {
+  constructor(galaxy: IGalaxyCore, id: string, props?: SolarSystemCoreStackProps) {
+    super(galaxy, id, {
+      description: 'Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.',
       ...props,
       type: 'SolarSystem',
     });
@@ -104,8 +110,8 @@ export class ImportedSolarSystemCore extends Construct implements ISolarSystemCo
   readonly zone: IPublicHostedZone;
   readonly privateZone: IPrivateHostedZone;
 
-  constructor(scope: Construct, name: string, galaxy: IGalaxyCore) {
-    super(scope, name);
+  constructor(scope: Construct, id: string, galaxy: IGalaxyCore) {
+    super(scope, id);
     this.node.type = 'SolarSystem';
     this.node.setContext(COSMOS_PARTITION, 'Core');
 
@@ -116,55 +122,18 @@ export class ImportedSolarSystemCore extends Construct implements ISolarSystemCo
   }
 }
 
-export interface ISolarSystemExtension extends Construct {
-  galaxy: IGalaxyExtension;
-  portal: ISolarSystemCore;
-}
-
-export class SolarSystemExtension extends BaseConstruct implements ISolarSystemExtension {
+export class SolarSystemExtensionStack extends BaseStack implements ISolarSystemExtension {
   readonly galaxy: IGalaxyExtension;
   readonly portal: ISolarSystemCore;
 
-  constructor(scope: Construct, name: string, galaxy: IGalaxyExtension) {
-    super(scope, name, {
+  constructor(galaxy: IGalaxyExtension, id: string, props?: Partial<BaseStackProps>) {
+    super(galaxy, id, {
+      description: 'Cosmos Extension: App resources dependant on each SolarSystem, like Services and Databases.',
+      ...props,
       type: 'SolarSystem',
     });
 
     this.galaxy = galaxy;
     this.portal = new ImportedSolarSystemCore(this, 'Default', this.galaxy.portal);
-  }
-}
-
-export interface SolarSystemCoreStackProps extends SolarSystemCoreProps, Partial<BaseStackProps> {}
-
-export class SolarSystemCoreStack extends BaseStack<SolarSystemCore> {
-  readonly galaxy: IGalaxyCore;
-
-  constructor(scope: GalaxyCoreStack, id: string, props?: SolarSystemCoreStackProps) {
-    super(scope.resource, id, {
-      description: 'Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.',
-      ...props,
-      type: 'SolarSystem',
-    });
-
-    this.galaxy = scope.resource;
-    this._resource = new SolarSystemCore(this, id, this.galaxy, props);
-  }
-}
-
-export class SolarSystemExtensionStack extends BaseStack<SolarSystemExtension> {
-  readonly galaxy: IGalaxyExtension;
-  readonly portal: ISolarSystemCore;
-
-  constructor(scope: GalaxyExtensionStack, id: string, props?: Partial<BaseStackProps>) {
-    super(scope.resource, id, {
-      description: 'Cosmos: App resources dependant on each SolarSystem, like Services and Databases.',
-      ...props,
-      type: 'SolarSystem',
-    });
-
-    this.galaxy = scope.resource;
-    this._resource = new SolarSystemExtension(this, id, this.galaxy);
-    this.portal = this.resource.portal;
   }
 }

@@ -35,8 +35,8 @@ describe('Cosmos', () => {
   });
 
   test('should have cidr range', () => {
-    expect(cosmos.resource.networkBuilder?.addSubnet(28)).toEqual('10.0.0.0/28');
-    expect(cosmos.resource.networkBuilder?.addSubnet(28)).toEqual('10.0.0.16/28');
+    expect(cosmos.networkBuilder?.addSubnet(28)).toEqual('10.0.0.0/28');
+    expect(cosmos.networkBuilder?.addSubnet(28)).toEqual('10.0.0.16/28');
   });
 
   test('should match snapshot', () => {

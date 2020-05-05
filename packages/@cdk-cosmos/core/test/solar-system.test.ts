@@ -16,14 +16,14 @@ const env2 = { account: 'account2', region: 'region2' };
 
 const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'cos.com', cidr: '10.0.1.0/22', env });
 const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { env });
-const galaxyVpc = galaxy.resource.addSharedVpc();
+const galaxyVpc = galaxy.addSharedVpc();
 const solarSystem = new SolarSystemCoreStack(galaxy, 'Sys', { env, vpc: galaxyVpc });
 const galaxy2 = new GalaxyCoreStack(cosmos, 'Gal2', { env: env2 });
 const solarSystem2 = new SolarSystemCoreStack(galaxy2, 'Sys2', { env: env2 });
 
-const cosmosExtension = new CosmosExtensionStack(app, 'CosExt', { env });
-const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'GalExt', { env });
-const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'SysExt', { env });
+const cosmosExtension = new CosmosExtensionStack(app, 'Test', { env });
+const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });
+const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys', { env });
 
 const [
   galaxyStack,
@@ -39,7 +39,7 @@ const [
   solarSystem2,
   solarSystemExtension,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  cosmos.resource.link as any
+  cosmos.link as any
 );
 
 describe('Solar-System', () => {
@@ -88,14 +88,14 @@ describe('Solar-System', () => {
     let cosmos = new CosmosCoreStack(app, 'Test', { tld: 'com', cidr: '10.0.0.0/22' });
     let galaxy = new GalaxyCoreStack(cosmos, 'Test');
     let solarSystem = new SolarSystemCoreStack(galaxy, 'Test');
-    expect(solarSystem.resource.networkBuilder?.addSubnet(28)).toEqual('10.0.1.0/28');
-    expect(solarSystem.resource.networkBuilder?.addSubnet(28)).toEqual('10.0.1.16/28');
+    expect(solarSystem.networkBuilder?.addSubnet(28)).toEqual('10.0.1.0/28');
+    expect(solarSystem.networkBuilder?.addSubnet(28)).toEqual('10.0.1.16/28');
 
     app = new App();
     cosmos = new CosmosCoreStack(app, 'Test', { tld: 'com' });
     galaxy = new GalaxyCoreStack(cosmos, 'Test');
     solarSystem = new SolarSystemCoreStack(galaxy, 'Test', { cidr: '10.0.4.0/22' });
-    expect(solarSystem.resource.networkBuilder?.addSubnet(28)).toEqual('10.0.5.0/28');
+    expect(solarSystem.networkBuilder?.addSubnet(28)).toEqual('10.0.5.0/28');
   });
 
   test('should be cross account solar system', () => {
@@ -124,7 +124,7 @@ describe('Solar-System', () => {
 
 describe('SolarSystem Extension', () => {
   test('should be a solar system extension', () => {
-    expect(solarSystemExtensionStack.name).toEqual('AppCosExtGalExtSysExtSolarSystem');
+    expect(solarSystemExtensionStack.name).toEqual('AppTestGalSysSolarSystem');
   });
 
   test('should inherit env', () => {
