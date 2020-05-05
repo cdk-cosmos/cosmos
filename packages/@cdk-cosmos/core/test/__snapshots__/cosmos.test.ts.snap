@@ -2,9 +2,8 @@
 
 exports[`Cosmos Extension should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos: App Singleton Resources for the Cosmos like CdkRepo and EcrRepo.",
   "Resources": Object {
-    "CdkRepo9606A710": Object {
+    "CdkRepo": Object {
       "Properties": Object {
         "RepositoryDescription": "App CDK Repo for Test Cosmos.",
         "RepositoryName": "app-test-cdk-repo",
@@ -19,73 +18,73 @@ exports[`Cosmos should match snapshot 1`] = `
 Object {
   "Description": "Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole",
   "Outputs": Object {
-    "CdkRepoRepoNameEBDD9CD6": Object {
+    "CdkRepoRepoName": Object {
       "Export": Object {
-        "Name": "Core-CdkRepo-Name",
+        "Name": "CoreCdkRepoName",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "CdkRepo9606A710",
+          "CdkRepo",
           "Name",
         ],
       },
     },
-    "CosmosName": Object {
+    "CoreLibVersion": Object {
       "Export": Object {
-        "Name": "Core-Name",
-      },
-      "Value": "Cos",
-    },
-    "CosmosVersion": Object {
-      "Export": Object {
-        "Name": "Core-Version",
+        "Name": "CoreLibVersion",
       },
       "Value": Any<String>,
     },
-    "CrossAccountExportsFnFunctionArn4D0D888C": Object {
+    "CoreName": Object {
       "Export": Object {
-        "Name": "Core-CrossAccountExportsFn-Arn",
+        "Name": "CoreName",
+      },
+      "Value": "Cos",
+    },
+    "CrossAccountExportsFnFunctionArn": Object {
+      "Export": Object {
+        "Name": "CoreCrossAccountExportsFnArn",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "CrossAccountExportsFnBB7349E9",
+          "CrossAccountExportsFn",
           "Arn",
         ],
       },
     },
-    "RootZoneNameServersC9CDB123": Object {
+    "RootZoneNameServers": Object {
       "Export": Object {
-        "Name": "Core-RootZone-NameServers",
+        "Name": "CoreRootZoneNameServers",
       },
       "Value": Object {
         "Fn::Join": Array [
           ",",
           Object {
             "Fn::GetAtt": Array [
-              "RootZone831A5F27",
+              "RootZone",
               "NameServers",
             ],
           },
         ],
       },
     },
-    "RootZoneZoneId57AFCBDD": Object {
+    "RootZoneZoneId": Object {
       "Export": Object {
-        "Name": "Core-RootZone-Id",
+        "Name": "CoreRootZoneId",
       },
       "Value": Object {
-        "Ref": "RootZone831A5F27",
+        "Ref": "RootZone",
       },
     },
-    "RootZoneZoneNameD5248AD9": Object {
+    "RootZoneZoneName": Object {
       "Export": Object {
-        "Name": "Core-RootZone-Name",
+        "Name": "CoreRootZoneName",
       },
-      "Value": "cos.com",
+      "Value": "test.com",
     },
   },
   "Resources": Object {
-    "CdkMasterRole2FE9B317": Object {
+    "CdkMasterRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -117,20 +116,20 @@ Object {
             ],
           },
         ],
-        "RoleName": "Core-CdkMaster-Role",
+        "RoleName": "CoreCdkMasterRole",
       },
       "Type": "AWS::IAM::Role",
     },
-    "CdkRepo9606A710": Object {
+    "CdkRepo": Object {
       "Properties": Object {
         "RepositoryDescription": "Core CDK Repo for Cos Cosmos.",
-        "RepositoryName": "core-cdk-repo",
+        "RepositoryName": "core-cos-cdk-repo",
       },
       "Type": "AWS::CodeCommit::Repository",
     },
-    "CrossAccountExportsFnBB7349E9": Object {
+    "CrossAccountExportsFn": Object {
       "DependsOn": Array [
-        "CdkMasterRole2FE9B317",
+        "CdkMasterRole",
       ],
       "Properties": Object {
         "Code": Object {
@@ -140,7 +139,7 @@ Object {
         "Handler": "index.handler",
         "Role": Object {
           "Fn::GetAtt": Array [
-            "CdkMasterRole2FE9B317",
+            "CdkMasterRole",
             "Arn",
           ],
         },
@@ -149,12 +148,12 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "RootZone831A5F27": Object {
+    "RootZone": Object {
       "Properties": Object {
         "HostedZoneConfig": Object {
           "Comment": "Core TLD Root Zone for Cos Cosmos.",
         },
-        "Name": "cos.com.",
+        "Name": "test.com.",
       },
       "Type": "AWS::Route53::HostedZone",
     },

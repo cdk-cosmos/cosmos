@@ -1,11 +1,27 @@
 import { IConstruct, CfnResource } from '@aws-cdk/core';
 import { Construct, ConstructNode } from '@aws-cdk/core/lib/construct-compat';
+import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Stack, StackProps } from '@aws-cdk/core/lib/stack';
 
 const COSMOS_PARTITION = 'COSMOS_PARTITION';
 const COSMOS_VERSION = 'COSMOS_VERSION';
-const DEFAULT_PATTERN = '{Resource}+';
-const STACK_PATTERN = '{Partition}{Cosmos}{Galaxy}?{SolarSystem}?{Version}?{Type}';
+const COSMOS_NETWORK_BUILDER = 'COSMOS_NETWORK_BUILDER';
+const AWS_ENV = 'AWS_ENV';
+
+export const PATTERN = {
+  SINGLETON_COSMOS: '{Partition}{Resource}+',
+  SINGLETON_GALAXY: '{Partition}{Galaxy}{Resource}+',
+  SINGLETON_SOLAR_SYSTEM: '${Partition}{Galaxy}{SolarSystem}{Resource}+',
+  STACK: '{Partition}{Cosmos}{Galaxy}?{SolarSystem}?{Version}?{Type}',
+  COSMOS: '{Partition}{Cosmos}{Galaxy}?{SolarSystem}?{Resource}*{Version}?',
+  RESOURCE: '{Resource}+{Version}?',
+  // SHORT_SOLAR_SYSTEM: '{Partition}{Cosmos}{SolarSystem}{Resource}+',
+  // DOCKER_TAG: '{Cosmos}/{Resource}+',
+  // LOG_GROUP: '{Partition}/{Cosmos}/{SolarSystem}/{Resource}+',
+};
+// export const DEFAULT_PATTERN = '{Resource}+{Version}?';
+// export const STACK_PATTERN = '{Partition}{Cosmos}{Galaxy}?{SolarSystem}?{Version}?{Type}';
+// export const COSMOS_PATTERN = '{Partition}{Cosmos}{Galaxy}?{SolarSystem}?{Resource}+{Version}?';
 
 declare module '@aws-cdk/core/lib/construct-compat' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -18,6 +34,48 @@ declare module '@aws-cdk/core/lib/construct-compat' {
 
 ConstructNode.prototype.type = 'Resource';
 
+export interface IBase extends IConstruct {
+  NetworkBuilder?: NetworkBuilder;
+}
+
+export interface BaseConstructProps {
+  type: string;
+  cidr?: string;
+}
+
+export class BaseConstruct extends Construct implements IBase {
+  public readonly networkBuilder?: NetworkBuilder;
+
+  constructor(scope: Construct, id: string, props: BaseConstructProps) {
+    super(scope, id);
+    const { type, cidr } = props;
+
+    this.node.type = type;
+    if (cidr) this.networkBuilder = new NetworkBuilder(cidr);
+    if (!this.networkBuilder) this.node.tryGetContext(COSMOS_NETWORK_BUILDER);
+    if (this.networkBuilder) this.node.setContext(COSMOS_NETWORK_BUILDER, this.networkBuilder);
+  }
+
+  public generateId(id: string, delimiter?: string, type?: string, pattern?: string): string {
+    return generateNodeId({
+      scope: this,
+      pattern,
+      id,
+      type,
+      delimiter,
+    });
+  }
+
+  public singletonId(id: string, delimiter?: string, type?: string): string {
+    return singletonNodeId({
+      scope: this,
+      id,
+      type,
+      delimiter,
+    });
+  }
+}
+
 export interface BaseStackProps extends StackProps {
   partition?: string;
   version?: string;
@@ -25,21 +83,19 @@ export interface BaseStackProps extends StackProps {
   disableCosmosNaming?: boolean;
 }
 
-export class BaseStack extends Stack {
-  private disableCosmosNaming: boolean;
+export class BaseStack<T extends IBase> extends Stack {
+  private readonly disableCosmosNaming: boolean;
+  protected _resource: T;
+  public get resource(): T {
+    return this._resource;
+  }
 
   constructor(scope: Construct, id: string, props: BaseStackProps) {
-    const { partition, version, type, disableCosmosNaming = false } = props;
-
-    const stackName = generateLogicalId({
-      scopes: [...getScopes(scope), { key: type, value: id }, { key: 'Type', value: type }],
-      pattern: STACK_PATTERN,
-      partition: partition,
-      version: version,
-    });
+    const { partition, version, type, disableCosmosNaming = false, env } = props;
 
     super(scope, id, {
-      stackName,
+      stackName: generateNodeId({ scope, id, type, partition, version, pattern: PATTERN.STACK }),
+      env: scope.node.tryGetContext(AWS_ENV),
       ...props,
     });
 
@@ -47,18 +103,84 @@ export class BaseStack extends Stack {
     if (partition) this.node.setContext(COSMOS_PARTITION, partition);
     if (version) this.node.setContext(COSMOS_VERSION, version);
     this.disableCosmosNaming = disableCosmosNaming;
+    if (env) this.node.setContext(AWS_ENV, env);
   }
 
   public allocateLogicalId(scope: CfnResource): string {
     if (this.disableCosmosNaming) return super.allocateLogicalId(scope);
 
-    return generateLogicalId({
+    const id = generateId({
       scopes: getScopes(scope),
-      pattern: getPattern(scope) || DEFAULT_PATTERN,
+      pattern: getPattern(scope) || PATTERN.RESOURCE,
       partition: scope.node.tryGetContext(COSMOS_PARTITION),
       version: scope.node.tryGetContext(COSMOS_VERSION),
     });
+
+    return removeNonAlphanumeric(id);
   }
+
+  public generateId(id: string, delimiter?: string, type?: string, pattern?: string): string {
+    return generateNodeId({
+      scope: this,
+      pattern,
+      id,
+      type,
+      delimiter,
+    });
+  }
+
+  public singletonId(id: string, delimiter?: string, type?: string): string {
+    return singletonNodeId({
+      scope: this,
+      id,
+      type,
+      delimiter,
+    });
+  }
+}
+
+export function singletonNodeId(props: { scope: IConstruct; id: string; type?: string; delimiter?: string }): string {
+  const { scope, id, type, delimiter } = props;
+  let pattern: string;
+  switch (scope.node.type) {
+    case 'Cosmos':
+      pattern = PATTERN.SINGLETON_COSMOS;
+      break;
+    case 'Galaxy':
+      pattern = PATTERN.SINGLETON_COSMOS;
+      break;
+    case 'SolarSystem':
+      pattern = PATTERN.SINGLETON_COSMOS;
+      break;
+    default:
+      throw new Error(`Singleton Pattern could not be found for ${scope.node.id}`);
+  }
+  return generateNodeId({
+    scope,
+    pattern,
+    id,
+    type,
+    delimiter,
+  });
+}
+
+export function generateNodeId(props: {
+  scope: IConstruct;
+  id: string;
+  pattern?: string;
+  type?: string;
+  partition?: string;
+  version?: string;
+  delimiter?: string;
+}): string {
+  const { scope, id, pattern, type = 'Resource', partition, version, delimiter } = props;
+  return generateId({
+    scopes: [...getScopes(scope), { key: type, value: id }, { key: 'Type', value: type }],
+    pattern: pattern || PATTERN.COSMOS,
+    partition: partition || scope.node.tryGetContext(COSMOS_PARTITION),
+    version: version || scope.node.tryGetContext(COSMOS_VERSION),
+    delimiter,
+  });
 }
 
 interface IScope {
@@ -71,10 +193,11 @@ interface GenerateLogicalIdProps {
   pattern: string;
   partition?: string;
   version?: string;
+  delimiter?: string;
 }
 
-export function generateLogicalId(props: GenerateLogicalIdProps): string {
-  const { scopes, pattern, partition, version } = props;
+export function generateId(props: GenerateLogicalIdProps): string {
+  const { scopes, pattern, partition, version, delimiter = '' } = props;
 
   if (partition) scopes.push({ key: 'Partition', value: partition });
   if (version) scopes.push({ key: 'Version', value: version });
@@ -82,10 +205,9 @@ export function generateLogicalId(props: GenerateLogicalIdProps): string {
   const selectedIds = selectScoped(scopes, pattern)
     .map(x => x.value)
     .reduce(removeDupes, [])
-    .filter(removeHidden)
-    .map(removeNonAlphanumeric);
+    .filter(removeHidden);
 
-  return selectedIds.join('').slice(0, 240);
+  return selectedIds.join(delimiter).slice(0, 240);
 }
 
 function selectScoped(scopes: IScope[], pattern: string): IScope[] {

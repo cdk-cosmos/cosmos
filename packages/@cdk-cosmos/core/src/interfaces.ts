@@ -1,4 +1,4 @@
-import { Construct } from '@aws-cdk/core';
+import { Construct, IConstruct } from '@aws-cdk/core';
 import { IPublicHostedZone, IPrivateHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository } from '@aws-cdk/aws-codecommit';
 import { IVpc } from '@aws-cdk/aws-ec2';
@@ -8,31 +8,10 @@ import { IApplicationLoadBalancer, IApplicationListener } from '@aws-cdk/aws-ela
 import { IProject } from '@aws-cdk/aws-codebuild';
 import { IFunction } from '@aws-cdk/aws-lambda';
 
-export interface Bubble {
-  Name: string;
+export interface IBubble {
   NetworkBuilder?: NetworkBuilder;
-  account?: string;
-  region?: string;
-}
-
-export interface Cosmos extends Bubble, Construct {
-  Partition: string;
-  Scope: Construct;
-  Galaxies?: Galaxy[];
-  SolarSystems?: SolarSystem[];
-  Version: string;
-  Link?: CosmosLink;
-  CdkRepo: IRepository;
-  RootZone: IPublicHostedZone;
-  CdkMasterRoleStaticArn: string;
-  CrossAccountExportsFn: IFunction;
-
-  AddGalaxy(galaxy: Galaxy): void;
-  AddSolarSystem(solarSystem: SolarSystem): void;
-}
-
-export interface CosmosLink extends Bubble, Construct {
-  Cosmos: Cosmos;
+  // account?: string;
+  // region?: string;
 }
 
 export interface Galaxy extends Bubble, Construct {
