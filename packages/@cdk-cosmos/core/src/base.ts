@@ -129,10 +129,10 @@ export function singletonNodeId(props: { scope: IConstruct; id: string; type?: s
       pattern = PATTERN.SINGLETON_COSMOS;
       break;
     case 'Galaxy':
-      pattern = PATTERN.SINGLETON_COSMOS;
+      pattern = PATTERN.SINGLETON_GALAXY;
       break;
     case 'SolarSystem':
-      pattern = PATTERN.SINGLETON_COSMOS;
+      pattern = PATTERN.SINGLETON_SOLAR_SYSTEM;
       break;
     default:
       throw new Error(`Singleton Pattern could not be found for ${scope.node.id}`);
@@ -184,8 +184,10 @@ export function generateId(props: GenerateLogicalIdProps): string {
   if (partition) scopes.push({ key: 'Partition', value: partition });
   if (version) scopes.push({ key: 'Version', value: version });
 
-  const filteredScopes = scopes.filter(removeHidden).reduce(removeDupes, []);
-  const selectedIds = selectScoped(filteredScopes, pattern).map(x => x.value);
+  const selectedIds = selectScoped(scopes.filter(removeHidden), pattern)
+    .map(x => x.value)
+    .reduce(removeDupes, []);
+
   return selectedIds.join(delimiter).slice(0, 240);
 }
 
@@ -215,7 +217,7 @@ function selectScoped(scopes: IScope[], pattern: string): IScope[] {
       }
       default: {
         const selected = scopes.filter(x => x.key === key).pop();
-        if (!selected) throw new Error(`No ${key} Scope found`);
+        if (!selected) throw new Error(`No ${key} Scope found.`);
         results.push(selected);
       }
     }
@@ -244,9 +246,9 @@ function getPattern(scope: IConstruct): string | undefined {
     .pop();
 }
 
-function removeDupes(result: IScope[], scope: IScope): IScope[] {
-  if (result.length === 0 || !result[result.length - 1].value.endsWith(scope.value)) {
-    result.push(scope);
+function removeDupes(result: string[], value: string): string[] {
+  if (result.length === 0 || !result[result.length - 1].endsWith(value)) {
+    result.push(value);
   }
 
   return result;

@@ -1,5 +1,5 @@
-import { Construct, Stack, StackProps, Duration } from '@aws-cdk/core';
-import { IVpc, SubnetType, Vpc, GatewayVpcEndpointAwsService, VpcProps } from '@aws-cdk/aws-ec2';
+import { Construct, StackProps, Duration } from '@aws-cdk/core';
+import { IVpc, Vpc } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import {
   IPublicHostedZone,
@@ -8,161 +8,163 @@ import {
   PrivateHostedZone,
   ZoneDelegationRecord,
 } from '@aws-cdk/aws-route53';
-import {
-  RESOLVE,
-  PATTERN,
-  Bubble,
-  Galaxy,
-  GalaxyExtension,
-  SolarSystem,
-  SolarSystemExtension,
-  RemoteVpc,
-  RemoteZone,
-} from '.';
 import { isCrossAccount } from './helpers/utils';
+import { BaseStack, BaseConstruct, BaseStackProps, COSMOS_PARTITION, PATTERN } from './base';
+import { IGalaxyCore, GalaxyCoreStack, IGalaxyExtension, GalaxyExtensionStack } from './galaxy';
+import { CoreVpc, CoreVpcProps } from './components/core-vpc';
 import { CrossAccountZoneDelegationRecord } from './helpers/cross-account';
+import { RemoteVpc, RemoteZone } from './helpers/remote';
 
-const stackName = (galaxy: Bubble, name: string): string =>
-  RESOLVE(PATTERN.SOLAR_SYSTEM, 'SolarSystem', { Name: name, Galaxy: galaxy });
+export interface ISolarSystemCore extends Construct {
+  galaxy: IGalaxyCore;
+  vpc: IVpc;
+  zone: IPublicHostedZone;
+  privateZone: IPrivateHostedZone;
+  networkBuilder?: NetworkBuilder;
+}
 
-export interface SolarSystemProps extends StackProps {
+export interface SolarSystemCoreProps extends StackProps {
   cidr?: string;
   vpc?: Vpc;
-  vpcProps?: Partial<VpcProps> & {
-    cidrMask?: number;
-    subnetMask?: number;
-  };
+  vpcProps?: Partial<CoreVpcProps>;
   zoneProps?: {
     linkZone?: boolean;
     ttl?: Duration;
   };
 }
 
-export class SolarSystemStack extends Stack implements SolarSystem {
-  readonly Galaxy: Galaxy;
-  readonly Name: string;
-  readonly NetworkBuilder?: NetworkBuilder;
-  readonly Vpc: Vpc;
-  readonly Zone: PublicHostedZone;
-  readonly PrivateZone: PrivateHostedZone;
+export class SolarSystemCore extends BaseConstruct implements ISolarSystemCore {
+  readonly galaxy: IGalaxyCore;
+  readonly vpc: Vpc;
+  readonly zone: PublicHostedZone;
+  readonly privateZone: PrivateHostedZone;
 
-  constructor(galaxy: Galaxy, name: string, props?: SolarSystemProps) {
-    super(galaxy.Cosmos.Scope, stackName(galaxy, name), {
-      description: 'Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.',
+  constructor(scope: Construct, id: string, galaxy: IGalaxyCore, props?: SolarSystemCoreProps) {
+    super(scope, id, {
       ...props,
-      env: {
-        account: props?.env?.account || galaxy.account,
-        region: props?.env?.region || galaxy.region,
-      },
+      type: 'SolarSystem',
     });
 
-    const { cidr, vpc, vpcProps = {}, zoneProps = {} } = props || {};
-    const { cidrMask = 24, subnetMask = 26 } = vpcProps;
+    const { vpc, vpcProps = {}, zoneProps = {} } = props || {};
     const { linkZone = true, ttl = Duration.minutes(30) } = zoneProps;
 
-    this.Galaxy = galaxy;
-    this.Galaxy.AddSolarSystem(this);
-    this.Name = name;
-    if (cidr) this.NetworkBuilder = new NetworkBuilder(cidr);
-    else if (this.Galaxy.NetworkBuilder) this.NetworkBuilder = this.Galaxy.NetworkBuilder;
+    this.galaxy = galaxy;
 
-    if (vpc) this.Vpc = vpc as Vpc;
+    if (vpc) this.vpc = vpc as Vpc;
     else {
-      if (!this.NetworkBuilder) {
+      if (!this.networkBuilder) {
         throw new Error(
-          `NetworkBuilder not found, please define cidr range here (SolarSystem: ${this.Name}) or Galaxy or Cosmos.`
+          `NetworkBuilder not found, please define cidr range here (SolarSystem: ${id}) or Galaxy or Cosmos.`
         );
       }
 
-      this.Vpc = new Vpc(this, 'Vpc', {
-        maxAzs: 2,
-        subnetConfiguration: [
-          {
-            name: 'App',
-            subnetType: SubnetType.ISOLATED,
-            cidrMask: subnetMask,
-          },
-        ],
+      this.vpc = new CoreVpc(this, 'Vpc', {
         ...vpcProps,
-        cidr: this.NetworkBuilder.addSubnet(cidrMask),
-      });
-
-      this.Vpc.addGatewayEndpoint('S3Gateway', {
-        service: GatewayVpcEndpointAwsService.S3,
-        subnets: [{ subnetType: SubnetType.ISOLATED }],
+        networkBuilder: this.networkBuilder,
       });
     }
 
-    RemoteVpc.export(this.Vpc, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc'), this);
+    RemoteVpc.export(this.vpc, this.singletonId('Vpc'), this);
 
-    const rootZoneName = this.Galaxy.Cosmos.RootZone.zoneName;
-    this.Zone = new PublicHostedZone(this, 'Zone', {
-      zoneName: `${this.Name}.${rootZoneName}`.toLowerCase(),
-      comment: `Core Main Zone for ${this.Name} SolarSystem`,
+    const rootZone = this.galaxy.cosmos.rootZone;
+    this.zone = new PublicHostedZone(this, 'Zone', {
+      zoneName: `${id}.${rootZone.zoneName}`.toLowerCase(),
+      comment: `Core Main Zone for ${id} SolarSystem`,
     });
-    this.PrivateZone = new PrivateHostedZone(this, 'PrivateZone', {
-      vpc: this.Vpc,
-      zoneName: `${this.Name}.internal`.toLowerCase(),
-      comment: `Core Main Private Zone for ${this.Name} SolarSystem`,
+    this.privateZone = new PrivateHostedZone(this, 'PrivateZone', {
+      vpc: this.vpc,
+      zoneName: `${id}.internal`.toLowerCase(),
+      comment: `Core Main Private Zone for ${id} SolarSystem`,
     });
-    RemoteZone.export(this.Zone, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone'));
-    RemoteZone.export(this.PrivateZone, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'PrivateZone'));
+    RemoteZone.export(this.zone, this.singletonId('Zone'));
+    RemoteZone.export(this.privateZone, this.singletonId('PrivateZone'));
 
     if (linkZone) {
-      if (isCrossAccount(this, this.Galaxy.Cosmos)) {
+      if (isCrossAccount(this.zone, rootZone)) {
         new CrossAccountZoneDelegationRecord(this, 'ZoneDelegation', {
           ttl,
-          comment: `Core Zone Delegation for ${this.Name} SolarSystem.`,
+          comment: `Core Zone Delegation for ${id} SolarSystem.`,
         });
       } else {
         new ZoneDelegationRecord(this, 'ZoneDelegation', {
-          zone: this.Galaxy.Cosmos.RootZone,
-          recordName: this.Zone.zoneName,
-          nameServers: this.Zone.hostedZoneNameServers as string[],
+          zone: rootZone,
+          recordName: this.zone.zoneName,
+          nameServers: this.zone.hostedZoneNameServers as string[],
           ttl,
-          comment: `Core Zone Delegation for ${this.Name} SolarSystem.`,
+          comment: `Core Zone Delegation for ${id} SolarSystem.`,
         });
       }
     }
   }
 }
 
-export class ImportedSolarSystem extends Construct implements SolarSystem {
-  readonly Galaxy: Galaxy;
-  readonly Name: string;
-  readonly Vpc: IVpc;
-  readonly Zone: IPublicHostedZone;
-  readonly PrivateZone: IPrivateHostedZone;
+export class ImportedSolarSystemCore extends Construct implements ISolarSystemCore {
+  readonly galaxy: IGalaxyCore;
+  readonly vpc: IVpc;
+  readonly zone: IPublicHostedZone;
+  readonly privateZone: IPrivateHostedZone;
 
-  constructor(scope: Construct, galaxy: Galaxy, name: string) {
-    super(scope, 'SolarSystemImport');
+  constructor(scope: Construct, name: string, galaxy: IGalaxyCore) {
+    super(scope, name);
+    this.node.type = 'SolarSystem';
+    this.node.setContext(COSMOS_PARTITION, 'Core');
 
-    this.Galaxy = galaxy;
-    this.Name = name;
-    this.Vpc = RemoteVpc.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc'), { hasIsolated: true });
-    this.Zone = RemoteZone.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone'));
-    this.PrivateZone = RemoteZone.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'PrivateZone'));
+    this.galaxy = galaxy;
+    this.vpc = RemoteVpc.import(this, this.singletonId('Vpc'), { hasIsolated: true });
+    this.zone = RemoteZone.import(this, this.singletonId('Zone'));
+    this.privateZone = RemoteZone.import(this, this.singletonId('PrivateZone'));
   }
 }
 
-export class SolarSystemExtensionStack extends Stack implements SolarSystemExtension {
-  readonly Galaxy: GalaxyExtension;
-  readonly Portal: SolarSystem;
-  readonly Name: string;
+export interface ISolarSystemExtension extends Construct {
+  galaxy: IGalaxyExtension;
+  portal: ISolarSystemCore;
+}
 
-  constructor(galaxy: GalaxyExtension, name: string, props?: StackProps) {
-    super(galaxy.Cosmos.Scope, stackName(galaxy, name), {
-      description: 'Cosmos: App resources dependant on each SolarSystem, like Services and Databases.',
-      ...props,
-      env: {
-        account: props?.env?.account || galaxy.account,
-        region: props?.env?.region || galaxy.region,
-      },
+export class SolarSystemExtension extends BaseConstruct implements ISolarSystemExtension {
+  readonly galaxy: IGalaxyExtension;
+  readonly portal: ISolarSystemCore;
+
+  constructor(scope: Construct, name: string, galaxy: IGalaxyExtension) {
+    super(scope, name, {
+      type: 'SolarSystem',
     });
 
-    this.Galaxy = galaxy;
-    this.Galaxy.AddSolarSystem(this);
-    this.Name = name;
-    this.Portal = new ImportedSolarSystem(this, this.Galaxy.Portal, this.Name);
+    this.galaxy = galaxy;
+    this.portal = new ImportedSolarSystemCore(this, 'Default', this.galaxy.portal);
+  }
+}
+
+export interface SolarSystemCoreStackProps extends SolarSystemCoreProps, Partial<BaseStackProps> {}
+
+export class SolarSystemCoreStack extends BaseStack<SolarSystemCore> {
+  readonly galaxy: IGalaxyCore;
+
+  constructor(scope: GalaxyCoreStack, id: string, props?: SolarSystemCoreStackProps) {
+    super(scope.resource, id, {
+      description: 'Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.',
+      ...props,
+      type: 'SolarSystem',
+    });
+
+    this.galaxy = scope.resource;
+    this._resource = new SolarSystemCore(this, id, this.galaxy, props);
+  }
+}
+
+export class SolarSystemExtensionStack extends BaseStack<SolarSystemExtension> {
+  readonly galaxy: IGalaxyExtension;
+  readonly portal: ISolarSystemCore;
+
+  constructor(scope: GalaxyExtensionStack, id: string, props?: Partial<BaseStackProps>) {
+    super(scope.resource, id, {
+      description: 'Cosmos: App resources dependant on each SolarSystem, like Services and Databases.',
+      ...props,
+      type: 'SolarSystem',
+    });
+
+    this.galaxy = scope.resource;
+    this._resource = new SolarSystemExtension(this, id, this.galaxy);
+    this.portal = this.resource.portal;
   }
 }

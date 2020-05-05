@@ -1,4 +1,4 @@
-import { Stack, Construct } from '@aws-cdk/core';
+import { Stack, IConstruct } from '@aws-cdk/core';
 // import {
 //   Bubble,
 //   Cosmos,
@@ -53,7 +53,7 @@ import { Stack, Construct } from '@aws-cdk/core';
 //   return _scope;
 // }
 
-export const isCrossAccount = (x: Construct, y: Construct, includeRegion?: boolean): boolean => {
+export const isCrossAccount = (x: IConstruct, y: IConstruct, includeRegion?: boolean): boolean => {
   const stackX = Stack.of(x);
   const stackY = Stack.of(y);
   const diffAccount = stackX.account !== stackY.account;

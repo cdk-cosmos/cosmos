@@ -15,7 +15,7 @@ export { CosmosCoreStack, CosmosCoreProps, CosmosExtensionStack } from './cosmos
 
 export { GalaxyCoreStack, GalaxyCoreStackProps, GalaxyExtensionStack } from './galaxy';
 
-// export { SolarSystemStack, SolarSystemProps, ImportedSolarSystem, SolarSystemExtensionStack } from './solar-system';
+export { SolarSystemCoreStack, SolarSystemCoreProps, SolarSystemExtensionStack } from './solar-system';
 
 // export {
 //   EcsSolarSystemStack,
@@ -31,18 +31,18 @@ export { GalaxyCoreStack, GalaxyCoreStackProps, GalaxyExtensionStack } from './g
 //   CiCdSolarSystemExtensionStack,
 // } from './ci-cd-solar-system';
 
-export {
-  Output,
-  OutputProps,
-  RemoteZone,
-  RemoteVpc,
-  RemoteCluster,
-  RemoteAlb,
-  RemoteApplicationListener,
-  RemoteCodeRepo,
-  RemoteBuildProject,
-  RemoteFunction,
-} from './helpers/remote';
+// export {
+//   Output,
+//   OutputProps,
+//   RemoteZone,
+//   RemoteVpc,
+//   RemoteCluster,
+//   RemoteAlb,
+//   RemoteApplicationListener,
+//   RemoteCodeRepo,
+//   RemoteBuildProject,
+//   RemoteFunction,
+// } from './helpers/remote';
 
 // export { CdkPipeline, CdkPipelineProps } from './helpers/cdk-pipeline';
 

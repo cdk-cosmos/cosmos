@@ -80,7 +80,7 @@ Object {
       "Export": Object {
         "Name": "CoreRootZoneName",
       },
-      "Value": "test.com",
+      "Value": "cos.com",
     },
   },
   "Resources": Object {
@@ -153,7 +153,7 @@ Object {
         "HostedZoneConfig": Object {
           "Comment": "Core TLD Root Zone for Cos Cosmos.",
         },
-        "Name": "test.com.",
+        "Name": "cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",
     },

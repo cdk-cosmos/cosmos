@@ -8,7 +8,7 @@ import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { CrossAccountExportsFn } from '@cosmos-building-blocks/common';
 import { IFunction, Function } from '@aws-cdk/aws-lambda';
 import { BaseStack, BaseConstruct, BaseStackProps, COSMOS_PARTITION } from './base';
-import { RemoteZone, RemoteCodeRepo, RemoteFunction } from '.';
+import { RemoteZone, RemoteCodeRepo, RemoteFunction } from './helpers/remote';
 
 export interface ICosmosCore extends Construct {
   link?: ICosmosCoreLink;
@@ -133,6 +133,24 @@ export class CosmosExtension extends BaseConstruct implements ICosmosExtension {
   }
 }
 
+export interface ICosmosCoreLink extends Construct {
+  cosmos: ICosmosCore;
+}
+
+export class CosmosLinkStack extends BaseStack<never> implements ICosmosCoreLink {
+  readonly cosmos: ICosmosCore;
+
+  constructor(cosmos: ICosmosCore, props?: StackProps) {
+    super(cosmos, 'Link', {
+      description: 'Cosmos: Resources to link the Cosmos, like Route53 zone delegation',
+      ...props,
+      type: 'Link',
+    });
+
+    this.cosmos = cosmos;
+  }
+}
+
 export interface CosmosCoreStackProps extends CosmosCoreProps, Partial<BaseStackProps> {}
 
 export class CosmosCoreStack extends BaseStack<CosmosCore> {
@@ -148,25 +166,9 @@ export class CosmosCoreStack extends BaseStack<CosmosCore> {
   }
 }
 
-export interface ICosmosCoreLink {
-  Cosmos: ICosmosCore;
-}
-
-export class CosmosLinkStack extends BaseStack<never> implements ICosmosCoreLink {
-  readonly Cosmos: ICosmosCore;
-
-  constructor(cosmos: ICosmosCore, props?: StackProps) {
-    super(cosmos, 'Link', {
-      description: 'Cosmos: Resources to link the Cosmos, like Route53 zone delegation',
-      ...props,
-      type: 'Link',
-    });
-
-    this.Cosmos = cosmos;
-  }
-}
-
 export class CosmosExtensionStack extends BaseStack<CosmosExtension> {
+  readonly portal: ICosmosCore;
+
   constructor(scope: Construct, id: string, props?: Partial<BaseStackProps>) {
     super(scope, id, {
       partition: 'App',
@@ -175,6 +177,7 @@ export class CosmosExtensionStack extends BaseStack<CosmosExtension> {
     });
 
     this._resource = new CosmosExtension(this, id);
+    this.portal = this.resource.portal;
   }
 }
 

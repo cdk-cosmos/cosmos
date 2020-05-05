@@ -14,21 +14,6 @@ export interface IBubble {
   // region?: string;
 }
 
-export interface Galaxy extends Bubble, Construct {
-  Cosmos: Cosmos;
-  SolarSystems?: SolarSystem[];
-  CdkCrossAccountRoleStaticArn?: string;
-
-  AddSolarSystem(solarSystem: SolarSystem): void;
-}
-
-export interface SolarSystem extends Bubble, Construct {
-  Galaxy: Galaxy;
-  Vpc: IVpc;
-  Zone: IPublicHostedZone;
-  PrivateZone: IPrivateHostedZone;
-}
-
 export interface EcsSolarSystem extends SolarSystem {
   Cluster: ICluster;
   Alb: IApplicationLoadBalancer;
@@ -40,29 +25,6 @@ export interface EcsSolarSystem extends SolarSystem {
 export interface CiCdSolarSystem extends EcsSolarSystem {}
 
 // Extensions
-
-export interface Extension<T extends Bubble & Construct> extends Bubble, Construct {
-  Portal: T;
-}
-
-export interface CosmosExtension extends Extension<Cosmos> {
-  Partition: string;
-  Scope: Construct;
-  Version: string;
-  Galaxies: Array<Galaxy | GalaxyExtension>;
-  SolarSystems?: Array<SolarSystem | SolarSystemExtension>;
-  CdkRepo: IRepository;
-
-  AddGalaxy(galaxy: Galaxy | GalaxyExtension): void;
-  AddSolarSystem(solarSystem: SolarSystem | SolarSystemExtension): void;
-}
-
-export interface GalaxyExtension extends Extension<Galaxy> {
-  Cosmos: CosmosExtension;
-  SolarSystems: Array<SolarSystem | SolarSystemExtension>;
-
-  AddSolarSystem(solarSystem: SolarSystem | SolarSystemExtension): void;
-}
 
 export interface SolarSystemExtension extends Extension<SolarSystem> {
   Galaxy: GalaxyExtension;

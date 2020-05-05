@@ -4,7 +4,7 @@ import { synthesizeStacks, toHaveResourceId, toHaveResourceCount } from '../../.
 import { CosmosCoreStack, CosmosExtensionStack } from '../src';
 
 const app = new App();
-const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'test.com', cidr: '10.0.0.0/24' });
+const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'cos.com', cidr: '10.0.0.0/24' });
 const cosmosExtension = new CosmosExtensionStack(app, 'Test');
 const [cosmosStack, cosmosExtensionStack] = synthesizeStacks(cosmos, cosmosExtension);
 
@@ -17,7 +17,7 @@ describe('Cosmos', () => {
   });
 
   test('should have a RootZone', () => {
-    expect(cosmosStack).toHaveResource('AWS::Route53::HostedZone', { Name: 'test.com.' });
+    expect(cosmosStack).toHaveResource('AWS::Route53::HostedZone', { Name: 'cos.com.' });
     expect(cosmosStack).toHaveOutput({ exportName: 'CoreRootZoneId' });
     expect(cosmosStack).toHaveOutput({ exportName: 'CoreRootZoneName' });
     toHaveResourceId(cosmosStack, 'RootZone');
