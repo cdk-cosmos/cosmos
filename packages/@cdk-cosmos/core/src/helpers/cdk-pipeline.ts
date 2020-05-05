@@ -1,4 +1,4 @@
-import { Construct, RemovalPolicy } from '@aws-cdk/core';
+import { Construct, RemovalPolicy, Stack } from '@aws-cdk/core';
 import { Bucket, BucketEncryption } from '@aws-cdk/aws-s3';
 import { IRepository } from '@aws-cdk/aws-codecommit';
 import { Pipeline, Artifact, StageOptions } from '@aws-cdk/aws-codepipeline';
@@ -20,7 +20,7 @@ import {
 } from '@aws-cdk/aws-codebuild';
 import { IRole } from '@aws-cdk/aws-iam';
 import { IVpc } from '@aws-cdk/aws-ec2';
-import { PATTERN, SolarSystem, SolarSystemExtension } from '..';
+import { ISolarSystemCore, ISolarSystemExtension } from '../solar-system';
 
 export type BuildEnvironmentVariables = { [key: string]: BuildEnvironmentVariable };
 
@@ -42,7 +42,7 @@ export class CdkPipeline extends Construct {
     super(scope, id);
 
     const {
-      name = id,
+      // name = id,
       cdkRepo,
       cdkBranch = 'master',
       deployRole = undefined,
@@ -57,7 +57,7 @@ export class CdkPipeline extends Construct {
     });
 
     this.Deploy = new Project(this, 'CdkDeploy', {
-      projectName: `${name}Deploy`,
+      // projectName: `${name}Deploy`,
       role: deployRole,
       vpc: deployVpc,
       source: Source.codeCommit({
@@ -113,7 +113,7 @@ export class CdkPipeline extends Construct {
     const cdkDeployOutput = new Artifact('CdkDeployOutput');
 
     this.Pipeline = new Pipeline(this, 'CdkPipeline', {
-      pipelineName: name,
+      // pipelineName: name,
       artifactBucket: artifactBucket,
       role: deployRole,
       stages: [
@@ -155,7 +155,7 @@ export const addCdkDeployEnvStageToPipeline = (props: {
   pipeline: Pipeline;
   deployProject: IProject;
   deployEnvs?: BuildEnvironmentVariables;
-  solarSystem: SolarSystem | SolarSystemExtension;
+  solarSystem: ISolarSystemCore | ISolarSystemExtension;
   isManualApprovalRequired?: boolean;
 }): void => {
   const { pipeline, deployProject, deployEnvs = {}, solarSystem, isManualApprovalRequired = true } = props || {};
@@ -165,7 +165,7 @@ export const addCdkDeployEnvStageToPipeline = (props: {
     const sourceOutput = new Artifact('CdkOutput');
     cdkSourceRepoAction = new CodeCommitSourceAction({
       actionName: 'CdkCheckout',
-      repository: solarSystem.Galaxy.Cosmos.CdkRepo,
+      repository: solarSystem.galaxy.cosmos.cdkRepo,
       output: sourceOutput,
       trigger: CodeCommitTrigger.NONE,
     });
@@ -175,7 +175,7 @@ export const addCdkDeployEnvStageToPipeline = (props: {
   const cdkOutputArtifact = (cdkSourceRepoAction?.actionProperties.outputs as Artifact[])[0];
 
   const deployStage: StageOptions = {
-    stageName: solarSystem.RESOLVE('${Galaxy}-${SolarSystem}'), // TODO: is this confusing ?
+    stageName: solarSystem.generateId('', '', '{Galaxy}{SolarSystem}'), // TODO: is this confusing ?
     actions: [
       new CodeBuildAction({
         actionName: 'CdkDeploy',
@@ -186,7 +186,7 @@ export const addCdkDeployEnvStageToPipeline = (props: {
           ...deployEnvs,
           STACKS: {
             type: BuildEnvironmentVariableType.PLAINTEXT,
-            value: solarSystem.RESOLVE(PATTERN.SOLAR_SYSTEM, 'SolarSystem'),
+            value: Stack.of(solarSystem).stackName,
           },
         },
       }),

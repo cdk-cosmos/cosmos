@@ -1,4 +1,4 @@
-import { Construct, StackProps } from '@aws-cdk/core';
+import { Construct } from '@aws-cdk/core';
 import { InstanceType, SecurityGroup } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster, ClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
 import {
@@ -25,6 +25,7 @@ import {
 } from './solar-system';
 import { CoreVpcProps, addEcsEndpoints } from './components/core-vpc';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from './helpers/remote';
+import { BaseStackProps } from './base';
 
 export interface IEcsSolarSystemCore extends ISolarSystemCore {
   cluster: ICluster;
@@ -143,7 +144,7 @@ export class ImportedEcsSolarSystemCore extends ImportedSolarSystemCore implemen
 export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack implements IEcsSolarSystemExtension {
   readonly portal: IEcsSolarSystemCore;
 
-  constructor(galaxy: IGalaxyExtension, id: string, props?: StackProps) {
+  constructor(galaxy: IGalaxyExtension, id: string, props?: Partial<BaseStackProps>) {
     super(galaxy, id, props);
 
     this.node.tryRemoveChild(this.portal.node.id);
