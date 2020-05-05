@@ -29,6 +29,25 @@ Object {
         ],
       },
     },
+    "AlbHttpInternalListenerAlArn79898939": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-HttpInternalListener-Arn",
+      },
+      "Value": Object {
+        "Ref": "AlbHttpInternalListenerE500F00F",
+      },
+    },
+    "AlbHttpInternalListenerAlSecurityGroupIdB16286F9": Object {
+      "Export": Object {
+        "Name": "Core-Mgt-Dev-HttpInternalListener-SecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "AlbSecurityGroup86A59E99",
+          "GroupId",
+        ],
+      },
+    },
     "AlbHttpListenerAlArn54F636C2": Object {
       "Export": Object {
         "Name": "Core-Mgt-Dev-HttpListener-Arn",
@@ -215,14 +234,36 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
     },
+    "AlbHttpInternalListenerE500F00F": Object {
+      "Properties": Object {
+        "DefaultActions": Array [
+          Object {
+            "FixedResponseConfig": Object {
+              "ContentType": "text/plain",
+              "MessageBody": "Route Not Found.",
+              "StatusCode": "404",
+            },
+            "Type": "fixed-response",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "Alb16C2F182",
+        },
+        "Port": 81,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
     "AlbHttpListener00C8B33E": Object {
       "Properties": Object {
         "DefaultActions": Array [
           Object {
-            "TargetGroupArn": Object {
-              "Ref": "DefaultTargetGroup00992EAD",
+            "FixedResponseConfig": Object {
+              "ContentType": "text/plain",
+              "MessageBody": "Route Not Found.",
+              "StatusCode": "404",
             },
-            "Type": "forward",
+            "Type": "fixed-response",
           },
         ],
         "LoadBalancerArn": Object {
@@ -275,6 +316,13 @@ Object {
             "IpProtocol": "tcp",
             "ToPort": 80,
           },
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 81",
+            "FromPort": 81,
+            "IpProtocol": "tcp",
+            "ToPort": 81,
+          },
         ],
         "VpcId": Object {
           "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
@@ -284,7 +332,6 @@ Object {
     },
     "ClusterCapacityASGA6ED330E": Object {
       "Properties": Object {
-        "DesiredCapacity": "1",
         "LaunchConfigurationName": Object {
           "Ref": "ClusterCapacityLaunchConfigC44566A4",
         },
@@ -704,7 +751,7 @@ def pick(dct, *keys):
         "ImageId": Object {
           "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter",
         },
-        "InstanceType": "t2.medium",
+        "InstanceType": "t3.medium",
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
@@ -820,17 +867,6 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "ClusterName": "Core-Mgt-Dev-Cluster",
       },
       "Type": "AWS::ECS::Cluster",
-    },
-    "DefaultTargetGroup00992EAD": Object {
-      "Properties": Object {
-        "Port": 80,
-        "Protocol": "HTTP",
-        "TargetType": "instance",
-        "VpcId": Object {
-          "Fn::ImportValue": "Core-Test-Mgt-Galaxy:ExportsOutputRefSharedVpc96F0F6140AE947C7",
-        },
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
     "PrivateZone27242E85": Object {
       "Properties": Object {

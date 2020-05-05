@@ -54,11 +54,14 @@ export interface EcsSolarSystem extends SolarSystem {
   Cluster: ICluster;
   Alb: IApplicationLoadBalancer;
   HttpListener: IApplicationListener;
+  HttpInternalListener: IApplicationListener;
   // HttpsListener: IApplicationListener;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface CiCdSolarSystem extends EcsSolarSystem {}
+export interface CiCdSolarSystem extends SolarSystem {
+  readonly CdkDeploy?: IProject;
+}
+export interface CiCdEcsSolarSystem extends CiCdSolarSystem, EcsSolarSystem {}
 
 // Extensions
 
@@ -93,7 +96,11 @@ export interface EcsSolarSystemExtension extends SolarSystemExtension {
   Galaxy: GalaxyExtension;
 }
 
-export interface CiCdSolarSystemExtension extends EcsSolarSystemExtension {
+export interface CiCdSolarSystemExtension extends SolarSystemExtension {
+  Galaxy: GalaxyExtension;
+  DeployProject: IProject;
+}
+export interface CiCdEcsSolarSystemExtension extends CiCdSolarSystemExtension, EcsSolarSystemExtension {
   Galaxy: GalaxyExtension;
   DeployProject: IProject;
 }

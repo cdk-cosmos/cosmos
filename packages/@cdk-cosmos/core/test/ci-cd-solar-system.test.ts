@@ -8,6 +8,8 @@ import {
   GalaxyExtensionStack,
   CiCdSolarSystemStack,
   CiCdSolarSystemExtensionStack,
+  CiCdEcsSolarSystemStack,
+  CiCdEcsSolarSystemExtensionStack,
 } from '../src';
 
 const app = new App();
@@ -15,11 +17,11 @@ const env = { account: 'account', region: 'region' };
 
 const cosmos = new CosmosStack(app, 'Cos', { tld: 'com', cidr: '10.0.1.0/22', env });
 const galaxy = new GalaxyStack(cosmos, 'Gal', { env });
-const cicdSolarSystem = new CiCdSolarSystemStack(galaxy, { env });
+const cicdSolarSystem = new CiCdEcsSolarSystemStack(galaxy, { env });
 
 const cosmosExtension = new CosmosExtensionStack(app, 'Cos', { env });
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });
-const cicdSolarSystemExtension = new CiCdSolarSystemExtensionStack(galaxyExtension, { env });
+const cicdSolarSystemExtension = new CiCdEcsSolarSystemExtensionStack(galaxyExtension, { env });
 
 const [cicdSolarSystemStack, cicdSolarSystemExtensionStack] = synthesizeStacks(
   cicdSolarSystem,

@@ -96,7 +96,7 @@ export class GalaxyStack extends Stack implements Galaxy {
 
     this.Vpc.addGatewayEndpoint('S3Gateway', {
       service: GatewayVpcEndpointAwsService.S3,
-      subnets: [{ subnetType: SubnetType.ISOLATED }],
+      subnets: [{ subnetGroupName: 'App' }],
     });
 
     if (defaultEndpoints) {

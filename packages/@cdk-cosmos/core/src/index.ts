@@ -6,19 +6,28 @@ export {
   SolarSystem,
   EcsSolarSystem,
   CiCdSolarSystem,
+  CiCdEcsSolarSystem,
   Extension,
   CosmosExtension,
   GalaxyExtension,
   SolarSystemExtension,
   EcsSolarSystemExtension,
   CiCdSolarSystemExtension,
+  CiCdEcsSolarSystemExtension,
 } from './interfaces';
 
 export { CosmosStack, CosmosStackProps, ImportedCosmos, CosmosExtensionStack } from './cosmos';
 
 export { GalaxyStack, GalaxyStackProps, ImportedGalaxy, GalaxyExtensionStack } from './galaxy';
 
-export { SolarSystemStack, SolarSystemProps, ImportedSolarSystem, SolarSystemExtensionStack } from './solar-system';
+export {
+  SolarSystemStack,
+  SolarSystemProps,
+  ImportedSolarSystem,
+  ImportedSolarSystemProps,
+  SolarSystemExtensionStack,
+  SolarSystemExtensionStackProps,
+} from './solar-system';
 
 export {
   EcsSolarSystemStack,
@@ -28,10 +37,12 @@ export {
 } from './ecs-solar-system';
 
 export {
-  CiCdSolarSystemStack,
   CiCdStackProps,
-  ImportedCiCdSolarSystem,
+  CiCdSolarSystemStack,
+  CiCdEcsSolarSystemStack,
+  CiCdExtensionStackProps,
   CiCdSolarSystemExtensionStack,
+  CiCdEcsSolarSystemExtensionStack,
 } from './ci-cd-solar-system';
 
 export {
@@ -39,6 +50,7 @@ export {
   OutputProps,
   RemoteZone,
   RemoteVpc,
+  RemoteVpcImportProps,
   RemoteCluster,
   RemoteAlb,
   RemoteApplicationListener,

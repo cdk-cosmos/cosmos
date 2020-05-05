@@ -17,6 +17,7 @@ import {
   SolarSystem,
   SolarSystemExtension,
   RemoteVpc,
+  RemoteVpcImportProps,
   RemoteZone,
 } from '.';
 import { isCrossAccount } from './helpers/utils';
@@ -89,7 +90,7 @@ export class SolarSystemStack extends Stack implements SolarSystem {
 
       this.Vpc.addGatewayEndpoint('S3Gateway', {
         service: GatewayVpcEndpointAwsService.S3,
-        subnets: [{ subnetType: SubnetType.ISOLATED }],
+        subnets: [{ subnetGroupName: 'App' }],
       });
     }
 
@@ -127,6 +128,11 @@ export class SolarSystemStack extends Stack implements SolarSystem {
   }
 }
 
+export interface ImportedSolarSystemProps {
+  name: string;
+  vpcProps?: RemoteVpcImportProps;
+}
+
 export class ImportedSolarSystem extends Construct implements SolarSystem {
   readonly Galaxy: Galaxy;
   readonly Name: string;
@@ -134,15 +140,24 @@ export class ImportedSolarSystem extends Construct implements SolarSystem {
   readonly Zone: IPublicHostedZone;
   readonly PrivateZone: IPrivateHostedZone;
 
-  constructor(scope: Construct, galaxy: Galaxy, name: string) {
+  constructor(scope: Construct, galaxy: Galaxy, props: ImportedSolarSystemProps) {
     super(scope, 'SolarSystemImport');
+
+    const { name, vpcProps = {} } = props;
 
     this.Galaxy = galaxy;
     this.Name = name;
-    this.Vpc = RemoteVpc.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc'), { hasIsolated: true });
+    this.Vpc = RemoteVpc.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Vpc'), {
+      isolatedSubnetNames: ['App'],
+      ...vpcProps,
+    });
     this.Zone = RemoteZone.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Zone'));
     this.PrivateZone = RemoteZone.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'PrivateZone'));
   }
+}
+
+export interface SolarSystemExtensionStackProps extends StackProps {
+  vpcProps?: RemoteVpcImportProps;
 }
 
 export class SolarSystemExtensionStack extends Stack implements SolarSystemExtension {
@@ -150,7 +165,7 @@ export class SolarSystemExtensionStack extends Stack implements SolarSystemExten
   readonly Portal: SolarSystem;
   readonly Name: string;
 
-  constructor(galaxy: GalaxyExtension, name: string, props?: StackProps) {
+  constructor(galaxy: GalaxyExtension, name: string, props?: SolarSystemExtensionStackProps) {
     super(galaxy.Cosmos.Scope, stackName(galaxy, name), {
       description: 'Cosmos: App resources dependant on each SolarSystem, like Services and Databases.',
       ...props,
@@ -163,6 +178,9 @@ export class SolarSystemExtensionStack extends Stack implements SolarSystemExten
     this.Galaxy = galaxy;
     this.Galaxy.AddSolarSystem(this);
     this.Name = name;
-    this.Portal = new ImportedSolarSystem(this, this.Galaxy.Portal, this.Name);
+    this.Portal = new ImportedSolarSystem(this, this.Galaxy.Portal, {
+      name: this.Name,
+      vpcProps: props?.vpcProps,
+    });
   }
 }
