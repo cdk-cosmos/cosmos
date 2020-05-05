@@ -3,10 +3,10 @@ import { Construct, ConstructNode } from '@aws-cdk/core/lib/construct-compat';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Stack, StackProps } from '@aws-cdk/core/lib/stack';
 
-const COSMOS_PARTITION = 'COSMOS_PARTITION';
-const COSMOS_VERSION = 'COSMOS_VERSION';
-const COSMOS_NETWORK_BUILDER = 'COSMOS_NETWORK_BUILDER';
-const AWS_ENV = 'AWS_ENV';
+export const COSMOS_PARTITION = 'COSMOS_PARTITION';
+export const COSMOS_VERSION = 'COSMOS_VERSION';
+export const COSMOS_NETWORK_BUILDER = 'COSMOS_NETWORK_BUILDER';
+export const AWS_ENV = 'AWS_ENV';
 
 export const PATTERN = {
   SINGLETON_COSMOS: '{Partition}{Resource}+',
@@ -19,20 +19,40 @@ export const PATTERN = {
   // DOCKER_TAG: '{Cosmos}/{Resource}+',
   // LOG_GROUP: '{Partition}/{Cosmos}/{SolarSystem}/{Resource}+',
 };
-// export const DEFAULT_PATTERN = '{Resource}+{Version}?';
-// export const STACK_PATTERN = '{Partition}{Cosmos}{Galaxy}?{SolarSystem}?{Version}?{Type}';
-// export const COSMOS_PATTERN = '{Partition}{Cosmos}{Galaxy}?{SolarSystem}?{Resource}+{Version}?';
 
 declare module '@aws-cdk/core/lib/construct-compat' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface ConstructNode {
     id: string;
     type: string;
     pattern: string;
   }
+
+  interface Construct {
+    generateId(id: string, delimiter?: string, pattern?: string, type?: string): string;
+    singletonId(id: string, delimiter?: string, type?: string): string;
+  }
 }
 
 ConstructNode.prototype.type = 'Resource';
+
+Construct.prototype.generateId = function(id, delimiter, pattern, type): string {
+  return generateNodeId({
+    scope: this,
+    pattern,
+    id,
+    type,
+    delimiter,
+  });
+};
+
+Construct.prototype.singletonId = function(id, delimiter, type): string {
+  return singletonNodeId({
+    scope: this,
+    id,
+    type,
+    delimiter,
+  });
+};
 
 export interface IBase extends IConstruct {
   NetworkBuilder?: NetworkBuilder;
@@ -52,27 +72,8 @@ export class BaseConstruct extends Construct implements IBase {
 
     this.node.type = type;
     if (cidr) this.networkBuilder = new NetworkBuilder(cidr);
-    if (!this.networkBuilder) this.node.tryGetContext(COSMOS_NETWORK_BUILDER);
     if (this.networkBuilder) this.node.setContext(COSMOS_NETWORK_BUILDER, this.networkBuilder);
-  }
-
-  public generateId(id: string, delimiter?: string, type?: string, pattern?: string): string {
-    return generateNodeId({
-      scope: this,
-      pattern,
-      id,
-      type,
-      delimiter,
-    });
-  }
-
-  public singletonId(id: string, delimiter?: string, type?: string): string {
-    return singletonNodeId({
-      scope: this,
-      id,
-      type,
-      delimiter,
-    });
+    else this.networkBuilder = this.node.tryGetContext(COSMOS_NETWORK_BUILDER);
   }
 }
 
@@ -117,25 +118,6 @@ export class BaseStack<T extends IBase> extends Stack {
     });
 
     return removeNonAlphanumeric(id);
-  }
-
-  public generateId(id: string, delimiter?: string, type?: string, pattern?: string): string {
-    return generateNodeId({
-      scope: this,
-      pattern,
-      id,
-      type,
-      delimiter,
-    });
-  }
-
-  public singletonId(id: string, delimiter?: string, type?: string): string {
-    return singletonNodeId({
-      scope: this,
-      id,
-      type,
-      delimiter,
-    });
   }
 }
 
@@ -202,11 +184,8 @@ export function generateId(props: GenerateLogicalIdProps): string {
   if (partition) scopes.push({ key: 'Partition', value: partition });
   if (version) scopes.push({ key: 'Version', value: version });
 
-  const selectedIds = selectScoped(scopes, pattern)
-    .map(x => x.value)
-    .reduce(removeDupes, [])
-    .filter(removeHidden);
-
+  const filteredScopes = scopes.filter(removeHidden).reduce(removeDupes, []);
+  const selectedIds = selectScoped(filteredScopes, pattern).map(x => x.value);
   return selectedIds.join(delimiter).slice(0, 240);
 }
 
@@ -265,16 +244,16 @@ function getPattern(scope: IConstruct): string | undefined {
     .pop();
 }
 
-function removeDupes(result: string[], component: string): string[] {
-  if (result.length === 0 || !result[result.length - 1].endsWith(component)) {
-    result.push(component);
+function removeDupes(result: IScope[], scope: IScope): IScope[] {
+  if (result.length === 0 || !result[result.length - 1].value.endsWith(scope.value)) {
+    result.push(scope);
   }
 
   return result;
 }
 
-function removeHidden(value: string): boolean {
-  if (value === 'Default' || value === 'Resource') return false;
+function removeHidden(scope: IScope): boolean {
+  if (scope.value === 'Default' || scope.value === 'Resource') return false;
   return true;
 }
 

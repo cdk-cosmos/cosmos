@@ -11,7 +11,7 @@ const [cosmosStack, cosmosExtensionStack] = synthesizeStacks(cosmos, cosmosExten
 describe('Cosmos', () => {
   test('should be a cosmos', () => {
     expect(cosmosStack.name).toEqual('CoreCosCosmos');
-    expect(cosmosStack).toHaveOutput({ exportName: 'CoreName', outputValue: 'Cos' });
+    expect(cosmosStack).toHaveOutput({ exportName: 'CoreId', outputValue: 'Cos' });
     expect(cosmosStack).toHaveOutput({ exportName: 'CoreLibVersion' });
     toHaveResourceCount(cosmosStack, 4);
   });

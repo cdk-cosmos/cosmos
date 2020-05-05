@@ -13,7 +13,7 @@
 
 export { CosmosCoreStack, CosmosCoreProps, CosmosExtensionStack } from './cosmos';
 
-// export { GalaxyStack, GalaxyStackProps, ImportedGalaxy, GalaxyExtensionStack } from './galaxy';
+export { GalaxyCoreStack, GalaxyCoreStackProps, GalaxyExtensionStack } from './galaxy';
 
 // export { SolarSystemStack, SolarSystemProps, ImportedSolarSystem, SolarSystemExtensionStack } from './solar-system';
 
