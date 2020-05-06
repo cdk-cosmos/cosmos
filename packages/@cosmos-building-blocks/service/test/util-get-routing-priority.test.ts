@@ -18,7 +18,6 @@ test('Should generate routing priority in order of path.', () => {
   expect(getRoutingPriority({ pathPattern: '/test2' })).toBeLessThan(getRoutingPriority({ pathPattern: '/test1' }));
   expect(getRoutingPriority({ pathPattern: '/test/v2' })).toBeLessThan(getRoutingPriority({ pathPattern: '/test/v1' }));
 
-
   expect(getRoutingPriority({ hostHeader: 'www.google.com' })).toBeLessThan(
     getRoutingPriority({ hostHeader: 'google.com' })
   );
