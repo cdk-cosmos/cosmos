@@ -2,7 +2,7 @@ import '@aws-cdk/assert/jest';
 import { App, Stack } from '@aws-cdk/core';
 import { Repository } from '@aws-cdk/aws-codecommit';
 import { synthesizeStacks } from '../../../../../src/test';
-import { CdkPipeline } from '../../src';
+import { CdkPipeline } from '../../src/components/cdk-pipeline';
 
 const app = new App();
 const stack = new Stack(app, 'Pipeline', {});
@@ -14,8 +14,8 @@ const [testStack] = synthesizeStacks(stack);
 
 describe('Pipeline', () => {
   test('should have master cdk pipeline', () => {
-    expect(testStack).toHaveResource('AWS::CodePipeline::Pipeline', { Name: 'CdkPipeline' });
-    expect(testStack).toHaveResource('AWS::CodeBuild::Project', { Name: 'CdkPipelineDeploy' });
+    expect(testStack).toHaveResource('AWS::CodePipeline::Pipeline');
+    expect(testStack).toHaveResource('AWS::CodeBuild::Project');
     const bucketEncryption = {
       ServerSideEncryptionConfiguration: [
         {
@@ -30,7 +30,7 @@ describe('Pipeline', () => {
 
   test('should be able to add stage', () => {
     // TODO: Need to create proper test for function "addCdkDeployEnvStageToPipeline"
-    expect(testStack).toHaveResource('AWS::CodePipeline::Pipeline', { Name: 'CdkPipeline' });
-    expect(testStack).toHaveResource('AWS::CodeBuild::Project', { Name: 'CdkPipelineDeploy' });
+    expect(testStack).toHaveResource('AWS::CodePipeline::Pipeline');
+    expect(testStack).toHaveResource('AWS::CodeBuild::Project');
   });
 });

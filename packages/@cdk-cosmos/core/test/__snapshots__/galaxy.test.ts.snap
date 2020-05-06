@@ -2,21 +2,21 @@
 
 exports[`Galaxy Extension should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos: App resources dependant on each Galaxy.",
+  "Description": "Galaxy Extension: App resources dependant on each Aws Account.",
 }
 `;
 
 exports[`Galaxy should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos: Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.",
+  "Description": "Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
 }
 `;
 
 exports[`Galaxy should match snapshot 2`] = `
 Object {
-  "Description": "Cosmos: Resources dependant on each Galaxy, like ShareVpc and CrossAccountRoles.",
+  "Description": "Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
   "Resources": Object {
-    "CdkCrossAccountRoleF932CF89": Object {
+    "CdkCrossAccountRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -24,7 +24,7 @@ Object {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": Object {
-                "AWS": "arn:aws:iam::account:role/Core-CdkMaster-Role",
+                "AWS": "arn:aws:iam::account:role/CoreCdkMasterRole",
               },
             },
           ],
@@ -44,7 +44,7 @@ Object {
             ],
           },
         ],
-        "RoleName": "Core-CdkCrossAccount-Role",
+        "RoleName": "CoreCdkCrossAccountRole",
       },
       "Type": "AWS::IAM::Role",
     },

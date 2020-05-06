@@ -1,139 +1,122 @@
-import { Project } from '@aws-cdk/aws-codebuild';
+import { Construct } from '@aws-cdk/core';
+import { Project, IProject } from '@aws-cdk/aws-codebuild';
 import { Role } from '@aws-cdk/aws-iam';
 import {
-  PATTERN,
-  Galaxy,
-  EcsSolarSystem,
-  CiCdSolarSystem,
-  CiCdEcsSolarSystem,
-  GalaxyExtension,
-  EcsSolarSystemStack,
-  EcsSolarSystemProps,
-  ImportedEcsSolarSystem,
-  EcsSolarSystemExtensionStack,
-  CiCdSolarSystemExtension,
-  CiCdEcsSolarSystemExtension,
-  CdkPipeline,
-  CdkPipelineProps,
-  SolarSystem,
-  SolarSystemStack,
-  SolarSystemProps,
+  IEcsSolarSystemCore,
+  EcsSolarSystemCoreStack,
+  EcsSolarSystemCoreProps,
+  ImportedEcsSolarSystemCore,
+} from './ecs-solar-system';
+import { IGalaxyExtension, IGalaxyCore } from './galaxy';
+import { CdkPipelineProps, CdkPipeline } from './components/cdk-pipeline';
+import {
+  SolarSystemExtensionStackProps,
+  ISolarSystemCore,
+  ISolarSystemExtension,
+  SolarSystemCoreStackProps,
+  SolarSystemCoreStack,
   SolarSystemExtensionStack,
-} from '.';
-import { SolarSystemExtension } from './interfaces';
-import { SolarSystemExtensionStackProps, ImportedSolarSystem } from './solar-system';
+  ImportedSolarSystemCore,
+} from './solar-system';
 
-// TODO: We need a better pattern
+const CDK_PIPELINE_PATTERN = '{Partition}{Cosmos}{Resource}';
+const CDK_PIPELINE_STACK_PATTERN = '{Partition}{Cosmos}{Resource}';
 
-export interface CiCdStackProps {
-  cdkPipelineProps?: Partial<CdkPipelineProps>;
+export interface ICiCdSolarSystemCore extends ISolarSystemCore {
+  deployProject?: IProject;
 }
 
-const createCdkPipeline = (solarSystem: SolarSystem, cdkPipelineProps?: Partial<CdkPipelineProps>): CdkPipeline => {
-  const { CdkRepo, CdkMasterRoleStaticArn } = solarSystem.Galaxy.Cosmos;
+export interface ICiCdEcsSolarSystemCore extends IEcsSolarSystemCore {
+  deployProject?: IProject;
+}
 
-  return new CdkPipeline(solarSystem, 'CdkPipeline', {
-    deployRole: Role.fromRoleArn(solarSystem, 'CdkMasterRole', CdkMasterRoleStaticArn, { mutable: false }),
-    deployStacks: [solarSystem.RESOLVE(PATTERN.COSMOS, '*')],
-    ...cdkPipelineProps,
-    name: solarSystem.RESOLVE(PATTERN.SINGLETON_COSMOS, 'Cdk-Pipeline'),
-    cdkRepo: CdkRepo,
-    // deployVpc: this.Vpc,
-  });
-};
+// Extensions
 
-export class CiCdSolarSystemStack extends SolarSystemStack implements CiCdSolarSystem {
-  readonly CdkPipeline: CdkPipeline;
-  readonly CdkDeploy: Project;
+export interface ICiCdSolarSystemExtension<T extends ICiCdSolarSystemCore> extends Construct {
+  galaxy: IGalaxyExtension;
+  portal: T;
+  deployProject: IProject;
+}
 
-  constructor(galaxy: Galaxy, props?: CiCdStackProps & SolarSystemProps) {
-    super(galaxy, 'CiCd', props);
+class CosmosCdkPipeline extends CdkPipeline {
+  constructor(scope: ISolarSystemCore | ISolarSystemExtension, id: string, props?: Partial<CdkPipelineProps>) {
+    const cdkRepo = scope.galaxy.cosmos.cdkRepo;
+    const cdkMasterRoleStaticArn =
+      (scope as ISolarSystemCore).galaxy.cosmos.cdkMasterRoleStaticArn ||
+      (scope as ISolarSystemExtension).galaxy.cosmos.portal.cdkMasterRoleStaticArn;
+    // const vpc = (scope as ISolarSystemCore).vpc || (scope as ISolarSystemExtension).portal.vpc;
 
-    const { cdkPipelineProps = {} } = props || {};
-
-    this.CdkPipeline = createCdkPipeline(this, cdkPipelineProps);
-    this.CdkDeploy = this.CdkPipeline.Deploy;
-
-    // RemoteBuildProject.export(`Core${this.Account.Name}${this.Name}`, this.CdkDeploy);
+    super(scope, id, {
+      deployRole: Role.fromRoleArn(scope, 'CdkMasterRole', cdkMasterRoleStaticArn, { mutable: false }),
+      deployStacks: [scope.generateId('*', '', CDK_PIPELINE_STACK_PATTERN)],
+      ...props,
+      pipelineName: scope.generateId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
+      deployName: scope.generateId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
+      cdkRepo: cdkRepo,
+      // deployVpc: vpc,
+    });
   }
 }
 
-export class CiCdEcsSolarSystemStack extends EcsSolarSystemStack implements CiCdEcsSolarSystem {
-  readonly CdkPipeline: CdkPipeline;
-  readonly CdkDeploy: Project;
-
-  constructor(galaxy: Galaxy, props?: CiCdStackProps & EcsSolarSystemProps) {
-    super(galaxy, 'CiCd', props);
-
-    const { cdkPipelineProps = {} } = props || {};
-
-    this.CdkPipeline = createCdkPipeline(this, cdkPipelineProps);
-    this.CdkDeploy = this.CdkPipeline.Deploy;
-
-    // RemoteBuildProject.export(`Core${this.Account.Name}${this.Name}`, this.CdkDeploy);
-  }
-}
-
-const creatExtensionCdkPipeline = (
-  solarSystem: SolarSystemExtension,
-  cdkPipelineProps?: Partial<CdkPipelineProps>
-): CdkPipeline => {
-  const { CdkMasterRoleStaticArn } = solarSystem.Galaxy.Cosmos.Portal;
-  const { CdkRepo } = solarSystem.Galaxy.Cosmos;
-
-  return new CdkPipeline(solarSystem, 'CdkPipeline', {
-    deployRole: Role.fromRoleArn(solarSystem, 'CdkMasterRole', CdkMasterRoleStaticArn, { mutable: false }),
-    deployStacks: [solarSystem.RESOLVE(PATTERN.COSMOS, '*')],
-    ...cdkPipelineProps,
-    name: solarSystem.RESOLVE(PATTERN.COSMOS, 'Cdk-Pipeline'),
-    cdkRepo: CdkRepo,
-    // deployVpc: this.Vpc,
-  });
-};
-
-export interface CiCdExtensionStackProps {
+export interface CiCdSolarSystemCoreStackProps extends SolarSystemCoreStackProps {
   cdkPipelineProps?: Partial<CdkPipelineProps>;
 }
 
-export class CiCdSolarSystemExtensionStack extends SolarSystemExtensionStack implements CiCdSolarSystemExtension {
-  readonly Portal: SolarSystem;
-  readonly DeployPipeline: CdkPipeline;
-  readonly DeployProject: Project;
+export class CiCdSolarSystemCoreStack extends SolarSystemCoreStack implements ICiCdSolarSystemCore {
+  readonly deployPipeline: CdkPipeline;
+  readonly deployProject: Project;
 
-  constructor(galaxy: GalaxyExtension, props?: CiCdExtensionStackProps & SolarSystemExtensionStackProps) {
+  constructor(galaxy: IGalaxyCore, props?: CiCdSolarSystemCoreStackProps) {
     super(galaxy, 'CiCd', props);
 
     const { cdkPipelineProps } = props || {};
 
-    this.node.tryRemoveChild(this.Portal.node.id);
-    this.Portal = new ImportedSolarSystem(this, this.Galaxy.Portal, {
-      name: 'CiCd',
-      vpcProps: props?.vpcProps,
-    });
-
-    this.DeployPipeline = creatExtensionCdkPipeline(this, cdkPipelineProps);
-    this.DeployProject = this.DeployPipeline.Deploy;
+    this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
+    this.deployProject = this.deployPipeline.Deploy;
   }
 }
 
-export class CiCdEcsSolarSystemExtensionStack extends EcsSolarSystemExtensionStack
-  implements CiCdEcsSolarSystemExtension {
-  readonly Portal: EcsSolarSystem;
-  readonly DeployPipeline: CdkPipeline;
-  readonly DeployProject: Project;
+export interface CiCdEcsSolarSystemCoreStackProps extends EcsSolarSystemCoreProps {
+  cdkPipelineProps?: Partial<CdkPipelineProps>;
+}
 
-  constructor(galaxy: GalaxyExtension, props?: CiCdExtensionStackProps & SolarSystemExtensionStackProps) {
+export class CiCdEcsSolarSystemCoreStack extends EcsSolarSystemCoreStack implements ICiCdSolarSystemCore {
+  readonly deployPipeline: CdkPipeline;
+  readonly deployProject: Project;
+
+  constructor(galaxy: IGalaxyCore, props?: CiCdEcsSolarSystemCoreStackProps) {
     super(galaxy, 'CiCd', props);
 
     const { cdkPipelineProps } = props || {};
 
-    this.node.tryRemoveChild(this.Portal.node.id);
-    this.Portal = new ImportedEcsSolarSystem(this, this.Galaxy.Portal, {
-      name: 'CiCd',
-      vpcProps: props?.vpcProps,
-    });
+    this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
+    this.deployProject = this.deployPipeline.Deploy;
+  }
+}
 
-    this.DeployPipeline = creatExtensionCdkPipeline(this, cdkPipelineProps);
-    this.DeployProject = this.DeployPipeline.Deploy;
+export interface CiCdSolarSystemExtensionStackProps extends SolarSystemExtensionStackProps {
+  ecs?: boolean;
+  cdkPipelineProps?: Partial<CdkPipelineProps>;
+}
+
+export class CiCdSolarSystemExtensionStack<T extends ICiCdSolarSystemCore = ICiCdSolarSystemCore>
+  extends SolarSystemExtensionStack
+  implements ICiCdSolarSystemExtension<T> {
+  readonly portal: T;
+  readonly deployPipeline: CdkPipeline;
+  readonly deployProject: Project;
+
+  constructor(galaxy: IGalaxyExtension, props?: CiCdSolarSystemExtensionStackProps) {
+    super(galaxy, 'CiCd', props);
+
+    const { ecs, cdkPipelineProps } = props || {};
+
+    this.node.tryRemoveChild(this.portal.node.id);
+    this.portal = (ecs
+      ? new ImportedEcsSolarSystemCore(this, "'CiCd'", this.galaxy.portal, props)
+      : new ImportedSolarSystemCore(this, "'CiCd'", this.galaxy.portal, props)) as T;
+
+    this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
+    this.deployProject = this.deployPipeline.Deploy;
   }
 }

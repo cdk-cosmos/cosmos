@@ -1,5 +1,5 @@
 import { Construct } from '@aws-cdk/core';
-import { InstanceType, SecurityGroup, InterfaceVpcEndpointAwsService } from '@aws-cdk/aws-ec2';
+import { InstanceType, SecurityGroup } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster, ClusterProps, AddCapacityOptions, CpuUtilizationScalingProps } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
@@ -14,26 +14,34 @@ import { ManagedPolicy } from '@aws-cdk/aws-iam';
 import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 import { AutoScalingGroup } from '@aws-cdk/aws-autoscaling';
+import { IGalaxyCore, IGalaxyExtension } from './galaxy';
 import {
-  PATTERN,
-  Galaxy,
-  GalaxyExtension,
-  EcsSolarSystem,
-  EcsSolarSystemExtension,
-  SolarSystemStack,
-  SolarSystemProps,
-  ImportedSolarSystem,
+  ISolarSystemCore,
+  ISolarSystemExtension,
+  SolarSystemCoreStack,
+  SolarSystemCoreStackProps,
+  ImportedSolarSystemCore,
   SolarSystemExtensionStack,
-  RemoteCluster,
-  RemoteAlb,
-  RemoteApplicationListener,
+  ImportedSolarSystemCoreProps,
   SolarSystemExtensionStackProps,
-} from '.';
-import { ImportedSolarSystemProps } from './solar-system';
+} from './solar-system';
+import { CoreVpcProps, addEcsEndpoints } from './components/core-vpc';
+import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from './helpers/remote';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface EcsSolarSystemProps extends SolarSystemProps {
-  vpcProps?: SolarSystemProps['vpcProps'] & {
+export interface IEcsSolarSystemCore extends ISolarSystemCore {
+  cluster: ICluster;
+  alb: IApplicationLoadBalancer;
+  httpListener: IApplicationListener;
+  httpInternalListener: IApplicationListener;
+  // HttpsListener: IApplicationListener;
+}
+
+export interface IEcsSolarSystemExtension extends ISolarSystemExtension {
+  portal: IEcsSolarSystemCore;
+}
+
+export interface EcsSolarSystemCoreProps extends SolarSystemCoreStackProps {
+  vpcProps?: Partial<CoreVpcProps> & {
     defaultEndpoints?: boolean;
   };
   clusterProps?: Partial<ClusterProps>;
@@ -41,49 +49,32 @@ export interface EcsSolarSystemProps extends SolarSystemProps {
   albProps?: Partial<ApplicationLoadBalancerProps>;
 }
 
-export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSystem {
-  readonly Cluster: Cluster;
-  readonly ClusterAutoScalingGroup: AutoScalingGroup;
-  readonly Alb: ApplicationLoadBalancer;
-  readonly HttpListener: ApplicationListener;
-  readonly HttpInternalListener: ApplicationListener;
-
+export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEcsSolarSystemCore {
+  readonly cluster: Cluster;
+  readonly clusterAutoScalingGroup: AutoScalingGroup;
+  readonly alb: ApplicationLoadBalancer;
+  readonly httpListener: ApplicationListener;
+  readonly httpInternalListener: ApplicationListener;
   // readonly HttpsListener: ApplicationListener;
 
-  constructor(galaxy: Galaxy, name: string, props?: EcsSolarSystemProps) {
-    super(galaxy, name, props);
+  constructor(galaxy: IGalaxyCore, id: string, props?: EcsSolarSystemCoreProps) {
+    super(galaxy, id, props);
 
-    const { vpc, vpcProps = {}, clusterProps = {}, clusterCapacityProps = {}, albProps = {} } = props || {};
+    const { vpcProps = {}, clusterProps = {}, clusterCapacityProps = {}, albProps = {} } = props || {};
     const { defaultEndpoints = true } = vpcProps;
 
-    // Only add endpoints if this component created the Vpc. ie vpc was not passed in as a prop.
-    if (!vpc) {
-      if (defaultEndpoints) {
-        this.Vpc.addInterfaceEndpoint('EcsEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECS,
-        });
-        this.Vpc.addInterfaceEndpoint('EcsAgentEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECS_AGENT,
-        });
-        this.Vpc.addInterfaceEndpoint('EcsTelemetryEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
-        });
-        this.Vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
-          service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
-        });
-        this.Vpc.addInterfaceEndpoint('CloudWatchLogsEndpoint', {
-          service: InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
-        });
-      }
+    // Only add endpoints if this component owens the Vpc.
+    if (this.vpc.node.scope === this) {
+      if (defaultEndpoints) addEcsEndpoints(this.vpc);
     }
 
-    this.Cluster = new Cluster(this, 'Cluster', {
-      vpc: this.Vpc,
+    this.cluster = new Cluster(this, 'Cluster', {
       ...clusterProps,
-      clusterName: this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster'),
+      clusterName: this.singletonId('Cluster'),
+      vpc: this.vpc,
     });
 
-    this.ClusterAutoScalingGroup = this.Cluster.addCapacity('Capacity', {
+    this.clusterAutoScalingGroup = this.cluster.addCapacity('Capacity', {
       vpcSubnets: { subnetGroupName: 'App' },
       instanceType: new InstanceType('t3.medium'),
       minCapacity: 1,
@@ -91,34 +82,34 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
       ...clusterCapacityProps,
     });
 
-    this.ClusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
+    this.clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
 
     const albSecurityGroup =
       albProps.securityGroup ||
       new SecurityGroup(this, 'AlbSecurityGroup', {
-        vpc: this.Vpc,
+        vpc: this.vpc,
         description: 'SecurityGroup for ALB.',
         allowAllOutbound: true,
       });
 
-    this.Alb = new ApplicationLoadBalancer(this, 'Alb', {
+    this.alb = new ApplicationLoadBalancer(this, 'Alb', {
       vpcSubnets: { subnetGroupName: 'App' },
       ...albProps,
-      vpc: this.Vpc,
+      vpc: this.vpc,
       securityGroup: albSecurityGroup,
-      loadBalancerName: this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'),
+      loadBalancerName: this.singletonId('Alb'),
     });
 
     new ARecord(this, 'AlbRecord', {
-      zone: this.Zone,
-      target: RecordTarget.fromAlias(new LoadBalancerTarget(this.Alb)),
+      zone: this.zone,
+      target: RecordTarget.fromAlias(new LoadBalancerTarget(this.alb)),
     });
 
-    this.HttpListener = this.Alb.addListener('HttpListener', {
+    this.httpListener = this.alb.addListener('HttpListener', {
       protocol: ApplicationProtocol.HTTP,
     });
 
-    this.HttpInternalListener = this.Alb.addListener('HttpInternalListener', {
+    this.httpInternalListener = this.alb.addListener('HttpInternalListener', {
       protocol: ApplicationProtocol.HTTP,
       port: 81,
     });
@@ -129,7 +120,7 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
     //   open: true
     // });
 
-    for (const listener of [this.HttpListener, this.HttpInternalListener]) {
+    for (const listener of [this.httpListener, this.httpInternalListener]) {
       listener.addFixedResponse('Default', {
         statusCode: '404',
         contentType: ContentType.TEXT_PLAIN,
@@ -137,17 +128,14 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
       });
     }
 
-    RemoteCluster.export(this.Cluster, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster'));
-    RemoteAlb.export(this.Alb, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'));
-    RemoteApplicationListener.export(this.HttpListener, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener'));
-    RemoteApplicationListener.export(
-      this.HttpInternalListener,
-      this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpInternalListener')
-    );
+    RemoteCluster.export(this.cluster, this.singletonId('Cluster'));
+    RemoteAlb.export(this.alb, this.singletonId('Alb'));
+    RemoteApplicationListener.export(this.httpListener, this.singletonId('HttpListener'));
+    RemoteApplicationListener.export(this.httpInternalListener, this.singletonId('HttpInternalListener'));
   }
 
   addCpuAutoScaling(props: Partial<CpuUtilizationScalingProps>): void {
-    this.ClusterAutoScalingGroup.scaleOnCpuUtilization('CpuScaling', {
+    this.clusterAutoScalingGroup.scaleOnCpuUtilization('CpuScaling', {
       ...props,
       targetUtilizationPercent: 50,
     });
@@ -156,38 +144,31 @@ export class EcsSolarSystemStack extends SolarSystemStack implements EcsSolarSys
   // TODO: addMemoryScaling when monitory and metrics task is done (custom metric needed ?)
 }
 
-export class ImportedEcsSolarSystem extends ImportedSolarSystem implements EcsSolarSystem {
-  readonly Cluster: ICluster;
-  readonly Alb: IApplicationLoadBalancer;
-  readonly HttpListener: IApplicationListener;
-  readonly HttpInternalListener: IApplicationListener;
+export class ImportedEcsSolarSystemCore extends ImportedSolarSystemCore implements IEcsSolarSystemCore {
+  readonly cluster: ICluster;
+  readonly alb: IApplicationLoadBalancer;
+  readonly httpListener: IApplicationListener;
+  readonly httpInternalListener: IApplicationListener;
   // readonly HttpsListener: IApplicationListener;
 
-  constructor(scope: Construct, galaxy: Galaxy, props: ImportedSolarSystemProps) {
-    super(scope, galaxy, props);
+  constructor(scope: Construct, id: string, galaxy: IGalaxyCore, props?: ImportedSolarSystemCoreProps) {
+    super(scope, id, galaxy, props);
 
-    this.Cluster = RemoteCluster.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Cluster'), this.Vpc);
-    this.Alb = RemoteAlb.import(this, this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'Alb'));
-    this.HttpListener = RemoteApplicationListener.import(
-      this,
-      this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpListener')
-    );
-    this.HttpInternalListener = RemoteApplicationListener.import(
-      this,
-      this.RESOLVE(PATTERN.SINGLETON_SOLAR_SYSTEM, 'HttpInternalListener')
-    );
+    this.cluster = RemoteCluster.import(this, this.singletonId('Cluster'), this.vpc);
+    this.alb = RemoteAlb.import(this, this.singletonId('Alb'));
+    this.httpListener = RemoteApplicationListener.import(this, this.singletonId('HttpListener'));
+    this.httpInternalListener = RemoteApplicationListener.import(this, this.singletonId('HttpInternalListener'));
   }
 }
 
-export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack implements EcsSolarSystemExtension {
-  readonly Portal: EcsSolarSystem;
+export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack implements IEcsSolarSystemExtension {
+  readonly portal: IEcsSolarSystemCore;
 
-  constructor(galaxy: GalaxyExtension, name: string, props?: SolarSystemExtensionStackProps) {
-    super(galaxy, name, props);
+  constructor(galaxy: IGalaxyExtension, id: string, props?: SolarSystemExtensionStackProps) {
+    super(galaxy, id, props);
 
-    this.node.tryRemoveChild(this.Portal.node.id);
-    this.Portal = new ImportedEcsSolarSystem(this, this.Galaxy.Portal, {
-      name: this.Name,
+    this.node.tryRemoveChild(this.portal.node.id);
+    this.portal = new ImportedEcsSolarSystemCore(this, 'Default', this.galaxy.portal, {
       vpcProps: props?.vpcProps,
     });
   }

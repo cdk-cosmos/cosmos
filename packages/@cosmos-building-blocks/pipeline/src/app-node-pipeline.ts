@@ -42,7 +42,8 @@ export type BasicBuildSpecObject = {
 };
 
 export interface AppNodePipelineProps {
-  name?: string;
+  pipelineName?: string;
+  buildName?: string;
   codeRepo: IRepository;
   codeBranch?: string;
   buildRole?: IRole;
@@ -58,7 +59,8 @@ export class AppNodePipeline extends Construct {
     super(scope, id);
 
     const {
-      name = id,
+      pipelineName,
+      buildName,
       codeRepo,
       codeBranch = 'master',
       buildRole = undefined,
@@ -72,7 +74,7 @@ export class AppNodePipeline extends Construct {
     });
 
     this.Build = new Project(this, 'Build', {
-      projectName: `${name}Build`,
+      projectName: buildName,
       role: buildRole,
       source: Source.codeCommit({
         repository: codeRepo,
@@ -95,7 +97,7 @@ export class AppNodePipeline extends Construct {
     const sourceOutput = new Artifact('CodeOutput');
 
     this.Pipeline = new Pipeline(this, 'Pipeline', {
-      pipelineName: name,
+      pipelineName: pipelineName,
       artifactBucket: artifactBucket,
       stages: [
         {

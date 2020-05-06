@@ -1,6 +1,5 @@
 import { Plugin, PluginHost, CredentialProviderSource } from 'aws-cdk';
 import { Credentials, ChainableTemporaryCredentials } from 'aws-sdk';
-import { RESOLVE, PATTERN } from '@cdk-cosmos/core';
 
 // Init AWS-SDK with common settings like proxy
 // new SDK();
@@ -15,12 +14,8 @@ export class CdkCredentialsProvider implements CredentialProviderSource {
 
   async canProvideCredentials(accountId: string): Promise<boolean> {
     try {
-      // console.log(`Checking if plugin can provide a Credential for ${accountId}`);
-
       if (!this.cache[accountId]?.expired) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const scope = { Partition: 'Core' } as any;
-        const roleName = RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkCrossAccount-Role', scope);
+        const roleName = 'CoreCdkCrossAccountRole';
         const cred = new ChainableTemporaryCredentials({
           params: {
             RoleArn: `arn:aws:iam::${accountId}:role/${roleName}`,
@@ -38,12 +33,8 @@ export class CdkCredentialsProvider implements CredentialProviderSource {
   }
 
   async getProvider(accountId: string): Promise<Credentials> {
-    // console.log(`Providing Credential for ${accountId}`);
-
     const creds = this.cache[accountId];
-
     if (!creds) throw new Error('Credentials Not Found.');
-
     return creds;
   }
 }

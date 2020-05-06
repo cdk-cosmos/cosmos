@@ -2,26 +2,25 @@ import '@aws-cdk/assert/jest';
 import { App } from '@aws-cdk/core';
 import { synthesizeStacks } from '../../../../src/test';
 import {
-  CosmosStack,
+  CosmosCoreStack,
   CosmosExtensionStack,
-  GalaxyStack,
+  GalaxyCoreStack,
   GalaxyExtensionStack,
-  CiCdSolarSystemStack,
+  CiCdSolarSystemCoreStack,
   CiCdSolarSystemExtensionStack,
-  CiCdEcsSolarSystemStack,
-  CiCdEcsSolarSystemExtensionStack,
+  CiCdEcsSolarSystemCoreStack,
 } from '../src';
 
 const app = new App();
 const env = { account: 'account', region: 'region' };
 
-const cosmos = new CosmosStack(app, 'Cos', { tld: 'com', cidr: '10.0.1.0/22', env });
-const galaxy = new GalaxyStack(cosmos, 'Gal', { env });
-const cicdSolarSystem = new CiCdEcsSolarSystemStack(galaxy, { env });
+const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'cos.com', cidr: '10.0.1.0/22', env });
+const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { env });
+const cicdSolarSystem = new CiCdEcsSolarSystemCoreStack(galaxy, { env });
 
-const cosmosExtension = new CosmosExtensionStack(app, 'Cos', { env });
+const cosmosExtension = new CosmosExtensionStack(app, 'Test', { env });
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });
-const cicdSolarSystemExtension = new CiCdEcsSolarSystemExtensionStack(galaxyExtension, { env });
+const cicdSolarSystemExtension = new CiCdSolarSystemExtensionStack(galaxyExtension, { env });
 
 const [cicdSolarSystemStack, cicdSolarSystemExtensionStack] = synthesizeStacks(
   cicdSolarSystem,
@@ -30,51 +29,51 @@ const [cicdSolarSystemStack, cicdSolarSystemExtensionStack] = synthesizeStacks(
 
 describe('CICD-Solar-System', () => {
   test('should be a cicd-solar-system', () => {
-    expect(cicdSolarSystemStack.name).toEqual('Core-Cos-Gal-CiCd-SolarSystem');
+    expect(cicdSolarSystemStack.name).toEqual('CoreCosGalCiCdSolarSystem');
     expect(cicdSolarSystemStack).toHaveResource('AWS::EC2::VPC');
-    expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'Core-Gal-CiCd-Zone-Name', outputValue: 'cicd.cos.com' });
-    expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'Core-Gal-CiCd-Zone-Id' });
-    expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'Core-Gal-CiCd-Cluster-Name' });
-    expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'Core-Gal-CiCd-Alb-Arn' });
-    expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'Core-Gal-CiCd-HttpListener-Arn' });
+    expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'CoreGalCiCdZoneName', outputValue: 'cicd.cos.com' });
+    expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'CoreGalCiCdZoneId' });
+    expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'CoreGalCiCdClusterName' });
+    expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'CoreGalCiCdAlbArn' });
+    expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'CoreGalCiCdHttpListenerArn' });
   });
 
   test('should inherit env', () => {
     const app = new App();
-    const cosmos = new CosmosStack(app, 'Test', { tld: 'com', cidr: '10.0.0.0/24', env });
-    const galaxy = new GalaxyStack(cosmos, 'Test', {});
-    const solarSystem = new CiCdSolarSystemStack(galaxy);
+    const cosmos = new CosmosCoreStack(app, 'Test', { tld: 'com', cidr: '10.0.0.0/24', env });
+    const galaxy = new GalaxyCoreStack(cosmos, 'Test', {});
+    const solarSystem = new CiCdSolarSystemCoreStack(galaxy);
     expect({ account: solarSystem.account, region: solarSystem.region }).toEqual(env);
   });
 
   test('should throw error if no cidr found', () => {
     expect(() => {
       const app = new App();
-      const cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
-      const galaxy = new GalaxyStack(cosmos, 'Test', {});
-      new CiCdSolarSystemStack(galaxy);
+      const cosmos = new CosmosCoreStack(app, 'Test', { tld: 'com' });
+      const galaxy = new GalaxyCoreStack(cosmos, 'Test', {});
+      new CiCdSolarSystemCoreStack(galaxy);
     }).toThrowError('NetworkBuilder not found, please define cidr range here (SolarSystem: CiCd) or Galaxy or Cosmos.');
   });
 
   test('should have cird range', () => {
     let app = new App();
-    let cosmos = new CosmosStack(app, 'Test', { tld: 'com', cidr: '10.0.0.0/22' });
-    let galaxy = new GalaxyStack(cosmos, 'Test', {});
-    let solarSystem = new CiCdSolarSystemStack(galaxy);
+    let cosmos = new CosmosCoreStack(app, 'Test', { tld: 'com', cidr: '10.0.0.0/22' });
+    let galaxy = new GalaxyCoreStack(cosmos, 'Test', {});
+    let solarSystem = new CiCdSolarSystemCoreStack(galaxy);
 
-    expect(solarSystem.NetworkBuilder?.addSubnet(28)).toEqual('10.0.1.0/28');
-    expect(solarSystem.NetworkBuilder?.addSubnet(28)).toEqual('10.0.1.16/28');
+    expect(solarSystem.networkBuilder?.addSubnet(28)).toEqual('10.0.1.0/28');
+    expect(solarSystem.networkBuilder?.addSubnet(28)).toEqual('10.0.1.16/28');
 
     app = new App();
-    cosmos = new CosmosStack(app, 'Test', { tld: 'com' });
-    galaxy = new GalaxyStack(cosmos, 'Test', {});
-    solarSystem = new CiCdSolarSystemStack(galaxy, { cidr: '10.0.4.0/22' });
-    expect(solarSystem.NetworkBuilder?.addSubnet(28)).toEqual('10.0.5.0/28');
+    cosmos = new CosmosCoreStack(app, 'Test', { tld: 'com' });
+    galaxy = new GalaxyCoreStack(cosmos, 'Test', {});
+    solarSystem = new CiCdSolarSystemCoreStack(galaxy, { cidr: '10.0.4.0/22' });
+    expect(solarSystem.networkBuilder?.addSubnet(28)).toEqual('10.0.5.0/28');
   });
 
   test('should have master cdk pipeline', () => {
-    expect(cicdSolarSystemStack).toHaveResource('AWS::CodePipeline::Pipeline', { Name: 'Core-Cdk-Pipeline' });
-    expect(cicdSolarSystemStack).toHaveResource('AWS::CodeBuild::Project', { Name: 'Core-Cdk-PipelineDeploy' });
+    expect(cicdSolarSystemStack).toHaveResource('AWS::CodePipeline::Pipeline');
+    expect(cicdSolarSystemStack).toHaveResource('AWS::CodeBuild::Project');
     const bucketEncryption = {
       ServerSideEncryptionConfiguration: [
         {
@@ -94,7 +93,7 @@ describe('CICD-Solar-System', () => {
 
 describe('CICD-Solar-System Extension', () => {
   test('should be a solar-system extension', () => {
-    expect(cicdSolarSystemExtensionStack.name).toEqual('App-Cos-Gal-CiCd-SolarSystem');
+    expect(cicdSolarSystemExtensionStack.name).toEqual('AppTestGalCiCdSolarSystem');
   });
 
   test('should inherit env', () => {

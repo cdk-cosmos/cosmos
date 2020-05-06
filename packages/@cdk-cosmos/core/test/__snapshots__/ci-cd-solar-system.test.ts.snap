@@ -2,18 +2,18 @@
 
 exports[`CICD-Solar-System Extension should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos: App resources dependant on each SolarSystem, like Services and Databases.",
+  "Description": "SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
   "Resources": Object {
-    "CdkPipeline7DE1C2DD": Object {
+    "CdkPipeline": Object {
       "Properties": Object {
         "ArtifactStore": Object {
           "Location": Object {
-            "Ref": "CdkPipelineCdkArtifactBucketBB4756CF",
+            "Ref": "CdkPipelineCdkArtifactBucket",
           },
           "Type": "S3",
         },
-        "Name": "App-Cos-Cdk-Pipeline",
-        "RoleArn": "arn:aws:iam::account:role/Core-CdkMaster-Role",
+        "Name": "App-Test-Cdk-Pipeline",
+        "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
         "Stages": Array [
           Object {
             "Actions": Array [
@@ -28,7 +28,7 @@ Object {
                   "BranchName": "master",
                   "PollForSourceChanges": false,
                   "RepositoryName": Object {
-                    "Fn::ImportValue": "App-Cos-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710Name171A5E5D",
+                    "Fn::ImportValue": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
                   },
                 },
                 "Name": "CdkCheckout",
@@ -39,7 +39,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48",
+                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
                     "Arn",
                   ],
                 },
@@ -58,9 +58,9 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"App-Cos-*\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTest*\\"}]",
                   "ProjectName": Object {
-                    "Ref": "CdkPipelineCdkDeploy613E8280",
+                    "Ref": "CdkPipelineCdkDeploy",
                   },
                 },
                 "InputArtifacts": Array [
@@ -76,7 +76,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949",
+                    "CdkPipelineDeployCdkDeployCodePipelineActionRole",
                     "Arn",
                   ],
                 },
@@ -89,7 +89,7 @@ Object {
       },
       "Type": "AWS::CodePipeline::Pipeline",
     },
-    "CdkPipelineCdkArtifactBucketBB4756CF": Object {
+    "CdkPipelineCdkArtifactBucket": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "BucketEncryption": Object {
@@ -105,11 +105,11 @@ Object {
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
     },
-    "CdkPipelineCdkDeploy613E8280": Object {
+    "CdkPipelineCdkDeploy": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Location": Object {
-            "Ref": "CdkPipelineCdkArtifactBucketBB4756CF",
+            "Ref": "CdkPipelineCdkArtifactBucket",
           },
           "Name": "cdk.templates",
           "NamespaceType": "BUILD_ID",
@@ -135,8 +135,8 @@ Object {
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
-        "Name": "App-Cos-Cdk-PipelineDeploy",
-        "ServiceRole": "arn:aws:iam::account:role/Core-CdkMaster-Role",
+        "Name": "App-Test-Cdk-Deploy",
+        "ServiceRole": "arn:aws:iam::account:role/CoreCdkMasterRole",
         "Source": Object {
           "BuildSpec": "{
   \\"version\\": \\"0.2\\",
@@ -167,7 +167,7 @@ Object {
   }
 }",
           "Location": Object {
-            "Fn::ImportValue": "App-Cos-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710CloneUrlHttpF918145B",
+            "Fn::ImportValue": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
           },
           "Type": "CODECOMMIT",
         },
@@ -175,7 +175,7 @@ Object {
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949": Object {
+    "CdkPipelineDeployCdkDeployCodePipelineActionRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -203,7 +203,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicyC3BBEE2C": Object {
+    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -216,7 +216,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "CdkPipelineCdkDeploy613E8280",
+                  "CdkPipelineCdkDeploy",
                   "Arn",
                 ],
               },
@@ -224,16 +224,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicyC3BBEE2C",
+        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949",
+            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48": Object {
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -261,7 +261,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy8D3C82EA": Object {
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -278,7 +278,7 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "CdkPipelineCdkArtifactBucketBB4756CF",
+                    "CdkPipelineCdkArtifactBucket",
                     "Arn",
                   ],
                 },
@@ -288,7 +288,7 @@ Object {
                     Array [
                       Object {
                         "Fn::GetAtt": Array [
-                          "CdkPipelineCdkArtifactBucketBB4756CF",
+                          "CdkPipelineCdkArtifactBucket",
                           "Arn",
                         ],
                       },
@@ -308,16 +308,16 @@ Object {
               ],
               "Effect": "Allow",
               "Resource": Object {
-                "Fn::ImportValue": "App-Cos-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710ArnF2A3B4CE",
+                "Fn::ImportValue": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoArn941DDF84",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy8D3C82EA",
+        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48",
+            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
           },
         ],
       },
@@ -329,125 +329,125 @@ Object {
 
 exports[`CICD-Solar-System should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.",
+  "Description": "SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
-    "AlbAlbArn044BCECB": Object {
+    "AlbAlbArn": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-Alb-Arn",
+        "Name": "CoreGalCiCdAlbArn",
       },
       "Value": Object {
-        "Ref": "Alb16C2F182",
+        "Ref": "Alb",
       },
     },
-    "AlbAlbSecurityGroupIdD444E58A": Object {
+    "AlbAlbSecurityGroupId": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-Alb-SecurityGroupId",
+        "Name": "CoreGalCiCdAlbSecurityGroupId",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "AlbSecurityGroup86A59E99",
+          "AlbSecurityGroup",
           "GroupId",
         ],
       },
     },
-    "AlbHttpInternalListenerAlArn79898939": Object {
+    "AlbHttpInternalListenerAlArn": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-HttpInternalListener-Arn",
+        "Name": "CoreGalCiCdHttpInternalListenerArn",
       },
       "Value": Object {
-        "Ref": "AlbHttpInternalListenerE500F00F",
+        "Ref": "AlbHttpInternalListener",
       },
     },
-    "AlbHttpInternalListenerAlSecurityGroupIdB16286F9": Object {
+    "AlbHttpInternalListenerAlSecurityGroupId": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-HttpInternalListener-SecurityGroupId",
+        "Name": "CoreGalCiCdHttpInternalListenerSecurityGroupId",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "AlbSecurityGroup86A59E99",
+          "AlbSecurityGroup",
           "GroupId",
         ],
       },
     },
-    "AlbHttpListenerAlArn54F636C2": Object {
+    "AlbHttpListenerAlArn": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-HttpListener-Arn",
+        "Name": "CoreGalCiCdHttpListenerArn",
       },
       "Value": Object {
-        "Ref": "AlbHttpListener00C8B33E",
+        "Ref": "AlbHttpListener",
       },
     },
-    "AlbHttpListenerAlSecurityGroupIdBB00BCEE": Object {
+    "AlbHttpListenerAlSecurityGroupId": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-HttpListener-SecurityGroupId",
+        "Name": "CoreGalCiCdHttpListenerSecurityGroupId",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "AlbSecurityGroup86A59E99",
+          "AlbSecurityGroup",
           "GroupId",
         ],
       },
     },
-    "ClusterClusterNameEB26049E": Object {
+    "ClusterClusterName": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-Cluster-Name",
+        "Name": "CoreGalCiCdClusterName",
       },
       "Value": Object {
-        "Ref": "ClusterEB0386A7",
+        "Ref": "Cluster",
       },
     },
-    "ClusterClusterSecurityGroupAAF8FE85": Object {
+    "ClusterClusterSecurityGroup": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-Cluster-SecurityGroup",
+        "Name": "CoreGalCiCdClusterSecurityGroup",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "ClusterCapacityInstanceSecurityGroup2D6F9ADD",
+          "ClusterCapacityInstanceSecurityGroup",
           "GroupId",
         ],
       },
     },
-    "PrivateZoneZoneId22821223": Object {
+    "PrivateZoneZoneId": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-PrivateZone-Id",
+        "Name": "CoreGalCiCdPrivateZoneId",
       },
       "Value": Object {
-        "Ref": "PrivateZone27242E85",
+        "Ref": "PrivateZone",
       },
     },
-    "PrivateZoneZoneName34E4A3CE": Object {
+    "PrivateZoneZoneName": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-PrivateZone-Name",
+        "Name": "CoreGalCiCdPrivateZoneName",
       },
       "Value": "cicd.internal",
     },
     "VpcAZs": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-Vpc-AZs",
+        "Name": "CoreGalCiCdVpcAZs",
       },
       "Value": "dummy1a,dummy1b",
     },
     "VpcId": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-Vpc-Id",
+        "Name": "CoreGalCiCdVpcId",
       },
       "Value": Object {
-        "Ref": "Vpc8378EB38",
+        "Ref": "Vpc",
       },
     },
     "VpcIsolatedSubnetRouteTables": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-Vpc-IsolatedSubnetRouteTableIds",
+        "Name": "CoreGalCiCdVpcIsolatedSubnetRouteTableIds",
       },
       "Value": Object {
         "Fn::Join": Array [
           ",",
           Array [
             Object {
-              "Ref": "VpcAppSubnet1RouteTable30EDBD03",
+              "Ref": "VpcAppSubnet1RouteTable",
             },
             Object {
-              "Ref": "VpcAppSubnet2RouteTable1525EC1E",
+              "Ref": "VpcAppSubnet2RouteTable",
             },
           ],
         ],
@@ -455,49 +455,49 @@ Object {
     },
     "VpcIsolatedSubnets": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-Vpc-IsolatedSubnetIds",
+        "Name": "CoreGalCiCdVpcIsolatedSubnetIds",
       },
       "Value": Object {
         "Fn::Join": Array [
           ",",
           Array [
             Object {
-              "Ref": "VpcAppSubnet1Subnet7D2CF347",
+              "Ref": "VpcAppSubnet1Subnet",
             },
             Object {
-              "Ref": "VpcAppSubnet2Subnet8D65443B",
+              "Ref": "VpcAppSubnet2Subnet",
             },
           ],
         ],
       },
     },
-    "ZoneNameServers105FD0B4": Object {
+    "ZoneNameServers": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-Zone-NameServers",
+        "Name": "CoreGalCiCdZoneNameServers",
       },
       "Value": Object {
         "Fn::Join": Array [
           ",",
           Object {
             "Fn::GetAtt": Array [
-              "ZoneA5DE4B68",
+              "Zone",
               "NameServers",
             ],
           },
         ],
       },
     },
-    "ZoneZoneIdD97F9BE1": Object {
+    "ZoneZoneId": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-Zone-Id",
+        "Name": "CoreGalCiCdZoneId",
       },
       "Value": Object {
-        "Ref": "ZoneA5DE4B68",
+        "Ref": "Zone",
       },
     },
-    "ZoneZoneName61A65788": Object {
+    "ZoneZoneName": Object {
       "Export": Object {
-        "Name": "Core-Gal-CiCd-Zone-Name",
+        "Name": "CoreGalCiCdZoneName",
       },
       "Value": "cicd.cos.com",
     },
@@ -509,31 +509,31 @@ Object {
     },
   },
   "Resources": Object {
-    "Alb16C2F182": Object {
+    "Alb": Object {
       "Properties": Object {
-        "Name": "Core-Gal-CiCd-Alb",
+        "Name": "CoreGalCiCdAlb",
         "Scheme": "internal",
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
-              "AlbSecurityGroup86A59E99",
+              "AlbSecurityGroup",
               "GroupId",
             ],
           },
         ],
         "Subnets": Array [
           Object {
-            "Ref": "VpcAppSubnet1Subnet7D2CF347",
+            "Ref": "VpcAppSubnet1Subnet",
           },
           Object {
-            "Ref": "VpcAppSubnet2Subnet8D65443B",
+            "Ref": "VpcAppSubnet2Subnet",
           },
         ],
         "Type": "application",
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
     },
-    "AlbHttpInternalListenerE500F00F": Object {
+    "AlbHttpInternalListener": Object {
       "Properties": Object {
         "DefaultActions": Array [
           Object {
@@ -546,14 +546,14 @@ Object {
           },
         ],
         "LoadBalancerArn": Object {
-          "Ref": "Alb16C2F182",
+          "Ref": "Alb",
         },
         "Port": 81,
         "Protocol": "HTTP",
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
-    "AlbHttpListener00C8B33E": Object {
+    "AlbHttpListener": Object {
       "Properties": Object {
         "DefaultActions": Array [
           Object {
@@ -566,38 +566,38 @@ Object {
           },
         ],
         "LoadBalancerArn": Object {
-          "Ref": "Alb16C2F182",
+          "Ref": "Alb",
         },
         "Port": 80,
         "Protocol": "HTTP",
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
-    "AlbRecord6ECCAA7E": Object {
+    "AlbRecord": Object {
       "Properties": Object {
         "AliasTarget": Object {
           "DNSName": Object {
             "Fn::GetAtt": Array [
-              "Alb16C2F182",
+              "Alb",
               "DNSName",
             ],
           },
           "HostedZoneId": Object {
             "Fn::GetAtt": Array [
-              "Alb16C2F182",
+              "Alb",
               "CanonicalHostedZoneID",
             ],
           },
         },
         "HostedZoneId": Object {
-          "Ref": "ZoneA5DE4B68",
+          "Ref": "Zone",
         },
         "Name": "cicd.cos.com.",
         "Type": "A",
       },
       "Type": "AWS::Route53::RecordSet",
     },
-    "AlbSecurityGroup86A59E99": Object {
+    "AlbSecurityGroup": Object {
       "Properties": Object {
         "GroupDescription": "SecurityGroup for ALB.",
         "SecurityGroupEgress": Array [
@@ -624,21 +624,21 @@ Object {
           },
         ],
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "CdkPipeline7DE1C2DD": Object {
+    "CdkPipeline": Object {
       "Properties": Object {
         "ArtifactStore": Object {
           "Location": Object {
-            "Ref": "CdkPipelineCdkArtifactBucketBB4756CF",
+            "Ref": "CdkPipelineCdkArtifactBucket",
           },
           "Type": "S3",
         },
-        "Name": "Core-Cdk-Pipeline",
-        "RoleArn": "arn:aws:iam::account:role/Core-CdkMaster-Role",
+        "Name": "Core-Cos-Cdk-Pipeline",
+        "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
         "Stages": Array [
           Object {
             "Actions": Array [
@@ -653,7 +653,7 @@ Object {
                   "BranchName": "master",
                   "PollForSourceChanges": false,
                   "RepositoryName": Object {
-                    "Fn::ImportValue": "Core-Cos-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710Name171A5E5D",
+                    "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
                   },
                 },
                 "Name": "CdkCheckout",
@@ -664,7 +664,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48",
+                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
                     "Arn",
                   ],
                 },
@@ -683,9 +683,9 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"Core-Cos-*\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCos*\\"}]",
                   "ProjectName": Object {
-                    "Ref": "CdkPipelineCdkDeploy613E8280",
+                    "Ref": "CdkPipelineCdkDeploy",
                   },
                 },
                 "InputArtifacts": Array [
@@ -701,7 +701,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949",
+                    "CdkPipelineDeployCdkDeployCodePipelineActionRole",
                     "Arn",
                   ],
                 },
@@ -714,7 +714,7 @@ Object {
       },
       "Type": "AWS::CodePipeline::Pipeline",
     },
-    "CdkPipelineCdkArtifactBucketBB4756CF": Object {
+    "CdkPipelineCdkArtifactBucket": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "BucketEncryption": Object {
@@ -730,11 +730,11 @@ Object {
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
     },
-    "CdkPipelineCdkDeploy613E8280": Object {
+    "CdkPipelineCdkDeploy": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Location": Object {
-            "Ref": "CdkPipelineCdkArtifactBucketBB4756CF",
+            "Ref": "CdkPipelineCdkArtifactBucket",
           },
           "Name": "cdk.templates",
           "NamespaceType": "BUILD_ID",
@@ -760,8 +760,8 @@ Object {
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
-        "Name": "Core-Cdk-PipelineDeploy",
-        "ServiceRole": "arn:aws:iam::account:role/Core-CdkMaster-Role",
+        "Name": "Core-Cos-Cdk-Deploy",
+        "ServiceRole": "arn:aws:iam::account:role/CoreCdkMasterRole",
         "Source": Object {
           "BuildSpec": "{
   \\"version\\": \\"0.2\\",
@@ -792,7 +792,7 @@ Object {
   }
 }",
           "Location": Object {
-            "Fn::ImportValue": "Core-Cos-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710CloneUrlHttpF918145B",
+            "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
           },
           "Type": "CODECOMMIT",
         },
@@ -800,7 +800,7 @@ Object {
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949": Object {
+    "CdkPipelineDeployCdkDeployCodePipelineActionRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -828,7 +828,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicyC3BBEE2C": Object {
+    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -841,7 +841,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "CdkPipelineCdkDeploy613E8280",
+                  "CdkPipelineCdkDeploy",
                   "Arn",
                 ],
               },
@@ -849,16 +849,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicyC3BBEE2C",
+        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRoleABC30949",
+            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48": Object {
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -886,7 +886,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy8D3C82EA": Object {
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -903,7 +903,7 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "CdkPipelineCdkArtifactBucketBB4756CF",
+                    "CdkPipelineCdkArtifactBucket",
                     "Arn",
                   ],
                 },
@@ -913,7 +913,7 @@ Object {
                     Array [
                       Object {
                         "Fn::GetAtt": Array [
-                          "CdkPipelineCdkArtifactBucketBB4756CF",
+                          "CdkPipelineCdkArtifactBucket",
                           "Arn",
                         ],
                       },
@@ -933,25 +933,31 @@ Object {
               ],
               "Effect": "Allow",
               "Resource": Object {
-                "Fn::ImportValue": "Core-Cos-Cosmos:ExportsOutputFnGetAttCdkRepo9606A710ArnF2A3B4CE",
+                "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoArn941DDF84",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy8D3C82EA",
+        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole10FA3A48",
+            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ClusterCapacityASGA6ED330E": Object {
+    "Cluster": Object {
+      "Properties": Object {
+        "ClusterName": "CoreGalCiCdCluster",
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "ClusterCapacityASG": Object {
       "Properties": Object {
         "LaunchConfigurationName": Object {
-          "Ref": "ClusterCapacityLaunchConfigC44566A4",
+          "Ref": "ClusterCapacityLaunchConfig",
         },
         "MaxSize": "5",
         "MinSize": "1",
@@ -959,15 +965,15 @@ Object {
           Object {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/CiCd/Cluster/Capacity",
           },
         ],
         "VPCZoneIdentifier": Array [
           Object {
-            "Ref": "VpcAppSubnet1Subnet7D2CF347",
+            "Ref": "VpcAppSubnet1Subnet",
           },
           Object {
-            "Ref": "VpcAppSubnet2Subnet8D65443B",
+            "Ref": "VpcAppSubnet2Subnet",
           },
         ],
       },
@@ -981,26 +987,10 @@ Object {
         },
       },
     },
-    "ClusterCapacityDrainECSHookFunctionAllowInvokeCoreCosGalCiCdSolarSystemClusterCapacityLifecycleHookDrainHookTopic8F2B1C78AFBD2CFE": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "ClusterCapacityDrainECSHookFunctionF75C9A9F",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": Object {
-          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "ClusterCapacityDrainECSHookFunctionF75C9A9F": Object {
+    "ClusterCapacityDrainECSHookFunction": Object {
       "DependsOn": Array [
-        "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA",
-        "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+        "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicy",
+        "ClusterCapacityDrainECSHookFunctionServiceRole",
       ],
       "Properties": Object {
         "Code": Object {
@@ -1079,14 +1069,14 @@ def pick(dct, *keys):
         "Environment": Object {
           "Variables": Object {
             "CLUSTER": Object {
-              "Ref": "ClusterEB0386A7",
+              "Ref": "Cluster",
             },
           },
         },
         "Handler": "index.lambda_handler",
         "Role": Object {
           "Fn::GetAtt": Array [
-            "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+            "ClusterCapacityDrainECSHookFunctionServiceRole",
             "Arn",
           ],
         },
@@ -1094,14 +1084,30 @@ def pick(dct, *keys):
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/CiCd/Cluster/Capacity",
           },
         ],
         "Timeout": 310,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB": Object {
+    "ClusterCapacityDrainECSHookFunctionAllowInvokeCosGalCiCdClusterCapacityLifecycleHookDrainHookTopic47B8765A": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "ClusterCapacityDrainECSHookFunction",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": Object {
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ClusterCapacityDrainECSHookFunctionServiceRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1132,13 +1138,13 @@ def pick(dct, *keys):
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/CiCd/Cluster/Capacity",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA": Object {
+    "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1165,7 +1171,7 @@ def pick(dct, *keys):
                     },
                     ":autoscaling:region:account:autoScalingGroup:*:autoScalingGroupName/",
                     Object {
-                      "Ref": "ClusterCapacityASGA6ED330E",
+                      "Ref": "ClusterCapacityASG",
                     },
                   ],
                 ],
@@ -1188,7 +1194,7 @@ def pick(dct, *keys):
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "ClusterEB0386A7",
+                  "Cluster",
                   "Arn",
                 ],
               },
@@ -1202,7 +1208,7 @@ def pick(dct, *keys):
                 "ArnEquals": Object {
                   "ecs:cluster": Object {
                     "Fn::GetAtt": Array [
-                      "ClusterEB0386A7",
+                      "Cluster",
                       "Arn",
                     ],
                   },
@@ -1214,41 +1220,41 @@ def pick(dct, *keys):
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicyAB4154DA",
+        "PolicyName": "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityDrainECSHookFunctionServiceRole58D510CB",
+            "Ref": "ClusterCapacityDrainECSHookFunctionServiceRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ClusterCapacityDrainECSHookFunctionTopic49CF7031": Object {
+    "ClusterCapacityDrainECSHookFunctionTopic": Object {
       "Properties": Object {
         "Endpoint": Object {
           "Fn::GetAtt": Array [
-            "ClusterCapacityDrainECSHookFunctionF75C9A9F",
+            "ClusterCapacityDrainECSHookFunction",
             "Arn",
           ],
         },
         "Protocol": "lambda",
         "TopicArn": Object {
-          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
         },
       },
       "Type": "AWS::SNS::Subscription",
     },
-    "ClusterCapacityInstanceProfileCD41BDF7": Object {
+    "ClusterCapacityInstanceProfile": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityInstanceRole4A69070A",
+            "Ref": "ClusterCapacityInstanceRole",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "ClusterCapacityInstanceRole4A69070A": Object {
+    "ClusterCapacityInstanceRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1289,13 +1295,13 @@ def pick(dct, *keys):
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/CiCd/Cluster/Capacity",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D": Object {
+    "ClusterCapacityInstanceRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1318,18 +1324,18 @@ def pick(dct, *keys):
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D",
+        "PolicyName": "ClusterCapacityInstanceRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityInstanceRole4A69070A",
+            "Ref": "ClusterCapacityInstanceRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ClusterCapacityInstanceSecurityGroup2D6F9ADD": Object {
+    "ClusterCapacityInstanceSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Core-Cos-Gal-CiCd-SolarSystem/Cluster/Capacity/InstanceSecurityGroup",
+        "GroupDescription": "Cos/Gal/CiCd/Cluster/Capacity/InstanceSecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1340,23 +1346,23 @@ def pick(dct, *keys):
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/CiCd/Cluster/Capacity",
           },
         ],
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "ClusterCapacityLaunchConfigC44566A4": Object {
+    "ClusterCapacityLaunchConfig": Object {
       "DependsOn": Array [
-        "ClusterCapacityInstanceRoleDefaultPolicyCCA4190D",
-        "ClusterCapacityInstanceRole4A69070A",
+        "ClusterCapacityInstanceRoleDefaultPolicy",
+        "ClusterCapacityInstanceRole",
       ],
       "Properties": Object {
         "IamInstanceProfile": Object {
-          "Ref": "ClusterCapacityInstanceProfileCD41BDF7",
+          "Ref": "ClusterCapacityInstanceProfile",
         },
         "ImageId": Object {
           "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter",
@@ -1365,7 +1371,7 @@ def pick(dct, *keys):
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
-              "ClusterCapacityInstanceSecurityGroup2D6F9ADD",
+              "ClusterCapacityInstanceSecurityGroup",
               "GroupId",
             ],
           },
@@ -1378,7 +1384,7 @@ def pick(dct, *keys):
                 "#!/bin/bash
 echo ECS_CLUSTER=",
                 Object {
-                  "Ref": "ClusterEB0386A7",
+                  "Ref": "Cluster",
                 },
                 " >> /etc/ecs/ecs.config
 sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
@@ -1391,31 +1397,31 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
-    "ClusterCapacityLifecycleHookDrainHook9C5B4B9E": Object {
+    "ClusterCapacityLifecycleHookDrainHook": Object {
       "DependsOn": Array [
-        "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B",
-        "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+        "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy",
+        "ClusterCapacityLifecycleHookDrainHookRole",
       ],
       "Properties": Object {
         "AutoScalingGroupName": Object {
-          "Ref": "ClusterCapacityASGA6ED330E",
+          "Ref": "ClusterCapacityASG",
         },
         "DefaultResult": "CONTINUE",
         "HeartbeatTimeout": 300,
         "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
         "NotificationTargetARN": Object {
-          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
         },
         "RoleARN": Object {
           "Fn::GetAtt": Array [
-            "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+            "ClusterCapacityLifecycleHookDrainHookRole",
             "Arn",
           ],
         },
       },
       "Type": "AWS::AutoScaling::LifecycleHook",
     },
-    "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9": Object {
+    "ClusterCapacityLifecycleHookDrainHookRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1432,13 +1438,13 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/CiCd/Cluster/Capacity",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B": Object {
+    "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1446,39 +1452,33 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
               "Action": "sns:Publish",
               "Effect": "Allow",
               "Resource": Object {
-                "Ref": "ClusterCapacityLifecycleHookDrainHookTopic1768B95F",
+                "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy34F3958B",
+        "PolicyName": "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityLifecycleHookDrainHookRoleB2BDD5F9",
+            "Ref": "ClusterCapacityLifecycleHookDrainHookRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ClusterCapacityLifecycleHookDrainHookTopic1768B95F": Object {
+    "ClusterCapacityLifecycleHookDrainHookTopic": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Cluster/Capacity",
+            "Value": "Cos/Gal/CiCd/Cluster/Capacity",
           },
         ],
       },
       "Type": "AWS::SNS::Topic",
     },
-    "ClusterEB0386A7": Object {
-      "Properties": Object {
-        "ClusterName": "Core-Gal-CiCd-Cluster",
-      },
-      "Type": "AWS::ECS::Cluster",
-    },
-    "PrivateZone27242E85": Object {
+    "PrivateZone": Object {
       "Properties": Object {
         "HostedZoneConfig": Object {
           "Comment": "Core Main Private Zone for CiCd SolarSystem",
@@ -1487,7 +1487,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "VPCs": Array [
           Object {
             "VPCId": Object {
-              "Ref": "Vpc8378EB38",
+              "Ref": "Vpc",
             },
             "VPCRegion": "region",
           },
@@ -1495,7 +1495,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::Route53::HostedZone",
     },
-    "Vpc8378EB38": Object {
+    "Vpc": Object {
       "Properties": Object {
         "CidrBlock": "10.0.4.0/24",
         "EnableDnsHostnames": true,
@@ -1504,38 +1504,38 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc",
+            "Value": "Cos/Gal/CiCd/Vpc",
           },
         ],
       },
       "Type": "AWS::EC2::VPC",
     },
-    "VpcAppSubnet1RouteTable30EDBD03": Object {
+    "VpcAppSubnet1RouteTable": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/AppSubnet1",
+            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet1",
           },
         ],
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "VpcAppSubnet1RouteTableAssociation95F593A9": Object {
+    "VpcAppSubnet1RouteTableAssociation": Object {
       "Properties": Object {
         "RouteTableId": Object {
-          "Ref": "VpcAppSubnet1RouteTable30EDBD03",
+          "Ref": "VpcAppSubnet1RouteTable",
         },
         "SubnetId": Object {
-          "Ref": "VpcAppSubnet1Subnet7D2CF347",
+          "Ref": "VpcAppSubnet1Subnet",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "VpcAppSubnet1Subnet7D2CF347": Object {
+    "VpcAppSubnet1Subnet": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1a",
         "CidrBlock": "10.0.4.0/26",
@@ -1543,7 +1543,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/AppSubnet1",
+            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet1",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -1555,37 +1555,37 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           },
         ],
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "VpcAppSubnet2RouteTable1525EC1E": Object {
+    "VpcAppSubnet2RouteTable": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/AppSubnet2",
+            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet2",
           },
         ],
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "VpcAppSubnet2RouteTableAssociationD8368F88": Object {
+    "VpcAppSubnet2RouteTableAssociation": Object {
       "Properties": Object {
         "RouteTableId": Object {
-          "Ref": "VpcAppSubnet2RouteTable1525EC1E",
+          "Ref": "VpcAppSubnet2RouteTable",
         },
         "SubnetId": Object {
-          "Ref": "VpcAppSubnet2Subnet8D65443B",
+          "Ref": "VpcAppSubnet2Subnet",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "VpcAppSubnet2Subnet8D65443B": Object {
+    "VpcAppSubnet2Subnet": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1b",
         "CidrBlock": "10.0.4.64/26",
@@ -1593,7 +1593,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/AppSubnet2",
+            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet2",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -1605,18 +1605,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           },
         ],
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "VpcCloudWatchLogsEndpointA6195533": Object {
+    "VpcCloudWatchLogsEndpoint": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "VpcCloudWatchLogsEndpointSecurityGroupE044298A",
+              "VpcCloudWatchLogsEndpointSecurityGroup",
               "GroupId",
             ],
           },
@@ -1635,22 +1635,22 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "VpcAppSubnet1Subnet7D2CF347",
+            "Ref": "VpcAppSubnet1Subnet",
           },
           Object {
-            "Ref": "VpcAppSubnet2Subnet8D65443B",
+            "Ref": "VpcAppSubnet2Subnet",
           },
         ],
         "VpcEndpointType": "Interface",
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "VpcCloudWatchLogsEndpointSecurityGroupE044298A": Object {
+    "VpcCloudWatchLogsEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/CiCd/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1662,7 +1662,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           Object {
             "CidrIp": Object {
               "Fn::GetAtt": Array [
-                "Vpc8378EB38",
+                "Vpc",
                 "CidrBlock",
               ],
             },
@@ -1673,7 +1673,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
                   "from ",
                   Object {
                     "Fn::GetAtt": Array [
-                      "Vpc8378EB38",
+                      "Vpc",
                       "CidrBlock",
                     ],
                   },
@@ -1689,22 +1689,22 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc",
+            "Value": "Cos/Gal/CiCd/Vpc",
           },
         ],
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "VpcEcrDockerEndpoint53ED547B": Object {
+    "VpcEcrDockerEndpoint": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "VpcEcrDockerEndpointSecurityGroup5D41A216",
+              "VpcEcrDockerEndpointSecurityGroup",
               "GroupId",
             ],
           },
@@ -1723,22 +1723,22 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "VpcAppSubnet1Subnet7D2CF347",
+            "Ref": "VpcAppSubnet1Subnet",
           },
           Object {
-            "Ref": "VpcAppSubnet2Subnet8D65443B",
+            "Ref": "VpcAppSubnet2Subnet",
           },
         ],
         "VpcEndpointType": "Interface",
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "VpcEcrDockerEndpointSecurityGroup5D41A216": Object {
+    "VpcEcrDockerEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/EcrDockerEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/CiCd/Vpc/EcrDockerEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1750,7 +1750,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           Object {
             "CidrIp": Object {
               "Fn::GetAtt": Array [
-                "Vpc8378EB38",
+                "Vpc",
                 "CidrBlock",
               ],
             },
@@ -1761,7 +1761,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
                   "from ",
                   Object {
                     "Fn::GetAtt": Array [
-                      "Vpc8378EB38",
+                      "Vpc",
                       "CidrBlock",
                     ],
                   },
@@ -1777,22 +1777,22 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc",
+            "Value": "Cos/Gal/CiCd/Vpc",
           },
         ],
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "VpcEcsAgentEndpoint7C64BE78": Object {
+    "VpcEcsAgentEndpoint": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "VpcEcsAgentEndpointSecurityGroup0260F9C0",
+              "VpcEcsAgentEndpointSecurityGroup",
               "GroupId",
             ],
           },
@@ -1811,22 +1811,22 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "VpcAppSubnet1Subnet7D2CF347",
+            "Ref": "VpcAppSubnet1Subnet",
           },
           Object {
-            "Ref": "VpcAppSubnet2Subnet8D65443B",
+            "Ref": "VpcAppSubnet2Subnet",
           },
         ],
         "VpcEndpointType": "Interface",
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "VpcEcsAgentEndpointSecurityGroup0260F9C0": Object {
+    "VpcEcsAgentEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/EcsAgentEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/CiCd/Vpc/EcsAgentEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1838,7 +1838,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           Object {
             "CidrIp": Object {
               "Fn::GetAtt": Array [
-                "Vpc8378EB38",
+                "Vpc",
                 "CidrBlock",
               ],
             },
@@ -1849,7 +1849,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
                   "from ",
                   Object {
                     "Fn::GetAtt": Array [
-                      "Vpc8378EB38",
+                      "Vpc",
                       "CidrBlock",
                     ],
                   },
@@ -1865,22 +1865,22 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc",
+            "Value": "Cos/Gal/CiCd/Vpc",
           },
         ],
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "VpcEcsEndpoint81699F6A": Object {
+    "VpcEcsEndpoint": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "VpcEcsEndpointSecurityGroup6B2A7280",
+              "VpcEcsEndpointSecurityGroup",
               "GroupId",
             ],
           },
@@ -1899,22 +1899,22 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "VpcAppSubnet1Subnet7D2CF347",
+            "Ref": "VpcAppSubnet1Subnet",
           },
           Object {
-            "Ref": "VpcAppSubnet2Subnet8D65443B",
+            "Ref": "VpcAppSubnet2Subnet",
           },
         ],
         "VpcEndpointType": "Interface",
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "VpcEcsEndpointSecurityGroup6B2A7280": Object {
+    "VpcEcsEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/EcsEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/CiCd/Vpc/EcsEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1926,7 +1926,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           Object {
             "CidrIp": Object {
               "Fn::GetAtt": Array [
-                "Vpc8378EB38",
+                "Vpc",
                 "CidrBlock",
               ],
             },
@@ -1937,7 +1937,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
                   "from ",
                   Object {
                     "Fn::GetAtt": Array [
-                      "Vpc8378EB38",
+                      "Vpc",
                       "CidrBlock",
                     ],
                   },
@@ -1953,22 +1953,22 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc",
+            "Value": "Cos/Gal/CiCd/Vpc",
           },
         ],
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "VpcEcsTelemetryEndpointF3189EDA": Object {
+    "VpcEcsTelemetryEndpoint": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "VpcEcsTelemetryEndpointSecurityGroupC8027D56",
+              "VpcEcsTelemetryEndpointSecurityGroup",
               "GroupId",
             ],
           },
@@ -1987,22 +1987,22 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "SubnetIds": Array [
           Object {
-            "Ref": "VpcAppSubnet1Subnet7D2CF347",
+            "Ref": "VpcAppSubnet1Subnet",
           },
           Object {
-            "Ref": "VpcAppSubnet2Subnet8D65443B",
+            "Ref": "VpcAppSubnet2Subnet",
           },
         ],
         "VpcEndpointType": "Interface",
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "VpcEcsTelemetryEndpointSecurityGroupC8027D56": Object {
+    "VpcEcsTelemetryEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Core-Cos-Gal-CiCd-SolarSystem/Vpc/EcsTelemetryEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/CiCd/Vpc/EcsTelemetryEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -2014,7 +2014,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           Object {
             "CidrIp": Object {
               "Fn::GetAtt": Array [
-                "Vpc8378EB38",
+                "Vpc",
                 "CidrBlock",
               ],
             },
@@ -2025,7 +2025,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
                   "from ",
                   Object {
                     "Fn::GetAtt": Array [
-                      "Vpc8378EB38",
+                      "Vpc",
                       "CidrBlock",
                     ],
                   },
@@ -2041,23 +2041,23 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "Core-Cos-Gal-CiCd-SolarSystem/Vpc",
+            "Value": "Cos/Gal/CiCd/Vpc",
           },
         ],
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "VpcS3Gateway0FF2BD16": Object {
+    "VpcS3Gateway": Object {
       "Properties": Object {
         "RouteTableIds": Array [
           Object {
-            "Ref": "VpcAppSubnet1RouteTable30EDBD03",
+            "Ref": "VpcAppSubnet1RouteTable",
           },
           Object {
-            "Ref": "VpcAppSubnet2RouteTable1525EC1E",
+            "Ref": "VpcAppSubnet2RouteTable",
           },
         ],
         "ServiceName": Object {
@@ -2074,12 +2074,12 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "VpcEndpointType": "Gateway",
         "VpcId": Object {
-          "Ref": "Vpc8378EB38",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "ZoneA5DE4B68": Object {
+    "Zone": Object {
       "Properties": Object {
         "HostedZoneConfig": Object {
           "Comment": "Core Main Zone for CiCd SolarSystem",
@@ -2088,16 +2088,16 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::Route53::HostedZone",
     },
-    "ZoneDelegationAE61034B": Object {
+    "ZoneDelegation": Object {
       "Properties": Object {
         "Comment": "Core Zone Delegation for CiCd SolarSystem.",
         "HostedZoneId": Object {
-          "Fn::ImportValue": "Core-Cos-Cosmos:ExportsOutputRefRootZone831A5F27FABD99AF",
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputRefRootZone2F3E9CEF",
         },
         "Name": "cicd.cos.com.",
         "ResourceRecords": Object {
           "Fn::GetAtt": Array [
-            "ZoneA5DE4B68",
+            "Zone",
             "NameServers",
           ],
         },

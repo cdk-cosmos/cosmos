@@ -1,13 +1,19 @@
 export const getRoutingPriority = (props: { hostHeader?: string; pathPattern?: string }): number => {
-  const map = (value: number): number => mapNumber(value, 1, 128 * charMapping.length, 5000, 1);
+  const path = getStringValue(props.pathPattern);
+  const host = getStringValue(props.hostHeader);
+  const count = 2;
+  const total = path + host;
+  const inMin = 0 * count;
+  const inMax = 128 * charMapping.length * count;
+  const outMin = 1000; // Offset
+  const outMax = Math.min(inMax + outMin, 50000); // only use and many as needed ?
 
-  const path = map(getStringValue(props.pathPattern));
-  const host = map(getStringValue(props.hostHeader));
-  return Math.floor((path + host) / 2);
+  // Since lower numbers are more important in Listener Rules for ALB, then flip out min and max
+  return mapNumber(total, inMin, inMax, outMax, outMin);
 };
 
-const mapNumber = (value: number, sMin: number, sMax: number, tMin: number, tMax: number): number => {
-  return Math.floor(((value - sMin) / (sMax - sMin)) * (tMax - tMin) + tMin);
+const mapNumber = (value: number, inMin: number, inMax: number, outMin: number, outMax: number): number => {
+  return Math.floor(((value - inMin) / (inMax - inMin)) * (outMax - outMin) + outMin);
 };
 
 const getStringValue = (str?: string): number => {
