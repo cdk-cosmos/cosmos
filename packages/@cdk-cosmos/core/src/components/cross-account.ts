@@ -2,7 +2,7 @@ import { Construct, Fn, Duration } from '@aws-cdk/core';
 import { ZoneDelegationRecord } from '@aws-cdk/aws-route53';
 import { CrossAccountExports } from '@cosmos-building-blocks/common';
 import { ISolarSystemCore } from '../solar-system';
-import { Output } from './remote';
+import { Output } from '../helpers/remote';
 
 export interface CrossAccountZoneDelegationRecordProps {
   comment?: string;

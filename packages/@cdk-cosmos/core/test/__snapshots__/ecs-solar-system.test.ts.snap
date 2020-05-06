@@ -2,13 +2,13 @@
 
 exports[`ECS-Solar-System Extension should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos Extension: App resources dependant on each SolarSystem, like Services and Databases.",
+  "Description": "SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
 }
 `;
 
 exports[`ECS-Solar-System should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.",
+  "Description": "SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
     "AlbAlbArn": Object {
       "Export": Object {

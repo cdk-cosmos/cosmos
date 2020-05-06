@@ -1,5 +1,5 @@
 import { IConstruct, CfnResource } from '@aws-cdk/core';
-import { Construct, ConstructNode } from '@aws-cdk/core/lib/construct-compat';
+import { Construct } from '@aws-cdk/core/lib/construct-compat';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Stack, StackProps } from '@aws-cdk/core/lib/stack';
 
@@ -33,8 +33,6 @@ declare module '@aws-cdk/core/lib/construct-compat' {
   }
 }
 
-ConstructNode.prototype.type = 'Resource';
-
 Construct.prototype.generateId = function(id, delimiter, pattern, type): string {
   return generateNodeId({
     scope: this,
@@ -54,12 +52,15 @@ Construct.prototype.singletonId = function(id, delimiter, type): string {
   });
 };
 
-export interface BaseStackProps extends StackProps {
+export interface BaseStackOptions extends StackProps {
   partition?: string;
   version?: string;
-  type: string;
   disableCosmosNaming?: boolean;
   cidr?: string;
+}
+
+export interface BaseStackProps extends BaseStackOptions {
+  type: string;
 }
 
 export class BaseStack extends Stack {
@@ -68,9 +69,10 @@ export class BaseStack extends Stack {
 
   constructor(scope: Construct, id: string, props: BaseStackProps) {
     const { partition, version, type, disableCosmosNaming = false, env, cidr } = props;
+    const stackName = generateNodeId({ scope, id, type, partition, version, pattern: PATTERN.STACK });
 
     super(scope, id, {
-      stackName: generateNodeId({ scope, id, type, partition, version, pattern: PATTERN.STACK }),
+      stackName,
       env: scope.node.tryGetContext(AWS_ENV),
       ...props,
     });
@@ -164,9 +166,10 @@ export function generateId(props: GenerateLogicalIdProps): string {
   if (partition) scopes.push({ key: 'Partition', value: partition });
   if (version) scopes.push({ key: 'Version', value: version });
 
-  const selectedIds = selectScoped(scopes.filter(removeHidden), pattern)
-    .map(x => x.value)
-    .reduce(removeDupes, []);
+  let selectedScopes = scopes.filter(removeHidden);
+  selectedScopes = selectedScopes.reduce(removeDupes, []);
+  selectedScopes = selectScoped(selectedScopes, pattern);
+  const selectedIds = selectedScopes.map(x => x.value);
 
   return selectedIds.join(delimiter).slice(0, 240);
 }
@@ -208,9 +211,9 @@ function selectScoped(scopes: IScope[], pattern: string): IScope[] {
 
 function getScopes(scope: IConstruct): IScope[] {
   const scopes = scope.node.scopes
-    .filter(x => x.node.id && x.node.type)
+    .filter(x => x.node.id)
     .map(x => ({
-      key: x.node.type,
+      key: x.node.type || 'Resource',
       value: x.node.id,
     }));
 
@@ -226,11 +229,11 @@ function getPattern(scope: IConstruct): string | undefined {
     .pop();
 }
 
-function removeDupes(result: string[], value: string): string[] {
-  if (result.length === 0 || !result[result.length - 1].endsWith(value)) {
-    result.push(value);
-  }
+function removeDupes(result: IScope[], scope: IScope): IScope[] {
+  const previous = result.length ? result[result.length - 1] : null;
+  if (previous?.key === scope.key && previous.value.endsWith(scope.value)) return result;
 
+  result.push(scope);
   return result;
 }
 

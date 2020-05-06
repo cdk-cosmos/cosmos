@@ -9,10 +9,10 @@ import {
   ZoneDelegationRecord,
 } from '@aws-cdk/aws-route53';
 import { isCrossAccount } from './helpers/utils';
-import { BaseStack, BaseStackProps, COSMOS_PARTITION } from './base';
+import { BaseStack, BaseStackOptions, COSMOS_PARTITION } from './components/base';
 import { IGalaxyCore, IGalaxyExtension } from './galaxy';
 import { CoreVpc, CoreVpcProps } from './components/core-vpc';
-import { CrossAccountZoneDelegationRecord } from './helpers/cross-account';
+import { CrossAccountZoneDelegationRecord } from './components/cross-account';
 import { RemoteVpc, RemoteZone } from './helpers/remote';
 
 export interface ISolarSystemCore extends Construct {
@@ -28,8 +28,7 @@ export interface ISolarSystemExtension extends Construct {
   portal: ISolarSystemCore;
 }
 
-export interface SolarSystemCoreStackProps extends Partial<BaseStackProps> {
-  cidr?: string;
+export interface SolarSystemCoreStackProps extends BaseStackOptions {
   vpc?: Vpc;
   vpcProps?: Partial<CoreVpcProps>;
   zoneProps?: {
@@ -46,7 +45,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
 
   constructor(galaxy: IGalaxyCore, id: string, props?: SolarSystemCoreStackProps) {
     super(galaxy, id, {
-      description: 'Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.',
+      description: 'SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.',
       ...props,
       type: 'SolarSystem',
     });
@@ -126,9 +125,9 @@ export class SolarSystemExtensionStack extends BaseStack implements ISolarSystem
   readonly galaxy: IGalaxyExtension;
   readonly portal: ISolarSystemCore;
 
-  constructor(galaxy: IGalaxyExtension, id: string, props?: Partial<BaseStackProps>) {
+  constructor(galaxy: IGalaxyExtension, id: string, props?: BaseStackOptions) {
     super(galaxy, id, {
-      description: 'Cosmos Extension: App resources dependant on each SolarSystem, like Services and Databases.',
+      description: 'SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.',
       ...props,
       type: 'SolarSystem',
     });

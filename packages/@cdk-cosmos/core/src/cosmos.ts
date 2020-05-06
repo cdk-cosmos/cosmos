@@ -7,7 +7,7 @@ import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { CrossAccountExportsFn } from '@cosmos-building-blocks/common';
 import { IFunction, Function } from '@aws-cdk/aws-lambda';
-import { BaseStack, BaseStackProps, COSMOS_PARTITION } from './base';
+import { BaseStack, BaseStackOptions, COSMOS_PARTITION } from './components/base';
 import { RemoteZone, RemoteCodeRepo, RemoteFunction } from './helpers/remote';
 
 export interface ICosmosCore extends Construct {
@@ -30,9 +30,8 @@ export interface ICosmosExtension extends Construct {
   cdkRepo: IRepository;
 }
 
-export interface CosmosCoreStackProps extends Partial<BaseStackProps> {
+export interface CosmosCoreStackProps extends BaseStackOptions {
   tld: string;
-  cidr?: string;
 }
 
 export class CosmosCoreStack extends BaseStack implements ICosmosCore {
@@ -124,7 +123,7 @@ export class CosmosLinkStack extends BaseStack implements ICosmosCoreLink {
 
   constructor(cosmos: ICosmosCore, props?: StackProps) {
     super(cosmos, 'Link', {
-      description: 'Cosmos: Resources to link the Cosmos, like Route53 zone delegation',
+      description: 'Cosmos Link: Resources to link the Cosmos, like Route53 zone delegation',
       ...props,
       type: 'Link',
     });
@@ -138,7 +137,7 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
   readonly libVersion: string;
   readonly cdkRepo: IRepository;
 
-  constructor(scope: Construct, id: string, props?: Partial<BaseStackProps>) {
+  constructor(scope: Construct, id: string, props?: BaseStackOptions) {
     super(scope, id, {
       partition: 'App',
       ...props,

@@ -2,7 +2,7 @@
 
 exports[`CICD-Solar-System Extension should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos Extension: App resources dependant on each SolarSystem, like Services and Databases.",
+  "Description": "SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
   "Resources": Object {
     "CdkPipeline": Object {
       "Properties": Object {
@@ -12,6 +12,7 @@ Object {
           },
           "Type": "S3",
         },
+        "Name": "App-Test-Cdk-Pipeline",
         "RoleArn": "arn:aws:iam::account:role/CoreCDKMasterRole",
         "Stages": Array [
           Object {
@@ -134,6 +135,7 @@ Object {
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
+        "Name": "App-Test-Cdk-Deploy",
         "ServiceRole": "arn:aws:iam::account:role/CoreCDKMasterRole",
         "Source": Object {
           "BuildSpec": "{
@@ -327,7 +329,7 @@ Object {
 
 exports[`CICD-Solar-System should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.",
+  "Description": "SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
     "AlbAlbArn": Object {
       "Export": Object {
@@ -587,6 +589,7 @@ Object {
           },
           "Type": "S3",
         },
+        "Name": "Core-Cos-Cdk-Pipeline",
         "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
         "Stages": Array [
           Object {
@@ -709,6 +712,7 @@ Object {
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
+        "Name": "Core-Cos-Cdk-Deploy",
         "ServiceRole": "arn:aws:iam::account:role/CoreCdkMasterRole",
         "Source": Object {
           "BuildSpec": "{

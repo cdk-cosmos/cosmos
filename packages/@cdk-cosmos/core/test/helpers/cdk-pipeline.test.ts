@@ -2,7 +2,7 @@ import '@aws-cdk/assert/jest';
 import { App, Stack } from '@aws-cdk/core';
 import { Repository } from '@aws-cdk/aws-codecommit';
 import { synthesizeStacks } from '../../../../../src/test';
-import { CdkPipeline } from '../../src/helpers/cdk-pipeline';
+import { CdkPipeline } from '../../src/components/cdk-pipeline';
 
 const app = new App();
 const stack = new Stack(app, 'Pipeline', {});

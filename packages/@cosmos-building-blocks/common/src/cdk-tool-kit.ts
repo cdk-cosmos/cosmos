@@ -1,13 +1,13 @@
 import { Construct, Stack, StackProps, CfnOutput } from '@aws-cdk/core';
 import { Bucket, BucketEncryption } from '@aws-cdk/aws-s3';
 
-export class CDKToolkit extends Stack {
+export class CDKToolKit extends Stack {
   readonly bucket: Bucket;
 
-  constructor(scope: Construct, id: string, props: StackProps) {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, {
       description:
-        'The CDK Toolkit Stack. It was created by `@cosmos-building-blocks` and manages resources necessary for managing your Cloud Applications with AWS CDK.',
+        'The CDK Tool Kit Stack. It was created by `@cosmos-building-blocks` and manages resources necessary for managing your Cloud Applications with AWS CDK.',
       ...props,
       stackName: 'CDKToolkit',
     });

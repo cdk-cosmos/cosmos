@@ -25,7 +25,8 @@ import { ISolarSystemCore, ISolarSystemExtension } from '../solar-system';
 export type BuildEnvironmentVariables = { [key: string]: BuildEnvironmentVariable };
 
 export interface CdkPipelineProps {
-  name?: string;
+  pipelineName?: string;
+  deployName?: string;
   cdkRepo: IRepository;
   cdkBranch?: string;
   deployRole?: IRole;
@@ -42,7 +43,8 @@ export class CdkPipeline extends Construct {
     super(scope, id);
 
     const {
-      // name = id,
+      pipelineName,
+      deployName,
       cdkRepo,
       cdkBranch = 'master',
       deployRole = undefined,
@@ -57,7 +59,7 @@ export class CdkPipeline extends Construct {
     });
 
     this.Deploy = new Project(this, 'CdkDeploy', {
-      // projectName: `${name}Deploy`,
+      projectName: deployName,
       role: deployRole,
       vpc: deployVpc,
       source: Source.codeCommit({
@@ -113,7 +115,7 @@ export class CdkPipeline extends Construct {
     const cdkDeployOutput = new Artifact('CdkDeployOutput');
 
     this.Pipeline = new Pipeline(this, 'CdkPipeline', {
-      // pipelineName: name,
+      pipelineName: pipelineName,
       artifactBucket: artifactBucket,
       role: deployRole,
       stages: [

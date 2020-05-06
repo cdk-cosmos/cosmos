@@ -2,7 +2,7 @@
 
 exports[`Galaxy Extension should match snapshot 1`] = `
 Object {
-  "Description": "Galaxy Extension: App resources dependant on each Galaxy.",
+  "Description": "Galaxy Extension: App resources dependant on each Aws Account.",
 }
 `;
 

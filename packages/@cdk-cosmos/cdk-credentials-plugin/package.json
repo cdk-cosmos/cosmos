@@ -26,7 +26,7 @@
     "clean": "rm -rf lib"
   },
   "peerDependencies": {
-    "aws-cdk": "^1.31.0"
+    "aws-cdk": "^1.37.0"
   },
   "gitHead": "173c051038a3acdaa93d6a37d42b6b0546ffd567"
 }

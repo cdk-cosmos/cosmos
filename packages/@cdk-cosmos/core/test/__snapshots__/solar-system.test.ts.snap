@@ -676,7 +676,7 @@ Object {
 
 exports[`Solar-System should match snapshot 3`] = `
 Object {
-  "Description": "Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.",
+  "Description": "SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
     "PrivateZoneZoneId": Object {
       "Export": Object {
@@ -824,7 +824,7 @@ Object {
 
 exports[`Solar-System should match snapshot 4`] = `
 Object {
-  "Description": "Cosmos: Resources dependant on each SolarSystem, like Vpc and MainZone.",
+  "Description": "SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
     "PrivateZoneZoneId": Object {
       "Export": Object {
@@ -1098,7 +1098,7 @@ Object {
 
 exports[`Solar-System should match snapshot 5`] = `
 Object {
-  "Description": "Cosmos: Resources to link the Cosmos, like Route53 zone delegation",
+  "Description": "Cosmos Link: Resources to link the Cosmos, like Route53 zone delegation",
   "Resources": Object {
     "Sys2ZoneDelegation": Object {
       "Properties": Object {
@@ -1157,6 +1157,6 @@ Object {
 
 exports[`SolarSystem Extension should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos Extension: App resources dependant on each SolarSystem, like Services and Databases.",
+  "Description": "SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
 }
 `;

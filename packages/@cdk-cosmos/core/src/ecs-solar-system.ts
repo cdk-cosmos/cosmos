@@ -25,7 +25,7 @@ import {
 } from './solar-system';
 import { CoreVpcProps, addEcsEndpoints } from './components/core-vpc';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from './helpers/remote';
-import { BaseStackProps } from './base';
+import { BaseStackOptions } from './components/base';
 
 export interface IEcsSolarSystemCore extends ISolarSystemCore {
   cluster: ICluster;
@@ -65,9 +65,9 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
     }
 
     this.cluster = new Cluster(this, 'Cluster', {
-      vpc: this.vpc,
       ...clusterProps,
       clusterName: this.singletonId('Cluster'),
+      vpc: this.vpc,
     });
 
     const capacity = this.cluster.addCapacity('Capacity', {
@@ -144,7 +144,7 @@ export class ImportedEcsSolarSystemCore extends ImportedSolarSystemCore implemen
 export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack implements IEcsSolarSystemExtension {
   readonly portal: IEcsSolarSystemCore;
 
-  constructor(galaxy: IGalaxyExtension, id: string, props?: Partial<BaseStackProps>) {
+  constructor(galaxy: IGalaxyExtension, id: string, props?: BaseStackOptions) {
     super(galaxy, id, props);
 
     this.node.tryRemoveChild(this.portal.node.id);

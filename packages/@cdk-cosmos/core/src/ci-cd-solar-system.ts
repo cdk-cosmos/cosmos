@@ -9,10 +9,11 @@ import {
   ImportedEcsSolarSystemCore,
   EcsSolarSystemExtensionStack,
 } from './ecs-solar-system';
-import { BaseStackProps } from './base';
+import { BaseStackOptions } from './components/base';
 import { IGalaxyExtension, IGalaxyCore } from './galaxy';
-import { CdkPipelineProps, CdkPipeline } from './helpers/cdk-pipeline';
+import { CdkPipelineProps, CdkPipeline } from './components/cdk-pipeline';
 
+const CDK_PIPELINE_PATTERN = '{Partition}{Cosmos}{Resource}';
 const CDK_PIPELINE_STACK_PATTERN = '{Partition}{Cosmos}{Resource}';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -42,7 +43,8 @@ export class CiCdSolarSystemCoreStack extends EcsSolarSystemCoreStack implements
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', cdkMasterRoleStaticArn, { mutable: false }),
       deployStacks: [this.generateId('*', '', CDK_PIPELINE_STACK_PATTERN)],
       ...cdkPipelineProps,
-      // name: this.RESOLVE(PATTERN.SINGLETON_COSMOS, 'CdkPipeline'),
+      pipelineName: this.generateId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
+      deployName: this.generateId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
       cdkRepo: cdkRepo,
       // deployVpc: this.Vpc,
     });
@@ -62,24 +64,32 @@ export class ImportedCiCdSolarSystemCore extends ImportedEcsSolarSystemCore impl
   }
 }
 
+export interface CiCdSolarSystemExtensionStackProps extends BaseStackOptions {
+  cdkPipelineProps?: Partial<CdkPipelineProps>;
+}
+
 export class CiCdSolarSystemExtensionStack extends EcsSolarSystemExtensionStack implements ICiCdSolarSystemExtension {
   readonly portal: IEcsSolarSystemCore;
   readonly deployPipeline: CdkPipeline;
   readonly deployProject: Project;
 
-  constructor(galaxy: IGalaxyExtension, props?: Partial<BaseStackProps>) {
+  constructor(galaxy: IGalaxyExtension, props?: CiCdSolarSystemExtensionStackProps) {
     super(galaxy, 'CiCd', props);
+
+    const { cdkPipelineProps } = props || {};
 
     this.node.tryRemoveChild(this.portal.node.id);
     this.portal = new ImportedCiCdSolarSystemCore(this, this.galaxy.portal);
 
     this.deployPipeline = new CdkPipeline(this, 'CdkPipeline', {
-      // name: `App-${this.Galaxy.Cosmos.Name}-Cdk-Pipeline`,
-      cdkRepo: this.galaxy.cosmos.cdkRepo,
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', this.galaxy.cosmos.portal.cdkMasterRoleStaticArn, {
         mutable: false,
       }),
       deployStacks: [this.generateId('*', '', CDK_PIPELINE_STACK_PATTERN)],
+      ...cdkPipelineProps,
+      pipelineName: this.generateId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
+      deployName: this.generateId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
+      cdkRepo: this.galaxy.cosmos.cdkRepo,
     });
     this.deployProject = this.deployPipeline.Deploy;
   }

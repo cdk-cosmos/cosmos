@@ -3,7 +3,7 @@ import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 import { Vpc } from '@aws-cdk/aws-ec2';
 import { isCrossAccount } from './helpers/utils';
-import { BaseStack, BaseStackProps, COSMOS_PARTITION, PATTERN } from './base';
+import { BaseStack, BaseStackOptions, COSMOS_PARTITION, PATTERN } from './components/base';
 import { ICosmosCore, ICosmosExtension } from './cosmos';
 import { CoreVpcProps, CoreVpc, addEcsEndpoints } from './components/core-vpc';
 
@@ -18,9 +18,8 @@ export interface IGalaxyExtension extends Construct {
   portal: IGalaxyCore;
 }
 
-export interface GalaxyCoreStackProps extends Partial<BaseStackProps> {
-  cidr?: string;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface GalaxyCoreStackProps extends BaseStackOptions {}
 
 export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
   readonly cosmos: ICosmosCore;
@@ -81,9 +80,9 @@ export class GalaxyExtensionStack extends BaseStack implements IGalaxyExtension 
   readonly cosmos: ICosmosExtension;
   readonly portal: IGalaxyCore;
 
-  constructor(cosmos: ICosmosExtension, id: string, props?: Partial<BaseStackProps>) {
+  constructor(cosmos: ICosmosExtension, id: string, props?: BaseStackOptions) {
     super(cosmos, id, {
-      description: 'Galaxy Extension: App resources dependant on each Galaxy.',
+      description: 'Galaxy Extension: App resources dependant on each Aws Account.',
       ...props,
       type: 'Galaxy',
     });
