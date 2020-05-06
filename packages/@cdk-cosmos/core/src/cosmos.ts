@@ -114,7 +114,7 @@ export class ImportedCosmosCore extends Construct implements ICosmosCore {
     this.cdkRepo = RemoteCodeRepo.import(this, this.singletonId('CdkRepo'));
     this.rootZone = RemoteZone.import(this, this.singletonId('RootZone'));
     this.crossAccountExportsFn = RemoteFunction.import(this, this.singletonId('CrossAccountExportsFn'));
-    this.cdkMasterRoleStaticArn = `arn:aws:iam::${Stack.of(scope).account}:role/${this.singletonId('CDKMasterRole')}`;
+    this.cdkMasterRoleStaticArn = `arn:aws:iam::${Stack.of(scope).account}:role/${this.singletonId('CdkMasterRole')}`;
   }
 }
 

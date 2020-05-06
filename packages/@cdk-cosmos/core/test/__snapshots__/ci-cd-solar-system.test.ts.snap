@@ -13,7 +13,7 @@ Object {
           "Type": "S3",
         },
         "Name": "App-Test-Cdk-Pipeline",
-        "RoleArn": "arn:aws:iam::account:role/CoreCDKMasterRole",
+        "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
         "Stages": Array [
           Object {
             "Actions": Array [
@@ -136,7 +136,7 @@ Object {
           "Type": "LINUX_CONTAINER",
         },
         "Name": "App-Test-Cdk-Deploy",
-        "ServiceRole": "arn:aws:iam::account:role/CoreCDKMasterRole",
+        "ServiceRole": "arn:aws:iam::account:role/CoreCdkMasterRole",
         "Source": Object {
           "BuildSpec": "{
   \\"version\\": \\"0.2\\",
