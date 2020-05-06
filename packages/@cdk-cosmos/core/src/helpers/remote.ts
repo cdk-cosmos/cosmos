@@ -56,6 +56,12 @@ export class RemoteZone {
   }
 }
 
+export class RemoteVpcImportProps {
+  isolatedSubnetNames?: string[];
+  privateSubnetNames?: string[];
+  publicSubnetNames?: string[];
+}
+
 export class RemoteVpc {
   static export(vpc: IVpc & Construct, exportName: string, scope: Construct = vpc): void {
     new Output(scope, 'VpcId', {
@@ -119,32 +125,41 @@ export class RemoteVpc {
     }
   }
 
-  static import(
-    scope: Construct,
-    exportName: string,
-    { hasIsolated = false, hasPrivate = false, hasPublic = false }
-  ): IVpc {
+  static import(scope: Construct, exportName: string, props: RemoteVpcImportProps): IVpc {
+    const { isolatedSubnetNames, privateSubnetNames, publicSubnetNames } = props;
+
     const vpcId = Fn.importValue(`${exportName}Id`);
     const availabilityZones = Fn.split(',', Fn.importValue(`${exportName}AZs`));
 
-    const isolatedSubnetIds = Fn.split(',', Fn.importValue(`${exportName}IsolatedSubnetIds`));
-    const isolatedSubnetRouteTableIds = Fn.split(',', Fn.importValue(`${exportName}IsolatedSubnetRouteTableIds`));
+    const isolatedSubnetIds = isolatedSubnetNames
+      ? Fn.split(',', Fn.importValue(`${exportName}IsolatedSubnetIds`))
+      : [];
+    const isolatedSubnetRouteTableIds = isolatedSubnetNames
+      ? Fn.split(',', Fn.importValue(`${exportName}IsolatedSubnetRouteTableIds`))
+      : [];
 
-    const privateSubnetIds = Fn.split(',', Fn.importValue(`${exportName}PrivateSubnetIds`));
-    const privateSubnetRouteTableIds = Fn.split(',', Fn.importValue(`${exportName}PrivateSubnetRouteTableIds`));
+    const privateSubnetIds = privateSubnetNames ? Fn.split(',', Fn.importValue(`${exportName}PrivateSubnetIds`)) : [];
+    const privateSubnetRouteTableIds = privateSubnetNames
+      ? Fn.split(',', Fn.importValue(`${exportName}PrivateSubnetRouteTableIds`))
+      : [];
 
-    const publicSubnetIds = Fn.split(',', Fn.importValue(`${exportName}PublicSubnetIds`));
-    const publicSubnetRouteTableIds = Fn.split(',', Fn.importValue(`${exportName}PublicSubnetRouteTableIds`));
+    const publicSubnetIds = publicSubnetNames ? Fn.split(',', Fn.importValue(`${exportName}PublicSubnetIds`)) : [];
+    const publicSubnetRouteTableIds = publicSubnetNames
+      ? Fn.split(',', Fn.importValue(`${exportName}PublicSubnetRouteTableIds`))
+      : [];
 
     return Vpc.fromVpcAttributes(scope, exportName, {
       vpcId,
       availabilityZones,
-      isolatedSubnetIds: hasIsolated ? isolatedSubnetIds : [],
-      isolatedSubnetRouteTableIds: hasIsolated ? isolatedSubnetRouteTableIds : [],
-      privateSubnetIds: hasPrivate ? privateSubnetIds : [],
-      privateSubnetRouteTableIds: hasPrivate ? privateSubnetRouteTableIds : [],
-      publicSubnetIds: hasPrivate ? publicSubnetIds : [],
-      publicSubnetRouteTableIds: hasPublic ? publicSubnetRouteTableIds : [],
+      isolatedSubnetNames,
+      isolatedSubnetIds,
+      isolatedSubnetRouteTableIds,
+      privateSubnetNames,
+      privateSubnetIds,
+      privateSubnetRouteTableIds,
+      publicSubnetNames,
+      publicSubnetIds,
+      publicSubnetRouteTableIds,
     });
   }
 }

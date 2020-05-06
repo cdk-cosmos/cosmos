@@ -8,6 +8,7 @@ import {
   GalaxyExtensionStack,
   CiCdSolarSystemCoreStack,
   CiCdSolarSystemExtensionStack,
+  CiCdEcsSolarSystemCoreStack,
 } from '../src';
 
 const app = new App();
@@ -15,7 +16,7 @@ const env = { account: 'account', region: 'region' };
 
 const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'cos.com', cidr: '10.0.1.0/22', env });
 const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { env });
-const cicdSolarSystem = new CiCdSolarSystemCoreStack(galaxy, { env });
+const cicdSolarSystem = new CiCdEcsSolarSystemCoreStack(galaxy, { env });
 
 const cosmosExtension = new CosmosExtensionStack(app, 'Test', { env });
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });

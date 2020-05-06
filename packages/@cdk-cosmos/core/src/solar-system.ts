@@ -13,7 +13,7 @@ import { BaseStack, BaseStackOptions, COSMOS_PARTITION } from './components/base
 import { IGalaxyCore, IGalaxyExtension } from './galaxy';
 import { CoreVpc, CoreVpcProps } from './components/core-vpc';
 import { CrossAccountZoneDelegationRecord } from './components/cross-account';
-import { RemoteVpc, RemoteZone } from './helpers/remote';
+import { RemoteVpc, RemoteZone, RemoteVpcImportProps } from './helpers/remote';
 
 export interface ISolarSystemCore extends Construct {
   galaxy: IGalaxyCore;
@@ -103,29 +103,43 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
   }
 }
 
+export interface ImportedSolarSystemCoreProps {
+  vpcProps?: RemoteVpcImportProps;
+}
+
 export class ImportedSolarSystemCore extends Construct implements ISolarSystemCore {
   readonly galaxy: IGalaxyCore;
   readonly vpc: IVpc;
   readonly zone: IPublicHostedZone;
   readonly privateZone: IPrivateHostedZone;
 
-  constructor(scope: Construct, id: string, galaxy: IGalaxyCore) {
+  constructor(scope: Construct, id: string, galaxy: IGalaxyCore, props?: ImportedSolarSystemCoreProps) {
     super(scope, id);
+
+    const { vpcProps = {} } = props || {};
+
     this.node.type = 'SolarSystem';
     this.node.setContext(COSMOS_PARTITION, 'Core');
 
     this.galaxy = galaxy;
-    this.vpc = RemoteVpc.import(this, this.singletonId('Vpc'), { hasIsolated: true });
+    this.vpc = RemoteVpc.import(this, this.singletonId('Vpc'), {
+      isolatedSubnetNames: ['App'],
+      ...vpcProps,
+    });
     this.zone = RemoteZone.import(this, this.singletonId('Zone'));
     this.privateZone = RemoteZone.import(this, this.singletonId('PrivateZone'));
   }
+}
+
+export interface SolarSystemExtensionStackProps extends BaseStackOptions {
+  vpcProps?: RemoteVpcImportProps;
 }
 
 export class SolarSystemExtensionStack extends BaseStack implements ISolarSystemExtension {
   readonly galaxy: IGalaxyExtension;
   readonly portal: ISolarSystemCore;
 
-  constructor(galaxy: IGalaxyExtension, id: string, props?: BaseStackOptions) {
+  constructor(galaxy: IGalaxyExtension, id: string, props?: SolarSystemExtensionStackProps) {
     super(galaxy, id, {
       description: 'SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.',
       ...props,
@@ -133,6 +147,8 @@ export class SolarSystemExtensionStack extends BaseStack implements ISolarSystem
     });
 
     this.galaxy = galaxy;
-    this.portal = new ImportedSolarSystemCore(this, 'Default', this.galaxy.portal);
+    this.portal = new ImportedSolarSystemCore(this, 'Default', this.galaxy.portal, {
+      vpcProps: props?.vpcProps,
+    });
   }
 }
