@@ -1,4 +1,4 @@
-import { Construct, Fn, Duration } from '@aws-cdk/core';
+import { Construct, Fn, Duration, Lazy, Token, Tokenization, Stack } from '@aws-cdk/core';
 import { ZoneDelegationRecord } from '@aws-cdk/aws-route53';
 import { CrossAccountExports } from '@cosmos-building-blocks/common';
 import { ISolarSystemCore } from '../solar-system';
@@ -21,19 +21,29 @@ export class CrossAccountZoneDelegationRecord extends Construct {
     const cosmos = solarSystem.galaxy.cosmos;
     if (!cosmos.link) throw new Error('Cosmos does not have a link stack. It is required');
 
-    const zoneName = solarSystem.zone.node.tryFindChild('ZoneName') as Output;
-    const zoneNameServers = solarSystem.zone.node.tryFindChild('NameServers') as Output;
-    if (!zoneName || !zoneNameServers) {
-      throw new Error("Look like the Zone has not been exported or doesn't have name servers");
-    }
+    const lazyExports = Lazy.listValue({
+      produce: () => {
+        const zoneName = solarSystem.zone.node.tryFindChild('ZoneName') as Output;
+        const zoneNameServers = solarSystem.zone.node.tryFindChild('NameServers') as Output;
+        if (!zoneName || !zoneNameServers) {
+          throw new Error("Look like the Zone has not been exported or doesn't have name servers");
+        }
+        return [zoneName.exportName, zoneNameServers.exportName];
+      },
+    });
 
     this.exports = new CrossAccountExports(cosmos.link, `${solarSystem.node.id}${id}Exports`, {
-      exports: [zoneName.exportName, zoneNameServers.exportName],
+      exports: lazyExports,
       fn: cosmos.crossAccountExportsFn,
       assumeRoleArn: solarSystem.galaxy.cdkCrossAccountRoleStaticArn,
     });
 
-    const [zoneNameRef, zoneNameServersRef] = this.exports.get();
+    const zoneNameRef = Lazy.stringValue({
+      produce: () => this.exports.get(Stack.of(this).resolve(lazyExports)[0]),
+    });
+    const zoneNameServersRef = Lazy.stringValue({
+      produce: () => this.exports.get(Stack.of(this).resolve(lazyExports)[1]),
+    });
     this.delegationRecord = new ZoneDelegationRecord(cosmos.link, `${solarSystem.node.id}${id}`, {
       zone: cosmos.rootZone,
       recordName: zoneNameRef + '.',

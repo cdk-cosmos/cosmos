@@ -67,7 +67,10 @@ export class CiCdSolarSystemCoreStack extends SolarSystemCoreStack implements IC
   readonly deployProject: Project;
 
   constructor(galaxy: IGalaxyCore, props?: CiCdSolarSystemCoreStackProps) {
-    super(galaxy, 'CiCd', props);
+    super(galaxy, 'CiCd', {
+      description: 'Cosmos CiCdSolarSystem: Resources dependant on Ci & Cd, like CodePipelines and CodeDeployments.',
+      ...props,
+    });
 
     const { cdkPipelineProps } = props || {};
 
@@ -85,7 +88,10 @@ export class CiCdEcsSolarSystemCoreStack extends EcsSolarSystemCoreStack impleme
   readonly deployProject: Project;
 
   constructor(galaxy: IGalaxyCore, props?: CiCdEcsSolarSystemCoreStackProps) {
-    super(galaxy, 'CiCd', props);
+    super(galaxy, 'CiCd', {
+      description: 'Cosmos CiCdEcsSolarSystem: Resources dependant on Ci & Cd, like CodePipelines and CodeDeployments.',
+      ...props,
+    });
 
     const { cdkPipelineProps } = props || {};
 
@@ -107,7 +113,11 @@ export class CiCdSolarSystemExtensionStack<T extends ICiCdSolarSystemCore = ICiC
   readonly deployProject: Project;
 
   constructor(galaxy: IGalaxyExtension, props?: CiCdSolarSystemExtensionStackProps) {
-    super(galaxy, 'CiCd', props);
+    super(galaxy, 'CiCd', {
+      description:
+        'Cosmos CiCdSolarSystem Extension: App resources dependant on Ci & Cd, like CodePipelines and CodeDeployments.',
+      ...props,
+    });
 
     const { ecs, cdkPipelineProps } = props || {};
 

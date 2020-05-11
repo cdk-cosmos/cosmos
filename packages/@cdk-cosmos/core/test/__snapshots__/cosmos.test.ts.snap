@@ -2,6 +2,7 @@
 
 exports[`Cosmos Extension should match snapshot 1`] = `
 Object {
+  "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
   "Resources": Object {
     "CdkRepo": Object {
       "Properties": Object {

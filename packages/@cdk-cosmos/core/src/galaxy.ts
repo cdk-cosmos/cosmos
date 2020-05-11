@@ -29,7 +29,7 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
 
   constructor(cosmos: ICosmosCore, id: string, props?: GalaxyCoreStackProps) {
     super(cosmos, id, {
-      description: 'Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.',
+      description: 'Cosmos Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.',
       ...props,
       type: 'Galaxy',
     });
@@ -82,7 +82,7 @@ export class GalaxyExtensionStack extends BaseStack implements IGalaxyExtension 
 
   constructor(cosmos: ICosmosExtension, id: string, props?: BaseStackOptions) {
     super(cosmos, id, {
-      description: 'Galaxy Extension: App resources dependant on each Aws Account.',
+      description: 'Cosmos Galaxy Extension: App resources dependant on each Aws Account.',
       ...props,
       type: 'Galaxy',
     });

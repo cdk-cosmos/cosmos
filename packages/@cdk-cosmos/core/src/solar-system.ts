@@ -45,7 +45,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
 
   constructor(galaxy: IGalaxyCore, id: string, props?: SolarSystemCoreStackProps) {
     super(galaxy, id, {
-      description: 'SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.',
+      description: 'Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.',
       ...props,
       type: 'SolarSystem',
     });
@@ -69,8 +69,6 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
       });
     }
 
-    RemoteVpc.export(this.vpc, this.singletonId('Vpc'), this);
-
     const rootZone = this.galaxy.cosmos.rootZone;
     this.zone = new PublicHostedZone(this, 'Zone', {
       zoneName: `${id}.${rootZone.zoneName}`.toLowerCase(),
@@ -81,8 +79,6 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
       zoneName: `${id}.internal`.toLowerCase(),
       comment: `Core Main Private Zone for ${id} SolarSystem`,
     });
-    RemoteZone.export(this.zone, this.singletonId('Zone'));
-    RemoteZone.export(this.privateZone, this.singletonId('PrivateZone'));
 
     if (linkZone) {
       if (isCrossAccount(this.zone, rootZone)) {
@@ -100,6 +96,10 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
         });
       }
     }
+
+    RemoteVpc.export(this.vpc, this.singletonId('Vpc'), this);
+    RemoteZone.export(this.zone, this.singletonId('Zone'));
+    RemoteZone.export(this.privateZone, this.singletonId('PrivateZone'));
   }
 }
 
@@ -141,7 +141,8 @@ export class SolarSystemExtensionStack extends BaseStack implements ISolarSystem
 
   constructor(galaxy: IGalaxyExtension, id: string, props?: SolarSystemExtensionStackProps) {
     super(galaxy, id, {
-      description: 'SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.',
+      description:
+        'Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.',
       ...props,
       type: 'SolarSystem',
     });

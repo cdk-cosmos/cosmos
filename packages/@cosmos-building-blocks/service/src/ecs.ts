@@ -14,6 +14,7 @@ import {
   RequestCountScalingProps,
   PlacementStrategy,
   BuiltInAttributes,
+  Ec2TaskDefinitionProps,
 } from '@aws-cdk/aws-ecs';
 import {
   ApplicationTargetGroup,
@@ -24,19 +25,21 @@ import {
   ApplicationTargetGroupProps,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { IVpc } from '@aws-cdk/aws-ec2';
-import { LogGroup } from '@aws-cdk/aws-logs';
+import { LogGroup, LogGroupProps } from '@aws-cdk/aws-logs';
 import { EnableScalingProps } from '@aws-cdk/aws-applicationautoscaling';
 import { getRoutingPriority } from './utils';
 
 export interface EcsServiceProps {
   vpc: IVpc;
   cluster: ICluster;
-  httpListener: IApplicationListener;
   containerProps: ContainerDefinitionOptions & { port?: PortMapping };
+  httpListener?: IApplicationListener;
+  taskProps?: Partial<Ec2TaskDefinitionProps>;
   serviceProps?: Partial<Ec2ServiceProps>;
   targetGroupProps?: Partial<ApplicationTargetGroupProps>;
   routingProps?: Partial<ApplicationListenerRuleProps>;
   scalingProps?: EnableScalingProps;
+  logProps?: Partial<LogGroupProps>;
 }
 
 export class EcsService extends Construct {
@@ -44,8 +47,8 @@ export class EcsService extends Construct {
   readonly TaskDefinition: Ec2TaskDefinition;
   readonly Container: ContainerDefinition;
   readonly Service: Ec2Service;
-  readonly TargetGroup: ApplicationTargetGroup;
-  readonly ListenerRule: ApplicationListenerRule;
+  readonly TargetGroup?: ApplicationTargetGroup;
+  readonly ListenerRule?: ApplicationListenerRule;
   readonly Scaling?: ScalableTaskCount;
 
   constructor(scope: Construct, id: string, props: EcsServiceProps) {
@@ -56,18 +59,18 @@ export class EcsService extends Construct {
       cluster,
       httpListener,
       containerProps,
-      serviceProps = {},
-      targetGroupProps = {},
+      taskProps,
+      serviceProps,
+      targetGroupProps,
       routingProps,
       scalingProps,
+      logProps,
     } = props;
 
-    this.LogGroup = new LogGroup(this, 'Logs', {
-      // logGroupName: `${id}-Logs`.replace('-', '/'),
-    });
+    this.LogGroup = new LogGroup(this, 'Logs', logProps);
 
     this.TaskDefinition = new Ec2TaskDefinition(this, 'Task', {
-      // family: `${id}-Task`,
+      ...taskProps,
     });
 
     this.Container = this.TaskDefinition.addContainer('Container', {
@@ -86,26 +89,25 @@ export class EcsService extends Construct {
       desiredCount: 1,
       placementStrategies: [PlacementStrategy.spreadAcross(BuiltInAttributes.AVAILABILITY_ZONE)],
       ...serviceProps,
-      // serviceName: `${id}-Service`,
       taskDefinition: this.TaskDefinition,
       cluster: cluster,
     });
 
-    // const targetGroupName = `${id}-TG`;
-    this.TargetGroup = new ApplicationTargetGroup(this, 'ServiceTargetGroup', {
-      ...targetGroupProps,
-      vpc: vpc,
-      // targetGroupName: targetGroupName.length <= 32 ? targetGroupName : undefined,
-      protocol: ApplicationProtocol.HTTP,
-      targets: [
-        this.Service.loadBalancerTarget({
-          containerName: 'Container',
-        }),
-      ],
-      deregistrationDelay: Duration.seconds(0),
-    });
-
     if (routingProps) {
+      if (!httpListener) throw new Error('To enable routing, Http Listener is required');
+
+      this.TargetGroup = new ApplicationTargetGroup(this, 'ServiceTargetGroup', {
+        protocol: ApplicationProtocol.HTTP,
+        deregistrationDelay: Duration.seconds(0),
+        ...targetGroupProps,
+        vpc: vpc,
+        targets: [
+          this.Service.loadBalancerTarget({
+            containerName: 'Container',
+          }),
+        ],
+      });
+
       this.ListenerRule = new ApplicationListenerRule(this, 'ServiceRule', {
         priority: getRoutingPriority(routingProps),
         ...routingProps,
@@ -137,6 +139,7 @@ export class EcsService extends Construct {
 
   addRequestAutoScaling(props: Partial<RequestCountScalingProps>): void {
     if (!this.Scaling) throw new Error('Scaling needs to be enabled');
+    if (!this.TargetGroup) throw new Error('Routing needs to be enabled');
     this.Scaling.scaleOnRequestCount('RequestScaling', {
       ...props,
       requestsPerTarget: 500,

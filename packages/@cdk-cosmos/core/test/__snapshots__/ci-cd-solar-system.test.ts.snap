@@ -2,7 +2,7 @@
 
 exports[`CICD-Solar-System Extension should match snapshot 1`] = `
 Object {
-  "Description": "SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Description": "Cosmos CiCdSolarSystem Extension: App resources dependant on Ci & Cd, like CodePipelines and CodeDeployments.",
   "Resources": Object {
     "CdkPipeline": Object {
       "Properties": Object {
@@ -329,7 +329,7 @@ Object {
 
 exports[`CICD-Solar-System should match snapshot 1`] = `
 Object {
-  "Description": "SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
+  "Description": "Cosmos CiCdEcsSolarSystem: Resources dependant on Ci & Cd, like CodePipelines and CodeDeployments.",
   "Outputs": Object {
     "AlbAlbArn": Object {
       "Export": Object {

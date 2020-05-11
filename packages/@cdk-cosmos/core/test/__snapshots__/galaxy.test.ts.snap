@@ -2,19 +2,19 @@
 
 exports[`Galaxy Extension should match snapshot 1`] = `
 Object {
-  "Description": "Galaxy Extension: App resources dependant on each Aws Account.",
+  "Description": "Cosmos Galaxy Extension: App resources dependant on each Aws Account.",
 }
 `;
 
 exports[`Galaxy should match snapshot 1`] = `
 Object {
-  "Description": "Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
+  "Description": "Cosmos Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
 }
 `;
 
 exports[`Galaxy should match snapshot 2`] = `
 Object {
-  "Description": "Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
+  "Description": "Cosmos Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
   "Resources": Object {
     "CdkCrossAccountRole": Object {
       "Properties": Object {
