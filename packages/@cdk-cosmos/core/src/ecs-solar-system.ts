@@ -174,9 +174,9 @@ export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack impl
       ...props,
     });
 
+    const { portalProps } = props || {};
+
     this.node.tryRemoveChild(this.portal.node.id);
-    this.portal = new ImportedEcsSolarSystemCore(this, 'Default', this.galaxy.portal, {
-      vpcProps: props?.vpcProps,
-    });
+    this.portal = new ImportedEcsSolarSystemCore(this, 'Default', this.galaxy.portal, portalProps);
   }
 }

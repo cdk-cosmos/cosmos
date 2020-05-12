@@ -132,7 +132,7 @@ export class ImportedSolarSystemCore extends Construct implements ISolarSystemCo
 }
 
 export interface SolarSystemExtensionStackProps extends BaseStackOptions {
-  vpcProps?: RemoteVpcImportProps;
+  portalProps?: ImportedSolarSystemCoreProps;
 }
 
 export class SolarSystemExtensionStack extends BaseStack implements ISolarSystemExtension {
@@ -147,9 +147,9 @@ export class SolarSystemExtensionStack extends BaseStack implements ISolarSystem
       type: 'SolarSystem',
     });
 
+    const { portalProps } = props || {};
+
     this.galaxy = galaxy;
-    this.portal = new ImportedSolarSystemCore(this, 'Default', this.galaxy.portal, {
-      vpcProps: props?.vpcProps,
-    });
+    this.portal = new ImportedSolarSystemCore(this, 'Default', this.galaxy.portal, portalProps);
   }
 }

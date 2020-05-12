@@ -119,12 +119,12 @@ export class CiCdSolarSystemExtensionStack<T extends ICiCdSolarSystemCore = ICiC
       ...props,
     });
 
-    const { ecs, cdkPipelineProps } = props || {};
+    const { ecs, cdkPipelineProps, portalProps } = props || {};
 
     this.node.tryRemoveChild(this.portal.node.id);
     this.portal = (ecs
-      ? new ImportedEcsSolarSystemCore(this, "'CiCd'", this.galaxy.portal, props)
-      : new ImportedSolarSystemCore(this, "'CiCd'", this.galaxy.portal, props)) as T;
+      ? new ImportedEcsSolarSystemCore(this, "'CiCd'", this.galaxy.portal, portalProps)
+      : new ImportedSolarSystemCore(this, "'CiCd'", this.galaxy.portal, portalProps)) as T;
 
     this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
     this.deployProject = this.deployPipeline.Deploy;
