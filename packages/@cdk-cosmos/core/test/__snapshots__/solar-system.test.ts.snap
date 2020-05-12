@@ -1160,3 +1160,30 @@ Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
 }
 `;
+
+exports[`SolarSystem Extension should restore multiple subnet groups and create route 1`] = `
+Object {
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Resources": Object {
+    "TestRoute": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "10.0.0.0/16",
+        "RouteTableId": Object {
+          "Fn::Select": Array [
+            2,
+            Object {
+              "Fn::Split": Array [
+                ",",
+                Object {
+                  "Fn::ImportValue": "CoreTestTestVpcIsolatedSubnetRouteTableIds",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+  },
+}
+`;

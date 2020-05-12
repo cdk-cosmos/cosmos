@@ -104,7 +104,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
 }
 
 export interface ImportedSolarSystemCoreProps {
-  vpcProps?: RemoteVpcImportProps;
+  vpcProps?: Partial<RemoteVpcImportProps>;
 }
 
 export class ImportedSolarSystemCore extends Construct implements ISolarSystemCore {
@@ -123,6 +123,7 @@ export class ImportedSolarSystemCore extends Construct implements ISolarSystemCo
 
     this.galaxy = galaxy;
     this.vpc = RemoteVpc.import(this, this.singletonId('Vpc'), {
+      aZs: 2,
       isolatedSubnetNames: ['App'],
       ...vpcProps,
     });

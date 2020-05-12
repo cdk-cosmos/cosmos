@@ -57,6 +57,7 @@ export class RemoteZone {
 }
 
 export class RemoteVpcImportProps {
+  aZs: number;
   isolatedSubnetNames?: string[];
   privateSubnetNames?: string[];
   publicSubnetNames?: string[];
@@ -126,27 +127,27 @@ export class RemoteVpc {
   }
 
   static import(scope: Construct, exportName: string, props: RemoteVpcImportProps): IVpc {
-    const { isolatedSubnetNames, privateSubnetNames, publicSubnetNames } = props;
+    const { aZs, isolatedSubnetNames, privateSubnetNames, publicSubnetNames } = props;
 
     const vpcId = Fn.importValue(`${exportName}Id`);
-    const availabilityZones = Fn.split(',', Fn.importValue(`${exportName}AZs`));
+    const availabilityZones = expandCfnArray(Fn.split(',', Fn.importValue(`${exportName}AZs`)), aZs);
 
-    const isolatedSubnetIds = isolatedSubnetNames
-      ? Fn.split(',', Fn.importValue(`${exportName}IsolatedSubnetIds`))
-      : [];
-    const isolatedSubnetRouteTableIds = isolatedSubnetNames
-      ? Fn.split(',', Fn.importValue(`${exportName}IsolatedSubnetRouteTableIds`))
-      : [];
+    const isolatedSubnetIds = expandSubnetIds(isolatedSubnetNames, `${exportName}IsolatedSubnetIds`, aZs);
+    const isolatedSubnetRouteTableIds = expandSubnetIds(
+      isolatedSubnetNames,
+      `${exportName}IsolatedSubnetRouteTableIds`,
+      aZs
+    );
 
-    const privateSubnetIds = privateSubnetNames ? Fn.split(',', Fn.importValue(`${exportName}PrivateSubnetIds`)) : [];
-    const privateSubnetRouteTableIds = privateSubnetNames
-      ? Fn.split(',', Fn.importValue(`${exportName}PrivateSubnetRouteTableIds`))
-      : [];
+    const privateSubnetIds = expandSubnetIds(privateSubnetNames, `${exportName}PrivateSubnetIds`, aZs);
+    const privateSubnetRouteTableIds = expandSubnetIds(
+      privateSubnetNames,
+      `${exportName}PrivateSubnetRouteTableIds`,
+      aZs
+    );
 
-    const publicSubnetIds = publicSubnetNames ? Fn.split(',', Fn.importValue(`${exportName}PublicSubnetIds`)) : [];
-    const publicSubnetRouteTableIds = publicSubnetNames
-      ? Fn.split(',', Fn.importValue(`${exportName}PublicSubnetRouteTableIds`))
-      : [];
+    const publicSubnetIds = expandSubnetIds(publicSubnetNames, `${exportName}PublicSubnetIds`, aZs);
+    const publicSubnetRouteTableIds = expandSubnetIds(publicSubnetNames, `${exportName}PublicSubnetRouteTableIds`, aZs);
 
     return Vpc.fromVpcAttributes(scope, exportName, {
       vpcId,
@@ -289,3 +290,19 @@ export class RemoteFunction {
     return Function.fromFunctionArn(scope, exportName, fnArn);
   }
 }
+
+const expandSubnetIds = (names: string[] | undefined, value: string, aZs: number): string[] => {
+  if (names && names.length) {
+    return expandCfnArray(Fn.split(',', Fn.importValue(value)), names.length * aZs);
+  }
+
+  return [];
+};
+
+const expandCfnArray = (val: string[], n: number): string[] => {
+  const res = [];
+  for (let i = 0; i < n; i++) {
+    res[i] = Fn.select(i, val);
+  }
+  return res;
+};
