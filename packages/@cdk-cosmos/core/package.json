@@ -1,6 +1,6 @@
 {
   "name": "@cdk-cosmos/core",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,7 +26,7 @@
     "clean": "rm -rf lib"
   },
   "dependencies": {
-    "@cosmos-building-blocks/common": "^0.4.1"
+    "@cosmos-building-blocks/common": "^0.4.2"
   },
   "peerDependencies": {
     "@aws-cdk/aws-cloudformation": "^1.37.0",
