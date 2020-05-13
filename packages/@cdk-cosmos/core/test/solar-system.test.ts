@@ -9,6 +9,7 @@ import {
   SolarSystemCoreStack,
   SolarSystemExtensionStack,
 } from '../src';
+import { CfnRoute } from '@aws-cdk/aws-ec2';
 
 const app = new App();
 const env = { account: 'account', region: 'region' };
@@ -133,6 +134,43 @@ describe('SolarSystem Extension', () => {
     const galaxy = new GalaxyExtensionStack(cosmos, 'Test');
     const sys = new SolarSystemExtensionStack(galaxy, 'Test');
     expect({ account: sys.account, region: sys.region }).toEqual(env);
+  });
+
+  test('should restore multiple subnet groups', () => {
+    const createApp = (): void => {
+      const app = new App();
+      const cosmos = new CosmosExtensionStack(app, 'Test', { env });
+      const galaxy = new GalaxyExtensionStack(cosmos, 'Test');
+      new SolarSystemExtensionStack(galaxy, 'Test', {
+        portalProps: {
+          vpcProps: {
+            isolatedSubnetNames: ['App', 'Redis'],
+          },
+        },
+      });
+    };
+
+    expect(createApp).not.toThrow();
+  });
+
+  test('should restore multiple subnet groups and create route', () => {
+    const app = new App();
+    const cosmos = new CosmosExtensionStack(app, 'Test', { env });
+    const galaxy = new GalaxyExtensionStack(cosmos, 'Test');
+    const sys = new SolarSystemExtensionStack(galaxy, 'Test', {
+      portalProps: {
+        vpcProps: {
+          isolatedSubnetNames: ['App', 'Redis'],
+        },
+      },
+    });
+    new CfnRoute(sys, 'TestRoute', {
+      routeTableId: sys.portal.vpc.selectSubnets({ subnetGroupName: 'Redis' }).subnets[0].routeTable.routeTableId,
+      destinationCidrBlock: '10.0.0.0/16',
+    });
+
+    const [stack] = synthesizeStacks(sys);
+    expect(stack.template).toMatchSnapshot();
   });
 
   test('should match snapshot', () => {

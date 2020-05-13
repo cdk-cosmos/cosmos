@@ -2,7 +2,7 @@
 
 exports[`Solar-System should match snapshot 1`] = `
 Object {
-  "Description": "Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
+  "Description": "Cosmos Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
   "Outputs": Object {
     "ExportsOutputRefSharedVpc": Object {
       "Export": Object {
@@ -636,7 +636,7 @@ Object {
 
 exports[`Solar-System should match snapshot 2`] = `
 Object {
-  "Description": "Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
+  "Description": "Cosmos Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
   "Resources": Object {
     "CdkCrossAccountRole": Object {
       "Properties": Object {
@@ -676,7 +676,7 @@ Object {
 
 exports[`Solar-System should match snapshot 3`] = `
 Object {
-  "Description": "SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
+  "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
     "PrivateZoneZoneId": Object {
       "Export": Object {
@@ -824,7 +824,7 @@ Object {
 
 exports[`Solar-System should match snapshot 4`] = `
 Object {
-  "Description": "SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
+  "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
     "PrivateZoneZoneId": Object {
       "Export": Object {
@@ -1157,6 +1157,33 @@ Object {
 
 exports[`SolarSystem Extension should match snapshot 1`] = `
 Object {
-  "Description": "SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+}
+`;
+
+exports[`SolarSystem Extension should restore multiple subnet groups and create route 1`] = `
+Object {
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Resources": Object {
+    "TestRoute": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "10.0.0.0/16",
+        "RouteTableId": Object {
+          "Fn::Select": Array [
+            2,
+            Object {
+              "Fn::Split": Array [
+                ",",
+                Object {
+                  "Fn::ImportValue": "CoreTestTestVpcIsolatedSubnetRouteTableIds",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+  },
 }
 `;

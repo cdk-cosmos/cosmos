@@ -139,6 +139,7 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
 
   constructor(scope: Construct, id: string, props?: BaseStackOptions) {
     super(scope, id, {
+      description: 'Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo',
       partition: 'App',
       ...props,
       type: 'Cosmos',

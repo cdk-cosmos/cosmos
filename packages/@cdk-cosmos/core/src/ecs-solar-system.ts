@@ -58,7 +58,10 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
   // readonly HttpsListener: ApplicationListener;
 
   constructor(galaxy: IGalaxyCore, id: string, props?: EcsSolarSystemCoreProps) {
-    super(galaxy, id, props);
+    super(galaxy, id, {
+      description: 'Cosmos EcsSolarSystem: Resources dependant on each App Env, like ECS & ALB',
+      ...props,
+    });
 
     const { vpcProps = {}, clusterProps = {}, clusterCapacityProps = {}, albProps = {} } = props || {};
     const { defaultEndpoints = true } = vpcProps;
@@ -165,11 +168,15 @@ export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack impl
   readonly portal: IEcsSolarSystemCore;
 
   constructor(galaxy: IGalaxyExtension, id: string, props?: SolarSystemExtensionStackProps) {
-    super(galaxy, id, props);
+    super(galaxy, id, {
+      description:
+        'Cosmos EcsSolarSystem Extension: App resources dependant on each App Env, like Services and Databases.',
+      ...props,
+    });
+
+    const { portalProps } = props || {};
 
     this.node.tryRemoveChild(this.portal.node.id);
-    this.portal = new ImportedEcsSolarSystemCore(this, 'Default', this.galaxy.portal, {
-      vpcProps: props?.vpcProps,
-    });
+    this.portal = new ImportedEcsSolarSystemCore(this, 'Default', this.galaxy.portal, portalProps);
   }
 }
