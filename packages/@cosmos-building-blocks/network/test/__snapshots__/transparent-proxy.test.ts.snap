@@ -1,0 +1,499 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Transparent Proxy should match snapshot 1`] = `
+Object {
+  "Parameters": Object {
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": Object {
+    "TransparentProxyAsgASGD26968BB": Object {
+      "Properties": Object {
+        "DesiredCapacity": "1",
+        "LaunchConfigurationName": Object {
+          "Ref": "TransparentProxyAsgLaunchConfig18394516",
+        },
+        "MaxSize": "1",
+        "MinSize": "1",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "Test/TransparentProxy/Asg",
+          },
+        ],
+        "VPCZoneIdentifier": Array [
+          Object {
+            "Ref": "VPCMainSubnet1SubnetE776C424",
+          },
+          Object {
+            "Ref": "VPCMainSubnet2Subnet1B273166",
+          },
+        ],
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "UpdatePolicy": Object {
+        "AutoScalingScheduledAction": Object {
+          "IgnoreUnmodifiedGroupSizeProperties": true,
+        },
+      },
+    },
+    "TransparentProxyAsgInstanceProfileE888F303": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "TransparentProxyAsgInstanceRole97CEB8B8",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "TransparentProxyAsgInstanceRole97CEB8B8": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMFullAccess",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/TransparentProxy/Asg",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TransparentProxyAsgInstanceRoleDefaultPolicy3847ADE0": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ec2:ModifyInstanceAttribute",
+                "ec2:DescribeInstances",
+                "ec2:DescribeRouteTables",
+                "ec2:ReplaceRoute",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TransparentProxyAsgInstanceRoleDefaultPolicy3847ADE0",
+        "Roles": Array [
+          Object {
+            "Ref": "TransparentProxyAsgInstanceRole97CEB8B8",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TransparentProxyAsgInstanceSecurityGroupC07B4566": Object {
+      "Properties": Object {
+        "GroupDescription": "Test/TransparentProxy/Asg/InstanceSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:ALL TRAFFIC",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/TransparentProxy/Asg",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "TransparentProxyAsgLaunchConfig18394516": Object {
+      "DependsOn": Array [
+        "TransparentProxyAsgInstanceRoleDefaultPolicy3847ADE0",
+        "TransparentProxyAsgInstanceRole97CEB8B8",
+      ],
+      "Properties": Object {
+        "IamInstanceProfile": Object {
+          "Ref": "TransparentProxyAsgInstanceProfileE888F303",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t3.nano",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "TransparentProxyAsgInstanceSecurityGroupC07B4566",
+              "GroupId",
+            ],
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "#!/bin/bash
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+export HTTP_PROXY=http://proxy.internal:8080 && export HTTPS_PROXY=$HTTP_PROXY
+yum install -y squid iptables-services
+unset HTTP_PROXY && unset HTTPS_PROXY
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8081
+iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8082
+iptables-save > /etc/sysconfig/iptables
+systemctl enable squid
+systemctl enable iptables
+mkdir /etc/squid/ssl
+cd /etc/squid/ssl
+openssl genrsa -out squid.key 4096
+openssl req -new -key squid.key -out squid.csr -subj \\"/L=proxy/O=cosmos/CN=squid\\"
+openssl x509 -req -days 3650 -in squid.csr -signkey squid.key -out squid.crt
+cat squid.key squid.crt >> squid.pem
+cd /etc/squid
+echo http_port 8080 >> squid.conf
+echo http_port 8081 intercept >> squid.conf
+echo https_port 8082 cert=/etc/squid/ssl/squid.pem ssl-bump intercept >> squid.conf
+echo ssl_bump splice all >> squid.conf
+echo cache_peer proxy.internal parent 8080 0 default >> squid.conf
+echo never_direct allow all >> squid.conf
+echo http_access allow all >> squid.conf
+systemctl start squid
+systemctl start iptables
+region=",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                "
+instanceId=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+aws ec2 modify-instance-attribute --region=\${region} --instance-id=\${instanceId} --no-source-dest-check
+declare -a routingTableIds=(",
+                Object {
+                  "Ref": "VPCMainSubnet1RouteTableFDDE4665",
+                },
+                " ",
+                Object {
+                  "Ref": "VPCMainSubnet2RouteTableA47F3294",
+                },
+                ")
+for routingTableId in \\"\${routingTableIds[@]}\\"
+do
+aws ec2 replace-route --region=\${region} --route-table-id=\${routingTableId} --destination-cidr-block=0.0.0.0/0 --instance-id=\${instanceId}
+done",
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "TransparentProxyMainSubnet1DefaultRoute416C1450": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "InstanceId": "in-1234",
+        "RouteTableId": Object {
+          "Ref": "VPCMainSubnet1RouteTableFDDE4665",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "TransparentProxyMainSubnet2DefaultRoute87B94861": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "InstanceId": "in-1234",
+        "RouteTableId": Object {
+          "Ref": "VPCMainSubnet2RouteTableA47F3294",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VPCB9E5F0B4": Object {
+      "Properties": Object {
+        "CidrBlock": "10.180.7.0/24",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/VPC",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VPCMainSubnet1RouteTableAssociationA92E4DDA": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCMainSubnet1RouteTableFDDE4665",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCMainSubnet1SubnetE776C424",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCMainSubnet1RouteTableFDDE4665": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/VPC/MainSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCMainSubnet1SubnetE776C424": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.180.7.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/VPC/MainSubnet1",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Main",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCMainSubnet2RouteTableA47F3294": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/VPC/MainSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCMainSubnet2RouteTableAssociation81BDC51F": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCMainSubnet2RouteTableA47F3294",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCMainSubnet2Subnet1B273166",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCMainSubnet2Subnet1B273166": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.180.7.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/VPC/MainSubnet2",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Main",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCRedisSubnet1RouteTableAssociation1C673EBE": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCRedisSubnet1RouteTableCAF7FB26",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCRedisSubnet1SubnetA76F661B",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCRedisSubnet1RouteTableCAF7FB26": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/VPC/RedisSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCRedisSubnet1SubnetA76F661B": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.180.7.128/28",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/VPC/RedisSubnet1",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Redis",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCRedisSubnet2RouteTable16EB92BE": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/VPC/RedisSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCRedisSubnet2RouteTableAssociationE7F24ECB": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCRedisSubnet2RouteTable16EB92BE",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCRedisSubnet2SubnetB4A3AE92",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCRedisSubnet2SubnetB4A3AE92": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.180.7.144/28",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/VPC/RedisSubnet2",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Redis",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+  },
+}
+`;

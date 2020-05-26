@@ -5,8 +5,8 @@ import { Vpc, SubnetType } from '@aws-cdk/aws-ec2';
 import { TransitGateway, ResolverRule } from '../src';
 
 const app = new App();
-const testStack = new Stack(app, 'TestStack');
-const myvpc = new Vpc(testStack, 'TestVpc', {
+const stack = new Stack(app, 'Test');
+const vpc = new Vpc(stack, 'Vpc', {
   cidr: '10.180.7.0/24',
   maxAzs: 2,
   subnetConfiguration: [
@@ -23,23 +23,23 @@ const myvpc = new Vpc(testStack, 'TestVpc', {
   ],
 });
 
-const gateway = TransitGateway.fromGatewayAttributes(testStack, 'TransitGateway', {
+const gateway = TransitGateway.fromGatewayAttributes(stack, 'TransitGateway', {
   gatewayId: 'tgw-1234',
 });
 const attachment = gateway.addAttachment('TransitGatewayAttachment', {
-  vpc: myvpc,
+  vpc: vpc,
   subnets: [{ subnetGroupName: 'Main' }],
 });
 attachment.addRoute('TGWRoute', { destinationCidrBlock: '10.0.0.0/8' });
 
-const resolver = ResolverRule.fromResolverAttributes(testStack, 'ResolverRule', {
+const resolver = ResolverRule.fromResolverAttributes(stack, 'ResolverRule', {
   ruleId: 'rslvr-rr-1234',
 });
 resolver.addAssociation('ResolverRuleAssociation', {
-  vpc: myvpc,
+  vpc: vpc,
 });
 
-const testStacksynth = SynthUtils.synthesize(testStack);
+const testStacksynth = SynthUtils.synthesize(stack);
 
 describe('Transit Gateway Connection', () => {
   test('should create TGW attachments', () => {
