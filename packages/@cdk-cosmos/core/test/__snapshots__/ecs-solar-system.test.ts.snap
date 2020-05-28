@@ -232,15 +232,15 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
         ],
@@ -340,15 +340,15 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
         ],
@@ -363,15 +363,15 @@ Object {
         "ClusterName": "CoreGalSysCluster",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
         ],
@@ -387,17 +387,17 @@ Object {
         "MinSize": "1",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "PropagateAtLaunch": true,
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "PropagateAtLaunch": true,
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "PropagateAtLaunch": true,
             "Value": "Sys",
           },
@@ -522,15 +522,15 @@ def pick(dct, *keys):
         "Runtime": "python3.6",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
           Object {
@@ -588,15 +588,15 @@ def pick(dct, *keys):
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
           Object {
@@ -765,15 +765,15 @@ def pick(dct, *keys):
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
           Object {
@@ -828,15 +828,15 @@ def pick(dct, *keys):
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
           Object {
@@ -932,15 +932,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
           Object {
@@ -978,15 +978,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       "Properties": Object {
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
           Object {
@@ -1004,15 +1004,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "HostedZoneTags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
         ],
@@ -1037,15 +1037,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "HostedZoneTags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
         ],

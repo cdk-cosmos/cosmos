@@ -47,11 +47,11 @@ Object {
         "RoleName": "CoreCdkCrossAccountRole",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal2",
           },
         ],

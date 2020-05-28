@@ -10,7 +10,7 @@ Object {
         "RepositoryName": "app-test-cdk-repo",
         "Tags": Array [
           Object {
-            "Key": "Cosmos:Extension",
+            "Key": "cosmos:extension",
             "Value": "Test",
           },
         ],
@@ -126,7 +126,7 @@ Object {
         "RoleName": "CoreCdkMasterRole",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
         ],
@@ -139,7 +139,7 @@ Object {
         "RepositoryName": "core-cos-cdk-repo",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
         ],
@@ -165,7 +165,7 @@ Object {
         "Runtime": "nodejs12.x",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
         ],
@@ -180,7 +180,7 @@ Object {
         },
         "HostedZoneTags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
         ],

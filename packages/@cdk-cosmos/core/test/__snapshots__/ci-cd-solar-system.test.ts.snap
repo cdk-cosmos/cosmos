@@ -88,15 +88,15 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos:Extension",
+            "Key": "cosmos:extension",
             "Value": "Test",
           },
           Object {
-            "Key": "Cosmos:Galaxy:Extension",
+            "Key": "cosmos:galaxy:extension",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem:Extension",
+            "Key": "cosmos:solarsystem:extension",
             "Value": "CiCd",
           },
         ],
@@ -117,15 +117,15 @@ Object {
         },
         "Tags": Array [
           Object {
-            "Key": "Cosmos:Extension",
+            "Key": "cosmos:extension",
             "Value": "Test",
           },
           Object {
-            "Key": "Cosmos:Galaxy:Extension",
+            "Key": "cosmos:galaxy:extension",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem:Extension",
+            "Key": "cosmos:solarsystem:extension",
             "Value": "CiCd",
           },
         ],
@@ -202,15 +202,15 @@ Object {
         "SourceVersion": "master",
         "Tags": Array [
           Object {
-            "Key": "Cosmos:Extension",
+            "Key": "cosmos:extension",
             "Value": "Test",
           },
           Object {
-            "Key": "Cosmos:Galaxy:Extension",
+            "Key": "cosmos:galaxy:extension",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem:Extension",
+            "Key": "cosmos:solarsystem:extension",
             "Value": "CiCd",
           },
         ],
@@ -244,15 +244,15 @@ Object {
         },
         "Tags": Array [
           Object {
-            "Key": "Cosmos:Extension",
+            "Key": "cosmos:extension",
             "Value": "Test",
           },
           Object {
-            "Key": "Cosmos:Galaxy:Extension",
+            "Key": "cosmos:galaxy:extension",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem:Extension",
+            "Key": "cosmos:solarsystem:extension",
             "Value": "CiCd",
           },
         ],
@@ -316,15 +316,15 @@ Object {
         },
         "Tags": Array [
           Object {
-            "Key": "Cosmos:Extension",
+            "Key": "cosmos:extension",
             "Value": "Test",
           },
           Object {
-            "Key": "Cosmos:Galaxy:Extension",
+            "Key": "cosmos:galaxy:extension",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem:Extension",
+            "Key": "cosmos:solarsystem:extension",
             "Value": "CiCd",
           },
         ],
@@ -601,15 +601,15 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
         ],
@@ -709,15 +709,15 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
         ],
@@ -811,15 +811,15 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
         ],
@@ -840,15 +840,15 @@ Object {
         },
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
         ],
@@ -925,15 +925,15 @@ Object {
         "SourceVersion": "master",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
         ],
@@ -967,15 +967,15 @@ Object {
         },
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
         ],
@@ -1039,15 +1039,15 @@ Object {
         },
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
         ],
@@ -1121,15 +1121,15 @@ Object {
         "ClusterName": "CoreGalCiCdCluster",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
         ],
@@ -1145,17 +1145,17 @@ Object {
         "MinSize": "1",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "PropagateAtLaunch": true,
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "PropagateAtLaunch": true,
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "PropagateAtLaunch": true,
             "Value": "CiCd",
           },
@@ -1280,15 +1280,15 @@ def pick(dct, *keys):
         "Runtime": "python3.6",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -1346,15 +1346,15 @@ def pick(dct, *keys):
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -1515,15 +1515,15 @@ def pick(dct, *keys):
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -1578,15 +1578,15 @@ def pick(dct, *keys):
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -1682,15 +1682,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -1728,15 +1728,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       "Properties": Object {
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -1754,15 +1754,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "HostedZoneTags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
         ],
@@ -1786,15 +1786,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "InstanceTenancy": "default",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -1809,15 +1809,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       "Properties": Object {
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -1849,15 +1849,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -1883,15 +1883,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       "Properties": Object {
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -1923,15 +1923,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -2031,15 +2031,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -2131,15 +2131,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -2231,15 +2231,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -2331,15 +2331,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -2431,15 +2431,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
           Object {
@@ -2489,15 +2489,15 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "HostedZoneTags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
         ],

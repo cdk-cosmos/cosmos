@@ -102,7 +102,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     RemoteZone.export(this.zone, this.singletonId('Zone'));
     RemoteZone.export(this.privateZone, this.singletonId('PrivateZone'));
 
-    Tag.add(this, 'Cosmos:SolarSystem', id);
+    Tag.add(this, 'cosmos:solarsystem', id);
   }
 }
 
@@ -156,6 +156,6 @@ export class SolarSystemExtensionStack extends BaseStack implements ISolarSystem
     this.galaxy = galaxy;
     this.portal = new ImportedSolarSystemCore(this, 'Default', this.galaxy.portal, portalProps);
 
-    Tag.add(this, 'Cosmos:SolarSystem:Extension', id);
+    Tag.add(this, 'cosmos:solarsystem:extension', id);
   }
 }

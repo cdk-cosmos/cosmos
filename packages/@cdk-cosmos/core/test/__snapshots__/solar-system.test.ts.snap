@@ -54,11 +54,11 @@ Object {
         "InstanceTenancy": "default",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
@@ -73,11 +73,11 @@ Object {
       "Properties": Object {
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
@@ -109,11 +109,11 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
@@ -139,11 +139,11 @@ Object {
       "Properties": Object {
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
@@ -175,11 +175,11 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
@@ -279,11 +279,11 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
@@ -375,11 +375,11 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
@@ -471,11 +471,11 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
@@ -567,11 +567,11 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
@@ -663,11 +663,11 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
@@ -749,11 +749,11 @@ Object {
         "RoleName": "CoreCdkCrossAccountRole",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal2",
           },
         ],
@@ -871,15 +871,15 @@ Object {
         },
         "HostedZoneTags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
         ],
@@ -902,15 +902,15 @@ Object {
         },
         "HostedZoneTags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys",
           },
         ],
@@ -1047,15 +1047,15 @@ Object {
         },
         "HostedZoneTags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal2",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys2",
           },
         ],
@@ -1079,15 +1079,15 @@ Object {
         "InstanceTenancy": "default",
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal2",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys2",
           },
           Object {
@@ -1102,15 +1102,15 @@ Object {
       "Properties": Object {
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal2",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys2",
           },
           Object {
@@ -1142,15 +1142,15 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal2",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys2",
           },
           Object {
@@ -1176,15 +1176,15 @@ Object {
       "Properties": Object {
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal2",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys2",
           },
           Object {
@@ -1216,15 +1216,15 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal2",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys2",
           },
           Object {
@@ -1282,15 +1282,15 @@ Object {
         },
         "HostedZoneTags": Array [
           Object {
-            "Key": "Cosmos",
+            "Key": "cosmos",
             "Value": "Cos",
           },
           Object {
-            "Key": "Cosmos:Galaxy",
+            "Key": "galaxy",
             "Value": "Gal2",
           },
           Object {
-            "Key": "Cosmos:SolarSystem",
+            "Key": "cosmos:solarsystem",
             "Value": "Sys2",
           },
         ],

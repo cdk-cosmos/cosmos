@@ -95,7 +95,7 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     RemoteFunction.export(this.crossAccountExportsFn, this.singletonId('CrossAccountExportsFn'));
     this.cdkMasterRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${cdkMasterRoleName}`;
 
-    Tag.add(this, 'Cosmos', id);
+    Tag.add(this, 'cosmos', id);
   }
 }
 
@@ -156,7 +156,7 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
       description: `App CDK Repo for ${id} Cosmos.`,
     });
 
-    Tag.add(this, 'Cosmos:Extension', id);
+    Tag.add(this, 'cosmos:extension', id);
   }
 }
 
