@@ -13,3 +13,5 @@ export {
   TransitGatewayRoute,
   TransitGatewayRouteProps,
 } from './transit-gateway/transit-gateway-attachment';
+
+export { TransparentProxy, TransparentProxyProps } from './internet/transparent-proxy';

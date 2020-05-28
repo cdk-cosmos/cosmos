@@ -7,12 +7,55 @@ Object {
       "Properties": Object {
         "ResolverRuleId": "rslvr-rr-1234",
         "VPCId": Object {
-          "Ref": "TestVpcE77CE678",
+          "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::Route53Resolver::ResolverRuleAssociation",
     },
-    "TestVpcE77CE678": Object {
+    "TransitGatewayTransitGatewayAttachment91E0B600": Object {
+      "Properties": Object {
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcMainSubnet1Subnet501A7278",
+          },
+          Object {
+            "Ref": "VpcMainSubnet2Subnet4C1ED704",
+          },
+        ],
+        "TransitGatewayId": "tgw-1234",
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayAttachment",
+    },
+    "TransitGatewayTransitGatewayAttachmentTGWRouteMainSubnet17BBA6FD6": Object {
+      "DependsOn": Array [
+        "TransitGatewayTransitGatewayAttachment91E0B600",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "10.0.0.0/8",
+        "RouteTableId": Object {
+          "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
+        },
+        "TransitGatewayId": "tgw-1234",
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "TransitGatewayTransitGatewayAttachmentTGWRouteMainSubnet25920AE59": Object {
+      "DependsOn": Array [
+        "TransitGatewayTransitGatewayAttachment91E0B600",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "10.0.0.0/8",
+        "RouteTableId": Object {
+          "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
+        },
+        "TransitGatewayId": "tgw-1234",
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "Vpc8378EB38": Object {
       "Properties": Object {
         "CidrBlock": "10.180.7.0/24",
         "EnableDnsHostnames": true,
@@ -21,38 +64,38 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "TestStack/TestVpc",
+            "Value": "Test/Vpc",
           },
         ],
       },
       "Type": "AWS::EC2::VPC",
     },
-    "TestVpcMainSubnet1RouteTable1567AA0E": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "TestStack/TestVpc/MainSubnet1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "TestVpcE77CE678",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "TestVpcMainSubnet1RouteTableAssociation388FC147": Object {
+    "VpcMainSubnet1RouteTableAssociation735BC7DF": Object {
       "Properties": Object {
         "RouteTableId": Object {
-          "Ref": "TestVpcMainSubnet1RouteTable1567AA0E",
+          "Ref": "VpcMainSubnet1RouteTableB8CBA6F0",
         },
         "SubnetId": Object {
-          "Ref": "TestVpcMainSubnet1SubnetC0BB40AC",
+          "Ref": "VpcMainSubnet1Subnet501A7278",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "TestVpcMainSubnet1SubnetC0BB40AC": Object {
+    "VpcMainSubnet1RouteTableB8CBA6F0": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/Vpc/MainSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcMainSubnet1Subnet501A7278": Object {
       "Properties": Object {
         "AvailabilityZone": Object {
           "Fn::Select": Array [
@@ -67,7 +110,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "TestStack/TestVpc/MainSubnet1",
+            "Value": "Test/Vpc/MainSubnet1",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -79,37 +122,37 @@ Object {
           },
         ],
         "VpcId": Object {
-          "Ref": "TestVpcE77CE678",
+          "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "TestVpcMainSubnet2RouteTable2DA894ED": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "TestStack/TestVpc/MainSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "TestVpcE77CE678",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "TestVpcMainSubnet2RouteTableAssociation08533BD7": Object {
+    "VpcMainSubnet2RouteTableAssociationE08931BA": Object {
       "Properties": Object {
         "RouteTableId": Object {
-          "Ref": "TestVpcMainSubnet2RouteTable2DA894ED",
+          "Ref": "VpcMainSubnet2RouteTableBE78C2D2",
         },
         "SubnetId": Object {
-          "Ref": "TestVpcMainSubnet2Subnet739DD487",
+          "Ref": "VpcMainSubnet2Subnet4C1ED704",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "TestVpcMainSubnet2Subnet739DD487": Object {
+    "VpcMainSubnet2RouteTableBE78C2D2": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test/Vpc/MainSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc8378EB38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcMainSubnet2Subnet4C1ED704": Object {
       "Properties": Object {
         "AvailabilityZone": Object {
           "Fn::Select": Array [
@@ -124,7 +167,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "TestStack/TestVpc/MainSubnet2",
+            "Value": "Test/Vpc/MainSubnet2",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -136,37 +179,37 @@ Object {
           },
         ],
         "VpcId": Object {
-          "Ref": "TestVpcE77CE678",
+          "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "TestVpcRedisSubnet1RouteTableAssociationAFBE0652": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "TestVpcRedisSubnet1RouteTableBE392024",
-        },
-        "SubnetId": Object {
-          "Ref": "TestVpcRedisSubnet1Subnet1490AFD4",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "TestVpcRedisSubnet1RouteTableBE392024": Object {
+    "VpcRedisSubnet1RouteTable24FAF5F0": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "TestStack/TestVpc/RedisSubnet1",
+            "Value": "Test/Vpc/RedisSubnet1",
           },
         ],
         "VpcId": Object {
-          "Ref": "TestVpcE77CE678",
+          "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "TestVpcRedisSubnet1Subnet1490AFD4": Object {
+    "VpcRedisSubnet1RouteTableAssociationC069FD84": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcRedisSubnet1RouteTable24FAF5F0",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcRedisSubnet1Subnet1DDA7592",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcRedisSubnet1Subnet1DDA7592": Object {
       "Properties": Object {
         "AvailabilityZone": Object {
           "Fn::Select": Array [
@@ -181,7 +224,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "TestStack/TestVpc/RedisSubnet1",
+            "Value": "Test/Vpc/RedisSubnet1",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -193,37 +236,37 @@ Object {
           },
         ],
         "VpcId": Object {
-          "Ref": "TestVpcE77CE678",
+          "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "TestVpcRedisSubnet2RouteTableAssociation019289EF": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "TestVpcRedisSubnet2RouteTableEA469BDA",
-        },
-        "SubnetId": Object {
-          "Ref": "TestVpcRedisSubnet2SubnetF514F480",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "TestVpcRedisSubnet2RouteTableEA469BDA": Object {
+    "VpcRedisSubnet2RouteTableA50390C1": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "TestStack/TestVpc/RedisSubnet2",
+            "Value": "Test/Vpc/RedisSubnet2",
           },
         ],
         "VpcId": Object {
-          "Ref": "TestVpcE77CE678",
+          "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "TestVpcRedisSubnet2SubnetF514F480": Object {
+    "VpcRedisSubnet2RouteTableAssociation3FB32DBA": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcRedisSubnet2RouteTableA50390C1",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcRedisSubnet2Subnet74FF70F9",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcRedisSubnet2Subnet74FF70F9": Object {
       "Properties": Object {
         "AvailabilityZone": Object {
           "Fn::Select": Array [
@@ -238,7 +281,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "TestStack/TestVpc/RedisSubnet2",
+            "Value": "Test/Vpc/RedisSubnet2",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -250,53 +293,10 @@ Object {
           },
         ],
         "VpcId": Object {
-          "Ref": "TestVpcE77CE678",
+          "Ref": "Vpc8378EB38",
         },
       },
       "Type": "AWS::EC2::Subnet",
-    },
-    "TransitGatewayTransitGatewayAttachment91E0B600": Object {
-      "Properties": Object {
-        "SubnetIds": Array [
-          Object {
-            "Ref": "TestVpcMainSubnet1SubnetC0BB40AC",
-          },
-          Object {
-            "Ref": "TestVpcMainSubnet2Subnet739DD487",
-          },
-        ],
-        "TransitGatewayId": "tgw-1234",
-        "VpcId": Object {
-          "Ref": "TestVpcE77CE678",
-        },
-      },
-      "Type": "AWS::EC2::TransitGatewayAttachment",
-    },
-    "TransitGatewayTransitGatewayAttachmentTGWRouteMainSubnet17BBA6FD6": Object {
-      "DependsOn": Array [
-        "TransitGatewayTransitGatewayAttachment91E0B600",
-      ],
-      "Properties": Object {
-        "DestinationCidrBlock": "10.0.0.0/8",
-        "RouteTableId": Object {
-          "Ref": "TestVpcMainSubnet1RouteTable1567AA0E",
-        },
-        "TransitGatewayId": "tgw-1234",
-      },
-      "Type": "AWS::EC2::Route",
-    },
-    "TransitGatewayTransitGatewayAttachmentTGWRouteMainSubnet25920AE59": Object {
-      "DependsOn": Array [
-        "TransitGatewayTransitGatewayAttachment91E0B600",
-      ],
-      "Properties": Object {
-        "DestinationCidrBlock": "10.0.0.0/8",
-        "RouteTableId": Object {
-          "Ref": "TestVpcMainSubnet2RouteTable2DA894ED",
-        },
-        "TransitGatewayId": "tgw-1234",
-      },
-      "Type": "AWS::EC2::Route",
     },
   },
 }
