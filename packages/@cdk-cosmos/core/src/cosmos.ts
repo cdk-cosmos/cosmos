@@ -7,8 +7,9 @@ import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { CrossAccountExportsFn } from '@cosmos-building-blocks/common';
 import { IFunction, Function } from '@aws-cdk/aws-lambda';
-import { BaseStack, BaseStackOptions, COSMOS_PARTITION } from './components/base';
+import { BaseStack, BaseStackOptions } from './components/base';
 import { RemoteZone, RemoteCodeRepo, RemoteFunction } from './helpers/remote';
+import { COSMOS_PARTITION } from './helpers/constants';
 
 export interface ICosmosCore extends Construct {
   link?: ICosmosCoreLink;
@@ -57,7 +58,7 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     this.link = new CosmosLinkStack(this);
 
     this.cdkRepo = new Repository(this, 'CdkRepo', {
-      repositoryName: this.generateId('Cdk-Repo', '-').toLowerCase(),
+      repositoryName: this.nodeId('Cdk-Repo', '-').toLowerCase(),
       description: `Core CDK Repo for ${id} Cosmos.`,
     });
 
@@ -96,6 +97,20 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
   }
 }
 
+export class CosmosLinkStack extends BaseStack implements ICosmosCoreLink {
+  readonly cosmos: ICosmosCore;
+
+  constructor(cosmos: ICosmosCore, props?: StackProps) {
+    super(cosmos, 'Link', {
+      description: 'Cosmos Link: Resources to link the Cosmos, like Route53 zone delegation',
+      ...props,
+      type: 'Link',
+    });
+
+    this.cosmos = cosmos;
+  }
+}
+
 export class ImportedCosmosCore extends Construct implements ICosmosCore {
   readonly id: string;
   readonly libVersion: string;
@@ -118,20 +133,6 @@ export class ImportedCosmosCore extends Construct implements ICosmosCore {
   }
 }
 
-export class CosmosLinkStack extends BaseStack implements ICosmosCoreLink {
-  readonly cosmos: ICosmosCore;
-
-  constructor(cosmos: ICosmosCore, props?: StackProps) {
-    super(cosmos, 'Link', {
-      description: 'Cosmos Link: Resources to link the Cosmos, like Route53 zone delegation',
-      ...props,
-      type: 'Link',
-    });
-
-    this.cosmos = cosmos;
-  }
-}
-
 export class CosmosExtensionStack extends BaseStack implements ICosmosExtension {
   readonly portal: ICosmosCore;
   readonly libVersion: string;
@@ -149,7 +150,7 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
     this.libVersion = getPackageVersion();
 
     this.cdkRepo = new Repository(this, 'CdkRepo', {
-      repositoryName: this.generateId('Cdk-Repo', '-').toLowerCase(),
+      repositoryName: this.nodeId('Cdk-Repo', '-').toLowerCase(),
       description: `App CDK Repo for ${id} Cosmos.`,
     });
   }

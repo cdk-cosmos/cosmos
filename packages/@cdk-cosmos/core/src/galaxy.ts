@@ -3,9 +3,10 @@ import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 import { Vpc } from '@aws-cdk/aws-ec2';
 import { isCrossAccount } from './helpers/utils';
-import { BaseStack, BaseStackOptions, COSMOS_PARTITION, PATTERN } from './components/base';
+import { BaseStack, BaseStackOptions } from './components/base';
 import { ICosmosCore, ICosmosExtension } from './cosmos';
 import { CoreVpcProps, CoreVpc, addEcsEndpoints } from './components/core-vpc';
+import { COSMOS_PARTITION, PATTERN } from './helpers/constants';
 
 export interface IGalaxyCore extends Construct {
   cosmos: ICosmosCore;
@@ -37,7 +38,7 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
     this.cosmos = cosmos;
 
     if (isCrossAccount(this, this.cosmos)) {
-      const CdkCrossAccountRoleName = this.generateId('CdkCrossAccountRole', '', PATTERN.SINGLETON_COSMOS);
+      const CdkCrossAccountRoleName = this.nodeId('CdkCrossAccountRole', '', PATTERN.SINGLETON_COSMOS);
       this.cdkCrossAccountRole = new Role(this, 'CdkCrossAccountRole', {
         roleName: CdkCrossAccountRoleName,
         assumedBy: new ArnPrincipal(this.cosmos.cdkMasterRoleStaticArn),

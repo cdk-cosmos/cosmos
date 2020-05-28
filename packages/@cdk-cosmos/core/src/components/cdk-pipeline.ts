@@ -177,7 +177,7 @@ export const addCdkDeployEnvStageToPipeline = (props: {
   const cdkOutputArtifact = (cdkSourceRepoAction?.actionProperties.outputs as Artifact[])[0];
 
   const deployStage: StageOptions = {
-    stageName: solarSystem.generateId('', '', '{Galaxy}{SolarSystem}'), // TODO: is this confusing ?
+    stageName: solarSystem.nodeId('', '', '{Galaxy}{SolarSystem}'), // TODO: is this confusing ?
     actions: [
       new CodeBuildAction({
         actionName: 'CdkDeploy',

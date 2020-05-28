@@ -9,11 +9,12 @@ import {
   ZoneDelegationRecord,
 } from '@aws-cdk/aws-route53';
 import { isCrossAccount } from './helpers/utils';
-import { BaseStack, BaseStackOptions, COSMOS_PARTITION } from './components/base';
+import { BaseStack, BaseStackOptions } from './components/base';
 import { IGalaxyCore, IGalaxyExtension } from './galaxy';
 import { CoreVpc, CoreVpcProps } from './components/core-vpc';
 import { CrossAccountZoneDelegationRecord } from './components/cross-account';
 import { RemoteVpc, RemoteZone, RemoteVpcImportProps } from './helpers/remote';
+import { COSMOS_PARTITION } from './helpers/constants';
 
 export interface ISolarSystemCore extends Construct {
   galaxy: IGalaxyCore;

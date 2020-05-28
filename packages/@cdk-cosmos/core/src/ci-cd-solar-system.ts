@@ -48,10 +48,10 @@ class CosmosCdkPipeline extends CdkPipeline {
 
     super(scope, id, {
       deployRole: Role.fromRoleArn(scope, 'CdkMasterRole', cdkMasterRoleStaticArn, { mutable: false }),
-      deployStacks: [scope.generateId('*', '', CDK_PIPELINE_STACK_PATTERN)],
+      deployStacks: [scope.nodeId('*', '', CDK_PIPELINE_STACK_PATTERN)],
       ...props,
-      pipelineName: scope.generateId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
-      deployName: scope.generateId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
+      pipelineName: scope.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
+      deployName: scope.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
       cdkRepo: cdkRepo,
       // deployVpc: vpc,
     });
