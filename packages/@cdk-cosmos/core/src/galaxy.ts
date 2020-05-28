@@ -1,4 +1,4 @@
-import { Construct, Stack } from '@aws-cdk/core';
+import { Construct, Stack, Tag } from '@aws-cdk/core';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 import { Vpc } from '@aws-cdk/aws-ec2';
@@ -46,6 +46,8 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
       this.cdkCrossAccountRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
       this.cdkCrossAccountRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${CdkCrossAccountRoleName}`;
     }
+
+    Tag.add(this, 'Cosmos:Galaxy', id);
   }
 
   addSharedVpc(props?: Partial<CoreVpcProps> & { defaultEndpoints: boolean }): Vpc {
@@ -90,5 +92,7 @@ export class GalaxyExtensionStack extends BaseStack implements IGalaxyExtension 
 
     this.cosmos = cosmos;
     this.portal = new ImportedGalaxyCore(this, 'Default', this.cosmos.portal);
+
+    Tag.add(this, 'Cosmos:Galaxy:Extension', id);
   }
 }

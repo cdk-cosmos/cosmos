@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Construct, Stack, StackProps, CfnOutput, Fn } from '@aws-cdk/core';
+import { Construct, Stack, StackProps, CfnOutput, Fn, Tag } from '@aws-cdk/core';
 import { HostedZone, IHostedZone, IPublicHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
@@ -94,6 +94,9 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     RemoteZone.export(this.rootZone, this.singletonId('RootZone'));
     RemoteFunction.export(this.crossAccountExportsFn, this.singletonId('CrossAccountExportsFn'));
     this.cdkMasterRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${cdkMasterRoleName}`;
+
+    Tag.add(this, 'Name', id);
+    Tag.add(this, 'Cosmos', id);
   }
 }
 
@@ -153,6 +156,9 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
       repositoryName: this.nodeId('Cdk-Repo', '-').toLowerCase(),
       description: `App CDK Repo for ${id} Cosmos.`,
     });
+
+    Tag.add(this, 'Name', id);
+    Tag.add(this, 'Cosmos:Extension', id);
   }
 }
 

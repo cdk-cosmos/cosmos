@@ -8,6 +8,16 @@ Object {
       "Properties": Object {
         "RepositoryDescription": "App CDK Repo for Test Cosmos.",
         "RepositoryName": "app-test-cdk-repo",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "Cosmos:Extension",
+            "Value": "Test",
+          },
+        ],
       },
       "Type": "AWS::CodeCommit::Repository",
     },
@@ -118,6 +128,16 @@ Object {
           },
         ],
         "RoleName": "CoreCdkMasterRole",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -125,6 +145,16 @@ Object {
       "Properties": Object {
         "RepositoryDescription": "Core CDK Repo for Cos Cosmos.",
         "RepositoryName": "core-cos-cdk-repo",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+        ],
       },
       "Type": "AWS::CodeCommit::Repository",
     },
@@ -145,6 +175,16 @@ Object {
           ],
         },
         "Runtime": "nodejs12.x",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+        ],
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
@@ -154,6 +194,16 @@ Object {
         "HostedZoneConfig": Object {
           "Comment": "Core TLD Root Zone for Cos Cosmos.",
         },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+        ],
         "Name": "cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",

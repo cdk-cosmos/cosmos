@@ -57,6 +57,14 @@ Object {
             "Key": "Name",
             "Value": "Cos/Gal/SharedVpc",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
         ],
       },
       "Type": "AWS::EC2::VPC",
@@ -67,6 +75,14 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/SharedVpc/AppSubnet1",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
           },
         ],
         "VpcId": Object {
@@ -97,6 +113,14 @@ Object {
             "Value": "Cos/Gal/SharedVpc/AppSubnet1",
           },
           Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
             "Key": "aws-cdk:subnet-name",
             "Value": "App",
           },
@@ -117,6 +141,14 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/SharedVpc/AppSubnet2",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
           },
         ],
         "VpcId": Object {
@@ -145,6 +177,14 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/SharedVpc/AppSubnet2",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -242,6 +282,14 @@ Object {
             "Key": "Name",
             "Value": "Cos/Gal/SharedVpc",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
         ],
         "VpcId": Object {
           "Ref": "SharedVpc",
@@ -329,6 +377,14 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/SharedVpc",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
           },
         ],
         "VpcId": Object {
@@ -418,6 +474,14 @@ Object {
             "Key": "Name",
             "Value": "Cos/Gal/SharedVpc",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
         ],
         "VpcId": Object {
           "Ref": "SharedVpc",
@@ -505,6 +569,14 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/SharedVpc",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
           },
         ],
         "VpcId": Object {
@@ -594,6 +666,14 @@ Object {
             "Key": "Name",
             "Value": "Cos/Gal/SharedVpc",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
         ],
         "VpcId": Object {
           "Ref": "SharedVpc",
@@ -667,6 +747,20 @@ Object {
           },
         ],
         "RoleName": "CoreCdkCrossAccountRole",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal2",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -779,6 +873,24 @@ Object {
         "HostedZoneConfig": Object {
           "Comment": "Core Main Private Zone for Sys SolarSystem",
         },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "Sys",
+          },
+        ],
         "Name": "sys.internal.",
         "VPCs": Array [
           Object {
@@ -796,6 +908,24 @@ Object {
         "HostedZoneConfig": Object {
           "Comment": "Core Main Zone for Sys SolarSystem",
         },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "Sys",
+          },
+        ],
         "Name": "sys.cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",
@@ -927,6 +1057,24 @@ Object {
         "HostedZoneConfig": Object {
           "Comment": "Core Main Private Zone for Sys2 SolarSystem",
         },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "Sys2",
+          },
+        ],
         "Name": "sys2.internal.",
         "VPCs": Array [
           Object {
@@ -950,6 +1098,18 @@ Object {
             "Key": "Name",
             "Value": "Cos/Gal2/Sys2/Vpc",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "Sys2",
+          },
         ],
       },
       "Type": "AWS::EC2::VPC",
@@ -960,6 +1120,18 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet1",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "Sys2",
           },
         ],
         "VpcId": Object {
@@ -990,6 +1162,18 @@ Object {
             "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet1",
           },
           Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "Sys2",
+          },
+          Object {
             "Key": "aws-cdk:subnet-name",
             "Value": "App",
           },
@@ -1010,6 +1194,18 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet2",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "Sys2",
           },
         ],
         "VpcId": Object {
@@ -1038,6 +1234,18 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet2",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "Sys2",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -1088,6 +1296,24 @@ Object {
         "HostedZoneConfig": Object {
           "Comment": "Core Main Zone for Sys2 SolarSystem",
         },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "Sys2",
+          },
+        ],
         "Name": "sys2.cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",

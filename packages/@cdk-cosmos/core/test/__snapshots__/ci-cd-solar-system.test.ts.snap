@@ -86,6 +86,24 @@ Object {
             "Name": "Deploy",
           },
         ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "Cosmos:Extension",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy:Extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem:Extension",
+            "Value": "CiCd",
+          },
+        ],
       },
       "Type": "AWS::CodePipeline::Pipeline",
     },
@@ -101,6 +119,24 @@ Object {
             },
           ],
         },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "Cosmos:Extension",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy:Extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem:Extension",
+            "Value": "CiCd",
+          },
+        ],
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
@@ -172,6 +208,24 @@ Object {
           "Type": "CODECOMMIT",
         },
         "SourceVersion": "master",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "Cosmos:Extension",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy:Extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem:Extension",
+            "Value": "CiCd",
+          },
+        ],
       },
       "Type": "AWS::CodeBuild::Project",
     },
@@ -200,6 +254,24 @@ Object {
           ],
           "Version": "2012-10-17",
         },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "Cosmos:Extension",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy:Extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem:Extension",
+            "Value": "CiCd",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -258,6 +330,24 @@ Object {
           ],
           "Version": "2012-10-17",
         },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "Cosmos:Extension",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy:Extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem:Extension",
+            "Value": "CiCd",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -529,6 +619,24 @@ Object {
             "Ref": "VpcAppSubnet2Subnet",
           },
         ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
+        ],
         "Type": "application",
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
@@ -623,6 +731,24 @@ Object {
             "ToPort": 81,
           },
         ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
+        ],
         "VpcId": Object {
           "Ref": "Vpc",
         },
@@ -711,6 +837,24 @@ Object {
             "Name": "Deploy",
           },
         ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
+        ],
       },
       "Type": "AWS::CodePipeline::Pipeline",
     },
@@ -726,6 +870,24 @@ Object {
             },
           ],
         },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
+        ],
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
@@ -797,6 +959,24 @@ Object {
           "Type": "CODECOMMIT",
         },
         "SourceVersion": "master",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
+        ],
       },
       "Type": "AWS::CodeBuild::Project",
     },
@@ -825,6 +1005,24 @@ Object {
           ],
           "Version": "2012-10-17",
         },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -883,6 +1081,24 @@ Object {
           ],
           "Version": "2012-10-17",
         },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -951,6 +1167,24 @@ Object {
     "Cluster": Object {
       "Properties": Object {
         "ClusterName": "CoreGalCiCdCluster",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
+        ],
       },
       "Type": "AWS::ECS::Cluster",
     },
@@ -966,6 +1200,21 @@ Object {
             "Key": "Name",
             "PropagateAtLaunch": true,
             "Value": "Cos/Gal/CiCd/Cluster/Capacity",
+          },
+          Object {
+            "Key": "Cosmos",
+            "PropagateAtLaunch": true,
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "PropagateAtLaunch": true,
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "PropagateAtLaunch": true,
+            "Value": "CiCd",
           },
         ],
         "VPCZoneIdentifier": Array [
@@ -1086,6 +1335,18 @@ def pick(dct, *keys):
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Cluster/Capacity",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
         ],
         "Timeout": 310,
       },
@@ -1139,6 +1400,18 @@ def pick(dct, *keys):
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Cluster/Capacity",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
           },
         ],
       },
@@ -1297,6 +1570,18 @@ def pick(dct, *keys):
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Cluster/Capacity",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
         ],
       },
       "Type": "AWS::IAM::Role",
@@ -1347,6 +1632,18 @@ def pick(dct, *keys):
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Cluster/Capacity",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
           },
         ],
         "VpcId": Object {
@@ -1440,6 +1737,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Cluster/Capacity",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
         ],
       },
       "Type": "AWS::IAM::Role",
@@ -1474,6 +1783,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Cluster/Capacity",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
         ],
       },
       "Type": "AWS::SNS::Topic",
@@ -1483,6 +1804,24 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "HostedZoneConfig": Object {
           "Comment": "Core Main Private Zone for CiCd SolarSystem",
         },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
+        ],
         "Name": "cicd.internal.",
         "VPCs": Array [
           Object {
@@ -1506,6 +1845,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Vpc",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
         ],
       },
       "Type": "AWS::EC2::VPC",
@@ -1516,6 +1867,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Vpc/AppSubnet1",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
           },
         ],
         "VpcId": Object {
@@ -1546,6 +1909,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Value": "Cos/Gal/CiCd/Vpc/AppSubnet1",
           },
           Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
+          Object {
             "Key": "aws-cdk:subnet-name",
             "Value": "App",
           },
@@ -1566,6 +1941,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Vpc/AppSubnet2",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
           },
         ],
         "VpcId": Object {
@@ -1594,6 +1981,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Vpc/AppSubnet2",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
           },
           Object {
             "Key": "aws-cdk:subnet-name",
@@ -1691,6 +2090,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Vpc",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
         ],
         "VpcId": Object {
           "Ref": "Vpc",
@@ -1778,6 +2189,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Vpc",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
           },
         ],
         "VpcId": Object {
@@ -1867,6 +2290,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Vpc",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
         ],
         "VpcId": Object {
           "Ref": "Vpc",
@@ -1954,6 +2389,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Vpc",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
           },
         ],
         "VpcId": Object {
@@ -2043,6 +2490,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Key": "Name",
             "Value": "Cos/Gal/CiCd/Vpc",
           },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
         ],
         "VpcId": Object {
           "Ref": "Vpc",
@@ -2084,6 +2543,24 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "HostedZoneConfig": Object {
           "Comment": "Core Main Zone for CiCd SolarSystem",
         },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "Cosmos:Galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Cosmos:SolarSystem",
+            "Value": "CiCd",
+          },
+        ],
         "Name": "cicd.cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",
