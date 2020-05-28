@@ -10,10 +10,6 @@ Object {
         "RepositoryName": "app-test-cdk-repo",
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Test",
-          },
-          Object {
             "Key": "Cosmos:Extension",
             "Value": "Test",
           },
@@ -130,10 +126,6 @@ Object {
         "RoleName": "CoreCdkMasterRole",
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Cos",
-          },
-          Object {
             "Key": "Cosmos",
             "Value": "Cos",
           },
@@ -146,10 +138,6 @@ Object {
         "RepositoryDescription": "Core CDK Repo for Cos Cosmos.",
         "RepositoryName": "core-cos-cdk-repo",
         "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Cos",
-          },
           Object {
             "Key": "Cosmos",
             "Value": "Cos",
@@ -177,10 +165,6 @@ Object {
         "Runtime": "nodejs12.x",
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Cos",
-          },
-          Object {
             "Key": "Cosmos",
             "Value": "Cos",
           },
@@ -195,10 +179,6 @@ Object {
           "Comment": "Core TLD Root Zone for Cos Cosmos.",
         },
         "HostedZoneTags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Cos",
-          },
           Object {
             "Key": "Cosmos",
             "Value": "Cos",

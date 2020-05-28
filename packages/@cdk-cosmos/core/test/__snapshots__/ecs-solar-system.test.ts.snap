@@ -232,10 +232,6 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Cos",
-          },
-          Object {
             "Key": "Cosmos",
             "Value": "Cos",
           },
@@ -344,10 +340,6 @@ Object {
         ],
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Cos",
-          },
-          Object {
             "Key": "Cosmos",
             "Value": "Cos",
           },
@@ -370,10 +362,6 @@ Object {
       "Properties": Object {
         "ClusterName": "CoreGalSysCluster",
         "Tags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Cos",
-          },
           Object {
             "Key": "Cosmos",
             "Value": "Cos",
@@ -399,11 +387,6 @@ Object {
         "MinSize": "1",
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "PropagateAtLaunch": true,
-            "Value": "Cos/Gal/Sys/Cluster/Capacity",
-          },
-          Object {
             "Key": "Cosmos",
             "PropagateAtLaunch": true,
             "Value": "Cos",
@@ -417,6 +400,11 @@ Object {
             "Key": "Cosmos:SolarSystem",
             "PropagateAtLaunch": true,
             "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
         "VPCZoneIdentifier": Array [
@@ -534,10 +522,6 @@ def pick(dct, *keys):
         "Runtime": "python3.6",
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/Capacity",
-          },
-          Object {
             "Key": "Cosmos",
             "Value": "Cos",
           },
@@ -548,6 +532,10 @@ def pick(dct, *keys):
           Object {
             "Key": "Cosmos:SolarSystem",
             "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
         "Timeout": 310,
@@ -600,10 +588,6 @@ def pick(dct, *keys):
         ],
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/Capacity",
-          },
-          Object {
             "Key": "Cosmos",
             "Value": "Cos",
           },
@@ -614,6 +598,10 @@ def pick(dct, *keys):
           Object {
             "Key": "Cosmos:SolarSystem",
             "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
       },
@@ -777,10 +765,6 @@ def pick(dct, *keys):
         ],
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/Capacity",
-          },
-          Object {
             "Key": "Cosmos",
             "Value": "Cos",
           },
@@ -791,6 +775,10 @@ def pick(dct, *keys):
           Object {
             "Key": "Cosmos:SolarSystem",
             "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
       },
@@ -840,10 +828,6 @@ def pick(dct, *keys):
         ],
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/Capacity",
-          },
-          Object {
             "Key": "Cosmos",
             "Value": "Cos",
           },
@@ -854,6 +838,10 @@ def pick(dct, *keys):
           Object {
             "Key": "Cosmos:SolarSystem",
             "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
         "VpcId": Object {
@@ -944,10 +932,6 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/Capacity",
-          },
-          Object {
             "Key": "Cosmos",
             "Value": "Cos",
           },
@@ -958,6 +942,10 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           Object {
             "Key": "Cosmos:SolarSystem",
             "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
         ],
       },
@@ -990,10 +978,6 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       "Properties": Object {
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/Capacity",
-          },
-          Object {
             "Key": "Cosmos",
             "Value": "Cos",
           },
@@ -1005,6 +989,10 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Key": "Cosmos:SolarSystem",
             "Value": "Sys",
           },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Cluster/Capacity",
+          },
         ],
       },
       "Type": "AWS::SNS::Topic",
@@ -1015,10 +1003,6 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           "Comment": "Core Main Private Zone for Sys SolarSystem",
         },
         "HostedZoneTags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Cos",
-          },
           Object {
             "Key": "Cosmos",
             "Value": "Cos",
@@ -1052,10 +1036,6 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           "Comment": "Core Main Zone for Sys SolarSystem",
         },
         "HostedZoneTags": Array [
-          Object {
-            "Key": "Name",
-            "Value": "Cos",
-          },
           Object {
             "Key": "Cosmos",
             "Value": "Cos",

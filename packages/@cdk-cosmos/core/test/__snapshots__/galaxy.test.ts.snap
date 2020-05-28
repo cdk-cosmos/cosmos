@@ -47,10 +47,6 @@ Object {
         "RoleName": "CoreCdkCrossAccountRole",
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "Cos",
-          },
-          Object {
             "Key": "Cosmos",
             "Value": "Cos",
           },
