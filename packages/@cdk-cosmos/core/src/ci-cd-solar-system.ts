@@ -30,32 +30,10 @@ export interface ICiCdEcsSolarSystemCore extends IEcsSolarSystemCore {
   deployProject?: IProject;
 }
 
-// Extensions
-
 export interface ICiCdSolarSystemExtension<T extends ICiCdSolarSystemCore> extends Construct {
   galaxy: IGalaxyExtension;
   portal: T;
   deployProject: IProject;
-}
-
-class CosmosCdkPipeline extends CdkPipeline {
-  constructor(scope: ISolarSystemCore | ISolarSystemExtension, id: string, props?: Partial<CdkPipelineProps>) {
-    const cdkRepo = scope.galaxy.cosmos.cdkRepo;
-    const cdkMasterRoleStaticArn =
-      (scope as ISolarSystemCore).galaxy.cosmos.cdkMasterRoleStaticArn ||
-      (scope as ISolarSystemExtension).galaxy.cosmos.portal.cdkMasterRoleStaticArn;
-    // const vpc = (scope as ISolarSystemCore).vpc || (scope as ISolarSystemExtension).portal.vpc;
-
-    super(scope, id, {
-      deployRole: Role.fromRoleArn(scope, 'CdkMasterRole', cdkMasterRoleStaticArn, { mutable: false }),
-      deployStacks: [scope.generateId('*', '', CDK_PIPELINE_STACK_PATTERN)],
-      ...props,
-      pipelineName: scope.generateId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
-      deployName: scope.generateId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
-      cdkRepo: cdkRepo,
-      // deployVpc: vpc,
-    });
-  }
 }
 
 export interface CiCdSolarSystemCoreStackProps extends SolarSystemCoreStackProps {
@@ -128,5 +106,25 @@ export class CiCdSolarSystemExtensionStack<T extends ICiCdSolarSystemCore = ICiC
 
     this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
     this.deployProject = this.deployPipeline.Deploy;
+  }
+}
+
+class CosmosCdkPipeline extends CdkPipeline {
+  constructor(scope: ISolarSystemCore | ISolarSystemExtension, id: string, props?: Partial<CdkPipelineProps>) {
+    const cdkRepo = scope.galaxy.cosmos.cdkRepo;
+    const cdkMasterRoleStaticArn =
+      (scope as ISolarSystemCore).galaxy.cosmos.cdkMasterRoleStaticArn ||
+      (scope as ISolarSystemExtension).galaxy.cosmos.portal.cdkMasterRoleStaticArn;
+    // const vpc = (scope as ISolarSystemCore).vpc || (scope as ISolarSystemExtension).portal.vpc;
+
+    super(scope, id, {
+      deployRole: Role.fromRoleArn(scope, 'CdkMasterRole', cdkMasterRoleStaticArn, { mutable: false }),
+      deployStacks: [scope.nodeId('*', '', CDK_PIPELINE_STACK_PATTERN)],
+      ...props,
+      pipelineName: scope.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
+      deployName: scope.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
+      cdkRepo: cdkRepo,
+      // deployVpc: vpc,
+    });
   }
 }

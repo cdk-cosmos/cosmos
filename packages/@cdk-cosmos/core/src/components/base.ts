@@ -1,56 +1,9 @@
-import { IConstruct, CfnResource } from '@aws-cdk/core';
+import { CfnResource } from '@aws-cdk/core';
 import { Construct } from '@aws-cdk/core/lib/construct-compat';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Stack, StackProps } from '@aws-cdk/core/lib/stack';
-
-export const COSMOS_PARTITION = 'COSMOS_PARTITION';
-export const COSMOS_VERSION = 'COSMOS_VERSION';
-export const COSMOS_NETWORK_BUILDER = 'COSMOS_NETWORK_BUILDER';
-export const AWS_ENV = 'AWS_ENV';
-
-export const PATTERN = {
-  SINGLETON_COSMOS: '{Partition}{Resource}+',
-  SINGLETON_GALAXY: '{Partition}{Galaxy}{Resource}+',
-  SINGLETON_SOLAR_SYSTEM: '${Partition}{Galaxy}{SolarSystem}{Resource}+',
-  STACK: '{Partition}{Cosmos}{Galaxy}?{SolarSystem}?{Version}?{Type}',
-  COSMOS: '{Partition}{Cosmos}{Galaxy}?{SolarSystem}?{Resource}*{Version}?',
-  RESOURCE: '{Resource}+{Version}?',
-  // SHORT_SOLAR_SYSTEM: '{Partition}{Cosmos}{SolarSystem}{Resource}+',
-  // DOCKER_TAG: '{Cosmos}/{Resource}+',
-  // LOG_GROUP: '{Partition}/{Cosmos}/{SolarSystem}/{Resource}+',
-};
-
-declare module '@aws-cdk/core/lib/construct-compat' {
-  interface ConstructNode {
-    id: string;
-    type: string;
-    pattern: string;
-  }
-
-  interface Construct {
-    generateId(id: string, delimiter?: string, pattern?: string, type?: string): string;
-    singletonId(id: string, delimiter?: string, type?: string): string;
-  }
-}
-
-Construct.prototype.generateId = function(id, delimiter, pattern, type): string {
-  return generateNodeId({
-    scope: this,
-    pattern,
-    id,
-    type,
-    delimiter,
-  });
-};
-
-Construct.prototype.singletonId = function(id, delimiter, type): string {
-  return singletonNodeId({
-    scope: this,
-    id,
-    type,
-    delimiter,
-  });
-};
+import { PATTERN, COSMOS_PARTITION, COSMOS_VERSION, COSMOS_NETWORK_BUILDER, AWS_ENV } from '../helpers/constants';
+import { generateNodeId, generateScopeId, generateSingletonId } from '../helpers/generate-scope-id';
 
 export interface BaseStackOptions extends StackProps {
   partition?: string;
@@ -91,157 +44,32 @@ export class BaseStack extends Stack {
 
   public allocateLogicalId(scope: CfnResource): string {
     if (this.disableCosmosNaming) return super.allocateLogicalId(scope);
-
-    const id = generateId({
-      scopes: getScopes(scope),
-      pattern: getPattern(scope) || PATTERN.RESOURCE,
-      partition: scope.node.tryGetContext(COSMOS_PARTITION),
-      version: scope.node.tryGetContext(COSMOS_VERSION),
-    });
-
+    const id = generateScopeId({ scope, defaultPattern: PATTERN.RESOURCE });
     return removeNonAlphanumeric(id);
   }
 }
 
-export function singletonNodeId(props: { scope: IConstruct; id: string; type?: string; delimiter?: string }): string {
-  const { scope, id, type, delimiter } = props;
-  let pattern: string;
-  switch (scope.node.type) {
-    case 'Cosmos':
-      pattern = PATTERN.SINGLETON_COSMOS;
-      break;
-    case 'Galaxy':
-      pattern = PATTERN.SINGLETON_GALAXY;
-      break;
-    case 'SolarSystem':
-      pattern = PATTERN.SINGLETON_SOLAR_SYSTEM;
-      break;
-    default:
-      throw new Error(`Singleton Pattern could not be found for ${scope.node.id}`);
-  }
-  return generateNodeId({
-    scope,
-    pattern,
-    id,
-    type,
-    delimiter,
-  });
-}
-
-export function generateNodeId(props: {
-  scope: IConstruct;
-  id: string;
-  pattern?: string;
-  type?: string;
-  partition?: string;
-  version?: string;
-  delimiter?: string;
-}): string {
-  const { scope, id, pattern, type = 'Resource', partition, version, delimiter } = props;
-  return generateId({
-    scopes: [...getScopes(scope), { key: type, value: id }, { key: 'Type', value: type }],
-    pattern: pattern || PATTERN.COSMOS,
-    partition: partition || scope.node.tryGetContext(COSMOS_PARTITION),
-    version: version || scope.node.tryGetContext(COSMOS_VERSION),
-    delimiter,
-  });
-}
-
-interface IScope {
-  key: string;
-  value: string;
-}
-
-interface GenerateLogicalIdProps {
-  scopes: IScope[];
-  pattern: string;
-  partition?: string;
-  version?: string;
-  delimiter?: string;
-}
-
-export function generateId(props: GenerateLogicalIdProps): string {
-  const { scopes, pattern, partition, version, delimiter = '' } = props;
-
-  if (partition) scopes.push({ key: 'Partition', value: partition });
-  if (version) scopes.push({ key: 'Version', value: version });
-
-  let selectedScopes = scopes.filter(removeHidden);
-  selectedScopes = selectedScopes.reduce(removeDupes, []);
-  selectedScopes = selectScoped(selectedScopes, pattern);
-  const selectedIds = selectedScopes.map(x => x.value);
-
-  return selectedIds.join(delimiter).slice(0, 240);
-}
-
-function selectScoped(scopes: IScope[], pattern: string): IScope[] {
-  const regex = /{(\w+)}([*+?])?/gm;
-  const results: IScope[] = [];
-  let segment: RegExpExecArray | null;
-  while ((segment = regex.exec(pattern)) !== null) {
-    const key: string = segment[1];
-    const selector: string | undefined = segment[2];
-
-    switch (selector) {
-      case '*': {
-        const selected = scopes.filter(x => x.key === key);
-        if (selected.length) results.push(...selected);
-        break;
-      }
-      case '+': {
-        if (!scopes.some(x => x.key === key)) throw new Error(`No ${key} Scope found`);
-        results.push(...scopes.filter(x => x.key === key));
-        break;
-      }
-      case '?': {
-        const selected = scopes.filter(x => x.key === key).pop();
-        if (selected) results.push(selected);
-        break;
-      }
-      default: {
-        const selected = scopes.filter(x => x.key === key).pop();
-        if (!selected) throw new Error(`No ${key} Scope found.`);
-        results.push(selected);
-      }
-    }
+declare module '@aws-cdk/core/lib/construct-compat' {
+  interface ConstructNode {
+    id: string;
+    type?: string;
+    pattern?: string;
   }
 
-  return results;
+  interface Construct {
+    nodeId(id?: string, delimiter?: string, pattern?: string, type?: string): string;
+    singletonId(id?: string, delimiter?: string, type?: string): string;
+  }
 }
 
-function getScopes(scope: IConstruct): IScope[] {
-  const scopes = scope.node.scopes
-    .filter(x => x.node.id)
-    .map(x => ({
-      key: x.node.type || 'Resource',
-      value: x.node.id,
-    }));
+Construct.prototype.nodeId = function(id, delimiter, pattern, type): string {
+  return generateNodeId({ scope: this, pattern, id, type, delimiter });
+};
 
-  if (scope.node.type) scopes.push({ key: 'Type', value: scope.node.type });
+Construct.prototype.singletonId = function(id, delimiter, type): string {
+  return generateSingletonId({ scope: this, id, type, delimiter });
+};
 
-  return scopes;
-}
-
-function getPattern(scope: IConstruct): string | undefined {
-  return scope.node.scopes
-    .map(x => x.node.pattern)
-    .filter(x => x)
-    .pop();
-}
-
-function removeDupes(result: IScope[], scope: IScope): IScope[] {
-  const previous = result.length ? result[result.length - 1] : null;
-  if (previous?.key === scope.key && previous.value.endsWith(scope.value)) return result;
-
-  result.push(scope);
-  return result;
-}
-
-function removeHidden(scope: IScope): boolean {
-  if (scope.value === 'Default' || scope.value === 'Resource') return false;
-  return true;
-}
-
-function removeNonAlphanumeric(s: string): string {
+const removeNonAlphanumeric = (s: string): string => {
   return s.replace(/[^A-Za-z0-9]/g, '');
-}
+};

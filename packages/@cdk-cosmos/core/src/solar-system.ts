@@ -1,4 +1,4 @@
-import { Construct, Duration } from '@aws-cdk/core';
+import { Construct, Duration, Tag } from '@aws-cdk/core';
 import { IVpc, Vpc } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import {
@@ -9,11 +9,12 @@ import {
   ZoneDelegationRecord,
 } from '@aws-cdk/aws-route53';
 import { isCrossAccount } from './helpers/utils';
-import { BaseStack, BaseStackOptions, COSMOS_PARTITION } from './components/base';
+import { BaseStack, BaseStackOptions } from './components/base';
 import { IGalaxyCore, IGalaxyExtension } from './galaxy';
 import { CoreVpc, CoreVpcProps } from './components/core-vpc';
 import { CrossAccountZoneDelegationRecord } from './components/cross-account';
 import { RemoteVpc, RemoteZone, RemoteVpcImportProps } from './helpers/remote';
+import { COSMOS_PARTITION } from './helpers/constants';
 
 export interface ISolarSystemCore extends Construct {
   galaxy: IGalaxyCore;
@@ -100,6 +101,8 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     RemoteVpc.export(this.vpc, this.singletonId('Vpc'), this);
     RemoteZone.export(this.zone, this.singletonId('Zone'));
     RemoteZone.export(this.privateZone, this.singletonId('PrivateZone'));
+
+    Tag.add(this, 'cosmos:solarsystem', id);
   }
 }
 
@@ -152,5 +155,7 @@ export class SolarSystemExtensionStack extends BaseStack implements ISolarSystem
 
     this.galaxy = galaxy;
     this.portal = new ImportedSolarSystemCore(this, 'Default', this.galaxy.portal, portalProps);
+
+    Tag.add(this, 'cosmos:solarsystem:extension', id);
   }
 }

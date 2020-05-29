@@ -45,6 +45,16 @@ Object {
           },
         ],
         "RoleName": "CoreCdkCrossAccountRole",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal2",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },

@@ -230,6 +230,20 @@ Object {
             "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
           },
         ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
         "Type": "application",
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
@@ -324,6 +338,20 @@ Object {
             "ToPort": 81,
           },
         ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
         "VpcId": Object {
           "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
         },
@@ -333,6 +361,20 @@ Object {
     "Cluster": Object {
       "Properties": Object {
         "ClusterName": "CoreGalSysCluster",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
       },
       "Type": "AWS::ECS::Cluster",
     },
@@ -344,6 +386,21 @@ Object {
         "MaxSize": "5",
         "MinSize": "1",
         "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "PropagateAtLaunch": true,
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "PropagateAtLaunch": true,
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "PropagateAtLaunch": true,
+            "Value": "Sys",
+          },
           Object {
             "Key": "Name",
             "PropagateAtLaunch": true,
@@ -465,6 +522,18 @@ def pick(dct, *keys):
         "Runtime": "python3.6",
         "Tags": Array [
           Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
             "Key": "Name",
             "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
@@ -518,6 +587,18 @@ def pick(dct, *keys):
           },
         ],
         "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/Sys/Cluster/Capacity",
@@ -684,6 +765,18 @@ def pick(dct, *keys):
         ],
         "Tags": Array [
           Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
             "Key": "Name",
             "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
@@ -734,6 +827,18 @@ def pick(dct, *keys):
           },
         ],
         "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/Sys/Cluster/Capacity",
@@ -827,6 +932,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         },
         "Tags": Array [
           Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
             "Key": "Name",
             "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
@@ -861,6 +978,18 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       "Properties": Object {
         "Tags": Array [
           Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
             "Key": "Name",
             "Value": "Cos/Gal/Sys/Cluster/Capacity",
           },
@@ -873,6 +1002,20 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "HostedZoneConfig": Object {
           "Comment": "Core Main Private Zone for Sys SolarSystem",
         },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
         "Name": "sys.internal.",
         "VPCs": Array [
           Object {
@@ -892,6 +1035,20 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "HostedZoneConfig": Object {
           "Comment": "Core Main Zone for Sys SolarSystem",
         },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
         "Name": "sys.cos.com.",
       },
       "Type": "AWS::Route53::HostedZone",
