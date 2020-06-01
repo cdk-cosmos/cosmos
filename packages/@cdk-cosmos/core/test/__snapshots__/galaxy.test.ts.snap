@@ -51,7 +51,7 @@ Object {
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal2",
           },
         ],
