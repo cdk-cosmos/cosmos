@@ -236,7 +236,7 @@ Object {
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
@@ -344,7 +344,7 @@ Object {
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
@@ -367,7 +367,7 @@ Object {
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
@@ -392,7 +392,7 @@ Object {
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "PropagateAtLaunch": true,
             "Value": "Gal",
           },
@@ -526,7 +526,7 @@ def pick(dct, *keys):
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
@@ -592,7 +592,7 @@ def pick(dct, *keys):
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
@@ -769,7 +769,7 @@ def pick(dct, *keys):
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
@@ -832,7 +832,7 @@ def pick(dct, *keys):
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
@@ -936,7 +936,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
@@ -982,7 +982,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
@@ -1008,7 +1008,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
@@ -1041,7 +1041,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Value": "Cos",
           },
           Object {
-            "Key": "galaxy",
+            "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
