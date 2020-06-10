@@ -38,6 +38,21 @@ export class CoreVpc extends Vpc {
   }
 }
 
+export function addCommonEndpoints(vpc: Vpc): void {
+  vpc.addInterfaceEndpoint('SsmEndpoint', {
+    service: InterfaceVpcEndpointAwsService.SSM,
+    subnets: { subnetGroupName: 'App' },
+  });
+  vpc.addInterfaceEndpoint('SsmMessageEndpoint', {
+    service: InterfaceVpcEndpointAwsService.SSM_MESSAGES,
+    subnets: { subnetGroupName: 'App' },
+  });
+  vpc.addInterfaceEndpoint('CloudWatchLogsEndpoint', {
+    service: InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
+    subnets: { subnetGroupName: 'App' },
+  });
+}
+
 export function addEcsEndpoints(vpc: Vpc): void {
   vpc.addInterfaceEndpoint('EcsEndpoint', {
     service: InterfaceVpcEndpointAwsService.ECS,
@@ -51,12 +66,12 @@ export function addEcsEndpoints(vpc: Vpc): void {
     service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
     subnets: { subnetGroupName: 'App' },
   });
-  vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
-    service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
+  vpc.addInterfaceEndpoint('EcrEndpoint', {
+    service: InterfaceVpcEndpointAwsService.ECR,
     subnets: { subnetGroupName: 'App' },
   });
-  vpc.addInterfaceEndpoint('CloudWatchLogsEndpoint', {
-    service: InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
+  vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
+    service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
     subnets: { subnetGroupName: 'App' },
   });
 }

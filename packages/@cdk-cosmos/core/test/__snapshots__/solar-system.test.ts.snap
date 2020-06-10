@@ -393,6 +393,102 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
+    "SharedVpcEcrEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "SharedVpcEcrEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ecr.api",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "SharedVpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "SharedVpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "SharedVpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "SharedVpcEcrEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/SharedVpc/EcrEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "SharedVpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "SharedVpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/SharedVpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
     "SharedVpcEcsAgentEndpoint": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
@@ -709,6 +805,198 @@ Object {
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "SharedVpcSsmEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "SharedVpcSsmEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ssm",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "SharedVpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "SharedVpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "SharedVpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "SharedVpcSsmEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/SharedVpc/SsmEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "SharedVpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "SharedVpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/SharedVpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "SharedVpcSsmMessageEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "SharedVpcSsmMessageEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ssmmessages",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "SharedVpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "SharedVpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "SharedVpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "SharedVpcSsmMessageEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/SharedVpc/SsmMessageEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "SharedVpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "SharedVpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/SharedVpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "SharedVpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
     },
   },
 }
@@ -1246,6 +1534,106 @@ Object {
       },
       "Type": "AWS::EC2::Subnet",
     },
+    "VpcCloudWatchLogsEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcCloudWatchLogsEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".logs",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcCloudWatchLogsEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal2/Sys2/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal2/Sys2/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
     "VpcS3Gateway": Object {
       "Properties": Object {
         "RouteTableIds": Array [
@@ -1274,6 +1662,206 @@ Object {
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ssm",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal2/Sys2/Vpc/SsmEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal2/Sys2/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcSsmMessageEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmMessageEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".ssmmessages",
+            ],
+          ],
+        },
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmMessageEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal2/Sys2/Vpc/SsmMessageEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal2/Sys2/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
     },
     "Zone": Object {
       "Properties": Object {

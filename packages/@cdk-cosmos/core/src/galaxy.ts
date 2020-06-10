@@ -5,7 +5,7 @@ import { Vpc } from '@aws-cdk/aws-ec2';
 import { isCrossAccount } from './helpers/utils';
 import { BaseStack, BaseStackOptions } from './components/base';
 import { ICosmosCore, ICosmosExtension } from './cosmos';
-import { CoreVpcProps, CoreVpc, addEcsEndpoints } from './components/core-vpc';
+import { CoreVpcProps, CoreVpc, addCommonEndpoints, addEcsEndpoints } from './components/core-vpc';
 import { COSMOS_PARTITION, PATTERN } from './helpers/constants';
 
 export interface IGalaxyCore extends Construct {
@@ -50,8 +50,8 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
     Tag.add(this, 'cosmos:galaxy', id);
   }
 
-  addSharedVpc(props?: Partial<CoreVpcProps> & { defaultEndpoints: boolean }): Vpc {
-    const { defaultEndpoints = true } = props || {};
+  addSharedVpc(props?: Partial<CoreVpcProps> & { commonEndpoints?: boolean; ecsEndpoints?: boolean }): Vpc {
+    const { commonEndpoints = true, ecsEndpoints = true } = props || {};
 
     if (!this.networkBuilder) {
       throw new Error(`NetworkBuilder not found, please define cidr range here (Galaxy: ${this.node.id}) or Cosmos.`);
@@ -61,7 +61,9 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
       ...props,
       networkBuilder: this.networkBuilder,
     });
-    if (defaultEndpoints) addEcsEndpoints(this.vpc);
+
+    if (commonEndpoints) addCommonEndpoints(this.vpc);
+    if (ecsEndpoints) addEcsEndpoints(this.vpc);
 
     return this.vpc;
   }

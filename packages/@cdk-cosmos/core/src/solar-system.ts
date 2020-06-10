@@ -11,7 +11,7 @@ import {
 import { isCrossAccount } from './helpers/utils';
 import { BaseStack, BaseStackOptions } from './components/base';
 import { IGalaxyCore, IGalaxyExtension } from './galaxy';
-import { CoreVpc, CoreVpcProps } from './components/core-vpc';
+import { CoreVpc, CoreVpcProps, addCommonEndpoints } from './components/core-vpc';
 import { CrossAccountZoneDelegationRecord } from './components/cross-account';
 import { RemoteVpc, RemoteZone, RemoteVpcImportProps } from './helpers/remote';
 import { COSMOS_PARTITION } from './helpers/constants';
@@ -31,7 +31,9 @@ export interface ISolarSystemExtension extends Construct {
 
 export interface SolarSystemCoreStackProps extends BaseStackOptions {
   vpc?: Vpc;
-  vpcProps?: Partial<CoreVpcProps>;
+  vpcProps?: Partial<CoreVpcProps> & {
+    defaultEndpoints?: boolean;
+  };
   zoneProps?: {
     linkZone?: boolean;
     ttl?: Duration;
@@ -52,6 +54,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     });
 
     const { vpc, vpcProps = {}, zoneProps = {} } = props || {};
+    const { defaultEndpoints = true } = vpcProps;
     const { linkZone = true, ttl = Duration.minutes(30) } = zoneProps;
 
     this.galaxy = galaxy;
@@ -68,6 +71,11 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
         ...vpcProps,
         networkBuilder: this.networkBuilder,
       });
+    }
+
+    // Only add endpoints if this component owens the Vpc.
+    if (this.vpc.node.scope === this) {
+      if (defaultEndpoints) addCommonEndpoints(this.vpc);
     }
 
     const rootZone = this.galaxy.cosmos.rootZone;

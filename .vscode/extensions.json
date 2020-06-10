@@ -3,7 +3,6 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "wayou.vscode-todo-highlight",
-    "amazonwebservices.aws-toolkit-vscode",
-    "orta.vscode-jest"
+    "amazonwebservices.aws-toolkit-vscode"
   ]
 }
