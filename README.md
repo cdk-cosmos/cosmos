@@ -1,6 +1,6 @@
 # Cosmos ![Cosmos Coverage](https://raw.githubusercontent.com/cdk-cosmos/cosmos/master/shields/coverage.svg)
 
-![Cosmos Logo](https://raw.githubusercontent.com/cdk-cosmos/law/master/assets/cosmos-logo-transparent-small.png)
+![Cosmos Logo](https://raw.githubusercontent.com/cdk-cosmos/law/master/static/img/cosmos-logo.png)
 
 Cosmos builds an opinionated layer on top of the AWS CDK, providing smart defaults for enterprise infrastructure. 
 
