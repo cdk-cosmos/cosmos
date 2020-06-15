@@ -1,4 +1,4 @@
-# Cosmos 
+# Cosmos ![Cosmos Coverage](https://raw.githubusercontent.com/cdk-cosmos/cosmos/master/shields/coverage.svg)
 
 ![Cosmos Logo](https://raw.githubusercontent.com/cdk-cosmos/law/master/assets/cosmos-logo-transparent-small.png)
 
