@@ -41,9 +41,6 @@ export interface IEcsSolarSystemExtension extends ISolarSystemExtension {
 }
 
 export interface EcsSolarSystemCoreProps extends SolarSystemCoreStackProps {
-  vpcProps?: Partial<CoreVpcProps> & {
-    defaultEndpoints?: boolean;
-  };
   clusterProps?: Partial<ClusterProps>;
   clusterCapacityProps?: Partial<AddCapacityOptions>;
   albProps?: Partial<ApplicationLoadBalancerProps>;
