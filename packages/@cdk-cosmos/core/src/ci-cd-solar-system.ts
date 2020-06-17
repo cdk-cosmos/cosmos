@@ -26,16 +26,6 @@ export interface ICiCdSolarSystemCore extends ISolarSystemCore {
   deployProject?: IProject;
 }
 
-export interface ICiCdEcsSolarSystemCore extends IEcsSolarSystemCore {
-  deployProject?: IProject;
-}
-
-export interface ICiCdSolarSystemExtension<T extends ICiCdSolarSystemCore> extends Construct {
-  galaxy: IGalaxyExtension;
-  portal: T;
-  deployProject: IProject;
-}
-
 export interface CiCdSolarSystemCoreStackProps extends SolarSystemCoreStackProps {
   cdkPipelineProps?: Partial<CdkPipelineProps>;
 }
@@ -57,9 +47,11 @@ export class CiCdSolarSystemCoreStack extends SolarSystemCoreStack implements IC
   }
 }
 
-export interface CiCdEcsSolarSystemCoreStackProps extends EcsSolarSystemCoreProps {
-  cdkPipelineProps?: Partial<CdkPipelineProps>;
+export interface ICiCdEcsSolarSystemCore extends IEcsSolarSystemCore {
+  deployProject?: IProject;
 }
+
+export interface CiCdEcsSolarSystemCoreStackProps extends CiCdSolarSystemCoreStackProps, EcsSolarSystemCoreProps {}
 
 export class CiCdEcsSolarSystemCoreStack extends EcsSolarSystemCoreStack implements ICiCdSolarSystemCore {
   readonly deployPipeline: CdkPipeline;
@@ -76,6 +68,12 @@ export class CiCdEcsSolarSystemCoreStack extends EcsSolarSystemCoreStack impleme
     this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
     this.deployProject = this.deployPipeline.Deploy;
   }
+}
+
+export interface ICiCdSolarSystemExtension<T extends ICiCdSolarSystemCore> extends Construct {
+  galaxy: IGalaxyExtension;
+  portal: T;
+  deployProject: IProject;
 }
 
 export interface CiCdSolarSystemExtensionStackProps extends SolarSystemExtensionStackProps {
@@ -97,15 +95,17 @@ export class CiCdSolarSystemExtensionStack<T extends ICiCdSolarSystemCore = ICiC
       ...props,
     });
 
-    const { ecs, cdkPipelineProps, portalProps } = props || {};
-
-    this.node.tryRemoveChild(this.portal.node.id);
-    this.portal = (ecs
-      ? new ImportedEcsSolarSystemCore(this, "'CiCd'", this.galaxy.portal, portalProps)
-      : new ImportedSolarSystemCore(this, "'CiCd'", this.galaxy.portal, portalProps)) as T;
+    const { cdkPipelineProps } = props || {};
 
     this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
     this.deployProject = this.deployPipeline.Deploy;
+  }
+
+  protected getPortal(props?: CiCdSolarSystemExtensionStackProps): T {
+    const galaxy = this.node.scope as IGalaxyExtension;
+    return (props?.ecs
+      ? new ImportedEcsSolarSystemCore(galaxy.portal, this.node.id, props?.portalProps)
+      : new ImportedSolarSystemCore(galaxy.portal, this.node.id, props?.portalProps)) as T;
   }
 }
 

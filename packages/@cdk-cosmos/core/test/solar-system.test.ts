@@ -1,6 +1,8 @@
 import '@aws-cdk/assert/jest';
 import { App } from '@aws-cdk/core';
 import { synthesizeStacks } from '../../../../src/test';
+import { CfnRoute } from '@aws-cdk/aws-ec2';
+import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
 import {
   CosmosCoreStack,
   CosmosExtensionStack,
@@ -9,7 +11,6 @@ import {
   SolarSystemCoreStack,
   SolarSystemExtensionStack,
 } from '../src';
-import { CfnRoute } from '@aws-cdk/aws-ec2';
 
 const app = new App();
 const env = { account: 'account', region: 'region' };
@@ -25,6 +26,11 @@ const solarSystem2 = new SolarSystemCoreStack(galaxy2, 'Sys2', { env: env2 });
 const cosmosExtension = new CosmosExtensionStack(app, 'Test', { env });
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });
 const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys', { env });
+// Test Resources for extension
+new ARecord(solarSystemExtension, 'test', {
+  zone: solarSystemExtension.portal.zone,
+  target: RecordTarget.fromIpAddresses('1.1.1.1'),
+});
 
 const [
   galaxyStack,

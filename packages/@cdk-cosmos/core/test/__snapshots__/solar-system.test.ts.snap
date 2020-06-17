@@ -1952,6 +1952,32 @@ Object {
 exports[`SolarSystem Extension should match snapshot 1`] = `
 Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Resources": Object {
+    "test": Object {
+      "Properties": Object {
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreGalSysZoneId",
+        },
+        "Name": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Fn::ImportValue": "CoreGalSysZoneName",
+              },
+              ".",
+            ],
+          ],
+        },
+        "ResourceRecords": Array [
+          "1.1.1.1",
+        ],
+        "TTL": "1800",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
 }
 `;
 

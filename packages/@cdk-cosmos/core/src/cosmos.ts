@@ -7,9 +7,16 @@ import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { CrossAccountExportsFn } from '@cosmos-building-blocks/common';
 import { IFunction, Function } from '@aws-cdk/aws-lambda';
-import { BaseStack, BaseStackOptions } from './components/base';
+import {
+  BaseStack,
+  BaseStackProps,
+  BaseConstruct,
+  BaseConstructProps,
+  BaseExtensionStack,
+  IBaseExtension,
+  BaseExtensionStackProps,
+} from './components/base';
 import { RemoteZone, RemoteCodeRepo, RemoteFunction } from './helpers/remote';
-import { COSMOS_PARTITION } from './helpers/constants';
 
 export interface ICosmosCore extends Construct {
   link?: ICosmosCoreLink;
@@ -21,17 +28,7 @@ export interface ICosmosCore extends Construct {
   networkBuilder?: NetworkBuilder;
 }
 
-export interface ICosmosCoreLink extends Construct {
-  cosmos: ICosmosCore;
-}
-
-export interface ICosmosExtension extends Construct {
-  portal: ICosmosCore;
-  libVersion: string;
-  cdkRepo: IRepository;
-}
-
-export interface CosmosCoreStackProps extends BaseStackOptions {
+export interface CosmosCoreStackProps extends BaseStackProps {
   tld: string;
 }
 
@@ -48,8 +45,8 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     super(scope, id, {
       description: 'Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole',
       partition: 'Core',
-      ...props,
       type: 'Cosmos',
+      ...props,
     });
 
     const { tld } = props;
@@ -82,9 +79,9 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
       role: this.cdkMasterRole,
     });
 
-    new CfnOutput(this, 'CoreId', {
-      exportName: this.singletonId('Id'),
-      value: id,
+    new CfnOutput(this, 'CoreName', {
+      exportName: this.singletonId('Name'),
+      value: this.node.name || this.node.id,
     });
     new CfnOutput(this, 'CoreLibVersion', {
       exportName: this.singletonId('LibVersion'),
@@ -97,6 +94,10 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
 
     Tag.add(this, 'cosmos', id);
   }
+}
+
+export interface ICosmosCoreLink extends Construct {
+  cosmos: ICosmosCore;
 }
 
 export class CosmosLinkStack extends BaseStack implements ICosmosCoreLink {
@@ -113,20 +114,24 @@ export class CosmosLinkStack extends BaseStack implements ICosmosCoreLink {
   }
 }
 
-export class ImportedCosmosCore extends Construct implements ICosmosCore {
-  readonly id: string;
+export interface ImportedCosmosCoreProps extends BaseConstructProps {}
+
+export class ImportedCosmosCore extends BaseConstruct implements ICosmosCore {
+  readonly name: string;
   readonly libVersion: string;
   readonly cdkRepo: IRepository;
   readonly rootZone: IHostedZone;
   readonly cdkMasterRoleStaticArn: string;
   readonly crossAccountExportsFn: IFunction;
 
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
-    this.node.type = 'Cosmos';
-    this.node.setContext(COSMOS_PARTITION, 'Core');
+  constructor(scope: Construct, id: string, props?: ImportedCosmosCoreProps) {
+    super(scope, id, {
+      type: 'Cosmos',
+      partition: 'Core',
+      ...props,
+    });
 
-    this.id = Fn.importValue(this.singletonId('Id'));
+    this.name = Fn.importValue(this.singletonId('Name'));
     this.libVersion = Fn.importValue(this.singletonId('LibVersion'));
     this.cdkRepo = RemoteCodeRepo.import(this, this.singletonId('CdkRepo'));
     this.rootZone = RemoteZone.import(this, this.singletonId('RootZone'));
@@ -135,20 +140,25 @@ export class ImportedCosmosCore extends Construct implements ICosmosCore {
   }
 }
 
-export class CosmosExtensionStack extends BaseStack implements ICosmosExtension {
-  readonly portal: ICosmosCore;
+export interface ICosmosExtension extends IBaseExtension<ICosmosCore> {
+  libVersion: string;
+  cdkRepo: IRepository;
+}
+
+export interface CosmosExtensionStackProps extends BaseExtensionStackProps<ImportedCosmosCoreProps> {}
+
+export class CosmosExtensionStack extends BaseExtensionStack<ICosmosCore> implements ICosmosExtension {
   readonly libVersion: string;
   readonly cdkRepo: IRepository;
 
-  constructor(scope: Construct, id: string, props?: BaseStackOptions) {
+  constructor(scope: Construct, id: string, props?: CosmosExtensionStackProps) {
     super(scope, id, {
       description: 'Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo',
       partition: 'App',
-      ...props,
       type: 'Cosmos',
+      ...props,
     });
 
-    this.portal = new ImportedCosmosCore(this, 'Default');
     this.libVersion = getPackageVersion();
 
     this.cdkRepo = new Repository(this, 'CdkRepo', {
@@ -157,6 +167,11 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
     });
 
     Tag.add(this, 'cosmos:extension', id);
+  }
+
+  protected getPortal(props?: CosmosExtensionStackProps): ICosmosCore {
+    const scope = new Construct(this, 'Default');
+    return new ImportedCosmosCore(scope, this.node.id, props?.portalProps);
   }
 }
 

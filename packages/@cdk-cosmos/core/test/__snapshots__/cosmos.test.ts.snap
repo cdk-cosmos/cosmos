@@ -36,17 +36,17 @@ Object {
         ],
       },
     },
-    "CoreId": Object {
-      "Export": Object {
-        "Name": "CoreId",
-      },
-      "Value": "Cos",
-    },
     "CoreLibVersion": Object {
       "Export": Object {
         "Name": "CoreLibVersion",
       },
       "Value": Any<String>,
+    },
+    "CoreName": Object {
+      "Export": Object {
+        "Name": "CoreName",
+      },
+      "Value": "Cos",
     },
     "CrossAccountExportsFnFunctionArn": Object {
       "Export": Object {

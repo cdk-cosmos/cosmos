@@ -3,18 +3,18 @@ import { PATTERN, COSMOS_PARTITION, COSMOS_VERSION } from './constants';
 import { IKeyValue, nodeId } from './generate-id';
 
 export interface IScope {
-  id: string;
+  name: string;
   type: string;
   pattern?: string;
 }
 
 export function generateSingletonId(props: {
   scope: IConstruct;
-  id?: string;
+  name?: string;
   type?: string;
   delimiter?: string;
 }): string {
-  const { scope, id, type, delimiter } = props;
+  const { scope, name, type, delimiter } = props;
   let pattern: string;
   switch (scope.node.type) {
     case 'Cosmos':
@@ -27,28 +27,28 @@ export function generateSingletonId(props: {
       pattern = PATTERN.SINGLETON_SOLAR_SYSTEM;
       break;
     default:
-      throw new Error(`Singleton Pattern could not be found for ${scope.node.id}`);
+      throw new Error(`Singleton Pattern could not be found for ${scope.node.uniqueId}`);
   }
-  return generateNodeId({ scope, pattern, id, type, delimiter });
+  return generateNodeId({ scope, pattern, name, type, delimiter });
 }
 
 export function generateNodeId(props: {
   scope: IConstruct;
-  id?: string;
+  name?: string;
   pattern?: string;
   type?: string;
   partition?: string;
   version?: string;
   delimiter?: string;
 }): string {
-  const { scope, id, pattern, type = 'Resource', partition, version, delimiter } = props;
+  const { scope, name, pattern, type = 'Resource', partition, version, delimiter } = props;
   return generateScopeId({
     scope,
     pattern,
     partition,
     version,
     delimiter,
-    scopes: id ? [{ id, type }] : [],
+    scopes: name ? [{ name, type }] : [],
     defaultPattern: PATTERN.COSMOS,
   });
 }
@@ -79,12 +79,14 @@ export const generateScopeId = (props: {
 };
 
 const getScopes = (scope: IConstruct): IScope[] =>
-  scope.node.scopes.map(x => x.node).map(x => ({ id: x.id, type: x.type || 'Resource', pattern: x.pattern }));
+  scope.node.scopes
+    .map(x => x.node)
+    .map(x => ({ name: x.name || x.id, type: x.type || 'Resource', pattern: x.pattern }));
 
 const getContext = (scopes: IScope[]): IKeyValue[] => {
   return scopes.reduce<IKeyValue[]>((context, scope) => {
-    if (scope.id) {
-      context.push({ key: scope.type, value: scope.id });
+    if (scope.name) {
+      context.push({ key: scope.type, value: scope.name });
       context.push({ key: 'Type', value: scope.type });
     }
     return context;
