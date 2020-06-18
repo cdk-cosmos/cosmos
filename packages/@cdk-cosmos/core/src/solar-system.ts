@@ -9,15 +9,7 @@ import {
   ZoneDelegationRecord,
 } from '@aws-cdk/aws-route53';
 import { isCrossAccount } from './helpers/utils';
-import {
-  BaseStack,
-  BaseStackProps,
-  BaseConstructProps,
-  BaseConstruct,
-  IBaseExtension,
-  BaseExtensionStackProps,
-  BaseExtensionStack,
-} from './components/base';
+import { BaseStack, BaseStackProps, BaseConstruct, BaseConstructProps } from './components/base';
 import { IGalaxyCore, IGalaxyExtension } from './galaxy';
 import { CoreVpc, CoreVpcProps, addCommonEndpoints } from './components/core-vpc';
 import { CrossAccountZoneDelegationRecord } from './components/cross-account';
@@ -117,6 +109,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
 }
 
 export interface ImportedSolarSystemCoreProps extends BaseConstructProps {
+  id?: string;
   vpcProps?: Partial<RemoteVpcImportProps>;
 }
 
@@ -127,6 +120,10 @@ export class ImportedSolarSystemCore extends BaseConstruct implements ISolarSyst
   readonly privateZone: IPrivateHostedZone;
 
   constructor(galaxy: IGalaxyCore, id: string, props?: ImportedSolarSystemCoreProps) {
+    id = props?.id || id;
+    const existing = galaxy.node.tryFindChild(id);
+    if (existing) return existing as ImportedSolarSystemCore;
+
     super(galaxy, id, {
       type: 'SolarSystem',
       ...props,
@@ -145,14 +142,18 @@ export class ImportedSolarSystemCore extends BaseConstruct implements ISolarSyst
   }
 }
 
-export interface ISolarSystemExtension extends IBaseExtension<ISolarSystemCore> {
+export interface ISolarSystemExtension extends Construct {
   galaxy: IGalaxyExtension;
+  portal: ISolarSystemCore;
 }
 
-export interface SolarSystemExtensionStackProps extends BaseExtensionStackProps<ImportedSolarSystemCoreProps> {}
+export interface SolarSystemExtensionStackProps extends BaseStackProps {
+  portalProps?: ImportedSolarSystemCoreProps;
+}
 
-export class SolarSystemExtensionStack extends BaseExtensionStack<ISolarSystemCore> implements ISolarSystemExtension {
+export class SolarSystemExtensionStack extends BaseStack implements ISolarSystemExtension {
   readonly galaxy: IGalaxyExtension;
+  readonly portal: ISolarSystemCore;
 
   constructor(galaxy: IGalaxyExtension, id: string, props?: SolarSystemExtensionStackProps) {
     super(galaxy, id, {
@@ -163,6 +164,7 @@ export class SolarSystemExtensionStack extends BaseExtensionStack<ISolarSystemCo
     });
 
     this.galaxy = galaxy;
+    this.portal = this.getPortal(props);
 
     Tag.add(this, 'cosmos:solarsystem:extension', id);
   }

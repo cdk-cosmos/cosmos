@@ -3,15 +3,7 @@ import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 import { Vpc } from '@aws-cdk/aws-ec2';
 import { isCrossAccount } from './helpers/utils';
-import {
-  BaseStack,
-  BaseStackProps,
-  BaseConstruct,
-  BaseConstructProps,
-  BaseExtensionStack,
-  IBaseExtension,
-  BaseExtensionStackProps,
-} from './components/base';
+import { BaseStack, BaseStackProps, BaseConstruct, BaseConstructProps } from './components/base';
 import { ICosmosCore, ICosmosExtension } from './cosmos';
 import { CoreVpcProps, CoreVpc, addCommonEndpoints, addEcsEndpoints } from './components/core-vpc';
 import { PATTERN } from './helpers/constants';
@@ -86,14 +78,18 @@ export class ImportedGalaxyCore extends BaseConstruct implements IGalaxyCore {
   }
 }
 
-export interface IGalaxyExtension extends IBaseExtension<IGalaxyCore> {
+export interface IGalaxyExtension extends Construct {
   cosmos: ICosmosExtension;
+  portal: IGalaxyCore;
 }
 
-export interface GalaxyExtensionStackProps extends BaseExtensionStackProps<ImportedGalaxyCoreProps> {}
+export interface GalaxyExtensionStackProps extends BaseStackProps {
+  portalProps?: ImportedGalaxyCoreProps;
+}
 
-export class GalaxyExtensionStack extends BaseExtensionStack<IGalaxyCore> implements IGalaxyExtension {
+export class GalaxyExtensionStack extends BaseStack implements IGalaxyExtension {
   readonly cosmos: ICosmosExtension;
+  readonly portal: IGalaxyCore;
 
   constructor(cosmos: ICosmosExtension, id: string, props?: GalaxyExtensionStackProps) {
     super(cosmos, id, {
@@ -103,12 +99,8 @@ export class GalaxyExtensionStack extends BaseExtensionStack<IGalaxyCore> implem
     });
 
     this.cosmos = cosmos;
+    this.portal = new ImportedGalaxyCore(cosmos.portal, this.node.id, props?.portalProps);
 
     Tag.add(this, 'cosmos:galaxy:extension', id);
-  }
-
-  protected getPortal(props?: GalaxyExtensionStackProps): IGalaxyCore {
-    const cosmos = this.node.scope as ICosmosExtension;
-    return new ImportedGalaxyCore(cosmos.portal, this.node.id, props?.portalProps);
   }
 }

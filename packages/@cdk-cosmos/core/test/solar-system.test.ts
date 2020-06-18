@@ -184,7 +184,7 @@ describe('SolarSystem Extension', () => {
     const cosmos = new CosmosExtensionStack(app, 'Test', { env });
     const galaxy = new GalaxyExtensionStack(cosmos, 'Test');
     const sys = new SolarSystemExtensionStack(galaxy, 'Test', {});
-    const sys2 = new SolarSystemExtensionStack(galaxy, 'Test2', { portalProps: { name: 'Test' } });
+    const sys2 = new SolarSystemExtensionStack(galaxy, 'Test2', { portalProps: { id: 'Test' } });
     new ARecord(sys, 'Test', {
       zone: sys.portal.zone,
       target: RecordTarget.fromIpAddresses('1.1.1.1'),
