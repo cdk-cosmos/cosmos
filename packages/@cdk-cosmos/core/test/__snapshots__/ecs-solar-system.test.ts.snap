@@ -361,6 +361,12 @@ Object {
     "Cluster": Object {
       "Properties": Object {
         "ClusterName": "CoreGalSysCluster",
+        "ClusterSettings": Array [
+          Object {
+            "Name": "containerInsights",
+            "Value": "enabled",
+          },
+        ],
         "Tags": Array [
           Object {
             "Key": "cosmos",

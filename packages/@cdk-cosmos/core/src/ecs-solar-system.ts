@@ -68,6 +68,7 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
     }
 
     this.cluster = new Cluster(this, 'Cluster', {
+      containerInsights: true,
       ...clusterProps,
       clusterName: this.singletonId('Cluster'),
       vpc: this.vpc,
