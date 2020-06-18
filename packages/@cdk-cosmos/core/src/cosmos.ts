@@ -71,10 +71,6 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
       role: this.cdkMasterRole,
     });
 
-    new CfnOutput(this, 'CoreName', {
-      exportName: this.singletonId('Name'),
-      value: this.node.id,
-    });
     new CfnOutput(this, 'CoreLibVersion', {
       exportName: this.singletonId('LibVersion'),
       value: this.libVersion,
@@ -123,7 +119,6 @@ export class ImportedCosmosCore extends BaseConstruct implements ICosmosCore {
       ...props,
     });
 
-    this.name = Fn.importValue(this.singletonId('Name'));
     this.libVersion = Fn.importValue(this.singletonId('LibVersion'));
     this.cdkRepo = RemoteCodeRepo.import(this, this.singletonId('CdkRepo'));
     this.rootZone = RemoteZone.import(this, this.singletonId('RootZone'));

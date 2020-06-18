@@ -42,12 +42,6 @@ Object {
       },
       "Value": Any<String>,
     },
-    "CoreName": Object {
-      "Export": Object {
-        "Name": "CoreName",
-      },
-      "Value": "Cos",
-    },
     "CrossAccountExportsFnFunctionArn": Object {
       "Export": Object {
         "Name": "CoreCrossAccountExportsFnArn",
