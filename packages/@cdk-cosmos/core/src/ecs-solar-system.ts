@@ -33,7 +33,7 @@ export interface IEcsSolarSystemCore extends ISolarSystemCore {
   alb: IApplicationLoadBalancer;
   httpListener: IApplicationListener;
   httpInternalListener: IApplicationListener;
-  // HttpsListener: IApplicationListener;
+  httpsListener: IApplicationListener;
 }
 
 export interface IEcsSolarSystemExtension extends ISolarSystemExtension {
@@ -157,7 +157,7 @@ export class ImportedEcsSolarSystemCore extends ImportedSolarSystemCore implemen
   readonly alb: IApplicationLoadBalancer;
   readonly httpListener: IApplicationListener;
   readonly httpInternalListener: IApplicationListener;
-  // readonly HttpsListener: IApplicationListener;
+  readonly httpsListener: IApplicationListener;
 
   constructor(scope: Construct, id: string, galaxy: IGalaxyCore, props?: ImportedSolarSystemCoreProps) {
     super(scope, id, galaxy, props);
@@ -166,6 +166,7 @@ export class ImportedEcsSolarSystemCore extends ImportedSolarSystemCore implemen
     this.alb = RemoteAlb.import(this, this.singletonId('Alb'));
     this.httpListener = RemoteApplicationListener.import(this, this.singletonId('HttpListener'));
     this.httpInternalListener = RemoteApplicationListener.import(this, this.singletonId('HttpInternalListener'));
+    this.httpsListener = RemoteApplicationListener.import(this, this.singletonId('HttpsListener'));
   }
 }
 
