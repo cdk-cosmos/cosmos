@@ -52,7 +52,7 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
   readonly alb: ApplicationLoadBalancer;
   readonly httpListener: ApplicationListener;
   readonly httpInternalListener: ApplicationListener;
-  // readonly HttpsListener: ApplicationListener;
+  readonly httpsListener: ApplicationListener;
 
   constructor(galaxy: IGalaxyCore, id: string, props?: EcsSolarSystemCoreProps) {
     super(galaxy, id, {
@@ -114,11 +114,19 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
       port: 81,
     });
 
-    // TODO: ?
-    // this.httpListener = this.alb.addListener("HttpsListener", {
-    //   port: 443,
-    //   open: true
-    // });
+    if (this.certificate !== undefined) {
+      this.httpsListener = this.alb.addListener('HttpsListener', {
+        port: 443,
+        protocol: ApplicationProtocol.HTTPS,
+        certificates: [this.certificate],
+        open: false,
+      });
+      this.httpsListener.addFixedResponse('Default', {
+        statusCode: '404',
+        contentType: ContentType.TEXT_PLAIN,
+        messageBody: 'Route Not Found.',
+      });
+    }
 
     for (const listener of [this.httpListener, this.httpInternalListener]) {
       listener.addFixedResponse('Default', {
@@ -132,6 +140,7 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
     RemoteAlb.export(this.alb, this.singletonId('Alb'));
     RemoteApplicationListener.export(this.httpListener, this.singletonId('HttpListener'));
     RemoteApplicationListener.export(this.httpInternalListener, this.singletonId('HttpInternalListener'));
+    RemoteApplicationListener.export(this.httpsListener, this.singletonId('HttpsListener'));
   }
 
   addCpuAutoScaling(props: Partial<CpuUtilizationScalingProps>): void {

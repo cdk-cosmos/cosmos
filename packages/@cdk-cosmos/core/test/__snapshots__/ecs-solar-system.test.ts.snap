@@ -67,6 +67,25 @@ Object {
         ],
       },
     },
+    "AlbHttpsListenerAlArn": Object {
+      "Export": Object {
+        "Name": "CoreGalSysHttpsListenerArn",
+      },
+      "Value": Object {
+        "Ref": "AlbHttpsListener",
+      },
+    },
+    "AlbHttpsListenerAlSecurityGroupId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysHttpsListenerSecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "AlbSecurityGroup",
+          "GroupId",
+        ],
+      },
+    },
     "ClusterClusterName": Object {
       "Export": Object {
         "Name": "CoreGalSysClusterName",
@@ -288,6 +307,36 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
+    "AlbHttpsListener": Object {
+      "Properties": Object {
+        "Certificates": Array [
+          Object {
+            "CertificateArn": Object {
+              "Fn::GetAtt": Array [
+                "CertificateCertificateRequestorResource",
+                "Arn",
+              ],
+            },
+          },
+        ],
+        "DefaultActions": Array [
+          Object {
+            "FixedResponseConfig": Object {
+              "ContentType": "text/plain",
+              "MessageBody": "Route Not Found.",
+              "StatusCode": "404",
+            },
+            "Type": "fixed-response",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "Alb",
+        },
+        "Port": 443,
+        "Protocol": "HTTPS",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
     "AlbRecord": Object {
       "Properties": Object {
         "AliasTarget": Object {
@@ -357,6 +406,153 @@ Object {
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
+    },
+    "CertificateCertificateRequestorFunction": Object {
+      "DependsOn": Array [
+        "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy",
+        "CertificateCertificateRequestorFunctionServiceRole",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "mock-s3BucketName",
+          "S3Key": "mock-s3ObjectKey",
+        },
+        "Handler": "index.certificateRequestHandler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CertificateCertificateRequestorFunctionServiceRole",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs10.x",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CertificateCertificateRequestorFunctionServiceRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "acm:RequestCertificate",
+                "acm:DescribeCertificate",
+                "acm:DeleteCertificate",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "route53:GetChange",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "route53:changeResourceRecordSets",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":route53:::hostedzone/",
+                    Object {
+                      "Ref": "Zone",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy",
+        "Roles": Array [
+          Object {
+            "Ref": "CertificateCertificateRequestorFunctionServiceRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CertificateCertificateRequestorResource": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "DomainName": "*.sys.cos.com",
+        "HostedZoneId": Object {
+          "Ref": "Zone",
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "CertificateCertificateRequestorFunction",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::CustomResource",
+      "UpdateReplacePolicy": "Delete",
     },
     "Cluster": Object {
       "Properties": Object {

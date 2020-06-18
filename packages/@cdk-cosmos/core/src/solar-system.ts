@@ -1,6 +1,7 @@
 import { Construct, Duration, Tag } from '@aws-cdk/core';
 import { IVpc, Vpc } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
+import { Certificate, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
 import {
   IPublicHostedZone,
   IPrivateHostedZone,
@@ -22,6 +23,7 @@ export interface ISolarSystemCore extends Construct {
   zone: IPublicHostedZone;
   privateZone: IPrivateHostedZone;
   networkBuilder?: NetworkBuilder;
+  certificate?: Certificate;
 }
 
 export interface ISolarSystemExtension extends Construct {
@@ -31,6 +33,7 @@ export interface ISolarSystemExtension extends Construct {
 
 export interface SolarSystemCoreStackProps extends BaseStackOptions {
   vpc?: Vpc;
+  cert?: boolean;
   vpcProps?: Partial<CoreVpcProps> & {
     defaultEndpoints?: boolean;
   };
@@ -45,6 +48,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
   readonly vpc: Vpc;
   readonly zone: PublicHostedZone;
   readonly privateZone: PrivateHostedZone;
+  readonly certificate?: Certificate;
 
   constructor(galaxy: IGalaxyCore, id: string, props?: SolarSystemCoreStackProps) {
     super(galaxy, id, {
@@ -53,7 +57,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
       type: 'SolarSystem',
     });
 
-    const { vpc, vpcProps = {}, zoneProps = {} } = props || {};
+    const { vpc, cert = true, vpcProps = {}, zoneProps = {} } = props || {};
     const { defaultEndpoints = true } = vpcProps;
     const { linkZone = true, ttl = Duration.minutes(30) } = zoneProps;
 
@@ -83,6 +87,14 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
       zoneName: `${id}.${rootZone.zoneName}`.toLowerCase(),
       comment: `Core Main Zone for ${id} SolarSystem`,
     });
+    if (cert) {
+      this.certificate = new DnsValidatedCertificate(this, 'Certificate', {
+        hostedZone: this.zone,
+        domainName: `*.${this.zone.zoneName}`,
+      });
+    } else {
+      this.certificate = undefined;
+    }
     this.privateZone = new PrivateHostedZone(this, 'PrivateZone', {
       vpc: this.vpc,
       zoneName: `${id}.internal`.toLowerCase(),
