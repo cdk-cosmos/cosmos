@@ -1,5 +1,5 @@
 import { Construct } from '@aws-cdk/core';
-import { InstanceType, SecurityGroup } from '@aws-cdk/aws-ec2';
+import { InstanceType, SecurityGroup, Peer } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster, ClusterProps, AddCapacityOptions, CpuUtilizationScalingProps } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
@@ -34,6 +34,7 @@ export interface IEcsSolarSystemCore extends ISolarSystemCore {
   httpListener: IApplicationListener;
   httpInternalListener: IApplicationListener;
   httpsListener: IApplicationListener;
+  httpsInternalListener: IApplicationListener;
 }
 
 export interface IEcsSolarSystemExtension extends ISolarSystemExtension {
@@ -44,6 +45,7 @@ export interface EcsSolarSystemCoreProps extends SolarSystemCoreStackProps {
   clusterProps?: Partial<ClusterProps>;
   clusterCapacityProps?: Partial<AddCapacityOptions>;
   albProps?: Partial<ApplicationLoadBalancerProps>;
+  listenerInboundCidr?: string;
 }
 
 export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEcsSolarSystemCore {
@@ -53,6 +55,7 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
   readonly httpListener: ApplicationListener;
   readonly httpInternalListener: ApplicationListener;
   readonly httpsListener: ApplicationListener;
+  readonly httpsInternalListener: ApplicationListener;
 
   constructor(galaxy: IGalaxyCore, id: string, props?: EcsSolarSystemCoreProps) {
     super(galaxy, id, {
@@ -60,7 +63,13 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
       ...props,
     });
 
-    const { vpcProps = {}, clusterProps = {}, clusterCapacityProps = {}, albProps = {} } = props || {};
+    const {
+      listenerInboundCidr = '0.0.0.0/0',
+      vpcProps = {},
+      clusterProps = {},
+      clusterCapacityProps = {},
+      albProps = {},
+    } = props || {};
     const { defaultEndpoints = true } = vpcProps;
 
     // Only add endpoints if this component owens the Vpc.
@@ -107,11 +116,13 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
 
     this.httpListener = this.alb.addListener('HttpListener', {
       protocol: ApplicationProtocol.HTTP,
+      open: false,
     });
 
     this.httpInternalListener = this.alb.addListener('HttpInternalListener', {
       protocol: ApplicationProtocol.HTTP,
-      port: 81,
+      port: 8080,
+      open: false,
     });
 
     if (this.certificate !== undefined) {
@@ -119,27 +130,39 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
         port: 443,
         protocol: ApplicationProtocol.HTTPS,
         certificates: [this.certificate],
+        open: false,
       });
-      this.httpsListener.addFixedResponse('Default', {
-        statusCode: '404',
-        contentType: ContentType.TEXT_PLAIN,
-        messageBody: 'Route Not Found.',
+      this.httpsInternalListener = this.alb.addListener('HttpsInternalListener', {
+        port: 8443,
+        protocol: ApplicationProtocol.HTTPS,
+        certificates: [this.certificate],
+        open: false,
       });
+      RemoteApplicationListener.export(this.httpsListener, this.singletonId('HttpsListener'));
+      RemoteApplicationListener.export(this.httpsInternalListener, this.singletonId('HttpsInternalListener'));
     }
 
-    for (const listener of [this.httpListener, this.httpInternalListener]) {
-      listener.addFixedResponse('Default', {
-        statusCode: '404',
-        contentType: ContentType.TEXT_PLAIN,
-        messageBody: 'Route Not Found.',
-      });
-    }
+    [this.httpListener, this.httpInternalListener, this.httpsListener, this.httpsInternalListener]
+      .filter(listener => listener)
+      .forEach(listener => this.configureListener(listener, listenerInboundCidr));
 
     RemoteCluster.export(this.cluster, this.singletonId('Cluster'));
     RemoteAlb.export(this.alb, this.singletonId('Alb'));
     RemoteApplicationListener.export(this.httpListener, this.singletonId('HttpListener'));
     RemoteApplicationListener.export(this.httpInternalListener, this.singletonId('HttpInternalListener'));
-    RemoteApplicationListener.export(this.httpsListener, this.singletonId('HttpsListener'));
+  }
+
+  private configureListener(listener: ApplicationListener, listenerInboundCidr?: string | null): void {
+    listener.addFixedResponse('Default', {
+      statusCode: '404',
+      contentType: ContentType.TEXT_PLAIN,
+      messageBody: 'Route Not Found.',
+    });
+    if (listenerInboundCidr) {
+      listener.connections.allowDefaultPortFrom(Peer.ipv4(listenerInboundCidr));
+    } else {
+      listener.connections.allowDefaultPortFrom(Peer.anyIpv4());
+    }
   }
 
   addCpuAutoScaling(props: Partial<CpuUtilizationScalingProps>): void {
@@ -158,6 +181,7 @@ export class ImportedEcsSolarSystemCore extends ImportedSolarSystemCore implemen
   readonly httpListener: IApplicationListener;
   readonly httpInternalListener: IApplicationListener;
   readonly httpsListener: IApplicationListener;
+  readonly httpsInternalListener: IApplicationListener;
 
   constructor(scope: Construct, id: string, galaxy: IGalaxyCore, props?: ImportedSolarSystemCoreProps) {
     super(scope, id, galaxy, props);
@@ -167,6 +191,7 @@ export class ImportedEcsSolarSystemCore extends ImportedSolarSystemCore implemen
     this.httpListener = RemoteApplicationListener.import(this, this.singletonId('HttpListener'));
     this.httpInternalListener = RemoteApplicationListener.import(this, this.singletonId('HttpInternalListener'));
     this.httpsListener = RemoteApplicationListener.import(this, this.singletonId('HttpsListener'));
+    this.httpsInternalListener = RemoteApplicationListener.import(this, this.singletonId('HttpsInternalListener'));
   }
 }
 

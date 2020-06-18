@@ -92,9 +92,8 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
         hostedZone: this.zone,
         domainName: `*.${this.zone.zoneName}`,
       });
-    } else {
-      this.certificate = undefined;
     }
+
     this.privateZone = new PrivateHostedZone(this, 'PrivateZone', {
       vpc: this.vpc,
       zoneName: `${id}.internal`.toLowerCase(),
