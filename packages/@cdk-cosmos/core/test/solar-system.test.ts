@@ -179,6 +179,26 @@ describe('SolarSystem Extension', () => {
     expect(stack.template).toMatchSnapshot();
   });
 
+  test('should be able to target the same SolarSystem from multiple Stacks', () => {
+    const app = new App();
+    const cosmos = new CosmosExtensionStack(app, 'Test', { env });
+    const galaxy = new GalaxyExtensionStack(cosmos, 'Test');
+    const sys = new SolarSystemExtensionStack(galaxy, 'Test', {});
+    const sys2 = new SolarSystemExtensionStack(galaxy, 'Test2', { portalProps: { name: 'Test' } });
+    new ARecord(sys, 'Test', {
+      zone: sys.portal.zone,
+      target: RecordTarget.fromIpAddresses('1.1.1.1'),
+    });
+    new ARecord(sys2, 'Test', {
+      zone: sys2.portal.zone,
+      target: RecordTarget.fromIpAddresses('1.1.1.1'),
+    });
+
+    const [stack1, stack2] = synthesizeStacks(sys, sys2);
+    expect(stack1.template).toMatchSnapshot();
+    expect(stack2.template).toMatchSnapshot();
+  });
+
   test('should match snapshot', () => {
     expect(solarSystemExtensionStack.template).toMatchSnapshot();
   });
