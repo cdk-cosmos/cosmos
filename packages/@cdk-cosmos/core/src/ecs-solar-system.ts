@@ -119,7 +119,6 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
         port: 443,
         protocol: ApplicationProtocol.HTTPS,
         certificates: [this.certificate],
-        open: false,
       });
       this.httpsListener.addFixedResponse('Default', {
         statusCode: '404',

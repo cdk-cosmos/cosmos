@@ -386,6 +386,13 @@ Object {
             "IpProtocol": "tcp",
             "ToPort": 81,
           },
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 443",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
         ],
         "Tags": Array [
           Object {
