@@ -15,13 +15,19 @@ const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'cos.com' });
 const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { cidr: '10.0.1.0/22' });
 const galaxyVpc = galaxy.addSharedVpc();
 const ecsSolarSystem = new EcsSolarSystemCoreStack(galaxy, 'Sys', { vpc: galaxyVpc });
+const ecsSolarSystem1 = new EcsSolarSystemCoreStack(galaxy, 'Sys1', {
+  vpc: galaxyVpc,
+  listenerInboundCidr: '10.0.0.0/8',
+  cert: false,
+});
 
 const cosmosExtension = new CosmosExtensionStack(app, 'Test');
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal');
 const ecsSolarSystemExtension = new EcsSolarSystemExtensionStack(galaxyExtension, 'Sys');
 
-const [devEcsSolarSystemStack, devEcsSolarSystemExtensionStack] = synthesizeStacks(
+const [devEcsSolarSystemStack, devEcsSolarSystemStack1, devEcsSolarSystemExtensionStack] = synthesizeStacks(
   ecsSolarSystem,
+  ecsSolarSystem1,
   ecsSolarSystemExtension
 );
 
@@ -33,6 +39,54 @@ describe('ECS-Solar-System', () => {
     expect(devEcsSolarSystemStack).toHaveOutput({ exportName: 'CoreGalSysClusterName' });
     expect(devEcsSolarSystemStack).toHaveOutput({ exportName: 'CoreGalSysAlbArn' });
     expect(devEcsSolarSystemStack).toHaveOutput({ exportName: 'CoreGalSysHttpListenerArn' });
+    const sgIngress = [
+      {
+        CidrIp: '0.0.0.0/0',
+        Description: 'from 0.0.0.0/0:80',
+        FromPort: 80,
+        IpProtocol: 'tcp',
+        ToPort: 80,
+      },
+      {
+        CidrIp: '0.0.0.0/0',
+        Description: 'from 0.0.0.0/0:8080',
+        FromPort: 8080,
+        IpProtocol: 'tcp',
+        ToPort: 8080,
+      },
+      {
+        CidrIp: '0.0.0.0/0',
+        Description: 'from 0.0.0.0/0:443',
+        FromPort: 443,
+        IpProtocol: 'tcp',
+        ToPort: 443,
+      },
+      {
+        CidrIp: '0.0.0.0/0',
+        Description: 'from 0.0.0.0/0:8443',
+        FromPort: 8443,
+        IpProtocol: 'tcp',
+        ToPort: 8443,
+      },
+    ];
+    expect(devEcsSolarSystemStack).toHaveResource('AWS::EC2::SecurityGroup', { SecurityGroupIngress: sgIngress });
+    const sgIngress1 = [
+      {
+        CidrIp: '10.0.0.0/8',
+        Description: 'from 10.0.0.0/8:80',
+        FromPort: 80,
+        IpProtocol: 'tcp',
+        ToPort: 80,
+      },
+      {
+        CidrIp: '10.0.0.0/8',
+        Description: 'from 10.0.0.0/8:8080',
+        FromPort: 8080,
+        IpProtocol: 'tcp',
+        ToPort: 8080,
+      },
+    ];
+    expect(devEcsSolarSystemStack1).toHaveResource('AWS::EC2::SecurityGroup', { SecurityGroupIngress: sgIngress1 });
   });
 
   test('should match snapshot', () => {
