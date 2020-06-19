@@ -33,8 +33,8 @@ export interface IEcsSolarSystemCore extends ISolarSystemCore {
   alb: IApplicationLoadBalancer;
   httpListener: IApplicationListener;
   httpInternalListener: IApplicationListener;
-  httpsListener: IApplicationListener;
-  httpsInternalListener: IApplicationListener;
+  httpsListener?: IApplicationListener;
+  httpsInternalListener?: IApplicationListener;
 }
 
 export interface IEcsSolarSystemExtension extends ISolarSystemExtension {
@@ -54,8 +54,8 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
   readonly alb: ApplicationLoadBalancer;
   readonly httpListener: ApplicationListener;
   readonly httpInternalListener: ApplicationListener;
-  readonly httpsListener: ApplicationListener;
-  readonly httpsInternalListener: ApplicationListener;
+  readonly httpsListener?: ApplicationListener;
+  readonly httpsInternalListener?: ApplicationListener;
 
   constructor(galaxy: IGalaxyCore, id: string, props?: EcsSolarSystemCoreProps) {
     super(galaxy, id, {
@@ -144,7 +144,7 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
 
     [this.httpListener, this.httpInternalListener, this.httpsListener, this.httpsInternalListener]
       .filter(listener => listener)
-      .forEach(listener => this.configureListener(listener, listenerInboundCidr));
+      .forEach(listener => this.configureListener(listener as ApplicationListener, listenerInboundCidr));
 
     RemoteCluster.export(this.cluster, this.singletonId('Cluster'));
     RemoteAlb.export(this.alb, this.singletonId('Alb'));
