@@ -3,10 +3,10 @@ import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 import { Vpc } from '@aws-cdk/aws-ec2';
 import { isCrossAccount } from './helpers/utils';
-import { BaseStack, BaseStackOptions } from './components/base';
+import { BaseStack, BaseStackProps, BaseConstruct, BaseConstructProps } from './components/base';
 import { ICosmosCore, ICosmosExtension } from './cosmos';
 import { CoreVpcProps, CoreVpc, addCommonEndpoints, addEcsEndpoints } from './components/core-vpc';
-import { COSMOS_PARTITION, PATTERN } from './helpers/constants';
+import { PATTERN } from './helpers/constants';
 
 export interface IGalaxyCore extends Construct {
   cosmos: ICosmosCore;
@@ -14,13 +14,7 @@ export interface IGalaxyCore extends Construct {
   networkBuilder?: NetworkBuilder;
 }
 
-export interface IGalaxyExtension extends Construct {
-  cosmos: ICosmosExtension;
-  portal: IGalaxyCore;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface GalaxyCoreStackProps extends BaseStackOptions {}
+export interface GalaxyCoreStackProps extends BaseStackProps {}
 
 export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
   readonly cosmos: ICosmosCore;
@@ -31,8 +25,8 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
   constructor(cosmos: ICosmosCore, id: string, props?: GalaxyCoreStackProps) {
     super(cosmos, id, {
       description: 'Cosmos Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.',
-      ...props,
       type: 'Galaxy',
+      ...props,
     });
 
     this.cosmos = cosmos;
@@ -69,31 +63,43 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
   }
 }
 
-export class ImportedGalaxyCore extends Construct implements IGalaxyCore {
+export interface ImportedGalaxyCoreProps extends BaseConstructProps {}
+
+export class ImportedGalaxyCore extends BaseConstruct implements IGalaxyCore {
   readonly cosmos: ICosmosCore;
 
-  constructor(scope: Construct, id: string, cosmos: ICosmosCore) {
-    super(scope, id);
-    this.node.type = 'Galaxy';
-    this.node.setContext(COSMOS_PARTITION, 'Core');
+  constructor(cosmos: ICosmosCore, id: string, props?: ImportedGalaxyCoreProps) {
+    super(cosmos, id, {
+      type: 'Galaxy',
+      ...props,
+    });
 
     this.cosmos = cosmos;
   }
+}
+
+export interface IGalaxyExtension extends Construct {
+  cosmos: ICosmosExtension;
+  portal: IGalaxyCore;
+}
+
+export interface GalaxyExtensionStackProps extends BaseStackProps {
+  portalProps?: ImportedGalaxyCoreProps;
 }
 
 export class GalaxyExtensionStack extends BaseStack implements IGalaxyExtension {
   readonly cosmos: ICosmosExtension;
   readonly portal: IGalaxyCore;
 
-  constructor(cosmos: ICosmosExtension, id: string, props?: BaseStackOptions) {
+  constructor(cosmos: ICosmosExtension, id: string, props?: GalaxyExtensionStackProps) {
     super(cosmos, id, {
       description: 'Cosmos Galaxy Extension: App resources dependant on each Aws Account.',
-      ...props,
       type: 'Galaxy',
+      ...props,
     });
 
     this.cosmos = cosmos;
-    this.portal = new ImportedGalaxyCore(this, 'Default', this.cosmos.portal);
+    this.portal = new ImportedGalaxyCore(cosmos.portal, this.node.id, props?.portalProps);
 
     Tag.add(this, 'cosmos:galaxy:extension', id);
   }

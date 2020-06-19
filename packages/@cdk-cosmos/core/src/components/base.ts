@@ -5,23 +5,36 @@ import { Stack, StackProps } from '@aws-cdk/core/lib/stack';
 import { PATTERN, COSMOS_PARTITION, COSMOS_VERSION, COSMOS_NETWORK_BUILDER, AWS_ENV } from '../helpers/constants';
 import { generateNodeId, generateScopeId, generateSingletonId } from '../helpers/generate-scope-id';
 
-export interface BaseStackOptions extends StackProps {
+export interface BaseConstructProps {
+  type?: string;
   partition?: string;
   version?: string;
-  disableCosmosNaming?: boolean;
-  cidr?: string;
 }
 
-export interface BaseStackProps extends BaseStackOptions {
-  type: string;
+export class BaseConstruct extends Construct {
+  constructor(scope: Construct, id: string, props?: BaseConstructProps) {
+    super(scope, id);
+
+    const { type, partition, version } = props || {};
+
+    this.node.type = type;
+
+    if (partition) this.node.setContext(COSMOS_PARTITION, partition);
+    if (version) this.node.setContext(COSMOS_VERSION, version);
+  }
+}
+
+export interface BaseStackProps extends BaseConstructProps, StackProps {
+  disableCosmosNaming?: boolean;
+  cidr?: string;
 }
 
 export class BaseStack extends Stack {
   private readonly disableCosmosNaming: boolean;
   public readonly networkBuilder?: NetworkBuilder;
 
-  constructor(scope: Construct, id: string, props: BaseStackProps) {
-    const { partition, version, type, disableCosmosNaming = false, env, cidr } = props;
+  constructor(scope: Construct, id: string, props?: BaseStackProps) {
+    const { partition, version, type, disableCosmosNaming = false, env, cidr } = props || {};
     const stackName = generateNodeId({ scope, id, type, partition, version, pattern: PATTERN.STACK });
 
     super(scope, id, {
@@ -51,7 +64,6 @@ export class BaseStack extends Stack {
 
 declare module '@aws-cdk/core/lib/construct-compat' {
   interface ConstructNode {
-    id: string;
     type?: string;
     pattern?: string;
   }

@@ -1378,6 +1378,12 @@ Object {
     "Cluster": Object {
       "Properties": Object {
         "ClusterName": "CoreGalCiCdCluster",
+        "ClusterSettings": Array [
+          Object {
+            "Name": "containerInsights",
+            "Value": "enabled",
+          },
+        ],
         "Tags": Array [
           Object {
             "Key": "cosmos",

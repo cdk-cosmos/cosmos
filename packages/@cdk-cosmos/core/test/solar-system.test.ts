@@ -1,6 +1,8 @@
 import '@aws-cdk/assert/jest';
 import { App } from '@aws-cdk/core';
 import { synthesizeStacks } from '../../../../src/test';
+import { CfnRoute } from '@aws-cdk/aws-ec2';
+import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
 import {
   CosmosCoreStack,
   CosmosExtensionStack,
@@ -9,7 +11,6 @@ import {
   SolarSystemCoreStack,
   SolarSystemExtensionStack,
 } from '../src';
-import { CfnRoute } from '@aws-cdk/aws-ec2';
 
 const app = new App();
 const env = { account: 'account', region: 'region' };
@@ -25,6 +26,11 @@ const solarSystem2 = new SolarSystemCoreStack(galaxy2, 'Sys2', { env: env2 });
 const cosmosExtension = new CosmosExtensionStack(app, 'Test', { env });
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });
 const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys', { env });
+// Test Resources for extension
+new ARecord(solarSystemExtension, 'test', {
+  zone: solarSystemExtension.portal.zone,
+  target: RecordTarget.fromIpAddresses('1.1.1.1'),
+});
 
 const [
   galaxyStack,
@@ -171,6 +177,26 @@ describe('SolarSystem Extension', () => {
 
     const [stack] = synthesizeStacks(sys);
     expect(stack.template).toMatchSnapshot();
+  });
+
+  test('should be able to target the same SolarSystem from multiple Stacks', () => {
+    const app = new App();
+    const cosmos = new CosmosExtensionStack(app, 'Test', { env });
+    const galaxy = new GalaxyExtensionStack(cosmos, 'Test');
+    const sys = new SolarSystemExtensionStack(galaxy, 'Test', {});
+    const sys2 = new SolarSystemExtensionStack(galaxy, 'Test2', { portalProps: { id: 'Test' } });
+    new ARecord(sys, 'Test', {
+      zone: sys.portal.zone,
+      target: RecordTarget.fromIpAddresses('1.1.1.1'),
+    });
+    new ARecord(sys2, 'Test', {
+      zone: sys2.portal.zone,
+      target: RecordTarget.fromIpAddresses('1.1.1.1'),
+    });
+
+    const [stack1, stack2] = synthesizeStacks(sys, sys2);
+    expect(stack1.template).toMatchSnapshot();
+    expect(stack2.template).toMatchSnapshot();
   });
 
   test('should match snapshot', () => {

@@ -27,7 +27,7 @@ export function generateSingletonId(props: {
       pattern = PATTERN.SINGLETON_SOLAR_SYSTEM;
       break;
     default:
-      throw new Error(`Singleton Pattern could not be found for ${scope.node.id}`);
+      throw new Error(`Singleton Pattern could not be found for ${scope.node.uniqueId}`);
   }
   return generateNodeId({ scope, pattern, id, type, delimiter });
 }
@@ -48,7 +48,7 @@ export function generateNodeId(props: {
     partition,
     version,
     delimiter,
-    scopes: id ? [{ id, type }] : [],
+    scopes: id ? [{ id: id, type }] : [],
     defaultPattern: PATTERN.COSMOS,
   });
 }

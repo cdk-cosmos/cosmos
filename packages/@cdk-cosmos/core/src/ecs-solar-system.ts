@@ -25,7 +25,7 @@ import {
   ImportedSolarSystemCoreProps,
   SolarSystemExtensionStackProps,
 } from './solar-system';
-import { CoreVpcProps, addEcsEndpoints } from './components/core-vpc';
+import { addEcsEndpoints } from './components/core-vpc';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from './helpers/remote';
 
 export interface IEcsSolarSystemCore extends ISolarSystemCore {
@@ -78,6 +78,7 @@ export class EcsSolarSystemCoreStack extends SolarSystemCoreStack implements IEc
     }
 
     this.cluster = new Cluster(this, 'Cluster', {
+      containerInsights: true,
       ...clusterProps,
       clusterName: this.singletonId('Cluster'),
       vpc: this.vpc,
@@ -183,8 +184,8 @@ export class ImportedEcsSolarSystemCore extends ImportedSolarSystemCore implemen
   readonly httpsListener: IApplicationListener;
   readonly httpsInternalListener: IApplicationListener;
 
-  constructor(scope: Construct, id: string, galaxy: IGalaxyCore, props?: ImportedSolarSystemCoreProps) {
-    super(scope, id, galaxy, props);
+  constructor(galaxy: IGalaxyCore, id: string, props?: ImportedSolarSystemCoreProps) {
+    super(galaxy, id, props);
 
     this.cluster = RemoteCluster.import(this, this.singletonId('Cluster'), this.vpc);
     this.alb = RemoteAlb.import(this, this.singletonId('Alb'));
@@ -204,10 +205,10 @@ export class EcsSolarSystemExtensionStack extends SolarSystemExtensionStack impl
         'Cosmos EcsSolarSystem Extension: App resources dependant on each App Env, like Services and Databases.',
       ...props,
     });
+  }
 
-    const { portalProps } = props || {};
-
-    this.node.tryRemoveChild(this.portal.node.id);
-    this.portal = new ImportedEcsSolarSystemCore(this, 'Default', this.galaxy.portal, portalProps);
+  protected getPortal(props?: SolarSystemExtensionStackProps): IEcsSolarSystemCore {
+    const galaxy = this.node.scope as IGalaxyExtension;
+    return new ImportedEcsSolarSystemCore(galaxy.portal, this.node.id, props?.portalProps);
   }
 }

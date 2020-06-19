@@ -36,12 +36,6 @@ Object {
         ],
       },
     },
-    "CoreId": Object {
-      "Export": Object {
-        "Name": "CoreId",
-      },
-      "Value": "Cos",
-    },
     "CoreLibVersion": Object {
       "Export": Object {
         "Name": "CoreLibVersion",

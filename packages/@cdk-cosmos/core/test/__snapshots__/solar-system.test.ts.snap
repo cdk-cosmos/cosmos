@@ -2243,9 +2243,99 @@ Object {
 }
 `;
 
+exports[`SolarSystem Extension should be able to target the same SolarSystem from multiple Stacks 1`] = `
+Object {
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Resources": Object {
+    "Test": Object {
+      "Properties": Object {
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreTestTestZoneId",
+        },
+        "Name": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Fn::ImportValue": "CoreTestTestZoneName",
+              },
+              ".",
+            ],
+          ],
+        },
+        "ResourceRecords": Array [
+          "1.1.1.1",
+        ],
+        "TTL": "1800",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;
+
+exports[`SolarSystem Extension should be able to target the same SolarSystem from multiple Stacks 2`] = `
+Object {
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Resources": Object {
+    "Test": Object {
+      "Properties": Object {
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreTestTestZoneId",
+        },
+        "Name": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Fn::ImportValue": "CoreTestTestZoneName",
+              },
+              ".",
+            ],
+          ],
+        },
+        "ResourceRecords": Array [
+          "1.1.1.1",
+        ],
+        "TTL": "1800",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;
+
 exports[`SolarSystem Extension should match snapshot 1`] = `
 Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Resources": Object {
+    "test": Object {
+      "Properties": Object {
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreGalSysZoneId",
+        },
+        "Name": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Fn::ImportValue": "CoreGalSysZoneName",
+              },
+              ".",
+            ],
+          ],
+        },
+        "ResourceRecords": Array [
+          "1.1.1.1",
+        ],
+        "TTL": "1800",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
 }
 `;
 
