@@ -1,6 +1,6 @@
 {
   "name": "@cdk-cosmos/core",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,11 +26,11 @@
     "clean": "rm -rf lib"
   },
   "dependencies": {
-    "@cosmos-building-blocks/common": "^0.4.3"
+    "@cosmos-building-blocks/common": "^0.4.4"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-cloudformation": "^1.37.0",
     "@aws-cdk/aws-certificatemanager": "1.37.0",
+    "@aws-cdk/aws-cloudformation": "^1.37.0",
     "@aws-cdk/aws-codebuild": "^1.37.0",
     "@aws-cdk/aws-codecommit": "^1.37.0",
     "@aws-cdk/aws-codepipeline": "^1.37.0",
