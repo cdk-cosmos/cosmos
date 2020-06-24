@@ -38,6 +38,20 @@ Object {
               },
               "Effect": "Deny",
               "Principal": "*",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "SecureBucket06F8D027",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
               "Sid": "ForceSSLOnly",
             },
           ],

@@ -15,6 +15,7 @@ export class SecureBucket extends Construct {
     const policyStatement = new PolicyStatement({
       actions: ['s3:*'],
       principals: [new AnyPrincipal()],
+      resources: [`${bucket.bucketArn}/*`],
       effect: Effect.DENY,
       sid: 'ForceSSLOnly',
     });
