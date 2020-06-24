@@ -1,6 +1,6 @@
 import { Construct } from '@aws-cdk/core';
 import { Bucket, BucketEncryption, BucketProps } from '@aws-cdk/aws-s3';
-import { PolicyStatement, Effect, AccountPrincipal } from '@aws-cdk/aws-iam';
+import { PolicyStatement, Effect, AccountPrincipal, AnyPrincipal } from '@aws-cdk/aws-iam';
 
 export interface SecureBucketProps extends BucketProps {
   prefix?: string;
@@ -18,7 +18,7 @@ export class SecureBucket extends Construct {
     });
     const policyStatement = new PolicyStatement({
       actions: ['s3:*'],
-      principals: [new AccountPrincipal('*')],
+      principals: [new AnyPrincipal()],
       effect: Effect.DENY,
       sid: 'ForceSSLOnly',
     });

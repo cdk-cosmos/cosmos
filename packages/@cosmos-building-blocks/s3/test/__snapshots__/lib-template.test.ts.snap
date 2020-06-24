@@ -37,20 +37,7 @@ Object {
                 },
               },
               "Effect": "Deny",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::*:root",
-                    ],
-                  ],
-                },
-              },
+              "Principal": "*",
               "Sid": "ForceSSLOnly",
             },
           ],
