@@ -1,15 +1,11 @@
 import { Construct } from '@aws-cdk/core';
 import { Bucket, BucketEncryption, BucketProps } from '@aws-cdk/aws-s3';
-import { PolicyStatement, Effect, AccountPrincipal, AnyPrincipal } from '@aws-cdk/aws-iam';
-
-export interface SecureBucketProps extends BucketProps {
-  prefix?: string;
-}
+import { PolicyStatement, Effect, AnyPrincipal } from '@aws-cdk/aws-iam';
 
 export class SecureBucket extends Construct {
   readonly bucket: Bucket;
 
-  constructor(scope: Construct, id: string, props?: SecureBucketProps) {
+  constructor(scope: Construct, id: string, props?: BucketProps) {
     super(scope, id);
     const bucket = new Bucket(this, id, {
       encryption: BucketEncryption.S3_MANAGED,
