@@ -1,0 +1,41 @@
+{
+  "name": "@cosmos-building-blocks/s3",
+  "version": "0.4.3",
+  "license": "Apache-2.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/*",
+    "package.json",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdk-cosmos/cosmos.git",
+    "directory": "packages/@cosmos-building-blocks/s3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "format": "prettier --write **/*.ts !**/*.d.ts",
+    "lint": "eslint . --ext .js,.ts",
+    "clean": "rm -rf lib"
+  },
+  "peerDependencies": {
+    "@aws-cdk/aws-cloudformation": "^1.37.0",
+    "@aws-cdk/aws-ec2": "^1.37.0",
+    "@aws-cdk/aws-ecs": "^1.37.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.37.0",
+    "@aws-cdk/aws-events": "^1.37.0",
+    "@aws-cdk/aws-events-targets": "^1.37.0",
+    "@aws-cdk/aws-iam": "^1.37.0",
+    "@aws-cdk/aws-lambda": "^1.37.0",
+    "@aws-cdk/aws-route53": "^1.37.0",
+    "@aws-cdk/aws-route53-targets": "^1.37.0",
+    "@aws-cdk/aws-s3": "^1.37.0",
+    "@aws-cdk/aws-ssm": "^1.37.0",
+    "@aws-cdk/core": "^1.37.0"
+  },
+  "gitHead": "173c051038a3acdaa93d6a37d42b6b0546ffd567"
+}
