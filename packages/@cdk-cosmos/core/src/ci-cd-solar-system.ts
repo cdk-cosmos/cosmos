@@ -36,7 +36,7 @@ export class CiCdSolarSystemCoreStack extends SolarSystemCoreStack implements IC
     const { cdkPipelineProps } = props || {};
 
     this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
-    this.deployProject = this.deployPipeline.Deploy;
+    this.deployProject = this.deployPipeline.deploy;
   }
 }
 
@@ -64,7 +64,7 @@ export class CiCdSolarSystemExtensionStack extends SolarSystemExtensionStack imp
     const { cdkPipelineProps } = props || {};
 
     this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
-    this.deployProject = this.deployPipeline.Deploy;
+    this.deployProject = this.deployPipeline.deploy;
   }
 
   protected getPortal(props?: CiCdSolarSystemExtensionStackProps): ICiCdSolarSystemCore {
