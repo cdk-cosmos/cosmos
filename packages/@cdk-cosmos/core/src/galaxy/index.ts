@@ -1,3 +1,3 @@
-export { GalaxyCoreStack, GalaxyCoreStackProps } from './galaxy-core-stack';
+export { IGalaxyCore, GalaxyCoreStack, GalaxyCoreStackProps } from './galaxy-core-stack';
 export { GalaxyCoreImport, GalaxyCoreImportProps } from './galaxy-core-import';
-export { GalaxyExtensionStack, GalaxyExtensionStackProps } from './galaxy-extension-stack';
+export { IGalaxyExtension, GalaxyExtensionStack, GalaxyExtensionStackProps } from './galaxy-extension-stack';

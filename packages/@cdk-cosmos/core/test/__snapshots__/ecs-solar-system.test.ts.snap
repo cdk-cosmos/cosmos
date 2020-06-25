@@ -613,6 +613,9 @@ Object {
             "Arn",
           ],
         },
+        "SubjectAlternativeNames": Array [
+          "*.sys.cos.com",
+        ],
       },
       "Type": "AWS::CloudFormation::CustomResource",
       "UpdateReplacePolicy": "Delete",
