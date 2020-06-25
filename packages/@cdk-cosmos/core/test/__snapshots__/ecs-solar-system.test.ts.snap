@@ -603,7 +603,7 @@ Object {
     "CertificateCertificateRequestorResource": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "DomainName": "*.sys.cos.com",
+        "DomainName": "sys.cos.com",
         "HostedZoneId": Object {
           "Ref": "Zone",
         },
