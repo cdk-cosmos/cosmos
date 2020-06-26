@@ -15,7 +15,7 @@ import {
 } from '@aws-cdk/aws-codebuild';
 import { IRole } from '@aws-cdk/aws-iam';
 import { IVpc } from '@aws-cdk/aws-ec2';
-import { BuildSpecObject } from './build-spec';
+import { BuildSpecObject, BuildSpecBuilder } from './build-spec';
 
 export interface BasePipelineProps {
   pipelineName?: string;
@@ -108,6 +108,10 @@ export class BasePipeline extends Construct {
         },
       ],
     });
+  }
+
+  static DefaultBuildSpec(): BuildSpecBuilder {
+    return new BuildSpecBuilder().addCommands('build', 'make build');
   }
 
   static DefaultAppBuildVersionStageEnv(): BuildEnvironmentVariables {
