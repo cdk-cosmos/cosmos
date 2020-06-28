@@ -1,11 +1,11 @@
 import { Construct } from '@aws-cdk/core';
 import { ECR_LOGIN, DOCKER_EXPORT_APP_BUILD_VERSION, DOCKER_BUILD, DOCKER_PUSH } from './commands';
-import { BasePipeline, BasePipelineProps } from './base-pipeline';
+import { StandardPipeline, StandardPipelineProps } from './standard-pipeline';
 import { BuildSpecBuilder } from './build-spec';
 
-export interface DockerPipelineProps extends BasePipelineProps {}
+export interface DockerPipelineProps extends StandardPipelineProps {}
 
-export class DockerPipeline extends BasePipeline {
+export class DockerPipeline extends StandardPipeline {
   constructor(scope: Construct, id: string, props: DockerPipelineProps) {
     super(scope, id, {
       buildSpec: DockerPipeline.DefaultBuildSpec(),

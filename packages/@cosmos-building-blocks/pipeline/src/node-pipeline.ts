@@ -1,12 +1,12 @@
 import { Construct } from '@aws-cdk/core';
 import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
 import { NPM_BUILD, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION, NPM_LOGIN } from './commands';
-import { BasePipeline, BasePipelineProps } from './base-pipeline';
+import { StandardPipeline, StandardPipelineProps } from './standard-pipeline';
 import { BuildSpecBuilder } from './build-spec';
 
-export interface NodePipelineProps extends BasePipelineProps {}
+export interface NodePipelineProps extends StandardPipelineProps {}
 
-export class NodePipeline extends BasePipeline {
+export class NodePipeline extends StandardPipeline {
   constructor(scope: Construct, id: string, props: NodePipelineProps) {
     super(scope, id, {
       buildSpec: NodePipeline.DefaultBuildSpec(),

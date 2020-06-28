@@ -17,7 +17,7 @@ import { IRole } from '@aws-cdk/aws-iam';
 import { IVpc } from '@aws-cdk/aws-ec2';
 import { BuildSpecObject, BuildSpecBuilder } from './build-spec';
 
-export interface BasePipelineProps {
+export interface StandardPipelineProps {
   pipelineName?: string;
   buildName?: string;
   codeRepo: IRepository;
@@ -31,11 +31,11 @@ export interface BasePipelineProps {
   buildPrivileged?: boolean;
 }
 
-export class BasePipeline extends Construct {
+export class StandardPipeline extends Construct {
   readonly build: Project;
   readonly pipeline: Pipeline;
 
-  constructor(scope: Construct, id: string, props: BasePipelineProps) {
+  constructor(scope: Construct, id: string, props: StandardPipelineProps) {
     super(scope, id);
 
     const {
