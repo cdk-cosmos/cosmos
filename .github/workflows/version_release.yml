@@ -32,7 +32,7 @@ jobs:
         run: |
           ./scripts/version
           echo "::set-output name=version::${git describe --abbrev=0 --tags}"
-      - uses: peter-evans/create-pull-request@v2
+      - uses: thomaseizinger/create-pull-request@master
         with:
           github_token: ${{ github.token }}
           head: ${{ github.ref }}
