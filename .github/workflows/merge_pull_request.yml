@@ -12,7 +12,7 @@ jobs:
   version:
     name: Version and Release
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == 'true' && (contains(github.event.pull_request.labels.*.name, "release:patch") || contains(github.event.pull_request.labels.*.name, "release:minor"))
+    if: github.event.pull_request.merged == 'true' && (contains(github.event.pull_request.labels.*.name, 'release:patch') || contains(github.event.pull_request.labels.*.name, 'release:minor'))
     steps:
       - uses: actions/checkout@v2
         with:
@@ -27,8 +27,8 @@ jobs:
         env:
           GITHUB_AUTH: ${{ github.token }}
           PUSH: 'true'
-          PATCH: ${{ contains(github.event.pull_request.labels.*.name, "release:patch") }}
-          MINOR: ${{ contains(github.event.pull_request.labels.*.name, "release:minor") }}
+          PATCH: ${{ contains(github.event.pull_request.labels.*.name, 'release:patch') }}
+          MINOR: ${{ contains(github.event.pull_request.labels.*.name, 'release:minor') }}
         run: |
           ./scripts/version
           echo "::set-output name=version::${git describe --abbrev=0 --tags}"
