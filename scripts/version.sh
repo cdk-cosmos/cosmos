@@ -3,8 +3,9 @@ prevous_version=$(git describe --abbrev=0 --tags)
 version_bump=${VERSION_BUMP:-"patch"}
 push=${PUSH:-"false"}
 
-if [ !$GITHUB_AUTH ]; then
+if [ -z "$GITHUB_AUTH" ]; then
     echo "Missing GITHUB_AUTH env"
+    exit 1
 fi
 
 echo $prevous_version, $version_bump, $push
@@ -19,6 +20,6 @@ echo "$(yarn -s lerna-changelog --from=$prevous_version --to $curent_version)\n$
 
 git add . && git commit --amend --no-edit
 
-if [ $push == "true" ]; then
+if [ "$push" == "true" ]; then
     git push
 fi
