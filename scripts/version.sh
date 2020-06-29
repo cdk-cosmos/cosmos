@@ -1,6 +1,8 @@
 #!/bin/bash
 version_bump=""
 push=${PUSH:-"false"}
+
+git fetch origin --tags
 prevous_version=$(git describe --abbrev=0 --tags)
 
 if [ -z "$GITHUB_AUTH" ]; then
