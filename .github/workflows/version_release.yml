@@ -9,15 +9,7 @@ on:
     types: [closed]
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github.event.pull_request.labels.*.name) }}
-        run: echo "$GITHUB_CONTEXT"
-  version:
+  version_release:
     name: Version and Release
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true && (contains(github.event.pull_request.labels.*.name, 'release:patch') || contains(github.event.pull_request.labels.*.name, 'release:minor'))
@@ -38,7 +30,7 @@ jobs:
           PATCH: ${{ contains(github.event.pull_request.labels.*.name, 'release:patch') }}
           MINOR: ${{ contains(github.event.pull_request.labels.*.name, 'release:minor') }}
         run: |
-          ./scripts/version
+          ./scripts/version.sh
           echo "::set-output name=version::${git describe --abbrev=0 --tags}"
       - uses: thomaseizinger/create-pull-request@master
         with:

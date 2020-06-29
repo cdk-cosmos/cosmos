@@ -32,5 +32,5 @@ echo "$(yarn -s lerna-changelog --from=$prevous_version --to $curent_version)\n$
 git add . && git commit --amend --no-edit
 
 if [ "$push" == "true" ]; then
-    git push
+    git push origin --force
 fi
