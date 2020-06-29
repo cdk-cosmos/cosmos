@@ -33,7 +33,7 @@ echo $prevous_version, $curent_version, $version_bump, $push
 
 echo "$(yarn -s lerna-changelog --from=$prevous_version --to $curent_version)\n$(cat changelog.md)" > changelog.md
 
-git add . && git commit --amend --no-edit
+git add . && git commit --no-verify --amend --no-edit
 
 if [ "$push" == "true" ]; then
     git push origin --force
