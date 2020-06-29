@@ -36,10 +36,12 @@ jobs:
           MINOR: ${{ contains(github.event.pull_request.labels.*.name, 'release:minor') }}
         run: |
           ./scripts/version.sh
-          git push --force --set-upstream origin release 
+          git push --force --set-upstream origin release
+          git push --follow-tags
           echo "::set-output name=version::$(git describe --abbrev=0 --tags)"
       - uses: thomaseizinger/create-pull-request@master
         with:
           github_token: ${{ github.token }}
-          head: ${{ github.ref }}
+          head: release
+          base: master
           title: 'Release ${{ steps.version.outputs.version }}'
