@@ -9,6 +9,14 @@ on:
     types: [closed]
 
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github.event.pull_request.labels.*.name) }}
+        run: echo "$GITHUB_CONTEXT"
   version:
     name: Version and Release
     runs-on: ubuntu-latest
