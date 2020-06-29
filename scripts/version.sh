@@ -21,6 +21,8 @@ fi
 
 echo $prevous_version, $version_bump, $push
 
+yarn clean
+yarn build
 yarn lerna version $version_bump --force-publish=* --yes --no-push
 
 curent_version=$(git describe --abbrev=0 --tags)
