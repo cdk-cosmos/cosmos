@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 version_bump=""
 push=${PUSH:-"false"}
 prevous_version=$(git describe --abbrev=0 --tags)
