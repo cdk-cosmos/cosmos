@@ -1,10 +1,21 @@
 #!/bin/sh
-prevous_version=$(git describe --abbrev=0 --tags)
-version_bump=${VERSION_BUMP:-"patch"}
+version_bump=""
 push=${PUSH:-"false"}
+prevous_version=$(git describe --abbrev=0 --tags)
 
 if [ -z "$GITHUB_AUTH" ]; then
     echo "Missing GITHUB_AUTH env"
+    exit 1
+fi
+
+if [ "$PATCH" == "true" ]; then
+    version_bump="patch"
+fi
+if [ "$MINOR" == "true" ]; then
+    version_bump="minor"
+fi
+if [ -z "$version_bump" ]; then
+    echo "PATCH or MINOR not set"
     exit 1
 fi
 
