@@ -17,9 +17,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: master
+          fetch-depth: 0
       - run: |
           git checkout --force -B release origin/master
           git fetch origin --force
+          git fetch origin --tags --force
           git config user.email "action@github.com"
           git config user.name "Github Action Bot"
       - uses: actions/setup-node@v1
