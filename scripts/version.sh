@@ -24,7 +24,9 @@ echo $prevous_version, $version_bump
 
 yarn clean
 yarn build
-yarn lerna version $version_bump --force-publish=* --yes --no-push
+yarn lint
+yarn test
+yarn lerna version $version_bump --force-publish=* --yes --no-push --no-commit-hooks
 
 curent_version=$(git describe --abbrev=0 --tags)
 
