@@ -2,6 +2,10 @@
   "name": "cdk-cosmos",
   "private": true,
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdk-cosmos/cosmos.git"
+  },
   "scripts": {
     "link": "lerna link",
     "bootstrap": "lerna bootstrap",
@@ -24,11 +28,19 @@
     "test-and-shield",
     "git-add"
   ],
+  "changelog": {
+    "labels": {
+      "breaking-change": "💥 Breaking Change:",
+      "enhancement": "🚀 Enhancement:",
+      "bug": "🐛 Bug Fix",
+      "documentation": "📝 Documentation"
+    }
+  },
   "devDependencies": {
     "@aws-cdk/assert": "1.37.0",
     "@aws-cdk/aws-certificatemanager": "1.37.0",
-    "@aws-cdk/aws-cloudwatch": "1.37.0",
     "@aws-cdk/aws-cloudformation": "1.37.0",
+    "@aws-cdk/aws-cloudwatch": "1.37.0",
     "@aws-cdk/aws-codebuild": "1.37.0",
     "@aws-cdk/aws-codecommit": "1.37.0",
     "@aws-cdk/aws-codepipeline": "1.37.0",
@@ -61,6 +73,7 @@
     "jest": "^25.1.0",
     "jest-coverage-shield": "^1.1.2",
     "lerna": "^3.20.2",
+    "lerna-changelog": "^1.0.1",
     "pre-commit": "^1.2.2",
     "prettier": "^1.19.1",
     "source-map-support": "^0.5.16",
