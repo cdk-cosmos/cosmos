@@ -20,7 +20,7 @@ jobs:
   version:
     name: Version and Release
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == 'true' && (contains(github.event.pull_request.labels.*.name, 'release:patch') || contains(github.event.pull_request.labels.*.name, 'release:minor'))
+    if: github.event.pull_request.merged == true && (contains(github.event.pull_request.labels.*.name, 'release:patch') || contains(github.event.pull_request.labels.*.name, 'release:minor'))
     steps:
       - uses: actions/checkout@v2
         with:
