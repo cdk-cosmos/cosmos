@@ -4,7 +4,6 @@ import { IGalaxyCore } from '../galaxy/galaxy-core-stack';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../helpers/remote';
 import { SolarSystemCoreImport, SolarSystemCoreImportProps } from '../solar-system/solar-system-core-import';
 import { IEcsSolarSystemCore } from './ecs-solar-system-core-stack';
-import { ClassType } from '../helpers/utils';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const EcsSolarSystemCoreImportBuilder = (base: typeof SolarSystemCoreImport) => {
@@ -28,7 +27,7 @@ export const EcsSolarSystemCoreImportBuilder = (base: typeof SolarSystemCoreImpo
     }
   }
 
-  return EcsSolarSystemCoreImport as ClassType<typeof EcsSolarSystemCoreImport>;
+  return EcsSolarSystemCoreImport;
 };
 
 export const EcsSolarSystemCoreImport = EcsSolarSystemCoreImportBuilder(SolarSystemCoreImport);

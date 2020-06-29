@@ -8,7 +8,6 @@ import {
 import { EcsSolarSystemExtensionStack } from '../ecs-solar-system/ecs-solar-system-extension-stack';
 import { ICiCdSolarSystemCore, CosmosCdkPipeline } from './cicd-solar-system-core-stack';
 import { CdkPipelineProps, CdkPipeline } from '../components/cdk-pipeline';
-import { ClassType } from '../helpers/utils';
 
 export interface ICiCdSolarSystemExtension extends ISolarSystemExtension {
   portal: ICiCdSolarSystemCore;
@@ -22,7 +21,6 @@ export interface CiCdSolarSystemExtensionStackProps extends SolarSystemExtension
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const CiCdSolarSystemExtensionStackBuilder = (base: typeof SolarSystemExtensionStack) => {
   class CiCdSolarSystemExtensionStack extends base implements ICiCdSolarSystemExtension {
-    readonly portal: ICiCdSolarSystemCore;
     readonly deployPipeline: CdkPipeline;
     readonly deployProject: Project;
 
@@ -40,7 +38,7 @@ export const CiCdSolarSystemExtensionStackBuilder = (base: typeof SolarSystemExt
     }
   }
 
-  return CiCdSolarSystemExtensionStack as ClassType<typeof CiCdSolarSystemExtensionStack>;
+  return CiCdSolarSystemExtensionStack;
 };
 
 export const CiCdSolarSystemExtensionStack = CiCdSolarSystemExtensionStackBuilder(SolarSystemExtensionStack);

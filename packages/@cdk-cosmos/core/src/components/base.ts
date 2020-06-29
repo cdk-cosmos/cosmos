@@ -7,6 +7,7 @@ import { generateNodeId, generateScopeId, generateSingletonId } from '../helpers
 
 export interface BaseConstructProps {
   type?: string;
+  context?: Record<string, string>;
   partition?: string;
   version?: string;
 }
@@ -15,9 +16,13 @@ export class BaseConstruct extends Construct {
   constructor(scope: Construct, id: string, props?: BaseConstructProps) {
     super(scope, id);
 
-    const { type, partition, version } = props || {};
+    const { type, context, partition, version } = props || {};
 
     this.node.type = type;
+
+    if (context) {
+      Object.entries(context).forEach(([key, value]) => this.node.setContext(key, value));
+    }
 
     if (partition) this.node.setContext(COSMOS_PARTITION, partition);
     if (version) this.node.setContext(COSMOS_VERSION, version);
@@ -34,7 +39,7 @@ export class BaseStack extends Stack {
   public readonly networkBuilder?: NetworkBuilder;
 
   constructor(scope: Construct, id: string, props?: BaseStackProps) {
-    const { partition, version, type, disableCosmosNaming = false, env, cidr } = props || {};
+    const { type, context, partition, version, disableCosmosNaming = false, env, cidr } = props || {};
     const stackName = generateNodeId({ scope, id, type, partition, version, pattern: PATTERN.STACK });
 
     super(scope, id, {
@@ -45,6 +50,10 @@ export class BaseStack extends Stack {
 
     this.node.type = type;
     this.disableCosmosNaming = disableCosmosNaming;
+
+    if (context) {
+      Object.entries(context).forEach(([key, value]) => this.node.setContext(key, value));
+    }
 
     if (partition) this.node.setContext(COSMOS_PARTITION, partition);
     if (version) this.node.setContext(COSMOS_VERSION, version);

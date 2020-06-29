@@ -2,9 +2,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Stack, IConstruct } from '@aws-cdk/core';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ClassType<T> = T extends { new (...args: any[]): infer U } ? T & U : never;
-
 export const isCrossAccount = (x: IConstruct, y: IConstruct, includeRegion?: boolean): boolean => {
   const stackX = Stack.of(x);
   const stackY = Stack.of(y);

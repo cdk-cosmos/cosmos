@@ -9,7 +9,6 @@ import {
 import { EcsSolarSystemCoreStack } from '../ecs-solar-system/ecs-solar-system-core-stack';
 import { ISolarSystemExtension } from '../solar-system/solar-system-extension-stack';
 import { CdkPipelineProps, CdkPipeline } from '../components/cdk-pipeline';
-import { ClassType } from '../helpers/utils';
 
 export interface ICiCdSolarSystemCore extends ISolarSystemCore {
   deployProject?: IProject;
@@ -38,7 +37,7 @@ export const CiCdSolarSystemCoreStackBuilder = (base: typeof SolarSystemCoreStac
     }
   }
 
-  return CiCdSolarSystemCoreStack as ClassType<typeof CiCdSolarSystemCoreStack>;
+  return CiCdSolarSystemCoreStack;
 };
 
 export const CiCdSolarSystemCoreStack = CiCdSolarSystemCoreStackBuilder(SolarSystemCoreStack);

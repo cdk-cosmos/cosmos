@@ -21,7 +21,6 @@ import {
 } from '../solar-system/solar-system-core-stack';
 import { addEcsEndpoints } from '../components/core-vpc';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../helpers/remote';
-import { ClassType } from '../helpers/utils';
 
 export interface IEcsSolarSystemCore extends ISolarSystemCore {
   readonly cluster: ICluster;
@@ -167,7 +166,7 @@ export const EcsSolarSystemCoreStackBuilder = (base: typeof SolarSystemCoreStack
     }
   }
 
-  return EcsSolarSystemCoreStack as ClassType<typeof EcsSolarSystemCoreStack>;
+  return EcsSolarSystemCoreStack;
 };
 
 export const EcsSolarSystemCoreStack = EcsSolarSystemCoreStackBuilder(SolarSystemCoreStack);
