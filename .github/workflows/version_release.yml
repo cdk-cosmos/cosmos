@@ -26,13 +26,13 @@ jobs:
       - id: version
         env:
           GITHUB_AUTH: ${{ github.token }}
-          PUSH: 'true'
           PATCH: ${{ contains(github.event.pull_request.labels.*.name, 'release:patch') }}
           MINOR: ${{ contains(github.event.pull_request.labels.*.name, 'release:minor') }}
         run: |
           git config user.email "action@github.com"
           git config user.name "Github Action Bot"
           ./scripts/version.sh
+          git push --force --set-upstream origin release 
           echo "::set-output name=version::${git describe --abbrev=0 --tags}"
       - uses: thomaseizinger/create-pull-request@master
         with:
