@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "//registry.npmjs.org/:_authToken=$NPM_KEY" > .npmrc
 
