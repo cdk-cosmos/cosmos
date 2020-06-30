@@ -40,4 +40,4 @@ jobs:
           MINOR: ${{ contains(github.event.pull_request.labels.*.name, 'release:minor') }}
         run: |
           ./scripts/version.sh
-          git push --tags --no-verify origin ${{ github.ref }}
+          git push --tags --no-verify origin ${{ github.head_ref }}
