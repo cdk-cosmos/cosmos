@@ -39,5 +39,5 @@ jobs:
           PATCH: ${{ contains(github.event.pull_request.labels.*.name, 'release:patch') }}
           MINOR: ${{ contains(github.event.pull_request.labels.*.name, 'release:minor') }}
         run: |
-          ./scripts/version.sh
+          ./src/scripts/version.sh
           git push --tags --no-verify origin ${{ github.head_ref }}
