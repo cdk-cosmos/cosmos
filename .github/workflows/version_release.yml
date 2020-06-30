@@ -19,7 +19,7 @@ jobs:
   version_release:
     name: Version and Release
     runs-on: ubuntu-latest
-    if: github.ref == 'develop' && (contains(github.event.pull_request.labels.*.name, 'release:patch') || contains(github.event.pull_request.labels.*.name, 'release:minor'))
+    if: github.head_ref == 'develop' && (contains(github.event.pull_request.labels.*.name, 'release:patch') || contains(github.event.pull_request.labels.*.name, 'release:minor'))
     steps:
       - uses: actions/checkout@v2
         with:
