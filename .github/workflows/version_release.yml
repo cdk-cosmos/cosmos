@@ -20,6 +20,7 @@ jobs:
           fetch-depth: 0
       - run: |
           git checkout --force -B release origin/master
+          git push --force --set-upstream origin release
           git config user.email "action@github.com"
           git config user.name "Github Action Bot"
       - uses: actions/setup-node@v1
@@ -34,9 +35,8 @@ jobs:
           MINOR: ${{ contains(github.event.pull_request.labels.*.name, 'release:minor') }}
         run: |
           ./scripts/version.sh
-          git push --force --set-upstream origin release
-          git push --follow-tags
           echo "::set-output name=version::$(git describe --abbrev=0 --tags)"
+          git push --follow-tags --no-verify origin release
       - uses: thomaseizinger/create-pull-request@master
         with:
           github_token: ${{ github.token }}
