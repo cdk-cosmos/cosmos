@@ -6,7 +6,9 @@
   * [#135](https://github.com/cdk-cosmos/cosmos/pull/135) Add Changelog + Release Actions ([@timpur](https://github.com/timpur))
 
 #### Committers: 1
-- Tim P ([@timpur](https://github.com/timpur))\n
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.4.4 (2020-06-19)
 
 #### 🚀 Enhancement:
