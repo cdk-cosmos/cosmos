@@ -3,9 +3,10 @@
 exports[`Empty Stack 1`] = `
 Object {
   "Resources": Object {
-    "SecureBucket06F8D027": Object {
+    "SecureBucket1ED1C5CE": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
+        "AccessControl": "LogDeliveryWrite",
         "BucketEncryption": Object {
           "ServerSideEncryptionConfiguration": Array [
             Object {
@@ -16,16 +17,16 @@ Object {
           ],
         },
         "LoggingConfiguration": Object {
-          "LogFilePrefix": "BucketAccessLogs",
+          "LogFilePrefix": "BucketLogs/",
         },
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
     },
-    "SecureBucketPolicyD0A910A5": Object {
+    "SecureBucketPolicy18EDC062": Object {
       "Properties": Object {
         "Bucket": Object {
-          "Ref": "SecureBucket06F8D027",
+          "Ref": "SecureBucket1ED1C5CE",
         },
         "PolicyDocument": Object {
           "Statement": Array [
@@ -44,7 +45,7 @@ Object {
                   Array [
                     Object {
                       "Fn::GetAtt": Array [
-                        "SecureBucket06F8D027",
+                        "SecureBucket1ED1C5CE",
                         "Arn",
                       ],
                     },
