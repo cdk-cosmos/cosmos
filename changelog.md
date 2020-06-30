@@ -1,4 +1,12 @@
 
+## v0.4.5 (2020-06-30)
+
+#### 🐛 Bug Fix
+* `private`
+  * [#126](https://github.com/cdk-cosmos/cosmos/pull/126) Clean up cross account resource build ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))\n
 ## v0.4.4 (2020-06-19)
 
 #### 🚀 Enhancement:
