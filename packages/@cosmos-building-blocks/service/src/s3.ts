@@ -7,7 +7,7 @@ export class SecureBucket extends Bucket {
     super(scope, id, {
       encryption: BucketEncryption.S3_MANAGED,
       accessControl: BucketAccessControl.LOG_DELIVERY_WRITE,
-      serverAccessLogsPrefix: 'BucketLogs/',
+      serverAccessLogsPrefix: 'BucketAccessLogs/',
       ...props,
     });
     const policyStatement = new PolicyStatement({

@@ -17,7 +17,7 @@ Object {
           ],
         },
         "LoggingConfiguration": Object {
-          "LogFilePrefix": "BucketLogs/",
+          "LogFilePrefix": "BucketAccessLogs/",
         },
       },
       "Type": "AWS::S3::Bucket",
