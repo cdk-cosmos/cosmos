@@ -20,17 +20,9 @@ if [ -z "$version_bump" ]; then
     exit 1
 fi
 
-echo $prevous_version, $version_bump
-
-yarn clean
-yarn build
-yarn lint
-yarn test
 yarn lerna version $version_bump --force-publish=* --yes --no-push --no-commit-hooks
 
 curent_version=$(git describe --abbrev=0 --tags)
-
-echo $prevous_version, $curent_version, $version_bump
 
 echo "$(yarn -s lerna-changelog --from=$prevous_version --to $curent_version)\n$(cat changelog.md)" > changelog.md
 
