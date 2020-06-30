@@ -5,10 +5,10 @@ name: Test
 
 on:
   pull_request:
-    branches: [master]
+    branches: [master, develop]
 
 jobs:
-  publish_patch:
+  test:
     name: Build, Lint and Test
     runs-on: ubuntu-latest
     steps:
