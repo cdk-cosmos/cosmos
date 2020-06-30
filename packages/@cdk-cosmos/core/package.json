@@ -44,6 +44,5 @@
     "@aws-cdk/aws-lambda": "^1.37.0",
     "@aws-cdk/aws-route53": "^1.37.0",
     "@aws-cdk/core": "^1.37.0"
-  },
-  "gitHead": "173c051038a3acdaa93d6a37d42b6b0546ffd567"
+  }
 }
