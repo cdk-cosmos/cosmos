@@ -106,6 +106,7 @@ Object {
     "CdkPipelineCdkArtifactBucket": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
+        "AccessControl": "LogDeliveryWrite",
         "BucketEncryption": Object {
           "ServerSideEncryptionConfiguration": Array [
             Object {
@@ -114,6 +115,9 @@ Object {
               },
             },
           ],
+        },
+        "LoggingConfiguration": Object {
+          "LogFilePrefix": "BucketAccessLogs/",
         },
         "Tags": Array [
           Object {
@@ -132,6 +136,44 @@ Object {
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
+    },
+    "CdkPipelineCdkArtifactBucketPolicy": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "CdkPipelineCdkArtifactBucket",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": false,
+                },
+              },
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "CdkPipelineCdkArtifactBucket",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+              "Sid": "ForceSSLOnly",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
     },
     "CdkPipelineCdkDeploy": Object {
       "Properties": Object {
@@ -941,6 +983,7 @@ Object {
     "CdkPipelineCdkArtifactBucket": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
+        "AccessControl": "LogDeliveryWrite",
         "BucketEncryption": Object {
           "ServerSideEncryptionConfiguration": Array [
             Object {
@@ -949,6 +992,9 @@ Object {
               },
             },
           ],
+        },
+        "LoggingConfiguration": Object {
+          "LogFilePrefix": "BucketAccessLogs/",
         },
         "Tags": Array [
           Object {
@@ -967,6 +1013,44 @@ Object {
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
+    },
+    "CdkPipelineCdkArtifactBucketPolicy": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "CdkPipelineCdkArtifactBucket",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": false,
+                },
+              },
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "CdkPipelineCdkArtifactBucket",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+              "Sid": "ForceSSLOnly",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
     },
     "CdkPipelineCdkDeploy": Object {
       "Properties": Object {
