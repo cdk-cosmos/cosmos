@@ -24,6 +24,6 @@ yarn lerna version $version_bump --force-publish=* --yes --no-push --no-commit-h
 
 curent_version=$(git describe --abbrev=0 --tags)
 
-echo "$(yarn -s lerna-changelog --from=$prevous_version --to $curent_version)\n$(cat changelog.md)" > changelog.md
+echo -e "$(yarn -s lerna-changelog --from=$prevous_version --to $curent_version)\n\n$(cat changelog.md)" > changelog.md
 
 git add . && git commit --no-verify --amend --no-edit && git tag --force $curent_version
