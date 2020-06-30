@@ -34,4 +34,4 @@ echo $prevous_version, $curent_version, $version_bump
 
 echo "$(yarn -s lerna-changelog --from=$prevous_version --to $curent_version)\n$(cat changelog.md)" > changelog.md
 
-git add . && git commit --no-verify --amend --no-edit
+git add . && git commit --no-verify --amend --no-edit && git tag --force $curent_version
