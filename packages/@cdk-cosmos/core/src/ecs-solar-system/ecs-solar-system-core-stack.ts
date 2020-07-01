@@ -38,7 +38,9 @@ export interface EcsSolarSystemCoreProps extends SolarSystemCoreStackProps {
   listenerInboundCidr?: string;
 }
 
-const EcsSolarSystemCoreStackBuilder = (base: typeof SolarSystemCoreStack): typeof EcsSolarSystemCoreStackBase => {
+export const EcsSolarSystemCoreStackBuilder = (
+  base: typeof SolarSystemCoreStack
+): typeof EcsSolarSystemCoreStackBase => {
   return class EcsSolarSystemCoreStack extends base implements IEcsSolarSystemCore {
     readonly cluster: Cluster;
     readonly clusterAutoScalingGroup: AutoScalingGroup;

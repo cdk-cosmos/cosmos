@@ -41,7 +41,6 @@ export class StandardPipeline extends Construct {
     const {
       pipelineName,
       buildName,
-      codeRepo,
       codeBranch = 'master',
       buildRole,
       buildVpc,
@@ -51,6 +50,12 @@ export class StandardPipeline extends Construct {
       buildComputeType = ComputeType.SMALL,
       buildPrivileged = false,
     } = props;
+
+    // Cross Stack Dependency issue since repo stack might differ from this stack
+    const codeRepo =
+      Stack.of(this) !== Stack.of(props.codeRepo)
+        ? Repository.fromRepositoryName(this, props.codeRepo.node.id, props.codeRepo.repositoryName)
+        : props.codeRepo;
 
     const artifactBucket = new Bucket(this, 'CodeArtifactBucket', {
       encryption: BucketEncryption.S3_MANAGED,
@@ -62,10 +67,7 @@ export class StandardPipeline extends Construct {
       role: buildRole,
       vpc: buildVpc,
       source: Source.codeCommit({
-        repository:
-          Stack.of(this) !== Stack.of(codeRepo)
-            ? Repository.fromRepositoryName(this, codeRepo.node.id, codeRepo.repositoryName)
-            : codeRepo,
+        repository: codeRepo,
         branchOrRef: codeBranch,
       }),
       buildSpec: buildSpec instanceof BuildSpec ? buildSpec : buildSpec ? BuildSpec.fromObject(buildSpec) : undefined,
