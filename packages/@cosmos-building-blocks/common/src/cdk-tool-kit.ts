@@ -1,8 +1,8 @@
 import { Construct, Stack, StackProps, CfnOutput } from '@aws-cdk/core';
-import { Bucket, BucketEncryption } from '@aws-cdk/aws-s3';
+import { SecureBucket } from '@cosmos-building-blocks/service';
 
 export class CDKToolKit extends Stack {
-  readonly bucket: Bucket;
+  readonly bucket: SecureBucket;
 
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, {
@@ -12,9 +12,7 @@ export class CDKToolKit extends Stack {
       stackName: 'CDKToolkit',
     });
 
-    this.bucket = new Bucket(this, 'StagingBucket', {
-      encryption: BucketEncryption.S3_MANAGED,
-    });
+    this.bucket = new SecureBucket(this, 'StagingBucket');
     new CfnOutput(this, 'BucketName', {
       value: this.bucket.bucketName,
       description: 'The name of the S3 bucket owned by the CDK toolkit stack',

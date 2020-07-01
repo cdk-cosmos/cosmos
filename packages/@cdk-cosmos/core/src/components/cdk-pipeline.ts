@@ -21,6 +21,7 @@ import {
 import { IRole } from '@aws-cdk/aws-iam';
 import { IVpc } from '@aws-cdk/aws-ec2';
 import { ISolarSystemCore, ISolarSystemExtension } from '../solar-system';
+import { SecureBucket } from '@cosmos-building-blocks/service';
 
 export type BuildEnvironmentVariables = { [key: string]: BuildEnvironmentVariable };
 
@@ -53,10 +54,7 @@ export class CdkPipeline extends Construct {
       deployStacks = [],
     } = props;
 
-    const artifactBucket = new Bucket(this, 'CdkArtifactBucket', {
-      encryption: BucketEncryption.S3_MANAGED,
-      removalPolicy: RemovalPolicy.RETAIN,
-    });
+    const artifactBucket = new SecureBucket(this, 'CdkArtifactBucket');
 
     this.deploy = new Project(this, 'CdkDeploy', {
       projectName: deployName,
