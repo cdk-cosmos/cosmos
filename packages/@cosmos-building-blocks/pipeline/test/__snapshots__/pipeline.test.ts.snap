@@ -1,0 +1,1364 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Docker Pipeline should match snapshot 1`] = `
+Object {
+  "Resources": Object {
+    "Pipeline9850B417": Object {
+      "DependsOn": Array [
+        "PipelineRoleDefaultPolicy7BDC1ABB",
+        "PipelineRoleB27FAA37",
+      ],
+      "Properties": Object {
+        "ArtifactStore": Object {
+          "Location": Object {
+            "Ref": "PipelineCodeArtifactBucket5C9D8055",
+          },
+          "Type": "S3",
+        },
+        "RoleArn": Object {
+          "Fn::GetAtt": Array [
+            "PipelineRoleB27FAA37",
+            "Arn",
+          ],
+        },
+        "Stages": Array [
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "CodeCommit",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "BranchName": "master",
+                  "PollForSourceChanges": false,
+                  "RepositoryName": Object {
+                    "Fn::GetAtt": Array [
+                      "Repo02AC86CF",
+                      "Name",
+                    ],
+                  },
+                },
+                "Name": "CodeCheckout",
+                "Namespace": "CodeCheckout",
+                "OutputArtifacts": Array [
+                  Object {
+                    "Name": "CodeOutput",
+                  },
+                ],
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineSourceCodeCheckoutCodePipelineActionRole90324978",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Source",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ProjectName": Object {
+                    "Ref": "PipelineBuild9D009F66",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CodeOutput",
+                  },
+                ],
+                "Name": "CodeBuild",
+                "Namespace": "CodeBuild",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineBuildCodeBuildCodePipelineActionRoleB93A768E",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Build",
+          },
+        ],
+      },
+      "Type": "AWS::CodePipeline::Pipeline",
+    },
+    "PipelineBuild9D009F66": Object {
+      "Properties": Object {
+        "Artifacts": Object {
+          "Type": "NO_ARTIFACTS",
+        },
+        "Environment": Object {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "Image": "aws/codebuild/standard:3.0",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER",
+        },
+        "ServiceRole": Object {
+          "Fn::GetAtt": Array [
+            "PipelineBuildRole64DEF1CD",
+            "Arn",
+          ],
+        },
+        "Source": Object {
+          "BuildSpec": "{
+  \\"version\\": \\"0.2\\",
+  \\"phases\\": {
+    \\"pre_build\\": {
+      \\"commands\\": [
+        \\"$(aws ecr get-login --no-include-email --region \${AWS_REGION})\\",
+        \\"export APP_BUILD_VERSION=v$(make version)\\"
+      ]
+    },
+    \\"build\\": {
+      \\"commands\\": [
+        \\"make build\\"
+      ]
+    },
+    \\"post_build\\": {
+      \\"commands\\": [
+        \\"make push\\"
+      ]
+    }
+  },
+  \\"env\\": {
+    \\"exported-variables\\": [
+      \\"APP_BUILD_VERSION\\"
+    ]
+  }
+}",
+          "Location": Object {
+            "Fn::GetAtt": Array [
+              "Repo02AC86CF",
+              "CloneUrlHttp",
+            ],
+          },
+          "Type": "CODECOMMIT",
+        },
+        "SourceVersion": "master",
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "PipelineBuildCodeBuildCodePipelineActionRoleB93A768E": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PipelineBuildCodeBuildCodePipelineActionRoleDefaultPolicy2A9E0000": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "PipelineBuild9D009F66",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PipelineBuildCodeBuildCodePipelineActionRoleDefaultPolicy2A9E0000",
+        "Roles": Array [
+          Object {
+            "Ref": "PipelineBuildCodeBuildCodePipelineActionRoleB93A768E",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "PipelineBuildRole64DEF1CD": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "codebuild.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PipelineBuildRoleDefaultPolicy71330ADB": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "codecommit:GitPull",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "Repo02AC86CF",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":log-group:/aws/codebuild/",
+                      Object {
+                        "Ref": "PipelineBuild9D009F66",
+                      },
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":log-group:/aws/codebuild/",
+                      Object {
+                        "Ref": "PipelineBuild9D009F66",
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineCodeArtifactBucket5C9D8055",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "PipelineCodeArtifactBucket5C9D8055",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PipelineBuildRoleDefaultPolicy71330ADB",
+        "Roles": Array [
+          Object {
+            "Ref": "PipelineBuildRole64DEF1CD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "PipelineCodeArtifactBucket5C9D8055": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "PipelineEventsRole96280D9B": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "events.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PipelineEventsRoleDefaultPolicy62809D8F": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "codepipeline:StartPipelineExecution",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codepipeline:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "Pipeline9850B417",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PipelineEventsRoleDefaultPolicy62809D8F",
+        "Roles": Array [
+          Object {
+            "Ref": "PipelineEventsRole96280D9B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "PipelineRoleB27FAA37": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "codepipeline.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PipelineRoleDefaultPolicy7BDC1ABB": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineCodeArtifactBucket5C9D8055",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "PipelineCodeArtifactBucket5C9D8055",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "PipelineSourceCodeCheckoutCodePipelineActionRole90324978",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "PipelineBuildCodeBuildCodePipelineActionRoleB93A768E",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PipelineRoleDefaultPolicy7BDC1ABB",
+        "Roles": Array [
+          Object {
+            "Ref": "PipelineRoleB27FAA37",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "PipelineSourceCodeCheckoutCodePipelineActionRole90324978": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PipelineSourceCodeCheckoutCodePipelineActionRoleDefaultPolicy1D1FC8A0": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineCodeArtifactBucket5C9D8055",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "PipelineCodeArtifactBucket5C9D8055",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "codecommit:GetBranch",
+                "codecommit:GetCommit",
+                "codecommit:UploadArchive",
+                "codecommit:GetUploadArchiveStatus",
+                "codecommit:CancelUploadArchive",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "Repo02AC86CF",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PipelineSourceCodeCheckoutCodePipelineActionRoleDefaultPolicy1D1FC8A0",
+        "Roles": Array [
+          Object {
+            "Ref": "PipelineSourceCodeCheckoutCodePipelineActionRole90324978",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "Repo02AC86CF": Object {
+      "Properties": Object {
+        "RepositoryName": "repo",
+      },
+      "Type": "AWS::CodeCommit::Repository",
+    },
+    "RepoTestPipeline483E7F4EEventRule68DB1D8B": Object {
+      "Properties": Object {
+        "EventPattern": Object {
+          "detail": Object {
+            "event": Array [
+              "referenceCreated",
+              "referenceUpdated",
+            ],
+            "referenceName": Array [
+              "master",
+            ],
+          },
+          "detail-type": Array [
+            "CodeCommit Repository State Change",
+          ],
+          "resources": Array [
+            Object {
+              "Fn::GetAtt": Array [
+                "Repo02AC86CF",
+                "Arn",
+              ],
+            },
+          ],
+          "source": Array [
+            "aws.codecommit",
+          ],
+        },
+        "State": "ENABLED",
+        "Targets": Array [
+          Object {
+            "Arn": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "arn:",
+                  Object {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":codepipeline:",
+                  Object {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  Object {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":",
+                  Object {
+                    "Ref": "Pipeline9850B417",
+                  },
+                ],
+              ],
+            },
+            "Id": "Target0",
+            "RoleArn": Object {
+              "Fn::GetAtt": Array [
+                "PipelineEventsRole96280D9B",
+                "Arn",
+              ],
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+  },
+}
+`;
+
+exports[`Node Pipeline should match snapshot 1`] = `
+Object {
+  "Resources": Object {
+    "Pipeline9850B417": Object {
+      "DependsOn": Array [
+        "PipelineRoleDefaultPolicy7BDC1ABB",
+        "PipelineRoleB27FAA37",
+      ],
+      "Properties": Object {
+        "ArtifactStore": Object {
+          "Location": Object {
+            "Ref": "PipelineCodeArtifactBucket5C9D8055",
+          },
+          "Type": "S3",
+        },
+        "RoleArn": Object {
+          "Fn::GetAtt": Array [
+            "PipelineRoleB27FAA37",
+            "Arn",
+          ],
+        },
+        "Stages": Array [
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "CodeCommit",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "BranchName": "master",
+                  "PollForSourceChanges": false,
+                  "RepositoryName": Object {
+                    "Fn::GetAtt": Array [
+                      "Repo02AC86CF",
+                      "Name",
+                    ],
+                  },
+                },
+                "Name": "CodeCheckout",
+                "Namespace": "CodeCheckout",
+                "OutputArtifacts": Array [
+                  Object {
+                    "Name": "CodeOutput",
+                  },
+                ],
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineSourceCodeCheckoutCodePipelineActionRole90324978",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Source",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ProjectName": Object {
+                    "Ref": "PipelineBuild9D009F66",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CodeOutput",
+                  },
+                ],
+                "Name": "CodeBuild",
+                "Namespace": "CodeBuild",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineBuildCodeBuildCodePipelineActionRoleB93A768E",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Build",
+          },
+        ],
+      },
+      "Type": "AWS::CodePipeline::Pipeline",
+    },
+    "PipelineBuild9D009F66": Object {
+      "Properties": Object {
+        "Artifacts": Object {
+          "Type": "NO_ARTIFACTS",
+        },
+        "Environment": Object {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": Array [
+            Object {
+              "Name": "NPM_KEY",
+              "Type": "PLAINTEXT",
+              "Value": "",
+            },
+          ],
+          "Image": "aws/codebuild/standard:3.0",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER",
+        },
+        "ServiceRole": Object {
+          "Fn::GetAtt": Array [
+            "PipelineBuildRole64DEF1CD",
+            "Arn",
+          ],
+        },
+        "Source": Object {
+          "BuildSpec": "{
+  \\"version\\": \\"0.2\\",
+  \\"phases\\": {
+    \\"install\\": {
+      \\"commands\\": [],
+      \\"runtime-versions\\": {
+        \\"nodejs\\": \\"12\\"
+      }
+    },
+    \\"pre_build\\": {
+      \\"commands\\": [
+        \\"echo \\\\\\"//registry.npmjs.org/:_authToken=\${NPM_KEY}\\\\\\" >> ~/.npmrc\\",
+        \\"npm ci\\",
+        \\"export APP_BUILD_VERSION=v$(node -p \\\\\\"require('./package.json').version\\\\\\")-\${CODEBUILD_BUILD_NUMBER}\\"
+      ]
+    },
+    \\"build\\": {
+      \\"commands\\": [
+        \\"npm run build\\"
+      ]
+    }
+  },
+  \\"env\\": {
+    \\"exported-variables\\": [
+      \\"APP_BUILD_VERSION\\"
+    ]
+  }
+}",
+          "Location": Object {
+            "Fn::GetAtt": Array [
+              "Repo02AC86CF",
+              "CloneUrlHttp",
+            ],
+          },
+          "Type": "CODECOMMIT",
+        },
+        "SourceVersion": "master",
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "PipelineBuildCodeBuildCodePipelineActionRoleB93A768E": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PipelineBuildCodeBuildCodePipelineActionRoleDefaultPolicy2A9E0000": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "PipelineBuild9D009F66",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PipelineBuildCodeBuildCodePipelineActionRoleDefaultPolicy2A9E0000",
+        "Roles": Array [
+          Object {
+            "Ref": "PipelineBuildCodeBuildCodePipelineActionRoleB93A768E",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "PipelineBuildRole64DEF1CD": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "codebuild.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PipelineBuildRoleDefaultPolicy71330ADB": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "codecommit:GitPull",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "Repo02AC86CF",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":log-group:/aws/codebuild/",
+                      Object {
+                        "Ref": "PipelineBuild9D009F66",
+                      },
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":log-group:/aws/codebuild/",
+                      Object {
+                        "Ref": "PipelineBuild9D009F66",
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineCodeArtifactBucket5C9D8055",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "PipelineCodeArtifactBucket5C9D8055",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PipelineBuildRoleDefaultPolicy71330ADB",
+        "Roles": Array [
+          Object {
+            "Ref": "PipelineBuildRole64DEF1CD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "PipelineCodeArtifactBucket5C9D8055": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "PipelineEventsRole96280D9B": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "events.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PipelineEventsRoleDefaultPolicy62809D8F": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "codepipeline:StartPipelineExecution",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codepipeline:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "Pipeline9850B417",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PipelineEventsRoleDefaultPolicy62809D8F",
+        "Roles": Array [
+          Object {
+            "Ref": "PipelineEventsRole96280D9B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "PipelineRoleB27FAA37": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "codepipeline.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PipelineRoleDefaultPolicy7BDC1ABB": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineCodeArtifactBucket5C9D8055",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "PipelineCodeArtifactBucket5C9D8055",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "PipelineSourceCodeCheckoutCodePipelineActionRole90324978",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "PipelineBuildCodeBuildCodePipelineActionRoleB93A768E",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PipelineRoleDefaultPolicy7BDC1ABB",
+        "Roles": Array [
+          Object {
+            "Ref": "PipelineRoleB27FAA37",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "PipelineSourceCodeCheckoutCodePipelineActionRole90324978": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PipelineSourceCodeCheckoutCodePipelineActionRoleDefaultPolicy1D1FC8A0": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineCodeArtifactBucket5C9D8055",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "PipelineCodeArtifactBucket5C9D8055",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "codecommit:GetBranch",
+                "codecommit:GetCommit",
+                "codecommit:UploadArchive",
+                "codecommit:GetUploadArchiveStatus",
+                "codecommit:CancelUploadArchive",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "Repo02AC86CF",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PipelineSourceCodeCheckoutCodePipelineActionRoleDefaultPolicy1D1FC8A0",
+        "Roles": Array [
+          Object {
+            "Ref": "PipelineSourceCodeCheckoutCodePipelineActionRole90324978",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "Repo02AC86CF": Object {
+      "Properties": Object {
+        "RepositoryName": "repo",
+      },
+      "Type": "AWS::CodeCommit::Repository",
+    },
+    "RepoTestPipeline483E7F4EEventRule68DB1D8B": Object {
+      "Properties": Object {
+        "EventPattern": Object {
+          "detail": Object {
+            "event": Array [
+              "referenceCreated",
+              "referenceUpdated",
+            ],
+            "referenceName": Array [
+              "master",
+            ],
+          },
+          "detail-type": Array [
+            "CodeCommit Repository State Change",
+          ],
+          "resources": Array [
+            Object {
+              "Fn::GetAtt": Array [
+                "Repo02AC86CF",
+                "Arn",
+              ],
+            },
+          ],
+          "source": Array [
+            "aws.codecommit",
+          ],
+        },
+        "State": "ENABLED",
+        "Targets": Array [
+          Object {
+            "Arn": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "arn:",
+                  Object {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":codepipeline:",
+                  Object {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  Object {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":",
+                  Object {
+                    "Ref": "Pipeline9850B417",
+                  },
+                ],
+              ],
+            },
+            "Id": "Target0",
+            "RoleArn": Object {
+              "Fn::GetAtt": Array [
+                "PipelineEventsRole96280D9B",
+                "Arn",
+              ],
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+  },
+}
+`;

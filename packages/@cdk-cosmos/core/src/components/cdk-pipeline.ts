@@ -37,8 +37,8 @@ export interface CdkPipelineProps {
 }
 
 export class CdkPipeline extends Construct {
-  readonly Deploy: Project;
-  readonly Pipeline: Pipeline;
+  readonly deploy: Project;
+  readonly pipeline: Pipeline;
 
   constructor(scope: Construct, id: string, props: CdkPipelineProps) {
     super(scope, id);
@@ -48,15 +48,15 @@ export class CdkPipeline extends Construct {
       deployName,
       cdkRepo,
       cdkBranch = 'master',
-      deployRole = undefined,
-      deployVpc = undefined,
-      deployEnvs = undefined,
+      deployRole,
+      deployVpc,
+      deployEnvs,
       deployStacks = [],
     } = props;
 
     const artifactBucket = new SecureBucket(this, 'CdkArtifactBucket');
 
-    this.Deploy = new Project(this, 'CdkDeploy', {
+    this.deploy = new Project(this, 'CdkDeploy', {
       projectName: deployName,
       role: deployRole,
       vpc: deployVpc,
@@ -112,7 +112,7 @@ export class CdkPipeline extends Construct {
     const sourceOutput = new Artifact('CdkCodeOutput');
     const cdkDeployOutput = new Artifact('CdkDeployOutput');
 
-    this.Pipeline = new Pipeline(this, 'CdkPipeline', {
+    this.pipeline = new Pipeline(this, 'CdkPipeline', {
       pipelineName: pipelineName,
       artifactBucket: artifactBucket,
       role: deployRole,
@@ -134,7 +134,7 @@ export class CdkPipeline extends Construct {
           actions: [
             new CodeBuildAction({
               actionName: 'CdkDeploy',
-              project: this.Deploy,
+              project: this.deploy,
               input: sourceOutput,
               outputs: [cdkDeployOutput],
               environmentVariables: {
