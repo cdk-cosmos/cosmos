@@ -603,7 +603,7 @@ Object {
     "CertificateCertificateRequestorResource": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "DomainName": "*.sys.cos.com",
+        "DomainName": "sys.cos.com",
         "HostedZoneId": Object {
           "Ref": "Zone",
         },
@@ -613,6 +613,9 @@ Object {
             "Arn",
           ],
         },
+        "SubjectAlternativeNames": Array [
+          "*.sys.cos.com",
+        ],
       },
       "Type": "AWS::CloudFormation::CustomResource",
       "UpdateReplacePolicy": "Delete",

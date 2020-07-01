@@ -9,25 +9,24 @@ import {
   PrivateHostedZone,
   ZoneDelegationRecord,
 } from '@aws-cdk/aws-route53';
-import { isCrossAccount } from './helpers/utils';
-import { BaseStack, BaseStackProps, BaseConstruct, BaseConstructProps } from './components/base';
-import { IGalaxyCore, IGalaxyExtension } from './galaxy';
-import { CoreVpc, CoreVpcProps, addCommonEndpoints } from './components/core-vpc';
-import { CrossAccountZoneDelegationRecord } from './components/cross-account';
-import { RemoteVpc, RemoteZone, RemoteVpcImportProps } from './helpers/remote';
+import { isCrossAccount } from '../helpers/utils';
+import { BaseStack, BaseStackProps } from '../components/base';
+import { IGalaxyCore } from '../galaxy/galaxy-core-stack';
+import { CoreVpc, CoreVpcProps, addCommonEndpoints } from '../components/core-vpc';
+import { CrossAccountZoneDelegationRecord } from '../components/cross-account';
+import { RemoteVpc, RemoteZone } from '../helpers/remote';
 
 export interface ISolarSystemCore extends Construct {
-  galaxy: IGalaxyCore;
-  vpc: IVpc;
-  zone: IPublicHostedZone;
-  privateZone: IPrivateHostedZone;
-  networkBuilder?: NetworkBuilder;
-  certificate?: Certificate;
+  readonly galaxy: IGalaxyCore;
+  readonly vpc: IVpc;
+  readonly zone: IPublicHostedZone;
+  readonly privateZone: IPrivateHostedZone;
+  readonly networkBuilder?: NetworkBuilder;
+  readonly certificate?: Certificate;
 }
 
 export interface SolarSystemCoreStackProps extends BaseStackProps {
   vpc?: Vpc;
-  cert?: boolean;
   vpcProps?: Partial<CoreVpcProps> & {
     defaultEndpoints?: boolean;
   };
@@ -35,6 +34,7 @@ export interface SolarSystemCoreStackProps extends BaseStackProps {
     linkZone?: boolean;
     ttl?: Duration;
   };
+  certificate?: boolean | { subDomains: string[] };
 }
 
 export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore {
@@ -51,7 +51,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
       type: 'SolarSystem',
     });
 
-    const { vpc, cert = true, vpcProps = {}, zoneProps = {} } = props || {};
+    const { vpc, certificate = false, vpcProps = {}, zoneProps = {} } = props || {};
     const { defaultEndpoints = true } = vpcProps;
     const { linkZone = true, ttl = Duration.minutes(30) } = zoneProps;
 
@@ -81,18 +81,21 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
       zoneName: `${id}.${rootZone.zoneName}`.toLowerCase(),
       comment: `Core Main Zone for ${id} SolarSystem`,
     });
-    if (cert) {
-      this.certificate = new DnsValidatedCertificate(this, 'Certificate', {
-        hostedZone: this.zone,
-        domainName: `*.${this.zone.zoneName}`,
-      });
-    }
 
     this.privateZone = new PrivateHostedZone(this, 'PrivateZone', {
       vpc: this.vpc,
       zoneName: `${id}.internal`.toLowerCase(),
       comment: `Core Main Private Zone for ${id} SolarSystem`,
     });
+
+    if (certificate) {
+      this.certificate = new DnsValidatedCertificate(this, 'Certificate', {
+        hostedZone: this.zone,
+        domainName: this.zone.zoneName,
+        subjectAlternativeNames:
+          typeof certificate === 'object' ? certificate.subDomains.map(x => `${x}.${this.zone.zoneName}`) : undefined,
+      });
+    }
 
     if (linkZone) {
       if (isCrossAccount(this.zone, rootZone)) {
@@ -116,72 +119,5 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     RemoteZone.export(this.privateZone, this.singletonId('PrivateZone'));
 
     Tag.add(this, 'cosmos:solarsystem', id);
-  }
-}
-
-export interface ImportedSolarSystemCoreProps extends BaseConstructProps {
-  id?: string;
-  vpcProps?: Partial<RemoteVpcImportProps>;
-}
-
-export class ImportedSolarSystemCore extends BaseConstruct implements ISolarSystemCore {
-  readonly galaxy: IGalaxyCore;
-  readonly vpc: IVpc;
-  readonly zone: IPublicHostedZone;
-  readonly privateZone: IPrivateHostedZone;
-
-  constructor(galaxy: IGalaxyCore, id: string, props?: ImportedSolarSystemCoreProps) {
-    id = props?.id || id;
-    const existing = galaxy.node.tryFindChild(id);
-    if (existing) return existing as ImportedSolarSystemCore;
-
-    super(galaxy, id, {
-      type: 'SolarSystem',
-      ...props,
-    });
-
-    const { vpcProps = {} } = props || {};
-
-    this.galaxy = galaxy;
-    this.vpc = RemoteVpc.import(this, this.singletonId('Vpc'), {
-      aZs: 2,
-      isolatedSubnetNames: ['App'],
-      ...vpcProps,
-    });
-    this.zone = RemoteZone.import(this, this.singletonId('Zone'));
-    this.privateZone = RemoteZone.import(this, this.singletonId('PrivateZone'));
-  }
-}
-
-export interface ISolarSystemExtension extends Construct {
-  galaxy: IGalaxyExtension;
-  portal: ISolarSystemCore;
-}
-
-export interface SolarSystemExtensionStackProps extends BaseStackProps {
-  portalProps?: ImportedSolarSystemCoreProps;
-}
-
-export class SolarSystemExtensionStack extends BaseStack implements ISolarSystemExtension {
-  readonly galaxy: IGalaxyExtension;
-  readonly portal: ISolarSystemCore;
-
-  constructor(galaxy: IGalaxyExtension, id: string, props?: SolarSystemExtensionStackProps) {
-    super(galaxy, id, {
-      description:
-        'Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.',
-      type: 'SolarSystem',
-      ...props,
-    });
-
-    this.galaxy = galaxy;
-    this.portal = this.getPortal(props);
-
-    Tag.add(this, 'cosmos:solarsystem:extension', id);
-  }
-
-  protected getPortal(props?: SolarSystemExtensionStackProps): ISolarSystemCore {
-    const galaxy = this.node.scope as IGalaxyExtension;
-    return new ImportedSolarSystemCore(galaxy.portal, this.node.id, props?.portalProps);
   }
 }
