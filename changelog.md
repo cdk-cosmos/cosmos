@@ -1,4 +1,14 @@
 
+## v0.5.1 (2020-07-01)
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`
+  * [#140](https://github.com/cdk-cosmos/cosmos/pull/140) Fix typescript typing issue from refactor in v0.5.0 ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.5.0 (2020-07-01)
 
 #### 🚀 Enhancement:
