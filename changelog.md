@@ -1,4 +1,19 @@
 
+## v0.5.0 (2020-07-01)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`
+  * [#100](https://github.com/cdk-cosmos/cosmos/pull/100) 0.5.x Refactor Code  ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`
+  * [#101](https://github.com/cdk-cosmos/cosmos/pull/101) Refactor pipelines + StandardPipeline + BuildSpecBuilder ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/service`
+  * [#99](https://github.com/cdk-cosmos/cosmos/pull/99) Add SecureBucket building block ([@jbnaik](https://github.com/jbnaik))
+
+#### Committers: 2
+- Tim P ([@timpur](https://github.com/timpur))
+- [@jbnaik](https://github.com/jbnaik)
+
+
 ## v0.4.5 (2020-06-30)
 
 #### 🚀 Enhancement:
