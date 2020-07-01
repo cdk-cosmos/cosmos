@@ -33,7 +33,7 @@ export const CiCdSolarSystemCoreStackBuilder = (base: typeof SolarSystemCoreStac
       const { cdkPipelineProps } = props || {};
 
       this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
-      this.deployProject = this.deployPipeline.Deploy;
+      this.deployProject = this.deployPipeline.deploy;
     }
   }
 

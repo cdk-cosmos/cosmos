@@ -91,7 +91,7 @@ describe('Solar-System', () => {
     }).toThrowError('NetworkBuilder not found, please define cidr range here (SolarSystem: Test) or Galaxy or Cosmos.');
   });
 
-  test('should have cird range', () => {
+  test('should have cidr range', () => {
     let app = new App();
     let cosmos = new CosmosCoreStack(app, 'Test', { tld: 'com', cidr: '10.0.0.0/22' });
     let galaxy = new GalaxyCoreStack(cosmos, 'Test');
