@@ -5,9 +5,10 @@ import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../helpers/
 import { SolarSystemCoreImport, SolarSystemCoreImportProps } from '../solar-system/solar-system-core-import';
 import { IEcsSolarSystemCore } from './ecs-solar-system-core-stack';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const EcsSolarSystemCoreImportBuilder = (base: typeof SolarSystemCoreImport) => {
-  class EcsSolarSystemCoreImport extends base implements IEcsSolarSystemCore {
+export const EcsSolarSystemCoreImportBuilder = (
+  base: typeof SolarSystemCoreImport
+): typeof EcsSolarSystemCoreImportBase => {
+  return class EcsSolarSystemCoreImport extends base implements IEcsSolarSystemCore {
     readonly cluster: ICluster;
     readonly alb: IApplicationLoadBalancer;
     readonly httpListener: IApplicationListener;
@@ -25,9 +26,20 @@ export const EcsSolarSystemCoreImportBuilder = (base: typeof SolarSystemCoreImpo
       this.httpsListener = RemoteApplicationListener.import(this, this.singletonId('HttpsListener'));
       this.httpsInternalListener = RemoteApplicationListener.import(this, this.singletonId('HttpsInternalListener'));
     }
-  }
-
-  return EcsSolarSystemCoreImport;
+  };
 };
 
-export const EcsSolarSystemCoreImport = EcsSolarSystemCoreImportBuilder(SolarSystemCoreImport);
+// Implementations
+
+declare class EcsSolarSystemCoreImportBase extends SolarSystemCoreImport implements IEcsSolarSystemCore {
+  readonly cluster: ICluster;
+  readonly alb: IApplicationLoadBalancer;
+  readonly httpListener: IApplicationListener;
+  readonly httpInternalListener: IApplicationListener;
+  readonly httpsListener: IApplicationListener;
+  readonly httpsInternalListener: IApplicationListener;
+
+  constructor(galaxy: IGalaxyCore, id: string, props?: SolarSystemCoreImportProps);
+}
+
+export class EcsSolarSystemCoreImport extends EcsSolarSystemCoreImportBuilder(SolarSystemCoreImport) {}

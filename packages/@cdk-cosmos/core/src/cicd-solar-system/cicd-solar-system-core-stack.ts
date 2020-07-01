@@ -19,8 +19,10 @@ export interface CiCdSolarSystemCoreStackProps extends SolarSystemCoreStackProps
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const CiCdSolarSystemCoreStackBuilder = (base: typeof SolarSystemCoreStack) => {
-  class CiCdSolarSystemCoreStack extends base implements ICiCdSolarSystemCore {
+export const CiCdSolarSystemCoreStackBuilder = (
+  base: typeof SolarSystemCoreStack
+): typeof CiCdSolarSystemCoreStackBase => {
+  return class CiCdSolarSystemCoreStack extends base implements ICiCdSolarSystemCore {
     readonly deployPipeline: CdkPipeline;
     readonly deployProject: Project;
 
@@ -35,13 +37,28 @@ export const CiCdSolarSystemCoreStackBuilder = (base: typeof SolarSystemCoreStac
       this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
       this.deployProject = this.deployPipeline.deploy;
     }
-  }
-
-  return CiCdSolarSystemCoreStack;
+  };
 };
 
-export const CiCdSolarSystemCoreStack = CiCdSolarSystemCoreStackBuilder(SolarSystemCoreStack);
-export const CiCdEcsSolarSystemCoreStack = CiCdSolarSystemCoreStackBuilder(EcsSolarSystemCoreStack);
+// Implementations
+
+declare class CiCdSolarSystemCoreStackBase extends SolarSystemCoreStack implements ICiCdSolarSystemCore {
+  readonly deployPipeline: CdkPipeline;
+  readonly deployProject: Project;
+
+  constructor(galaxy: IGalaxyCore, props?: CiCdSolarSystemCoreStackProps);
+}
+export class CiCdSolarSystemCoreStack extends CiCdSolarSystemCoreStackBuilder(SolarSystemCoreStack) {}
+
+declare class CiCdEcsSolarSystemCoreStackBase extends EcsSolarSystemCoreStack implements ICiCdSolarSystemCore {
+  readonly deployPipeline: CdkPipeline;
+  readonly deployProject: Project;
+
+  constructor(galaxy: IGalaxyCore, props?: CiCdSolarSystemCoreStackProps);
+}
+export class CiCdEcsSolarSystemCoreStack extends (CiCdSolarSystemCoreStackBuilder(
+  EcsSolarSystemCoreStack
+) as typeof CiCdEcsSolarSystemCoreStackBase) {}
 
 // Components
 
