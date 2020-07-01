@@ -11,10 +11,11 @@ export interface IEcsSolarSystemExtension extends ISolarSystemExtension {
   portal: IEcsSolarSystemCore;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const EcsSolarSystemExtensionStackBuilder = (base: typeof SolarSystemExtensionStack) => {
-  class EcsSolarSystemExtensionStack extends base implements IEcsSolarSystemExtension {
-    readonly portal: InstanceType<typeof EcsSolarSystemCoreImport>;
+export const EcsSolarSystemExtensionStackBuilder = (
+  base: typeof SolarSystemExtensionStack
+): typeof EcsSolarSystemExtensionStackBase => {
+  return class EcsSolarSystemExtensionStack extends base implements IEcsSolarSystemExtension {
+    readonly portal: EcsSolarSystemCoreImport;
 
     constructor(galaxy: IGalaxyExtension, id: string, props?: SolarSystemExtensionStackProps) {
       super(galaxy, id, {
@@ -24,9 +25,14 @@ export const EcsSolarSystemExtensionStackBuilder = (base: typeof SolarSystemExte
         ...props,
       });
     }
-  }
-
-  return EcsSolarSystemExtensionStack;
+  };
 };
 
-export const EcsSolarSystemExtensionStack = EcsSolarSystemExtensionStackBuilder(SolarSystemExtensionStack);
+// Implementations
+
+declare class EcsSolarSystemExtensionStackBase extends SolarSystemExtensionStack implements IEcsSolarSystemExtension {
+  readonly portal: EcsSolarSystemCoreImport;
+
+  constructor(galaxy: IGalaxyExtension, id: string, props?: SolarSystemExtensionStackProps);
+}
+export class EcsSolarSystemExtensionStack extends EcsSolarSystemExtensionStackBuilder(SolarSystemExtensionStack) {}

@@ -19,8 +19,10 @@ export interface CiCdSolarSystemExtensionStackProps extends SolarSystemExtension
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const CiCdSolarSystemExtensionStackBuilder = (base: typeof SolarSystemExtensionStack) => {
-  class CiCdSolarSystemExtensionStack extends base implements ICiCdSolarSystemExtension {
+export const CiCdSolarSystemExtensionStackBuilder = (
+  base: typeof SolarSystemExtensionStack
+): typeof CiCdSolarSystemExtensionStackBase => {
+  return class CiCdSolarSystemExtensionStack extends base implements ICiCdSolarSystemExtension {
     readonly deployPipeline: CdkPipeline;
     readonly deployProject: Project;
 
@@ -36,10 +38,26 @@ export const CiCdSolarSystemExtensionStackBuilder = (base: typeof SolarSystemExt
       this.deployPipeline = new CosmosCdkPipeline(this, 'CdkPipeline', cdkPipelineProps);
       this.deployProject = this.deployPipeline.deploy;
     }
-  }
-
-  return CiCdSolarSystemExtensionStack;
+  };
 };
 
-export const CiCdSolarSystemExtensionStack = CiCdSolarSystemExtensionStackBuilder(SolarSystemExtensionStack);
-export const CiCdEcsSolarSystemExtensionStack = CiCdSolarSystemExtensionStackBuilder(EcsSolarSystemExtensionStack);
+// Implementations
+
+declare class CiCdSolarSystemExtensionStackBase extends SolarSystemExtensionStack implements ICiCdSolarSystemExtension {
+  readonly deployPipeline: CdkPipeline;
+  readonly deployProject: Project;
+
+  constructor(galaxy: IGalaxyExtension, props?: CiCdSolarSystemExtensionStackProps);
+}
+export class CiCdSolarSystemExtensionStack extends CiCdSolarSystemExtensionStackBuilder(SolarSystemExtensionStack) {}
+
+declare class CiCdEcsSolarSystemExtensionStackBase extends EcsSolarSystemExtensionStack
+  implements ICiCdSolarSystemExtension {
+  readonly deployPipeline: CdkPipeline;
+  readonly deployProject: Project;
+
+  constructor(galaxy: IGalaxyExtension, props?: CiCdSolarSystemExtensionStackProps);
+}
+export class CiCdEcsSolarSystemExtensionStack extends (CiCdSolarSystemExtensionStackBuilder(
+  EcsSolarSystemExtensionStack
+) as typeof CiCdEcsSolarSystemExtensionStackBase) {}

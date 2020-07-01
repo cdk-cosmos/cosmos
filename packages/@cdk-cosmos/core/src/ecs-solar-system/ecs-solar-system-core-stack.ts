@@ -38,9 +38,8 @@ export interface EcsSolarSystemCoreProps extends SolarSystemCoreStackProps {
   listenerInboundCidr?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const EcsSolarSystemCoreStackBuilder = (base: typeof SolarSystemCoreStack) => {
-  class EcsSolarSystemCoreStack extends base implements IEcsSolarSystemCore {
+const EcsSolarSystemCoreStackBuilder = (base: typeof SolarSystemCoreStack): typeof EcsSolarSystemCoreStackBase => {
+  return class EcsSolarSystemCoreStack extends base implements IEcsSolarSystemCore {
     readonly cluster: Cluster;
     readonly clusterAutoScalingGroup: AutoScalingGroup;
     readonly alb: ApplicationLoadBalancer;
@@ -145,6 +144,13 @@ export const EcsSolarSystemCoreStackBuilder = (base: typeof SolarSystemCoreStack
       RemoteApplicationListener.export(this.httpInternalListener, this.singletonId('HttpInternalListener'));
     }
 
+    addCpuAutoScaling(props: Partial<CpuUtilizationScalingProps>): void {
+      this.clusterAutoScalingGroup.scaleOnCpuUtilization('CpuScaling', {
+        ...props,
+        targetUtilizationPercent: 50,
+      });
+    }
+
     private configureListener(listener: ApplicationListener, listenerInboundCidr?: string | null): void {
       listener.addFixedResponse('Default', {
         statusCode: '404',
@@ -157,16 +163,23 @@ export const EcsSolarSystemCoreStackBuilder = (base: typeof SolarSystemCoreStack
         listener.connections.allowDefaultPortFrom(Peer.anyIpv4());
       }
     }
-
-    addCpuAutoScaling(props: Partial<CpuUtilizationScalingProps>): void {
-      this.clusterAutoScalingGroup.scaleOnCpuUtilization('CpuScaling', {
-        ...props,
-        targetUtilizationPercent: 50,
-      });
-    }
-  }
-
-  return EcsSolarSystemCoreStack;
+  };
 };
 
-export const EcsSolarSystemCoreStack = EcsSolarSystemCoreStackBuilder(SolarSystemCoreStack);
+// Implementations
+
+declare class EcsSolarSystemCoreStackBase extends SolarSystemCoreStack implements IEcsSolarSystemCore {
+  readonly cluster: Cluster;
+  readonly clusterAutoScalingGroup: AutoScalingGroup;
+  readonly alb: ApplicationLoadBalancer;
+  readonly httpListener: ApplicationListener;
+  readonly httpInternalListener: ApplicationListener;
+  readonly httpsListener?: ApplicationListener;
+  readonly httpsInternalListener?: ApplicationListener;
+
+  constructor(galaxy: IGalaxyCore, id: string, props?: EcsSolarSystemCoreProps);
+
+  addCpuAutoScaling(props: Partial<CpuUtilizationScalingProps>): void;
+}
+
+export class EcsSolarSystemCoreStack extends EcsSolarSystemCoreStackBuilder(SolarSystemCoreStack) {}
