@@ -1,4 +1,4 @@
-import { InstanceType, SecurityGroup, Peer } from '@aws-cdk/aws-ec2';
+import { InstanceType, SecurityGroup, Peer, InstanceClass, InstanceSize } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster, ClusterProps, AddCapacityOptions, CpuUtilizationScalingProps } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
@@ -79,7 +79,7 @@ export const EcsSolarSystemCoreStackBuilder = (
 
       this.clusterAutoScalingGroup = this.cluster.addCapacity('Capacity', {
         vpcSubnets: { subnetGroupName: 'App' },
-        instanceType: new InstanceType('t3.medium'),
+        instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
         minCapacity: 1,
         maxCapacity: 5,
         ...clusterCapacityProps,
