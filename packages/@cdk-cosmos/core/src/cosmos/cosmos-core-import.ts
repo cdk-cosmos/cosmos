@@ -24,9 +24,13 @@ export class CosmosCoreImport extends BaseConstruct implements ICosmosCore {
     });
 
     this.libVersion = Fn.importValue(this.singletonId('LibVersion'));
-    this.cdkRepo = RemoteCodeRepo.import(this, this.singletonId('CdkRepo'));
-    this.rootZone = RemoteZone.import(this, this.singletonId('RootZone'));
-    this.crossAccountExportsFn = RemoteFunction.import(this, this.singletonId('CrossAccountExportsFn'));
+    this.cdkRepo = RemoteCodeRepo.import(this, 'CdkRepo', this.singletonId('CdkRepo'));
+    this.rootZone = RemoteZone.import(this, 'RootZone', this.singletonId('RootZone'));
+    this.crossAccountExportsFn = RemoteFunction.import(
+      this,
+      'CrossAccountExportsFn',
+      this.singletonId('CrossAccountExportsFn')
+    );
     this.cdkMasterRoleStaticArn = `arn:aws:iam::${Stack.of(scope).account}:role/${this.singletonId('CdkMasterRole')}`;
   }
 }

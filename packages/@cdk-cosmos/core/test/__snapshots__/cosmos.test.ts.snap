@@ -1,5 +1,51 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Cosmos Extension should allow resourced to be created in portal 1`] = `
+Object {
+  "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
+  "Resources": Object {
+    "CdkRepo": Object {
+      "Properties": Object {
+        "RepositoryDescription": "App CDK Repo for Test Cosmos.",
+        "RepositoryName": "app-test-cdk-repo",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "Test",
+          },
+        ],
+      },
+      "Type": "AWS::CodeCommit::Repository",
+    },
+    "RootZoneTest": Object {
+      "Properties": Object {
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreRootZoneId",
+        },
+        "Name": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "test.",
+              Object {
+                "Fn::ImportValue": "CoreRootZoneName",
+              },
+              ".",
+            ],
+          ],
+        },
+        "ResourceRecords": Array [
+          "test",
+        ],
+        "TTL": "1800",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;
+
 exports[`Cosmos Extension should match snapshot 1`] = `
 Object {
   "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",

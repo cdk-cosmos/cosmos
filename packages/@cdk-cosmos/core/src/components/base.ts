@@ -13,6 +13,8 @@ export interface BaseConstructProps {
 }
 
 export class BaseConstruct extends Construct {
+  protected readonly hidden: Construct;
+
   constructor(scope: Construct, id: string, props?: BaseConstructProps) {
     super(scope, id);
 
@@ -26,6 +28,8 @@ export class BaseConstruct extends Construct {
 
     if (partition) this.node.setContext(COSMOS_PARTITION, partition);
     if (version) this.node.setContext(COSMOS_VERSION, version);
+
+    this.hidden = new Construct(this, 'Default');
   }
 }
 
@@ -36,6 +40,7 @@ export interface BaseStackProps extends BaseConstructProps, StackProps {
 
 export class BaseStack extends Stack {
   private readonly disableCosmosNaming: boolean;
+  protected readonly hidden: Construct;
   public readonly networkBuilder?: NetworkBuilder;
 
   constructor(scope: Construct, id: string, props?: BaseStackProps) {
@@ -62,6 +67,8 @@ export class BaseStack extends Stack {
     if (cidr) this.networkBuilder = new NetworkBuilder(cidr);
     if (this.networkBuilder) this.node.setContext(COSMOS_NETWORK_BUILDER, this.networkBuilder);
     else this.networkBuilder = this.node.tryGetContext(COSMOS_NETWORK_BUILDER);
+
+    this.hidden = new Construct(this, 'Default');
   }
 
   public allocateLogicalId(scope: CfnResource): string {

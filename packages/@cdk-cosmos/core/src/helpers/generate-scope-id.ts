@@ -12,9 +12,11 @@ export function generateSingletonId(props: {
   scope: IConstruct;
   id?: string;
   type?: string;
+  partition?: string;
+  version?: string;
   delimiter?: string;
 }): string {
-  const { scope, id, type, delimiter } = props;
+  const { scope, id, type, partition, version, delimiter } = props;
   let pattern: string;
   switch (scope.node.type) {
     case 'Cosmos':
@@ -29,7 +31,7 @@ export function generateSingletonId(props: {
     default:
       throw new Error(`Singleton Pattern could not be found for ${scope.node.uniqueId}`);
   }
-  return generateNodeId({ scope, pattern, id, type, delimiter });
+  return generateNodeId({ scope, pattern, id, type, partition, version, delimiter });
 }
 
 export function generateNodeId(props: {

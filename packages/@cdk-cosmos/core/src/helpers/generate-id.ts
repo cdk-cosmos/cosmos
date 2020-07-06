@@ -87,7 +87,6 @@ const isNotHidden = (item: IKeyValue): boolean => {
 
 const isUnique = (item: IKeyValue, index: number, context: IKeyValue[]): boolean => {
   const previous = index ? context[index - 1] : null;
-  // console.log(previous, item, index);
   if (previous?.key === item.key && previous.value.endsWith(item.value)) return false;
   return true;
 };
