@@ -451,6 +451,28 @@ Object {
         "Ref": "Alb",
       },
     },
+    "AlbAlbDnsHostZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalCiCdAlbDnsHostZoneId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Alb",
+          "CanonicalHostedZoneID",
+        ],
+      },
+    },
+    "AlbAlbDnsName": Object {
+      "Export": Object {
+        "Name": "CoreGalCiCdAlbDnsName",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Alb",
+          "DNSName",
+        ],
+      },
+    },
     "AlbAlbSecurityGroupId": Object {
       "Export": Object {
         "Name": "CoreGalCiCdAlbSecurityGroupId",

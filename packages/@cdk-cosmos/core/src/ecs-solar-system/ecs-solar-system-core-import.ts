@@ -20,7 +20,7 @@ export const EcsSolarSystemCoreImportBuilder = (
       super(galaxy, id, props);
 
       this.cluster = RemoteCluster.import(this, this.singletonId('Cluster'), this.vpc);
-      this.alb = RemoteAlb.import(this, this.singletonId('Alb'));
+      this.alb = RemoteAlb.import(this, this.singletonId('Alb'), this.vpc);
       this.httpListener = RemoteApplicationListener.import(this, this.singletonId('HttpListener'));
       this.httpInternalListener = RemoteApplicationListener.import(this, this.singletonId('HttpInternalListener'));
       this.httpsListener = RemoteApplicationListener.import(this, this.singletonId('HttpsListener'));
