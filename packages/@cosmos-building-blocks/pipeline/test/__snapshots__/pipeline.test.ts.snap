@@ -119,7 +119,7 @@ Object {
     \\"pre_build\\": {
       \\"commands\\": [
         \\"$(aws ecr get-login --no-include-email --region \${AWS_REGION})\\",
-        \\"export APP_BUILD_VERSION=v$(make version)\\"
+        \\"export APP_BUILD_VERSION=$(make version)\\"
       ]
     },
     \\"build\\": {

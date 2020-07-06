@@ -205,15 +205,28 @@ export class RemoteAlb {
       exportName: `${exportName}SecurityGroupId`,
       value: alb.connections.securityGroups[0].securityGroupId,
     });
+    new Output(scope, 'AlbDnsName', {
+      exportName: `${exportName}DnsName`,
+      value: alb.loadBalancerDnsName,
+    });
+    new Output(scope, 'AlbDnsHostZoneId', {
+      exportName: `${exportName}DnsHostZoneId`,
+      value: alb.loadBalancerCanonicalHostedZoneId,
+    });
   }
 
-  static import(scope: Construct, exportName: string): IApplicationLoadBalancer {
+  static import(scope: Construct, exportName: string, vpc: IVpc): IApplicationLoadBalancer {
     const loadBalancerArn = Fn.importValue(`${exportName}Arn`);
     const securityGroupId = Fn.importValue(`${exportName}SecurityGroupId`);
+    const loadBalancerDnsName = Fn.importValue(`${exportName}DnsName`);
+    const loadBalancerCanonicalHostedZoneId = Fn.importValue(`${exportName}DnsHostZoneId`);
 
     return ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(scope, exportName, {
+      vpc,
       loadBalancerArn,
       securityGroupId,
+      loadBalancerDnsName,
+      loadBalancerCanonicalHostedZoneId,
     });
   }
 }
