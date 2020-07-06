@@ -8,4 +8,4 @@ export const NPM_EXPORT_APP_BUILD_VERSION =
 
 export const DOCKER_BUILD = 'make build';
 export const DOCKER_PUSH = 'make push';
-export const DOCKER_EXPORT_APP_BUILD_VERSION = 'export APP_BUILD_VERSION=v$(make version)';
+export const DOCKER_EXPORT_APP_BUILD_VERSION = 'export APP_BUILD_VERSION=$(make version)';

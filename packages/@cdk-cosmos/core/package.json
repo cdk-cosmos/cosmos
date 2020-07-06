@@ -29,7 +29,7 @@
     "@cosmos-building-blocks/common": "^0.5.1"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-certificatemanager": "1.37.0",
+    "@aws-cdk/aws-certificatemanager": "^1.37.0",
     "@aws-cdk/aws-cloudformation": "^1.37.0",
     "@aws-cdk/aws-codebuild": "^1.37.0",
     "@aws-cdk/aws-codecommit": "^1.37.0",
