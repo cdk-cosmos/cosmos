@@ -1,4 +1,4 @@
-import { expect as expectCDK, haveResource, SynthUtils } from '@aws-cdk/assert';
+import { SynthUtils } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '../src/index';
 

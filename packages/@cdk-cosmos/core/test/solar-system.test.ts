@@ -1,8 +1,8 @@
 import '@aws-cdk/assert/jest';
-import { App } from '@aws-cdk/core';
+import { App, Construct } from '@aws-cdk/core';
 import { synthesizeStacks } from '../../../../src/test';
 import { CfnRoute } from '@aws-cdk/aws-ec2';
-import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
+import { ARecord, RecordTarget, CnameRecord } from '@aws-cdk/aws-route53';
 import {
   CosmosCoreStack,
   CosmosExtensionStack,
@@ -184,7 +184,7 @@ describe('SolarSystem Extension', () => {
     const app = new App();
     const cosmos = new CosmosExtensionStack(app, 'Test', { env });
     const galaxy = new GalaxyExtensionStack(cosmos, 'Test');
-    const portal = new SolarSystemCoreImport(galaxy.portal, 'Test');
+    const portal = new SolarSystemCoreImport(galaxy.portal, 'Test', { galaxy: galaxy.portal });
     const sys = new SolarSystemExtensionStack(galaxy, 'Test', { portal });
     const sys2 = new SolarSystemExtensionStack(galaxy, 'Test2', { portal });
     new ARecord(sys, 'Test', {
@@ -199,6 +199,20 @@ describe('SolarSystem Extension', () => {
     const [stack1, stack2] = synthesizeStacks(sys, sys2);
     expect(stack1.template).toMatchSnapshot();
     expect(stack2.template).toMatchSnapshot();
+  });
+
+  test('should allow resourced to be created in portal', () => {
+    const app = new App();
+    const cosmosExtension = new CosmosExtensionStack(app, 'Test', { env });
+    const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });
+    const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys', { env });
+    new CnameRecord((solarSystemExtension.portal.zone as any) as Construct, 'Test', {
+      zone: solarSystemExtension.portal.zone,
+      recordName: 'test',
+      domainName: 'test',
+    });
+    const [solarSystemExtensionStack] = synthesizeStacks(solarSystemExtension);
+    expect(solarSystemExtensionStack.template).toMatchSnapshot();
   });
 
   test('should match snapshot', () => {

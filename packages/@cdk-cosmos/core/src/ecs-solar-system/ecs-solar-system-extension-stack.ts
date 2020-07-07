@@ -21,8 +21,13 @@ export const EcsSolarSystemExtensionStackBuilder = (
       super(galaxy, id, {
         description:
           'Cosmos EcsSolarSystem Extension: App resources dependant on each App Env, like Services and Databases.',
-        portal: new EcsSolarSystemCoreImport(galaxy.portal, id, props?.portalProps),
         ...props,
+      });
+
+      this.hidden.node.tryRemoveChild(this.portal.node.id);
+      this.portal = new EcsSolarSystemCoreImport(this.hidden, id, {
+        ...props?.portalProps,
+        galaxy: this.galaxy.portal,
       });
     }
   };

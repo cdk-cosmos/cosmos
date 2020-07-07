@@ -45,11 +45,11 @@ export class RemoteZone {
     }
   }
 
-  static import(scope: Construct, exportName: string): IHostedZone {
+  static import(scope: Construct, id: string, exportName: string): IHostedZone {
     const hostedZoneId = Fn.importValue(`${exportName}Id`);
     const zoneName = Fn.importValue(`${exportName}Name`);
 
-    return HostedZone.fromHostedZoneAttributes(scope, exportName, {
+    return HostedZone.fromHostedZoneAttributes(scope, id, {
       hostedZoneId,
       zoneName,
     });
@@ -126,7 +126,7 @@ export class RemoteVpc {
     }
   }
 
-  static import(scope: Construct, exportName: string, props: RemoteVpcImportProps): IVpc {
+  static import(scope: Construct, id: string, exportName: string, props: RemoteVpcImportProps): IVpc {
     const { aZs, isolatedSubnetNames, privateSubnetNames, publicSubnetNames } = props;
 
     const vpcId = Fn.importValue(`${exportName}Id`);
@@ -149,7 +149,7 @@ export class RemoteVpc {
     const publicSubnetIds = expandSubnetIds(publicSubnetNames, `${exportName}PublicSubnetIds`, aZs);
     const publicSubnetRouteTableIds = expandSubnetIds(publicSubnetNames, `${exportName}PublicSubnetRouteTableIds`, aZs);
 
-    return Vpc.fromVpcAttributes(scope, exportName, {
+    return Vpc.fromVpcAttributes(scope, id, {
       vpcId,
       availabilityZones,
       isolatedSubnetNames,
@@ -177,7 +177,7 @@ export class RemoteCluster {
     });
   }
 
-  static import(scope: Construct, exportName: string, vpc: IVpc): ICluster {
+  static import(scope: Construct, id: string, exportName: string, vpc: IVpc): ICluster {
     const clusterName = Fn.importValue(`${exportName}Name`);
     const securityGroups = [
       SecurityGroup.fromSecurityGroupId(
@@ -187,7 +187,7 @@ export class RemoteCluster {
       ),
     ];
 
-    return Cluster.fromClusterAttributes(scope, exportName, {
+    return Cluster.fromClusterAttributes(scope, id, {
       clusterName,
       vpc,
       securityGroups,
@@ -215,13 +215,13 @@ export class RemoteAlb {
     });
   }
 
-  static import(scope: Construct, exportName: string, vpc: IVpc): IApplicationLoadBalancer {
+  static import(scope: Construct, id: string, exportName: string, vpc: IVpc): IApplicationLoadBalancer {
     const loadBalancerArn = Fn.importValue(`${exportName}Arn`);
     const securityGroupId = Fn.importValue(`${exportName}SecurityGroupId`);
     const loadBalancerDnsName = Fn.importValue(`${exportName}DnsName`);
     const loadBalancerCanonicalHostedZoneId = Fn.importValue(`${exportName}DnsHostZoneId`);
 
-    return ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(scope, exportName, {
+    return ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(scope, id, {
       vpc,
       loadBalancerArn,
       securityGroupId,
@@ -243,7 +243,7 @@ export class RemoteApplicationListener {
     });
   }
 
-  static import(scope: Construct, exportName: string): IApplicationListener {
+  static import(scope: Construct, id: string, exportName: string): IApplicationListener {
     const listenerArn = Fn.importValue(`${exportName}Arn`);
     const securityGroup = SecurityGroup.fromSecurityGroupId(
       scope,
@@ -251,7 +251,7 @@ export class RemoteApplicationListener {
       Fn.importValue(`${exportName}SecurityGroupId`)
     );
 
-    return ApplicationListener.fromApplicationListenerAttributes(scope, exportName, {
+    return ApplicationListener.fromApplicationListenerAttributes(scope, id, {
       listenerArn,
       // securityGroupId,
       securityGroup,
@@ -267,10 +267,10 @@ export class RemoteCodeRepo {
     });
   }
 
-  static import(scope: Construct, exportName: string): ICodeRepository {
+  static import(scope: Construct, id: string, exportName: string): ICodeRepository {
     const repoName = Fn.importValue(`${exportName}Name`);
 
-    return CodeRepository.fromRepositoryName(scope, exportName, repoName);
+    return CodeRepository.fromRepositoryName(scope, id, repoName);
   }
 }
 
@@ -282,10 +282,10 @@ export class RemoteBuildProject {
     });
   }
 
-  static import(scope: Construct, exportName: string): IProject {
+  static import(scope: Construct, id: string, exportName: string): IProject {
     const repoName = Fn.importValue(`${exportName}Name`);
 
-    return Project.fromProjectName(scope, exportName, repoName);
+    return Project.fromProjectName(scope, id, repoName);
   }
 }
 
@@ -297,10 +297,10 @@ export class RemoteFunction {
     });
   }
 
-  static import(scope: Construct, exportName: string): IFunction {
+  static import(scope: Construct, id: string, exportName: string): IFunction {
     const fnArn = Fn.importValue(`${exportName}Arn`);
 
-    return Function.fromFunctionArn(scope, exportName, fnArn);
+    return Function.fromFunctionArn(scope, id, fnArn);
   }
 }
 

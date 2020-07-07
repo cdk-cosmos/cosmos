@@ -11,7 +11,7 @@ export interface ISolarSystemExtension extends Construct {
 
 export interface SolarSystemExtensionStackProps extends BaseStackProps {
   portal?: SolarSystemCoreImport;
-  portalProps?: SolarSystemCoreImportProps;
+  portalProps?: Partial<SolarSystemCoreImportProps>;
 }
 
 export class SolarSystemExtensionStack extends BaseStack implements ISolarSystemExtension {
@@ -29,7 +29,12 @@ export class SolarSystemExtensionStack extends BaseStack implements ISolarSystem
     const { portal, portalProps } = props || {};
 
     this.galaxy = galaxy;
-    this.portal = portal || new SolarSystemCoreImport(galaxy.portal, this.node.id, portalProps);
+    this.portal =
+      portal ||
+      new SolarSystemCoreImport(this.hidden, this.node.id, {
+        ...portalProps,
+        galaxy: this.galaxy.portal,
+      });
 
     Tag.add(this, 'cosmos:solarsystem:extension', id);
   }

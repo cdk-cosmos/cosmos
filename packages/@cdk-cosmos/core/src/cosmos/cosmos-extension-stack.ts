@@ -12,7 +12,7 @@ export interface ICosmosExtension extends Construct {
 }
 
 export interface CosmosExtensionStackProps extends BaseStackProps {
-  portalProps?: CosmosCoreImportProps;
+  portalProps?: Partial<CosmosCoreImportProps>;
 }
 
 export class CosmosExtensionStack extends BaseStack implements ICosmosExtension {
@@ -28,14 +28,18 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
       ...props,
     });
 
-    this.portal = new CosmosCoreImport(new Construct(this, 'Default'), id, props?.portalProps);
+    const { portalProps } = props || {};
+
+    this.portal = new CosmosCoreImport(this.hidden, this.node.id, {
+      ...portalProps,
+    });
 
     this.libVersion = getPackageVersion();
     this.cdkRepo = new Repository(this, 'CdkRepo', {
       repositoryName: this.nodeId('Cdk-Repo', '-').toLowerCase(),
-      description: `App CDK Repo for ${id} Cosmos.`,
+      description: `App CDK Repo for ${this.node.id} Cosmos.`,
     });
 
-    Tag.add(this, 'cosmos:extension', id);
+    Tag.add(this, 'cosmos:extension', this.node.id);
   }
 }

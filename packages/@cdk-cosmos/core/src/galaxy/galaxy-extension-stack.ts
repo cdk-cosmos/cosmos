@@ -10,7 +10,7 @@ export interface IGalaxyExtension extends Construct {
 }
 
 export interface GalaxyExtensionStackProps extends BaseStackProps {
-  portalProps?: GalaxyCoreImportProps;
+  portalProps?: Partial<GalaxyCoreImportProps>;
 }
 
 export class GalaxyExtensionStack extends BaseStack implements IGalaxyExtension {
@@ -24,8 +24,13 @@ export class GalaxyExtensionStack extends BaseStack implements IGalaxyExtension 
       ...props,
     });
 
+    const { portalProps } = props || {};
+
     this.cosmos = cosmos;
-    this.portal = new GalaxyCoreImport(cosmos.portal, this.node.id, props?.portalProps);
+    this.portal = new GalaxyCoreImport(this.hidden, this.node.id, {
+      ...portalProps,
+      cosmos: this.cosmos.portal,
+    });
 
     Tag.add(this, 'cosmos:galaxy:extension', id);
   }
