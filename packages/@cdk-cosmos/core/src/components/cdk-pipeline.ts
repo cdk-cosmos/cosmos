@@ -1,5 +1,4 @@
-import { Construct, RemovalPolicy, Stack } from '@aws-cdk/core';
-import { Bucket, BucketEncryption } from '@aws-cdk/aws-s3';
+import { Construct, Stack } from '@aws-cdk/core';
 import { IRepository } from '@aws-cdk/aws-codecommit';
 import { Pipeline, Artifact, StageOptions } from '@aws-cdk/aws-codepipeline';
 import {

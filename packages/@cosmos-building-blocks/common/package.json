@@ -1,6 +1,6 @@
 {
   "name": "@cosmos-building-blocks/common",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -32,6 +32,6 @@
     "@aws-cdk/core": "^1.37.0"
   },
   "devDependencies": {
-    "cross-account-stack-ref-handler": "^0.5.1"
+    "cross-account-stack-ref-handler": "^0.5.2"
   }
 }

@@ -1,4 +1,16 @@
 
+## v0.5.2 (2020-07-07)
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/service`
+  * [#143](https://github.com/cdk-cosmos/cosmos/pull/143) Fix portal scope issue ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`
+  * [#142](https://github.com/cdk-cosmos/cosmos/pull/142) A Couple of Small Fixes ( Pipeline repo cross stack + Alb dns export issue) ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.5.1 (2020-07-01)
 
 #### 🐛 Bug Fix
