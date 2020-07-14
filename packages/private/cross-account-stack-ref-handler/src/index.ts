@@ -1,9 +1,6 @@
 import 'source-map-support/register';
-import { CloudFormationCustomResourceEvent } from 'aws-lambda/trigger/cloudformation-custom-resource';
-import { Context } from 'aws-lambda/handler';
-import * as CloudFormation from 'aws-sdk/clients/cloudformation';
-import { Credentials } from 'aws-sdk/lib/credentials';
-import { ChainableTemporaryCredentials } from 'aws-sdk/lib/credentials/chainable_temporary_credentials';
+import { Context, CloudFormationCustomResourceEvent } from 'aws-lambda';
+import { Credentials, CloudFormation, ChainableTemporaryCredentials } from 'aws-sdk';
 import { send } from './send';
 
 interface Props {
