@@ -1,10 +1,10 @@
 {
   "name": "cross-account-stack-ref-handler",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "private": true,
   "license": "Apache-2.0",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "source": "src/index.ts",
+  "node": "lib/index.js",
   "files": [
     "lib/*",
     "package.json",
@@ -16,15 +16,29 @@
     "directory": "packages/private/cross-account-stack-ref-handler"
   },
   "scripts": {
-    "build": "parcel build src/index.ts --out-dir lib --target node --bundle-node-modules && yarn bundle",
+    "build": "parcel build src/index.ts --target node --cache-dir .cache && yarn bundle",
     "test": "jest",
     "format": "prettier --write **/*.ts !**/*.d.ts",
     "lint": "eslint . --ext .js,.ts",
     "clean": "rm -rf lib && rm -rf .cache",
     "bundle": "cd lib && rm -f bundle.zip && zip bundle.zip *"
   },
+  "targets": {
+    "node": {
+      "context": "node",
+      "engines": {
+        "node": ">=12.x"
+      },
+      "sourceMap": true,
+      "includeNodeModules": [
+        "source-map-support"
+      ]
+    }
+  },
   "dependencies": {
-    "parcel-bundler": "^1.12.4",
     "source-map-support": "^0.5.16"
+  },
+  "devDependencies": {
+    "parcel": "^2.0.0-beta.1"
   }
 }

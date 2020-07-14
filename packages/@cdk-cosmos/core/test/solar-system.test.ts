@@ -206,6 +206,7 @@ describe('SolarSystem Extension', () => {
     const cosmosExtension = new CosmosExtensionStack(app, 'Test', { env });
     const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });
     const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys', { env });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     new CnameRecord((solarSystemExtension.portal.zone as any) as Construct, 'Test', {
       zone: solarSystemExtension.portal.zone,
       recordName: 'test',

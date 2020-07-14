@@ -180,11 +180,7 @@ export class RemoteCluster {
   static import(scope: Construct, id: string, exportName: string, vpc: IVpc): ICluster {
     const clusterName = Fn.importValue(`${exportName}Name`);
     const securityGroups = [
-      SecurityGroup.fromSecurityGroupId(
-        scope,
-        `${exportName}SecurityGroup`,
-        Fn.importValue(`${exportName}SecurityGroup`)
-      ),
+      SecurityGroup.fromSecurityGroupId(scope, `${id}SecurityGroup`, Fn.importValue(`${exportName}SecurityGroup`)),
     ];
 
     return Cluster.fromClusterAttributes(scope, id, {
@@ -247,7 +243,7 @@ export class RemoteApplicationListener {
     const listenerArn = Fn.importValue(`${exportName}Arn`);
     const securityGroup = SecurityGroup.fromSecurityGroupId(
       scope,
-      `${exportName}SecurityGroup`,
+      `${id}SecurityGroup`,
       Fn.importValue(`${exportName}SecurityGroupId`)
     );
 

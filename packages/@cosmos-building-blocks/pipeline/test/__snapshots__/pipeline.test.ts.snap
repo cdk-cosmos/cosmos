@@ -103,7 +103,7 @@ Object {
         "Environment": Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "Image": "aws/codebuild/standard:3.0",
-          "PrivilegedMode": false,
+          "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
         "ServiceRole": Object {

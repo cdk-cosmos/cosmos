@@ -9,6 +9,7 @@ export class DockerPipeline extends StandardPipeline {
   constructor(scope: Construct, id: string, props: DockerPipelineProps) {
     super(scope, id, {
       buildSpec: DockerPipeline.DefaultBuildSpec(),
+      buildPrivileged: true,
       ...props,
     });
   }

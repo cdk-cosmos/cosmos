@@ -1,9 +1,7 @@
 import { request } from 'https';
 import { IncomingMessage } from 'http';
 import { parse } from 'url';
-import { CloudFormationCustomResourceEvent } from 'aws-lambda/trigger/cloudformation-custom-resource';
-import { Context } from 'aws-lambda/handler';
-import { CloudFormationCustomResourceResponse } from 'aws-lambda/trigger/cloudformation-custom-resource';
+import { Context, CloudFormationCustomResourceEvent, CloudFormationCustomResourceResponse } from 'aws-lambda';
 
 const sendRequest = async (url: string, body: object): Promise<IncomingMessage> => {
   const parsedUrl = parse(url);

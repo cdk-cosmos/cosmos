@@ -113,7 +113,7 @@ export class StandardPipeline extends Construct {
   }
 
   static DefaultBuildSpec(): BuildSpecBuilder {
-    return new BuildSpecBuilder().addCommands('build', 'make build');
+    return new BuildSpecBuilder().addCommands('build', 'make build').addExportedVariables('APP_BUILD_VERSION');
   }
 
   static DefaultAppBuildVersionStageEnv(): BuildEnvironmentVariables {
