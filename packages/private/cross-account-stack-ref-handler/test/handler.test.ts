@@ -32,7 +32,7 @@ const mockRequest = () => ({
 });
 
 jest.mock('https', () => mockRequest());
-jest.mock('aws-sdk/clients/cloudformation', () => MockCloudFormation);
+jest.mock('aws-sdk', () => ({ CloudFormation: MockCloudFormation }));
 
 // Silence logging
 console.log = jest.fn();
