@@ -1,4 +1,14 @@
 
+## v0.5.3 (2020-07-14)
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`, `private`
+  * [#146](https://github.com/cdk-cosmos/cosmos/pull/146) Bug Fixes: Typeo in Remote Imports, Default Privileged mode for Docker Pipeline, Bundle Issue in Cross Account Stack Ref Fn ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.5.2 (2020-07-07)
 
 #### 🐛 Bug Fix
