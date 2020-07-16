@@ -30,9 +30,9 @@
         "node": ">=12.x"
       },
       "sourceMap": true,
-      "includeNodeModules": [
-        "source-map-support"
-      ]
+      "includeNodeModules": {
+        "aws-sdk": false
+      }
     }
   },
   "dependencies": {
