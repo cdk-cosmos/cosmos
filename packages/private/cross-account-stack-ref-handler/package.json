@@ -1,6 +1,6 @@
 {
   "name": "cross-account-stack-ref-handler",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "private": true,
   "license": "Apache-2.0",
   "source": "src/index.ts",
@@ -30,9 +30,9 @@
         "node": ">=12.x"
       },
       "sourceMap": true,
-      "includeNodeModules": [
-        "source-map-support"
-      ]
+      "includeNodeModules": {
+        "aws-sdk": false
+      }
     }
   },
   "dependencies": {
