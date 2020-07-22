@@ -1,4 +1,4 @@
-import { CfnResource } from '@aws-cdk/core';
+import { CfnResource, NestedStack, NestedStackProps } from '@aws-cdk/core';
 import { Construct } from '@aws-cdk/core/lib/construct-compat';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Stack, StackProps } from '@aws-cdk/core/lib/stack';
@@ -63,6 +63,45 @@ export class BaseStack extends Stack {
     if (partition) this.node.setContext(COSMOS_PARTITION, partition);
     if (version) this.node.setContext(COSMOS_VERSION, version);
     if (env) this.node.setContext(AWS_ENV, env);
+
+    if (cidr) this.networkBuilder = new NetworkBuilder(cidr);
+    if (this.networkBuilder) this.node.setContext(COSMOS_NETWORK_BUILDER, this.networkBuilder);
+    else this.networkBuilder = this.node.tryGetContext(COSMOS_NETWORK_BUILDER);
+
+    this.hidden = new Construct(this, 'Default');
+  }
+
+  public allocateLogicalId(scope: CfnResource): string {
+    if (this.disableCosmosNaming) return super.allocateLogicalId(scope);
+    const id = generateScopeId({ scope, defaultPattern: PATTERN.RESOURCE });
+    return removeNonAlphanumeric(id);
+  }
+}
+
+export interface BaseNestedStackProps extends BaseConstructProps, NestedStackProps {
+  disableCosmosNaming?: boolean;
+  cidr?: string;
+}
+
+export class BaseNestedStack extends NestedStack {
+  private readonly disableCosmosNaming: boolean;
+  protected readonly hidden: Construct;
+  public readonly networkBuilder?: NetworkBuilder;
+
+  constructor(scope: Construct, id: string, props?: BaseNestedStackProps) {
+    const { type, context, partition, version, disableCosmosNaming = false, cidr } = props || {};
+
+    super(scope, id, props);
+
+    this.node.type = type;
+    this.disableCosmosNaming = disableCosmosNaming;
+
+    if (context) {
+      Object.entries(context).forEach(([key, value]) => this.node.setContext(key, value));
+    }
+
+    if (partition) this.node.setContext(COSMOS_PARTITION, partition);
+    if (version) this.node.setContext(COSMOS_VERSION, version);
 
     if (cidr) this.networkBuilder = new NetworkBuilder(cidr);
     if (this.networkBuilder) this.node.setContext(COSMOS_NETWORK_BUILDER, this.networkBuilder);

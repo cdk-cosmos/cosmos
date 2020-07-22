@@ -5,6 +5,7 @@ import {
   SubnetType,
   GatewayVpcEndpointAwsService,
   InterfaceVpcEndpointAwsService,
+  IVpc,
 } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 
@@ -38,7 +39,7 @@ export class CoreVpc extends Vpc {
   }
 }
 
-export function addCommonEndpoints(vpc: Vpc): void {
+export function addCommonEndpoints(vpc: IVpc): void {
   vpc.addInterfaceEndpoint('SsmEndpoint', {
     service: InterfaceVpcEndpointAwsService.SSM,
     subnets: { subnetGroupName: 'App' },
@@ -53,7 +54,7 @@ export function addCommonEndpoints(vpc: Vpc): void {
   });
 }
 
-export function addEcsEndpoints(vpc: Vpc): void {
+export function addEcsEndpoints(vpc: IVpc): void {
   vpc.addInterfaceEndpoint('EcsEndpoint', {
     service: InterfaceVpcEndpointAwsService.ECS,
     subnets: { subnetGroupName: 'App' },

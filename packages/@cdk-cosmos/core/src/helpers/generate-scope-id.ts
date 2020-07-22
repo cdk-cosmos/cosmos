@@ -17,21 +17,7 @@ export function generateSingletonId(props: {
   delimiter?: string;
 }): string {
   const { scope, id, type, partition, version, delimiter } = props;
-  let pattern: string;
-  switch (scope.node.type) {
-    case 'Cosmos':
-      pattern = PATTERN.SINGLETON_COSMOS;
-      break;
-    case 'Galaxy':
-      pattern = PATTERN.SINGLETON_GALAXY;
-      break;
-    case 'SolarSystem':
-      pattern = PATTERN.SINGLETON_SOLAR_SYSTEM;
-      break;
-    default:
-      throw new Error(`Singleton Pattern could not be found for ${scope.node.uniqueId}`);
-  }
-  return generateNodeId({ scope, pattern, id, type, partition, version, delimiter });
+  return generateNodeId({ scope, pattern: PATTERN.SINGLETON_COSMOS, id, type, partition, version, delimiter });
 }
 
 export function generateNodeId(props: {

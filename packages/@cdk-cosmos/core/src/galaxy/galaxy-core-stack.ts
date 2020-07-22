@@ -41,7 +41,7 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
       this.cdkCrossAccountRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${CdkCrossAccountRoleName}`;
     }
 
-    Tag.add(this, 'cosmos:galaxy', id);
+    Tag.add(this, 'cosmos:galaxy', this.node.id);
   }
 
   addSharedVpc(props?: Partial<CoreVpcProps> & { commonEndpoints?: boolean; ecsEndpoints?: boolean }): Vpc {

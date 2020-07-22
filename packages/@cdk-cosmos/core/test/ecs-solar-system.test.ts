@@ -6,42 +6,45 @@ import {
   CosmosExtensionStack,
   GalaxyCoreStack,
   GalaxyExtensionStack,
-  EcsSolarSystemCoreStack,
+  SolarSystemCoreStack,
   EcsSolarSystemExtensionStack,
 } from '../src';
 
 const app = new App();
 const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'cos.com' });
 const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { cidr: '10.0.1.0/22' });
-const galaxyVpc = galaxy.addSharedVpc();
-const ecsSolarSystem = new EcsSolarSystemCoreStack(galaxy, 'Sys', {
-  vpc: galaxyVpc,
+galaxy.addSharedVpc();
+const solarSystem = new SolarSystemCoreStack(galaxy, 'Sys', {
+  vpc: galaxy.vpc,
   certificate: { subDomains: ['*'] },
 });
-const ecsSolarSystem1 = new EcsSolarSystemCoreStack(galaxy, 'Sys1', {
-  vpc: galaxyVpc,
-  listenerInboundCidr: '10.0.0.0/8',
+solarSystem.addEcs();
+const solarSystem2 = new SolarSystemCoreStack(galaxy, 'Sys1', {
+  vpc: galaxy.vpc,
   certificate: false,
+});
+solarSystem2.addEcs({
+  albListenerCidr: '10.0.0.0/8',
 });
 
 const cosmosExtension = new CosmosExtensionStack(app, 'Test');
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal');
-const ecsSolarSystemExtension = new EcsSolarSystemExtensionStack(galaxyExtension, 'Sys');
+const solarSystemExtension = new EcsSolarSystemExtensionStack(galaxyExtension, 'Sys');
 
-const [devEcsSolarSystemStack, devEcsSolarSystemStack1, devEcsSolarSystemExtensionStack] = synthesizeStacks(
-  ecsSolarSystem,
-  ecsSolarSystem1,
-  ecsSolarSystemExtension
-);
+const [
+  solarSystemStack,
+  ecsSolarSystemStack,
+  solarSystem2Stack,
+  ecsSolarSystem2Stack,
+  solarSystemExtensionStack,
+] = synthesizeStacks(solarSystem, solarSystem.ecs, solarSystem2, solarSystem2.ecs, solarSystemExtension);
 
 describe('ECS-Solar-System', () => {
   test('should be an ecs-solar-system', () => {
-    expect(devEcsSolarSystemStack.name).toEqual('CoreCosGalSysSolarSystem');
-    expect(devEcsSolarSystemStack).toHaveOutput({ exportName: 'CoreGalSysZoneName', outputValue: 'sys.cos.com' });
-    expect(devEcsSolarSystemStack).toHaveOutput({ exportName: 'CoreGalSysZoneId' });
-    expect(devEcsSolarSystemStack).toHaveOutput({ exportName: 'CoreGalSysClusterName' });
-    expect(devEcsSolarSystemStack).toHaveOutput({ exportName: 'CoreGalSysAlbArn' });
-    expect(devEcsSolarSystemStack).toHaveOutput({ exportName: 'CoreGalSysHttpListenerArn' });
+    expect(solarSystem.stackName).toEqual('CoreCosGalSysSolarSystem');
+    expect(solarSystem.ecs).toHaveOutput({ exportName: 'CoreGalSysClusterName' });
+    expect(solarSystem.ecs).toHaveOutput({ exportName: 'CoreGalSysAlbArn' });
+    expect(solarSystem.ecs).toHaveOutput({ exportName: 'CoreGalSysHttpListenerArn' });
   });
   test('should be an have correct security groups', () => {
     const httpsSgIngress = [
@@ -74,7 +77,7 @@ describe('ECS-Solar-System', () => {
         ToPort: 8443,
       },
     ];
-    expect(devEcsSolarSystemStack).toHaveResource('AWS::EC2::SecurityGroup', { SecurityGroupIngress: httpsSgIngress });
+    expect(solarSystem.ecs).toHaveResource('AWS::EC2::SecurityGroup', { SecurityGroupIngress: httpsSgIngress });
     const httpSgIngress = [
       {
         CidrIp: '10.0.0.0/8',
@@ -91,20 +94,23 @@ describe('ECS-Solar-System', () => {
         ToPort: 8080,
       },
     ];
-    expect(devEcsSolarSystemStack1).toHaveResource('AWS::EC2::SecurityGroup', { SecurityGroupIngress: httpSgIngress });
+    expect(solarSystem2.ecs).toHaveResource('AWS::EC2::SecurityGroup', { SecurityGroupIngress: httpSgIngress });
   });
 
   test('should match snapshot', () => {
-    expect(devEcsSolarSystemStack.template).toMatchSnapshot();
+    expect(solarSystemStack).toMatchSnapshot();
+    expect(ecsSolarSystemStack).toMatchSnapshot();
+    expect(solarSystem2Stack).toMatchSnapshot();
+    expect(ecsSolarSystem2Stack).toMatchSnapshot();
   });
 });
 
 describe('ECS-Solar-System Extension', () => {
   test('should be a solar-system extension', () => {
-    expect(devEcsSolarSystemExtensionStack.name).toEqual('AppTestGalSysSolarSystem');
+    expect(solarSystemExtension.stackName).toEqual('AppTestGalSysSolarSystem');
   });
 
   test('should match snapshot', () => {
-    expect(devEcsSolarSystemExtensionStack.template).toMatchSnapshot();
+    expect(solarSystemExtensionStack).toMatchSnapshot();
   });
 });
