@@ -23,7 +23,6 @@
     "clean": "rm -rf lib"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-cloudformation": "^1.54.0",
     "@aws-cdk/aws-ec2": "^1.54.0",
     "@aws-cdk/aws-ecs": "^1.54.0",
     "@aws-cdk/aws-elasticloadbalancingv2": "^1.54.0",

@@ -27,7 +27,6 @@
     "copy-files": "cp ../../private/cross-account-stack-ref-handler/lib/bundle.zip lib/cross-account-stack-ref-handler.zip"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-cloudformation": "^1.54.0",
     "@aws-cdk/aws-lambda": "^1.54.0",
     "@aws-cdk/core": "^1.54.0"
   },

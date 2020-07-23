@@ -39,7 +39,6 @@
   "devDependencies": {
     "@aws-cdk/assert": "1.54.0",
     "@aws-cdk/aws-certificatemanager": "1.54.0",
-    "@aws-cdk/aws-cloudformation": "1.54.0",
     "@aws-cdk/aws-cloudwatch": "1.54.0",
     "@aws-cdk/aws-codebuild": "1.54.0",
     "@aws-cdk/aws-codecommit": "1.54.0",
