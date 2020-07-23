@@ -412,9 +412,17 @@ Object {
       "Properties": Object {
         "AliasTarget": Object {
           "DNSName": Object {
-            "Fn::GetAtt": Array [
-              "Alb",
-              "DNSName",
+            "Fn::Join": Array [
+              "",
+              Array [
+                "dualstack.",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "Alb",
+                    "DNSName",
+                  ],
+                },
+              ],
             ],
           },
           "HostedZoneId": Object {

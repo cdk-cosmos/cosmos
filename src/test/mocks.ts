@@ -22,6 +22,9 @@ export class MockCdkAsset extends Construct implements Asset {
   s3Url: string;
   assetPath: string;
   sourceHash: string;
+  httpUrl: string;
+  s3ObjectUrl: string;
+  assetHash: string;
   isZipArchive = true;
   bucket: IBucket = mockProxy() as IBucket;
 
