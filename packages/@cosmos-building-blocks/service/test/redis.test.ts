@@ -32,26 +32,24 @@ test('Should match snapshot', () => {
   new Redis(stack, 'Redis', {
     vpc,
     connectionsAllowedFrom: ec2.connections,
-    subnetIds: vpc.selectSubnets({ subnetGroupName: 'Redis' }).subnetIds,
+    subnetIds: [{ subnetGroupName: 'Redis' }],
   });
   // Redis cluster allowing all connections in 'Redis' subnet
   new Redis(stack, 'RedisOpen', {
     vpc,
-    subnetIds: vpc.selectSubnets({ subnetGroupName: 'Redis' }).subnetIds,
+    subnetIds: [{ subnetGroupName: 'Redis' }],
   });
 
   // Redis cluster overwriting some of the default props
   new Redis(stack, 'RedisOverwrite', {
     vpc,
-    subnetIds: vpc.selectSubnets({ subnetGroupName: 'App' }).subnetIds,
-    redisProps: {
-      replicationGroupDescription: 'Redis cluster not encrypted',
-      atRestEncryptionEnabled: false,
-      cacheNodeType: 'cache.t3.medium',
-      numCacheClusters: 3,
-      transitEncryptionEnabled: false,
-      automaticFailoverEnabled: true,
-    },
+    subnetIds: [{ subnetGroupName: 'App' }],
+    replicationGroupDescription: 'Redis cluster not encrypted',
+    atRestEncryptionEnabled: false,
+    cacheNodeType: 'cache.t3.medium',
+    numCacheClusters: 3,
+    transitEncryptionEnabled: false,
+    automaticFailoverEnabled: true,
   });
   // THEN
   expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
@@ -78,15 +76,13 @@ test('Should be able to overwrite props', () => {
   });
   new Redis(stack, 'RedisTest2', {
     vpc,
-    subnetIds: vpc.selectSubnets({ subnetGroupName: 'App' }).subnetIds,
-    redisProps: {
-      replicationGroupDescription: 'Redis cluster not encrypted',
-      atRestEncryptionEnabled: true,
-      cacheNodeType: 'cache.t3.medium',
-      numCacheClusters: 3,
-      transitEncryptionEnabled: false,
-      automaticFailoverEnabled: true,
-    },
+    subnetIds: [{ subnetGroupName: 'App' }],
+    atRestEncryptionEnabled: true,
+    cacheNodeType: 'cache.t3.medium',
+    numCacheClusters: 3,
+    transitEncryptionEnabled: false,
+    automaticFailoverEnabled: true,
+    engine: 'memcached', // This should not create memcache engine and should overwrite to Redis
   });
   // THEN
   expect(stack).toHaveResource('AWS::ElastiCache::ReplicationGroup', { AtRestEncryptionEnabled: true });
@@ -94,9 +90,7 @@ test('Should be able to overwrite props', () => {
   expect(stack).toHaveResource('AWS::ElastiCache::ReplicationGroup', { NumCacheClusters: 3 });
   expect(stack).toHaveResource('AWS::ElastiCache::ReplicationGroup', { CacheNodeType: 'cache.t3.medium' });
   expect(stack).toHaveResource('AWS::ElastiCache::ReplicationGroup', { AutomaticFailoverEnabled: true });
-  expect(stack).toHaveResource('AWS::ElastiCache::ReplicationGroup', {
-    ReplicationGroupDescription: 'Redis cluster not encrypted',
-  });
+  expect(stack).toHaveResource('AWS::ElastiCache::ReplicationGroup', { Engine: 'redis' }); // Engine should always be redis
 });
 
 test('Default Redis should have all default properties', () => {
@@ -121,7 +115,7 @@ test('Default Redis should have all default properties', () => {
   // Redis with only required props
   new Redis(stack, 'RedisTest3', {
     vpc,
-    subnetIds: vpc.selectSubnets({ subnetGroupName: 'Redis' }).subnetIds,
+    subnetIds: [{ subnetGroupName: 'Redis' }],
   });
   // THEN
   // Redis SG should allow connection from anywhere on port 6379
