@@ -33,8 +33,8 @@ export class CrossAccountZoneDelegationRecord extends Construct {
     });
 
     this.exports = new CrossAccountExports(cosmos.link, `${solarSystem.node.id}${id}Exports`, {
+      serviceToken: cosmos.crossAccountExportServiceToken,
       exports: lazyExports,
-      fn: cosmos.crossAccountExportsFn,
       assumeRoleArn: solarSystem.galaxy.cdkCrossAccountRoleStaticArn,
     });
 
