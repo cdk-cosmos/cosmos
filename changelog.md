@@ -1,4 +1,14 @@
 
+## v0.5.4 (2020-07-16)
+
+#### 🐛 Bug Fix
+* `private`
+  * [#148](https://github.com/cdk-cosmos/cosmos/pull/148) Fix missing node modules in cross account fn (bundle issue) ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.5.3 (2020-07-14)
 
 #### 🐛 Bug Fix
