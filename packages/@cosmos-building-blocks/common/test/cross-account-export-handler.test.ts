@@ -64,6 +64,6 @@ test('should fail when invalid event', async () => {
   try {
     await handler({} as any);
   } catch (error) {
-    expect(error.message).toEqual("Cannot destructure property `exports` of 'undefined' or 'null'.");
+    expect(error.message).toContain('Cannot destructure property');
   }
 });
