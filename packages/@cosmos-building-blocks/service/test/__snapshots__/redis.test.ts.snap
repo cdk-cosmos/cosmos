@@ -1,0 +1,569 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should match snapshot 1`] = `
+Object {
+  "Parameters": Object {
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": Object {
+    "Ec2FD86B82F": Object {
+      "DependsOn": Array [
+        "Ec2InstanceRole8071A9F0",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "IamInstanceProfile": Object {
+          "Ref": "Ec2InstanceProfile7C946CD9",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t3.large",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "Ec2InstanceSecurityGroup1638B7F2",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": Object {
+          "Ref": "vpcAppSubnet1Subnet0009B9D9",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/Ec2",
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": "#!/bin/bash",
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "Ec2InstanceProfile7C946CD9": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "Ec2InstanceRole8071A9F0",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "Ec2InstanceRole8071A9F0": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/Ec2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "Ec2InstanceSecurityGroup1638B7F2": Object {
+      "Properties": Object {
+        "GroupDescription": "aws-redis/Ec2/InstanceSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/Ec2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "Redis04B3B4F3": Object {
+      "Properties": Object {
+        "AtRestEncryptionEnabled": true,
+        "AutomaticFailoverEnabled": false,
+        "CacheNodeType": "cache.t3.micro",
+        "CacheSubnetGroupName": Object {
+          "Ref": "RedisRedisSubnetGroupE7D796E2",
+        },
+        "Engine": "redis",
+        "NumCacheClusters": 1,
+        "ReplicationGroupDescription": "Redis cluster",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "RedisRedisSecurityGroup23991694",
+              "GroupId",
+            ],
+          },
+        ],
+        "TransitEncryptionEnabled": true,
+      },
+      "Type": "AWS::ElastiCache::ReplicationGroup",
+    },
+    "RedisOpenRedisE10E4372": Object {
+      "Properties": Object {
+        "AtRestEncryptionEnabled": true,
+        "AutomaticFailoverEnabled": false,
+        "CacheNodeType": "cache.t3.micro",
+        "CacheSubnetGroupName": Object {
+          "Ref": "RedisOpenRedisSubnetGroupA40EB59D",
+        },
+        "Engine": "redis",
+        "NumCacheClusters": 1,
+        "ReplicationGroupDescription": "Redis cluster",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "RedisOpenRedisSecurityGroupD3941EDF",
+              "GroupId",
+            ],
+          },
+        ],
+        "TransitEncryptionEnabled": true,
+      },
+      "Type": "AWS::ElastiCache::ReplicationGroup",
+    },
+    "RedisOpenRedisSecurityGroupD3941EDF": Object {
+      "Properties": Object {
+        "GroupDescription": "aws-redis/RedisOpen/RedisSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:6379",
+            "FromPort": 6379,
+            "IpProtocol": "tcp",
+            "ToPort": 6379,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "RedisOpenRedisSubnetGroupA40EB59D": Object {
+      "Properties": Object {
+        "Description": "Subnet group for Redis",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "vpcRedisSubnet1Subnet3EE087E6",
+          },
+          Object {
+            "Ref": "vpcRedisSubnet2SubnetFF7CC220",
+          },
+        ],
+      },
+      "Type": "AWS::ElastiCache::SubnetGroup",
+    },
+    "RedisOverwriteRedis9B423C14": Object {
+      "Properties": Object {
+        "AtRestEncryptionEnabled": false,
+        "AutomaticFailoverEnabled": true,
+        "CacheNodeType": "cache.t3.medium",
+        "CacheSubnetGroupName": Object {
+          "Ref": "RedisOverwriteRedisSubnetGroupB4851474",
+        },
+        "Engine": "redis",
+        "NumCacheClusters": 3,
+        "ReplicationGroupDescription": "Redis cluster not encrypted",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "RedisOverwriteRedisSecurityGroupDBCF27F8",
+              "GroupId",
+            ],
+          },
+        ],
+        "TransitEncryptionEnabled": false,
+      },
+      "Type": "AWS::ElastiCache::ReplicationGroup",
+    },
+    "RedisOverwriteRedisSecurityGroupDBCF27F8": Object {
+      "Properties": Object {
+        "GroupDescription": "aws-redis/RedisOverwrite/RedisSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:6379",
+            "FromPort": 6379,
+            "IpProtocol": "tcp",
+            "ToPort": 6379,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "RedisOverwriteRedisSubnetGroupB4851474": Object {
+      "Properties": Object {
+        "Description": "Subnet group for Redis",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "vpcAppSubnet1Subnet0009B9D9",
+          },
+          Object {
+            "Ref": "vpcAppSubnet2Subnet01033D46",
+          },
+        ],
+      },
+      "Type": "AWS::ElastiCache::SubnetGroup",
+    },
+    "RedisRedisSecurityGroup23991694": Object {
+      "Properties": Object {
+        "GroupDescription": "aws-redis/Redis/RedisSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "RedisRedisSecurityGroupfromawsredisEc2InstanceSecurityGroup964FF1106379FE5EA424": Object {
+      "Properties": Object {
+        "Description": "from awsredisEc2InstanceSecurityGroup964FF110:6379",
+        "FromPort": 6379,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "RedisRedisSecurityGroup23991694",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "Ec2InstanceSecurityGroup1638B7F2",
+            "GroupId",
+          ],
+        },
+        "ToPort": 6379,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "RedisRedisSubnetGroupE7D796E2": Object {
+      "Properties": Object {
+        "Description": "Subnet group for Redis",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "vpcRedisSubnet1Subnet3EE087E6",
+          },
+          Object {
+            "Ref": "vpcRedisSubnet2SubnetFF7CC220",
+          },
+        ],
+      },
+      "Type": "AWS::ElastiCache::SubnetGroup",
+    },
+    "vpcA2121C38": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "vpcAppSubnet1RouteTable883411EE": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "vpcAppSubnet1RouteTableAssociation7C392A32": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "vpcAppSubnet1RouteTable883411EE",
+        },
+        "SubnetId": Object {
+          "Ref": "vpcAppSubnet1Subnet0009B9D9",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "vpcAppSubnet1Subnet0009B9D9": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/AppSubnet1",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "vpcAppSubnet2RouteTable9E7B4A01": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "vpcAppSubnet2RouteTableAssociationD024F74B": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "vpcAppSubnet2RouteTable9E7B4A01",
+        },
+        "SubnetId": Object {
+          "Ref": "vpcAppSubnet2Subnet01033D46",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "vpcAppSubnet2Subnet01033D46": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/AppSubnet2",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "vpcRedisSubnet1RouteTable9EFB9850": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/RedisSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "vpcRedisSubnet1RouteTableAssociation2DCFFBEC": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "vpcRedisSubnet1RouteTable9EFB9850",
+        },
+        "SubnetId": Object {
+          "Ref": "vpcRedisSubnet1Subnet3EE087E6",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "vpcRedisSubnet1Subnet3EE087E6": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.128/28",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/RedisSubnet1",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Redis",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "vpcRedisSubnet2RouteTable262EC3FD": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/RedisSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "vpcRedisSubnet2RouteTableAssociationAFAC6951": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "vpcRedisSubnet2RouteTable262EC3FD",
+        },
+        "SubnetId": Object {
+          "Ref": "vpcRedisSubnet2SubnetFF7CC220",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "vpcRedisSubnet2SubnetFF7CC220": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.144/28",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/RedisSubnet2",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Redis",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+  },
+}
+`;
