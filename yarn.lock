@@ -334,6 +334,14 @@
     "@aws-cdk/cx-api" "1.54.0"
     constructs "^3.0.2"
 
+"@aws-cdk/aws-elasticache@1.54.0":
+  version "1.54.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-elasticache/-/aws-elasticache-1.54.0.tgz#194cb75a1b8bed4f16953f5d3c528181f6fb8682"
+  integrity sha512-0OGMyiu/mq7pZxQGQ6CJMV7mSVAi2K1ac8ts/Bm5HuHkXMaoDtDDhK29LM6KCR2BPPHSN+RysbR+7gyBy3q47g==
+  dependencies:
+    "@aws-cdk/core" "1.54.0"
+    constructs "^3.0.2"
+
 "@aws-cdk/aws-elasticloadbalancing@1.54.0":
   version "1.54.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-elasticloadbalancing/-/aws-elasticloadbalancing-1.54.0.tgz#aabf6880f30bee5ab547b119ecb3ae9100e6a0b4"
