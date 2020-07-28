@@ -375,16 +375,16 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "aws-redis/vpc/AppSubnet1",
-          },
-          Object {
             "Key": "aws-cdk:subnet-name",
             "Value": "App",
           },
           Object {
             "Key": "aws-cdk:subnet-type",
             "Value": "Isolated",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/AppSubnet1",
           },
         ],
         "VpcId": Object {
@@ -432,16 +432,16 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "aws-redis/vpc/AppSubnet2",
-          },
-          Object {
             "Key": "aws-cdk:subnet-name",
             "Value": "App",
           },
           Object {
             "Key": "aws-cdk:subnet-type",
             "Value": "Isolated",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/AppSubnet2",
           },
         ],
         "VpcId": Object {
@@ -489,16 +489,16 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "aws-redis/vpc/RedisSubnet1",
-          },
-          Object {
             "Key": "aws-cdk:subnet-name",
             "Value": "Redis",
           },
           Object {
             "Key": "aws-cdk:subnet-type",
             "Value": "Isolated",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/RedisSubnet1",
           },
         ],
         "VpcId": Object {
@@ -546,16 +546,16 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
-            "Key": "Name",
-            "Value": "aws-redis/vpc/RedisSubnet2",
-          },
-          Object {
             "Key": "aws-cdk:subnet-name",
             "Value": "Redis",
           },
           Object {
             "Key": "aws-cdk:subnet-type",
             "Value": "Isolated",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "aws-redis/vpc/RedisSubnet2",
           },
         ],
         "VpcId": Object {
