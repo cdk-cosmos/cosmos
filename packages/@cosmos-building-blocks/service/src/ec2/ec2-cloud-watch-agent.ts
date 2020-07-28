@@ -4,7 +4,6 @@ import { Construct, Lazy, Stack } from '@aws-cdk/core';
 import { Instance, OperatingSystemType } from '@aws-cdk/aws-ec2';
 import { AutoScalingGroup } from '@aws-cdk/aws-autoscaling';
 import { ManagedPolicy } from '@aws-cdk/aws-iam';
-import { encode } from 'punycode';
 
 export interface CloudWatchAgentProps {
   instance: Instance | AutoScalingGroup;
@@ -66,7 +65,7 @@ export class CloudWatchAgent extends Construct {
       produce: () => {
         const stack = Stack.of(this);
         const json = stack.resolve(stack.toJsonString(this.renderConfig())) as string;
-        const escapedJson = json.replace(/\"/g, '\\"').replace(/\$/g, '\\$');
+        const escapedJson = json.replace(/"/g, '\\"').replace(/\$/g, '\\$');
         return escapedJson;
       },
     });

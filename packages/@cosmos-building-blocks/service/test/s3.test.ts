@@ -3,7 +3,7 @@ import { App, Stack } from '@aws-cdk/core';
 import { SecureBucket } from '../src';
 
 const app = new App();
-const stack = new Stack(app, 'aws-secure-bucket');
+const stack = new Stack(app, 'Stack');
 new SecureBucket(stack, 'SecureBucket', {});
 
 const synth = SynthUtils.toCloudFormation(stack);

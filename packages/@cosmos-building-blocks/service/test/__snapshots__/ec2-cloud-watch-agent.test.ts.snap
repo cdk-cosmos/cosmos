@@ -34,7 +34,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "aws-cloud-watch-agent/Instance",
+            "Value": "Stack/Instance",
           },
         ],
         "UserData": Object {
@@ -112,7 +112,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-c
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "aws-cloud-watch-agent/Instance",
+            "Value": "Stack/Instance",
           },
         ],
       },
@@ -120,7 +120,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-c
     },
     "InstanceInstanceSecurityGroupF0E2D5BE": Object {
       "Properties": Object {
-        "GroupDescription": "aws-cloud-watch-agent/Instance/InstanceSecurityGroup",
+        "GroupDescription": "Stack/Instance/InstanceSecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -131,10 +131,10 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-c
         "Tags": Array [
           Object {
             "Key": "Name",
-            "Value": "aws-cloud-watch-agent/Instance",
+            "Value": "Stack/Instance",
           },
         ],
-        "VpcId": "",
+        "VpcId": "Vpc",
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
