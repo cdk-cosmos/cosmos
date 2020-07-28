@@ -8,8 +8,6 @@
   },
   "dependencies": {
     "@aws-cdk/core": "1.37.0",
-    "@cdk-cosmos/core": "../../packages/@cdk-cosmos/core",
-    "@cosmos-building-blocks/common": "../../packages/@cosmos-building-blocks/common",
     "source-map-support": "^0.5.16"
   },
   "devDependencies": {

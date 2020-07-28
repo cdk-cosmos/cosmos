@@ -1,14 +1,13 @@
 import { SynthUtils } from '@aws-cdk/assert';
-import * as cdk from '@aws-cdk/core';
-import * as s3 from '../src/index';
+import { App, Stack } from '@aws-cdk/core';
+import { SecureBucket } from '../src';
 
-test('Empty Stack', () => {
-  const app = new cdk.App();
-  const stack = new cdk.Stack(app, 'aws-secure-bucket');
+const app = new App();
+const stack = new Stack(app, 'aws-secure-bucket');
+new SecureBucket(stack, 'SecureBucket', {});
 
-  //WHEN
-  // new s3.SecureBucket(stack, 'SecureBucket', { serverAccessLogsPrefix: '' });
-  new s3.SecureBucket(stack, 'SecureBucket', {});
-  // THEN
-  expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+const synth = SynthUtils.toCloudFormation(stack);
+
+test('Secure Bucket', () => {
+  expect(synth).toMatchSnapshot();
 });
