@@ -32,7 +32,7 @@ export interface IEcsSolarSystemCore extends ISolarSystemCore {
 }
 
 export interface EcsSolarSystemCoreProps extends SolarSystemCoreStackProps {
-  clusterProps?: Partial<ClusterProps>;
+  clusterProps?: Partial<ClusterProps> | { capacity?: false };
   albProps?: Partial<ApplicationLoadBalancerProps>;
   listenerInboundCidr?: string;
 }
@@ -68,7 +68,7 @@ export const EcsSolarSystemCoreStackBuilder = (
         clusterName: this.singletonId('Cluster'),
         vpc: this.vpc,
         capacity:
-          clusterProps.capacity !== null
+          clusterProps.capacity !== false
             ? {
                 vpcSubnets: { subnetGroupName: 'App' },
                 instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
