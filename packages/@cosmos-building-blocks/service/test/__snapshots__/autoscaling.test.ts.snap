@@ -1,0 +1,424 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should match snapshot 1`] = `
+Object {
+  "Parameters": Object {
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": Object {
+    "DefaultAsgLaunchConfig8140DA5E": Object {
+      "DependsOn": Array [
+        "DefaultAsgLaunchConfigInstanceRoleF77373C9",
+      ],
+      "Properties": Object {
+        "IamInstanceProfile": Object {
+          "Ref": "DefaultAsgLaunchConfigInstanceProfile1F634371",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t3.medium",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "DefaultAsgLaunchConfigInstanceSecurityGroup339317F1",
+              "GroupId",
+            ],
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": "#!/bin/bash",
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "DefaultAsgLaunchConfigASG06101099": Object {
+      "Properties": Object {
+        "DesiredCapacity": "1",
+        "LaunchConfigurationName": Object {
+          "Ref": "DefaultAsgLaunchConfig8140DA5E",
+        },
+        "MaxSize": "5",
+        "MinSize": "0",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "aws-autoscaling/DefaultAsgLaunchConfig",
+          },
+        ],
+        "VPCZoneIdentifier": Array [
+          Object {
+            "Ref": "vpcAppSubnet1Subnet0009B9D9",
+          },
+          Object {
+            "Ref": "vpcAppSubnet2Subnet01033D46",
+          },
+        ],
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "UpdatePolicy": Object {
+        "AutoScalingScheduledAction": Object {
+          "IgnoreUnmodifiedGroupSizeProperties": true,
+        },
+      },
+    },
+    "DefaultAsgLaunchConfigInstanceProfile1F634371": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "DefaultAsgLaunchConfigInstanceRoleF77373C9",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "DefaultAsgLaunchConfigInstanceRoleF77373C9": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-autoscaling/DefaultAsgLaunchConfig",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "DefaultAsgLaunchConfigInstanceSecurityGroup339317F1": Object {
+      "Properties": Object {
+        "GroupDescription": "aws-autoscaling/DefaultAsgLaunchConfig/InstanceSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-autoscaling/DefaultAsgLaunchConfig",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "SpotAsgLaunchTemplate2147FC9C": Object {
+      "DependsOn": Array [
+        "SpotAsgLaunchTemplateInstanceRole62ACCAC2",
+      ],
+      "Properties": Object {
+        "LaunchTemplateData": Object {
+          "IamInstanceProfile": Object {
+            "Arn": Object {
+              "Fn::GetAtt": Array [
+                "SpotAsgLaunchTemplateInstanceProfileF66B715A",
+                "Arn",
+              ],
+            },
+          },
+          "ImageId": Object {
+            "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter",
+          },
+          "InstanceType": "t3.medium",
+          "Monitoring": Object {
+            "Enabled": true,
+          },
+          "SecurityGroupIds": Array [
+            Object {
+              "Fn::GetAtt": Array [
+                "SpotAsgLaunchTemplateInstanceSecurityGroupC1F6C06B",
+                "GroupId",
+              ],
+            },
+          ],
+          "UserData": Object {
+            "Fn::Base64": "#!/bin/bash",
+          },
+        },
+      },
+      "Type": "AWS::EC2::LaunchTemplate",
+    },
+    "SpotAsgLaunchTemplateASGB05FC1E5": Object {
+      "Properties": Object {
+        "DesiredCapacity": "1",
+        "MaxSize": "5",
+        "MinSize": "0",
+        "MixedInstancesPolicy": Object {
+          "InstancesDistribution": Object {
+            "OnDemandAllocationStrategy": "prioritized",
+            "OnDemandBaseCapacity": 0,
+            "OnDemandPercentageAboveBaseCapacity": 0,
+            "SpotAllocationStrategy": "capacity-optimized",
+            "SpotMaxPrice": "0.03",
+          },
+          "LaunchTemplate": Object {
+            "LaunchTemplateSpecification": Object {
+              "LaunchTemplateId": Object {
+                "Ref": "SpotAsgLaunchTemplate2147FC9C",
+              },
+              "Version": Object {
+                "Fn::GetAtt": Array [
+                  "SpotAsgLaunchTemplate2147FC9C",
+                  "LatestVersionNumber",
+                ],
+              },
+            },
+            "Overrides": Array [
+              Object {
+                "InstanceType": "t3.medium",
+              },
+              Object {
+                "InstanceType": "t3a.medium",
+              },
+            ],
+          },
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "aws-autoscaling/SpotAsgLaunchTemplate",
+          },
+        ],
+        "VPCZoneIdentifier": Array [
+          Object {
+            "Ref": "vpcAppSubnet1Subnet0009B9D9",
+          },
+          Object {
+            "Ref": "vpcAppSubnet2Subnet01033D46",
+          },
+        ],
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "UpdatePolicy": Object {
+        "AutoScalingScheduledAction": Object {
+          "IgnoreUnmodifiedGroupSizeProperties": true,
+        },
+      },
+    },
+    "SpotAsgLaunchTemplateInstanceProfileF66B715A": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "SpotAsgLaunchTemplateInstanceRole62ACCAC2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "SpotAsgLaunchTemplateInstanceRole62ACCAC2": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-autoscaling/SpotAsgLaunchTemplate",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "SpotAsgLaunchTemplateInstanceSecurityGroupC1F6C06B": Object {
+      "Properties": Object {
+        "GroupDescription": "aws-autoscaling/SpotAsgLaunchTemplate/InstanceSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-autoscaling/SpotAsgLaunchTemplate",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "vpcA2121C38": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-autoscaling/vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "vpcAppSubnet1RouteTable883411EE": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-autoscaling/vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "vpcAppSubnet1RouteTableAssociation7C392A32": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "vpcAppSubnet1RouteTable883411EE",
+        },
+        "SubnetId": Object {
+          "Ref": "vpcAppSubnet1Subnet0009B9D9",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "vpcAppSubnet1Subnet0009B9D9": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "aws-autoscaling/vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "vpcAppSubnet2RouteTable9E7B4A01": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-autoscaling/vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "vpcAppSubnet2RouteTableAssociationD024F74B": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "vpcAppSubnet2RouteTable9E7B4A01",
+        },
+        "SubnetId": Object {
+          "Ref": "vpcAppSubnet2Subnet01033D46",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "vpcAppSubnet2Subnet01033D46": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "aws-autoscaling/vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+  },
+}
+`;
