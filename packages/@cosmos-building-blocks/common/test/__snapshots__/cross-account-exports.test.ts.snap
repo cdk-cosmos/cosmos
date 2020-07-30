@@ -2,6 +2,20 @@
 
 exports[`should match snapshot 1`] = `
 Object {
+  "Parameters": Object {
+    "AssetParameterssourceHashArtifactHash4AD140F3": Object {
+      "Description": "Artifact hash for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3Bucket55D9AB30": Object {
+      "Description": "S3 bucket for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3VersionKey491A8CF8": Object {
+      "Description": "S3 key for asset version \\"sourceHash\\"",
+      "Type": "String",
+    },
+  },
   "Resources": Object {
     "CustomCrossAccountExportsCustomResourceProviderHandler2315F6D6": Object {
       "DependsOn": Array [
@@ -10,9 +24,41 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": Object {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+            "Ref": "AssetParameterssourceHashS3Bucket55D9AB30",
           },
-          "S3Key": "sourceHash.zip",
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey491A8CF8",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey491A8CF8",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
         },
         "Handler": "__entrypoint__.handler",
         "MemorySize": 128,

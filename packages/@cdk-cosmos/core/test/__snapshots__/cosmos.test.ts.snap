@@ -130,6 +130,20 @@ Object {
       "Value": "cos.com",
     },
   },
+  "Parameters": Object {
+    "AssetParameterssourceHashArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"sourceHash\\"",
+      "Type": "String",
+    },
+  },
   "Resources": Object {
     "CdkMasterRole": Object {
       "Properties": Object {
@@ -193,9 +207,41 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": Object {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+            "Ref": "AssetParameterssourceHashS3Bucket",
           },
-          "S3Key": "sourceHash.zip",
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
         },
         "Handler": "__entrypoint__.handler",
         "MemorySize": 128,

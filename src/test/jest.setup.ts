@@ -29,6 +29,5 @@ jest.mock('@aws-cdk/aws-s3-assets/lib/asset', () => ({
 }));
 
 process.env[CONTEXT_ENV] = JSON.stringify({
-  [NEW_STYLE_STACK_SYNTHESIS_CONTEXT]: true,
   [ENABLE_DIFF_NO_FAIL_CONTEXT]: true,
 });
