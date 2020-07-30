@@ -24,7 +24,7 @@ console.log = jest.fn();
 console.error = jest.fn();
 
 // Tests
-import { handler } from '../src/cross-account-handler';
+import { handler } from '../src/cross-account-export-handler';
 
 beforeEach(() => {
   jest.clearAllMocks();

@@ -130,20 +130,6 @@ Object {
       "Value": "cos.com",
     },
   },
-  "Parameters": Object {
-    "AssetParameters9e074de14a6fa95ed2ff22f2ff6750f09ccd87f1ccb98e3f7827c8d8dd9be795ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"9e074de14a6fa95ed2ff22f2ff6750f09ccd87f1ccb98e3f7827c8d8dd9be795\\"",
-      "Type": "String",
-    },
-    "AssetParameters9e074de14a6fa95ed2ff22f2ff6750f09ccd87f1ccb98e3f7827c8d8dd9be795S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"9e074de14a6fa95ed2ff22f2ff6750f09ccd87f1ccb98e3f7827c8d8dd9be795\\"",
-      "Type": "String",
-    },
-    "AssetParameters9e074de14a6fa95ed2ff22f2ff6750f09ccd87f1ccb98e3f7827c8d8dd9be795S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"9e074de14a6fa95ed2ff22f2ff6750f09ccd87f1ccb98e3f7827c8d8dd9be795\\"",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
     "CdkMasterRole": Object {
       "Properties": Object {
@@ -207,41 +193,9 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": Object {
-            "Ref": "AssetParameters9e074de14a6fa95ed2ff22f2ff6750f09ccd87f1ccb98e3f7827c8d8dd9be795S3Bucket",
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters9e074de14a6fa95ed2ff22f2ff6750f09ccd87f1ccb98e3f7827c8d8dd9be795S3VersionKey",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters9e074de14a6fa95ed2ff22f2ff6750f09ccd87f1ccb98e3f7827c8d8dd9be795S3VersionKey",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
+          "S3Key": "sourceHash.zip",
         },
         "Handler": "__entrypoint__.handler",
         "MemorySize": 128,

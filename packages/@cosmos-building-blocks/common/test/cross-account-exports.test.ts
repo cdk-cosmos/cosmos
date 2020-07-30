@@ -1,10 +1,10 @@
-import '@aws-cdk/assert/jest';
 import { App, Stack } from '@aws-cdk/core';
-import { SynthUtils, expect as cdkExpect, countResources } from '@aws-cdk/assert';
-import { CrossAccountExports, createCrossAccountExportProvider } from '../src';
+import { SynthUtils, expect as cdkExpect, countResources, haveResource } from '@aws-cdk/assert';
 import { Role, AnyPrincipal } from '@aws-cdk/aws-iam';
+import { CrossAccountExports, createCrossAccountExportProvider } from '../src';
 
 jest.mock('fs', () => ({
+  ...jest.requireActual<object>('fs'),
   copyFileSync: jest.fn(),
   existsSync: jest.fn(() => true),
 }));
@@ -23,7 +23,7 @@ const exp3 = new CrossAccountExports(stack, 'TestExports3', { exports: [], alway
 const synth = SynthUtils.synthesize(stack);
 
 test('should have a custom resource and a lambda fn', () => {
-  expect(synth).toHaveResource('Custom::CrossAccountExports', { exports: ['Test-Export'] });
+  cdkExpect(synth).to(haveResource('Custom::CrossAccountExports', { exports: ['Test-Export'] }));
   cdkExpect(synth).to(countResources('Custom::CrossAccountExports', 3));
   cdkExpect(synth).to(countResources('AWS::Lambda::Function', 1));
   expect(exp.get('Test-Export')).toContain('Token');

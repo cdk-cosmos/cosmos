@@ -1,20 +1,14 @@
-import * as path from 'path';
-import * as fs from 'fs';
 import {
   Construct,
   Reference,
   Duration,
   CustomResource,
+  CustomResourceProvider,
   CustomResourceProviderRuntime,
   Stack,
-  CustomResourceProviderProps,
-  FileAssetPackaging,
-  AssetStaging,
   CfnResource,
-  Size,
-  Token,
 } from '@aws-cdk/core';
-import { IRole } from '@aws-cdk/aws-iam';
+import { IRole, CfnRole } from '@aws-cdk/aws-iam';
 
 export const RESOURCE_TYPE = 'Custom::CrossAccountExports';
 
@@ -75,109 +69,22 @@ export class CrossAccountExports extends Construct {
 }
 
 export const createCrossAccountExportProvider = (scope: Construct, role?: IRole): string => {
-  return CustomResourceProvider.getOrCreate(scope, RESOURCE_TYPE, {
-    codeDirectory: `${__dirname}/cross-account-handler`,
+  const serviceToken = CustomResourceProvider.getOrCreate(scope, RESOURCE_TYPE, {
+    codeDirectory: `${__dirname}/cross-account-export-handler`,
     runtime: CustomResourceProviderRuntime.NODEJS_12,
     timeout: Duration.minutes(5),
-    role,
   });
+
+  if (role) {
+    const provider = Stack.of(scope).node.findChild(`${RESOURCE_TYPE}CustomResourceProvider`) as CustomResourceProvider;
+    const providerRole = provider.node.findChild('Role') as CfnRole;
+    const providerHandler = provider.node.findChild('Handler') as CfnResource;
+    provider.node.tryRemoveChild(providerRole.node.id);
+    providerHandler.addPropertyOverride('Role', role.roleArn);
+    providerHandler.addDependsOn(role.node.defaultChild as CfnResource);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const deps = (providerHandler as any).dependsOn as Set<any>;
+    deps.delete(providerRole);
+  }
+  return serviceToken;
 };
-
-// FROM AWS CDK (FIXME:)
-
-const ENTRYPOINT_FILENAME = '__entrypoint__';
-const ENTRYPOINT_NODEJS_SOURCE = require.resolve('@aws-cdk/core/lib/custom-resource-provider/nodejs-entrypoint.js');
-
-class CustomResourceProvider extends Construct {
-  public static getOrCreate(
-    scope: Construct,
-    uniqueid: string,
-    props: CustomResourceProviderProps & { role?: IRole }
-  ): string {
-    const id = `${uniqueid}CustomResourceProvider`;
-    const stack = Stack.of(scope);
-    const provider =
-      (stack.node.tryFindChild(id) as CustomResourceProvider) ?? new CustomResourceProvider(stack, id, props);
-
-    return provider.serviceToken;
-  }
-
-  public readonly serviceToken: string;
-
-  protected constructor(scope: Construct, id: string, props: CustomResourceProviderProps & { role?: IRole }) {
-    super(scope, id);
-
-    const stack = Stack.of(scope);
-
-    // copy the entry point to the code directory
-    fs.copyFileSync(ENTRYPOINT_NODEJS_SOURCE, path.join(props.codeDirectory, `${ENTRYPOINT_FILENAME}.js`));
-
-    // verify we have an index file there
-    if (!fs.existsSync(path.join(props.codeDirectory, 'index.js'))) {
-      throw new Error(`cannot find ${props.codeDirectory}/index.js`);
-    }
-
-    const staging = new AssetStaging(this, 'Staging', {
-      sourcePath: props.codeDirectory,
-    });
-
-    const asset = stack.addFileAsset({
-      fileName: staging.stagedPath,
-      sourceHash: staging.sourceHash,
-      packaging: FileAssetPackaging.ZIP_DIRECTORY,
-    });
-
-    const policies = !props.policyStatements
-      ? undefined
-      : [
-          {
-            PolicyName: 'Inline',
-            PolicyDocument: {
-              Version: '2012-10-17',
-              Statement: props.policyStatements,
-            },
-          },
-        ];
-
-    const role = !props.role
-      ? new CfnResource(this, 'Role', {
-          type: 'AWS::IAM::Role',
-          properties: {
-            AssumeRolePolicyDocument: {
-              Version: '2012-10-17',
-              Statement: [
-                { Action: 'sts:AssumeRole', Effect: 'Allow', Principal: { Service: 'lambda.amazonaws.com' } },
-              ],
-            },
-            ManagedPolicyArns: [
-              { 'Fn::Sub': 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole' },
-            ],
-            Policies: policies,
-          },
-        })
-      : undefined;
-    const roleArn = props.role ? props.role.roleArn : role?.getAtt('Arn');
-
-    const timeout = props.timeout ?? Duration.minutes(15);
-    const memory = props.memorySize ?? Size.mebibytes(128);
-
-    const handler = new CfnResource(this, 'Handler', {
-      type: 'AWS::Lambda::Function',
-      properties: {
-        Code: {
-          S3Bucket: asset.bucketName,
-          S3Key: asset.objectKey,
-        },
-        Timeout: timeout.toSeconds(),
-        MemorySize: memory.toMebibytes(),
-        Handler: `${ENTRYPOINT_FILENAME}.handler`,
-        Role: roleArn,
-        Runtime: 'nodejs12.x',
-      },
-    });
-
-    handler.addDependsOn(role || (props.role?.node.defaultChild as CfnResource));
-
-    this.serviceToken = Token.asString(handler.getAtt('Arn'));
-  }
-}

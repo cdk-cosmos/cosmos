@@ -2,20 +2,6 @@
 
 exports[`should match snapshot 1`] = `
 Object {
-  "Parameters": Object {
-    "AssetParameterse4966f4c45166a3cbc74185be045a0a9302fc8189986dc209d95d262becf3406ArtifactHash3E9D8595": Object {
-      "Description": "Artifact hash for asset \\"e4966f4c45166a3cbc74185be045a0a9302fc8189986dc209d95d262becf3406\\"",
-      "Type": "String",
-    },
-    "AssetParameterse4966f4c45166a3cbc74185be045a0a9302fc8189986dc209d95d262becf3406S3BucketA76112FF": Object {
-      "Description": "S3 bucket for asset \\"e4966f4c45166a3cbc74185be045a0a9302fc8189986dc209d95d262becf3406\\"",
-      "Type": "String",
-    },
-    "AssetParameterse4966f4c45166a3cbc74185be045a0a9302fc8189986dc209d95d262becf3406S3VersionKey8C378FA4": Object {
-      "Description": "S3 key for asset version \\"e4966f4c45166a3cbc74185be045a0a9302fc8189986dc209d95d262becf3406\\"",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
     "CustomCrossAccountExportsCustomResourceProviderHandler2315F6D6": Object {
       "DependsOn": Array [
@@ -24,41 +10,9 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": Object {
-            "Ref": "AssetParameterse4966f4c45166a3cbc74185be045a0a9302fc8189986dc209d95d262becf3406S3BucketA76112FF",
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameterse4966f4c45166a3cbc74185be045a0a9302fc8189986dc209d95d262becf3406S3VersionKey8C378FA4",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameterse4966f4c45166a3cbc74185be045a0a9302fc8189986dc209d95d262becf3406S3VersionKey8C378FA4",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
+          "S3Key": "sourceHash.zip",
         },
         "Handler": "__entrypoint__.handler",
         "MemorySize": 128,
