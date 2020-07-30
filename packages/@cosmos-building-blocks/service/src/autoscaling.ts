@@ -11,6 +11,9 @@ import {
   BlockDeviceVolume,
 } from '@aws-cdk/aws-autoscaling';
 
+/**
+ * Properties for AutoScalingGroupV1
+ */
 export interface AutoScalingGroupV1Props extends AutoScalingGroupProps {
   /**
    * Set this to `true` if you want to use Instance Template instead of Launch Config.
@@ -54,6 +57,16 @@ export interface AutoScalingGroupV1Props extends AutoScalingGroupProps {
   readonly instancesDistribution?: Partial<CfnAutoScalingGroup.InstancesDistributionProperty>;
 }
 
+/**
+ * Derived from Base class AutoScalingGroup with additional functionalities.
+ *
+ * Base AutoScalingGroup class uses Launch Config and have no ability to use more advanced Launch Templates
+ * and MixedInstancesPolicies which gives ability to use Spot fleet and combination of spot and on-demand
+ *
+ * This construct uses default spot fleet template settings with just one property `useInstanceTemplate = true`
+ *
+ * With `launchTemplateOverrides` and `instancesDistribution`, it gives additional fine tuning.
+ */
 export class AutoScalingGroupV1 extends AutoScalingGroup {
   constructor(scope: Construct, id: string, props: AutoScalingGroupV1Props) {
     super(scope, id, props);
