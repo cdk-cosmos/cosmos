@@ -1,0 +1,18 @@
+jenkins:
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
+  clouds:
+    - ecs:
+        cluster: {{ECS_CLUSTER_ARN}}
+        # Credentials should not be set locally. Use IAM roles assigned to the container.
+        credentialsId: False
+        regionName: {{AWS_REGION}}
+        name: jenkins-workers
+        jenkinsUrl: {{JENKINS_URL}}
+        templates:
+          - label: workers
+            templateName: jenkins-worker-nodes
+            taskDefinitionOverride: {{ AGENT_TASK_DEF_ARN }}
+            securityGroups: {{ AGENT_SECURITY_GROUP_IDS }}
+            # launchType: EC2

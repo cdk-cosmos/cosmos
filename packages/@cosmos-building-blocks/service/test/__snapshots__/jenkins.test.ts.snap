@@ -1,0 +1,1425 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Jenkins should match snapshot 1`] = `
+Object {
+  "Resources": Object {
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": Object {
+      "DependsOn": Array [
+        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleDefaultPolicyD28E1A5E",
+        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "mock-s3BucketName",
+          "S3Key": "mock-s3ObjectKey",
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 120,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleDefaultPolicyD28E1A5E": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "elasticfilesystem:CreateAccessPoint",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "ecs:RegisterTaskDefinition",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "JenkinsMasterTaskExecutionRoleFF9AF060",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "JenkinsMasterTaskTaskRole32716B59",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleDefaultPolicyD28E1A5E",
+        "Roles": Array [
+          Object {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "EfsAccessPointjenkins7BF42150": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "Create": Object {
+          "action": "createAccessPoint",
+          "parameters": Object {
+            "FileSystemId": Object {
+              "Ref": "JenkinsMasterEfsDDEC4001",
+            },
+            "PosixUser": Object {
+              "Gid": 6000,
+              "Uid": 6000,
+            },
+            "RootDirectory": Object {
+              "CreationInfo": Object {
+                "OwnerGid": 6000,
+                "OwnerUid": 6000,
+                "Permissions": 750,
+              },
+              "Path": "/data/shared/jenkins",
+            },
+            "Tags": Array [
+              Object {
+                "Key": "Name",
+                "Value": "jenkins",
+              },
+            ],
+          },
+          "physicalResourceId": Object {
+            "responsePath": "AccessPointArn",
+          },
+          "service": "EFS",
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+        "Update": Object {
+          "action": "createAccessPoint",
+          "parameters": Object {
+            "FileSystemId": Object {
+              "Ref": "JenkinsMasterEfsDDEC4001",
+            },
+            "PosixUser": Object {
+              "Gid": 6000,
+              "Uid": 6000,
+            },
+            "RootDirectory": Object {
+              "CreationInfo": Object {
+                "OwnerGid": 6000,
+                "OwnerUid": 6000,
+                "Permissions": 750,
+              },
+              "Path": "/data/shared/jenkins",
+            },
+            "Tags": Array [
+              Object {
+                "Key": "Name",
+                "Value": "jenkins",
+              },
+            ],
+          },
+          "physicalResourceId": Object {
+            "responsePath": "AccessPointArn",
+          },
+          "service": "EFS",
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "JenkinsMasterAlias971282E6": Object {
+      "Properties": Object {
+        "AliasTarget": Object {
+          "DNSName": "dualstack.dnsName",
+          "HostedZoneId": "hostedZoneIdxxx",
+        },
+        "HostedZoneId": "hostedZoneIdxxx",
+        "Name": "jenkins.zoneName.",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "JenkinsMasterCustomEC2TaskDefinition70814E95": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "Create": Object {
+          "action": "registerTaskDefinition",
+          "outputPath": "taskDefinition.taskDefinitionArn",
+          "parameters": Object {
+            "containerDefinitions": Array [
+              Object {
+                "cpu": 512,
+                "environment": Array [
+                  Object {
+                    "name": "cluster_arn",
+                    "value": "clusterArnxxx",
+                  },
+                  Object {
+                    "name": "aws_region",
+                    "value": Object {
+                      "Ref": "AWS::Region",
+                    },
+                  },
+                  Object {
+                    "name": "jenkins_url",
+                    "value": "http://jenkins-master.servicediscovery.internal:8080",
+                  },
+                  Object {
+                    "name": "agent_task_def_arn",
+                    "value": Object {
+                      "Ref": "JenkinsWorkerTaskDefinitionFB915764",
+                    },
+                  },
+                  Object {
+                    "name": "agent_security_group_ids",
+                    "value": Object {
+                      "Fn::GetAtt": Array [
+                        "JenkinsWorkerSecurityGroup74111233",
+                        "GroupId",
+                      ],
+                    },
+                  },
+                  Object {
+                    "name": "CASC_JENKINS_CONFIG",
+                    "value": "/config-as-code.yaml",
+                  },
+                  Object {
+                    "name": "JAVA_OPTS",
+                    "value": "-Xmx512m -Duser.timezone=Australia/Melbourne -Djenkins.install.runSetupWizard=false",
+                  },
+                  Object {
+                    "name": "JENKINS_HOME",
+                    "value": "/data/shared/jenkins",
+                  },
+                ],
+                "essential": "TRUE:BOOLEAN",
+                "image": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ".dkr.ecr.",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      ".",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                      "/aws-cdk/assets:d9cd104a52ab4c48f84a621a78df6c7e5b0aa2cd9b465d545221183f7ed79bb4",
+                    ],
+                  ],
+                },
+                "logConfiguration": Object {
+                  "logDriver": "awslogs",
+                  "options": Object {
+                    "awslogs-group": Object {
+                      "Ref": "JenkinsMasterLogsEFEC40AA",
+                    },
+                    "awslogs-region": Object {
+                      "Ref": "AWS::Region",
+                    },
+                    "awslogs-stream-prefix": "JenkinsMaster",
+                  },
+                },
+                "memory": 1024,
+                "mountPoints": Array [
+                  Object {
+                    "containerPath": Object {
+                      "Fn::GetAtt": Array [
+                        "EfsAccessPointjenkins7BF42150",
+                        "RootDirectory.Path",
+                      ],
+                    },
+                    "sourceVolume": "jenkins",
+                  },
+                ],
+                "name": "JenkinsMaster",
+                "portMappings": Array [
+                  Object {
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp",
+                  },
+                  Object {
+                    "containerPort": 50000,
+                    "hostPort": 50000,
+                    "protocol": "tcp",
+                  },
+                ],
+              },
+            ],
+            "executionRoleArn": Object {
+              "Fn::GetAtt": Array [
+                "JenkinsMasterTaskExecutionRoleFF9AF060",
+                "Arn",
+              ],
+            },
+            "family": "awsjenkinsJenkinsMasterTaskF82DDA60",
+            "networkMode": "awsvpc",
+            "requiresCompatibilities": Array [
+              "EC2",
+            ],
+            "taskRoleArn": Object {
+              "Fn::GetAtt": Array [
+                "JenkinsMasterTaskTaskRole32716B59",
+                "Arn",
+              ],
+            },
+            "volumes": Array [
+              Object {
+                "efsVolumeConfiguration": Object {
+                  "authorizationConfig": Object {
+                    "accessPointId": Object {
+                      "Fn::GetAtt": Array [
+                        "EfsAccessPointjenkins7BF42150",
+                        "AccessPointId",
+                      ],
+                    },
+                    "iam": "ENABLED",
+                  },
+                  "fileSystemId": Object {
+                    "Ref": "JenkinsMasterEfsDDEC4001",
+                  },
+                  "transitEncryption": "ENABLED",
+                },
+                "name": "jenkins",
+              },
+            ],
+          },
+          "physicalResourceId": Object {
+            "responsePath": "taskDefinition.taskDefinitionArn",
+          },
+          "service": "ECS",
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+        "Update": Object {
+          "action": "registerTaskDefinition",
+          "outputPath": "taskDefinition.taskDefinitionArn",
+          "parameters": Object {
+            "containerDefinitions": Array [
+              Object {
+                "cpu": 512,
+                "environment": Array [
+                  Object {
+                    "name": "cluster_arn",
+                    "value": "clusterArnxxx",
+                  },
+                  Object {
+                    "name": "aws_region",
+                    "value": Object {
+                      "Ref": "AWS::Region",
+                    },
+                  },
+                  Object {
+                    "name": "jenkins_url",
+                    "value": "http://jenkins-master.servicediscovery.internal:8080",
+                  },
+                  Object {
+                    "name": "agent_task_def_arn",
+                    "value": Object {
+                      "Ref": "JenkinsWorkerTaskDefinitionFB915764",
+                    },
+                  },
+                  Object {
+                    "name": "agent_security_group_ids",
+                    "value": Object {
+                      "Fn::GetAtt": Array [
+                        "JenkinsWorkerSecurityGroup74111233",
+                        "GroupId",
+                      ],
+                    },
+                  },
+                  Object {
+                    "name": "CASC_JENKINS_CONFIG",
+                    "value": "/config-as-code.yaml",
+                  },
+                  Object {
+                    "name": "JAVA_OPTS",
+                    "value": "-Xmx512m -Duser.timezone=Australia/Melbourne -Djenkins.install.runSetupWizard=false",
+                  },
+                  Object {
+                    "name": "JENKINS_HOME",
+                    "value": "/data/shared/jenkins",
+                  },
+                ],
+                "essential": "TRUE:BOOLEAN",
+                "image": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ".dkr.ecr.",
+                      Object {
+                        "Ref": "AWS::Region",
+                      },
+                      ".",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                      "/aws-cdk/assets:d9cd104a52ab4c48f84a621a78df6c7e5b0aa2cd9b465d545221183f7ed79bb4",
+                    ],
+                  ],
+                },
+                "logConfiguration": Object {
+                  "logDriver": "awslogs",
+                  "options": Object {
+                    "awslogs-group": Object {
+                      "Ref": "JenkinsMasterLogsEFEC40AA",
+                    },
+                    "awslogs-region": Object {
+                      "Ref": "AWS::Region",
+                    },
+                    "awslogs-stream-prefix": "JenkinsMaster",
+                  },
+                },
+                "memory": 1024,
+                "mountPoints": Array [
+                  Object {
+                    "containerPath": Object {
+                      "Fn::GetAtt": Array [
+                        "EfsAccessPointjenkins7BF42150",
+                        "RootDirectory.Path",
+                      ],
+                    },
+                    "sourceVolume": "jenkins",
+                  },
+                ],
+                "name": "JenkinsMaster",
+                "portMappings": Array [
+                  Object {
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp",
+                  },
+                  Object {
+                    "containerPort": 50000,
+                    "hostPort": 50000,
+                    "protocol": "tcp",
+                  },
+                ],
+              },
+            ],
+            "executionRoleArn": Object {
+              "Fn::GetAtt": Array [
+                "JenkinsMasterTaskExecutionRoleFF9AF060",
+                "Arn",
+              ],
+            },
+            "family": "awsjenkinsJenkinsMasterTaskF82DDA60",
+            "networkMode": "awsvpc",
+            "requiresCompatibilities": Array [
+              "EC2",
+            ],
+            "taskRoleArn": Object {
+              "Fn::GetAtt": Array [
+                "JenkinsMasterTaskTaskRole32716B59",
+                "Arn",
+              ],
+            },
+            "volumes": Array [
+              Object {
+                "efsVolumeConfiguration": Object {
+                  "authorizationConfig": Object {
+                    "accessPointId": Object {
+                      "Fn::GetAtt": Array [
+                        "EfsAccessPointjenkins7BF42150",
+                        "AccessPointId",
+                      ],
+                    },
+                    "iam": "ENABLED",
+                  },
+                  "fileSystemId": Object {
+                    "Ref": "JenkinsMasterEfsDDEC4001",
+                  },
+                  "transitEncryption": "ENABLED",
+                },
+                "name": "jenkins",
+              },
+            ],
+          },
+          "physicalResourceId": Object {
+            "responsePath": "taskDefinition.taskDefinitionArn",
+          },
+          "service": "ECS",
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "JenkinsMasterEfsDDEC4001": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "Encrypted": true,
+        "FileSystemTags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aws-jenkins/JenkinsMaster/Efs",
+          },
+        ],
+      },
+      "Type": "AWS::EFS::FileSystem",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "JenkinsMasterEfsEfsMountTarget18CCED912": Object {
+      "Properties": Object {
+        "FileSystemId": Object {
+          "Ref": "JenkinsMasterEfsDDEC4001",
+        },
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "JenkinsMasterEfsSecurityGroup048A5ADB",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": "isolatedSubnetId",
+      },
+      "Type": "AWS::EFS::MountTarget",
+    },
+    "JenkinsMasterEfsSecurityGroup048A5ADB": Object {
+      "Properties": Object {
+        "GroupDescription": "aws-jenkins/JenkinsMaster/EfsSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": "vpcIdxxx",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "JenkinsMasterEfsSecurityGroupfromawsjenkinsJenkinsMasterServiceSecurityGroup4A54D71D2049A0FBCCC8": Object {
+      "Properties": Object {
+        "Description": "from awsjenkinsJenkinsMasterServiceSecurityGroup4A54D71D:2049",
+        "FromPort": 2049,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "JenkinsMasterEfsSecurityGroup048A5ADB",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "JenkinsMasterServiceSecurityGroup77EF6BD2",
+            "GroupId",
+          ],
+        },
+        "ToPort": 2049,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "JenkinsMasterJenkinsPlan374F4897": Object {
+      "Properties": Object {
+        "BackupPlan": Object {
+          "BackupPlanName": "JenkinsPlan",
+          "BackupPlanRule": Array [
+            Object {
+              "Lifecycle": Object {
+                "DeleteAfterDays": 35,
+              },
+              "RuleName": "Daily",
+              "ScheduleExpression": "cron(0 5 * * ? *)",
+              "TargetBackupVault": Object {
+                "Fn::GetAtt": Array [
+                  "JenkinsMasterJenkinsPlanVaultB3C98FF7",
+                  "BackupVaultName",
+                ],
+              },
+            },
+            Object {
+              "Lifecycle": Object {
+                "DeleteAfterDays": 90,
+              },
+              "RuleName": "Weekly",
+              "ScheduleExpression": "cron(0 5 ? * SAT *)",
+              "TargetBackupVault": Object {
+                "Fn::GetAtt": Array [
+                  "JenkinsMasterJenkinsPlanVaultB3C98FF7",
+                  "BackupVaultName",
+                ],
+              },
+            },
+            Object {
+              "Lifecycle": Object {
+                "DeleteAfterDays": 1825,
+                "MoveToColdStorageAfterDays": 90,
+              },
+              "RuleName": "Monthly5Year",
+              "ScheduleExpression": "cron(0 5 1 * ? *)",
+              "TargetBackupVault": Object {
+                "Fn::GetAtt": Array [
+                  "JenkinsMasterJenkinsPlanVaultB3C98FF7",
+                  "BackupVaultName",
+                ],
+              },
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Backup::BackupPlan",
+    },
+    "JenkinsMasterJenkinsPlanSelectionAC6196B2": Object {
+      "Properties": Object {
+        "BackupPlanId": Object {
+          "Fn::GetAtt": Array [
+            "JenkinsMasterJenkinsPlan374F4897",
+            "BackupPlanId",
+          ],
+        },
+        "BackupSelection": Object {
+          "IamRoleArn": Object {
+            "Fn::GetAtt": Array [
+              "JenkinsMasterJenkinsPlanSelectionRoleBC15CF72",
+              "Arn",
+            ],
+          },
+          "Resources": Array [
+            Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "arn:",
+                  Object {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":elasticfilesystem:",
+                  Object {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  Object {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":file-system/",
+                  Object {
+                    "Ref": "JenkinsMasterEfsDDEC4001",
+                  },
+                ],
+              ],
+            },
+          ],
+          "SelectionName": "Selection",
+        },
+      },
+      "Type": "AWS::Backup::BackupSelection",
+    },
+    "JenkinsMasterJenkinsPlanSelectionRoleBC15CF72": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "backup.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "JenkinsMasterJenkinsPlanVaultB3C98FF7": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BackupVaultName": "awsjenkinsJenkinsMasterJenkinsPlanVault8D552AA9",
+      },
+      "Type": "AWS::Backup::BackupVault",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "JenkinsMasterLogsEFEC40AA": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "JenkinsMasterServiceCloudmapService5CFF9BDF": Object {
+      "Properties": Object {
+        "DnsConfig": Object {
+          "DnsRecords": Array [
+            Object {
+              "TTL": 60,
+              "Type": "A",
+            },
+          ],
+          "NamespaceId": Object {
+            "Fn::GetAtt": Array [
+              "Namespace9B63B8C8",
+              "Id",
+            ],
+          },
+          "RoutingPolicy": "MULTIVALUE",
+        },
+        "HealthCheckCustomConfig": Object {
+          "FailureThreshold": 1,
+        },
+        "Name": "jenkins-master",
+        "NamespaceId": Object {
+          "Fn::GetAtt": Array [
+            "Namespace9B63B8C8",
+            "Id",
+          ],
+        },
+      },
+      "Type": "AWS::ServiceDiscovery::Service",
+    },
+    "JenkinsMasterServiceE13F62AB": Object {
+      "DependsOn": Array [
+        "JenkinsMasterServiceRule85189EAA",
+      ],
+      "Properties": Object {
+        "Cluster": "clusterName",
+        "DeploymentConfiguration": Object {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "EC2",
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "JenkinsMaster",
+            "ContainerPort": 8080,
+            "TargetGroupArn": Object {
+              "Ref": "JenkinsMasterServiceTargetGroup1E24C48A",
+            },
+          },
+        ],
+        "NetworkConfiguration": Object {
+          "AwsvpcConfiguration": Object {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "JenkinsMasterServiceSecurityGroup77EF6BD2",
+                  "GroupId",
+                ],
+              },
+            ],
+            "Subnets": Array [
+              "isolatedSubnetId",
+            ],
+          },
+        },
+        "PlacementStrategies": Array [
+          Object {
+            "Field": "attribute:ecs.availability-zone",
+            "Type": "spread",
+          },
+        ],
+        "SchedulingStrategy": "REPLICA",
+        "ServiceRegistries": Array [
+          Object {
+            "RegistryArn": Object {
+              "Fn::GetAtt": Array [
+                "JenkinsMasterServiceCloudmapService5CFF9BDF",
+                "Arn",
+              ],
+            },
+          },
+        ],
+        "TaskDefinition": Object {
+          "Fn::GetAtt": Array [
+            "JenkinsMasterCustomEC2TaskDefinition70814E95",
+            "taskDefinition.taskDefinitionArn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "JenkinsMasterServiceRule85189EAA": Object {
+      "Properties": Object {
+        "Actions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "JenkinsMasterServiceTargetGroup1E24C48A",
+            },
+            "Type": "forward",
+          },
+        ],
+        "Conditions": Array [
+          Object {
+            "Field": "host-header",
+            "HostHeaderConfig": Object {
+              "Values": Array [
+                "jenkins.zoneName",
+              ],
+            },
+          },
+        ],
+        "ListenerArn": "listenerArnxxx",
+        "Priority": 20456,
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+    },
+    "JenkinsMasterServiceSecurityGroup77EF6BD2": Object {
+      "Properties": Object {
+        "GroupDescription": "aws-jenkins/JenkinsMaster/Service/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": "vpcIdxxx",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "JenkinsMasterServiceSecurityGroupfromawsjenkinsclusterSecurityGroup6470055F50000A036D521": Object {
+      "Properties": Object {
+        "Description": "from awsjenkinsclusterSecurityGroup6470055F:50000",
+        "FromPort": 50000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "JenkinsMasterServiceSecurityGroup77EF6BD2",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": "clusterSecurityGroupId",
+        "ToPort": 50000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "JenkinsMasterServiceSecurityGroupfromawsjenkinsclusterSecurityGroup6470055F8080FD0B5A44": Object {
+      "Properties": Object {
+        "Description": "from awsjenkinsclusterSecurityGroup6470055F:8080",
+        "FromPort": 8080,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "JenkinsMasterServiceSecurityGroup77EF6BD2",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": "clusterSecurityGroupId",
+        "ToPort": 8080,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "JenkinsMasterServiceSecurityGroupfromawsjenkinslistenerSecurityGroupFB2D356E8080D5129C57": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "FromPort": 8080,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "JenkinsMasterServiceSecurityGroup77EF6BD2",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": "listenerSecurityGroupId",
+        "ToPort": 8080,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "JenkinsMasterServiceTargetGroup1E24C48A": Object {
+      "Properties": Object {
+        "HealthCheckPath": "/",
+        "Matcher": Object {
+          "HttpCode": "200",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "0",
+          },
+        ],
+        "TargetType": "ip",
+        "VpcId": "vpcIdxxx",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "JenkinsMasterTask5E36A430": Object {
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Essential": true,
+            "Image": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  Object {
+                    "Fn::Select": Array [
+                      4,
+                      Object {
+                        "Fn::Split": Array [
+                          ":",
+                          Object {
+                            "Fn::Join": Array [
+                              "",
+                              Array [
+                                "arn:",
+                                Object {
+                                  "Ref": "AWS::Partition",
+                                },
+                                ":ecr:",
+                                Object {
+                                  "Ref": "AWS::Region",
+                                },
+                                ":",
+                                Object {
+                                  "Ref": "AWS::AccountId",
+                                },
+                                ":repository/aws-cdk/assets",
+                              ],
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  ".dkr.ecr.",
+                  Object {
+                    "Fn::Select": Array [
+                      3,
+                      Object {
+                        "Fn::Split": Array [
+                          ":",
+                          Object {
+                            "Fn::Join": Array [
+                              "",
+                              Array [
+                                "arn:",
+                                Object {
+                                  "Ref": "AWS::Partition",
+                                },
+                                ":ecr:",
+                                Object {
+                                  "Ref": "AWS::Region",
+                                },
+                                ":",
+                                Object {
+                                  "Ref": "AWS::AccountId",
+                                },
+                                ":repository/aws-cdk/assets",
+                              ],
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  ".",
+                  Object {
+                    "Ref": "AWS::URLSuffix",
+                  },
+                  "/aws-cdk/assets:latest",
+                ],
+              ],
+            },
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "JenkinsMasterLogsEFEC40AA",
+                },
+                "awslogs-region": Object {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "JenkinsMaster",
+              },
+            },
+            "Memory": 256,
+            "Name": "JenkinsMaster",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 8080,
+                "Protocol": "tcp",
+              },
+            ],
+          },
+        ],
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "JenkinsMasterTaskExecutionRoleFF9AF060",
+            "Arn",
+          ],
+        },
+        "Family": "awsjenkinsJenkinsMasterTaskF82DDA60",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": Array [
+          "EC2",
+        ],
+        "TaskRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "JenkinsMasterTaskTaskRole32716B59",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "JenkinsMasterTaskExecutionRoleDefaultPolicy72598D63": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":repository/aws-cdk/assets",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "JenkinsMasterLogsEFEC40AA",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "JenkinsMasterTaskExecutionRoleDefaultPolicy72598D63",
+        "Roles": Array [
+          Object {
+            "Ref": "JenkinsMasterTaskExecutionRoleFF9AF060",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "JenkinsMasterTaskExecutionRoleFF9AF060": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "JenkinsMasterTaskTaskRole32716B59": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "JenkinsMasterTaskTaskRoleDefaultPolicyE1064E9B": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ecs:RegisterTaskDefinition",
+                "ecs:DeregisterTaskDefinition",
+                "ecs:ListClusters",
+                "ecs:DescribeContainerInstances",
+                "ecs:ListTaskDefinitions",
+                "ecs:DescribeTaskDefinition",
+                "ecs:DescribeTasks",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "ecs:ListContainerInstances",
+              "Effect": "Allow",
+              "Resource": "clusterArnxxx",
+            },
+            Object {
+              "Action": "ecs:RunTask",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "JenkinsWorkerTaskDefinitionFB915764",
+              },
+            },
+            Object {
+              "Action": "ecs:StopTask",
+              "Condition": Object {
+                "ForAnyValue:ArnEquals": Object {
+                  "ecs:cluster": "clusterArnxxx",
+                },
+              },
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ecs:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":task/*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "JenkinsWorkerExecutionRoleA76EC1D6",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::GetAtt": Array [
+                    "JenkinsWorkerTaskRoleC2C94610",
+                    "Arn",
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "JenkinsMasterTaskTaskRoleDefaultPolicyE1064E9B",
+        "Roles": Array [
+          Object {
+            "Ref": "JenkinsMasterTaskTaskRole32716B59",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "JenkinsWorkerExecutionRoleA76EC1D6": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "JenkinsWorkerExecutionRoleDefaultPolicy0612E890": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":repository/aws-cdk/assets",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "JenkinsWorkerLogs173B1209",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "JenkinsWorkerExecutionRoleDefaultPolicy0612E890",
+        "Roles": Array [
+          Object {
+            "Ref": "JenkinsWorkerExecutionRoleA76EC1D6",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "JenkinsWorkerLogs173B1209": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "JenkinsWorkerSecurityGroup74111233": Object {
+      "Properties": Object {
+        "GroupDescription": "aws-jenkins/JenkinsWorker/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": "vpcIdxxx",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "JenkinsWorkerTaskDefinitionFB915764": Object {
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Cpu": 1024,
+            "Environment": Array [
+              Object {
+                "Name": "HTTP_PROXY",
+                "Value": "http://proxy",
+              },
+            ],
+            "Essential": true,
+            "Image": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  Object {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ".dkr.ecr.",
+                  Object {
+                    "Ref": "AWS::Region",
+                  },
+                  ".",
+                  Object {
+                    "Ref": "AWS::URLSuffix",
+                  },
+                  "/aws-cdk/assets:85024b51dc55c35325aa9016b22a99feaa872cbd6bed25df2e7f32c29c9e436a",
+                ],
+              ],
+            },
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "JenkinsWorkerLogs173B1209",
+                },
+                "awslogs-region": Object {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "Agent",
+              },
+            },
+            "MemoryReservation": 1024,
+            "Name": "Agent",
+            "Privileged": true,
+          },
+        ],
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "JenkinsWorkerExecutionRoleA76EC1D6",
+            "Arn",
+          ],
+        },
+        "Family": "awsjenkinsJenkinsWorkerTaskDefinitionA785F6AD",
+        "NetworkMode": "bridge",
+        "RequiresCompatibilities": Array [
+          "EC2",
+        ],
+        "TaskRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "JenkinsWorkerTaskRoleC2C94610",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "JenkinsWorkerTaskRoleC2C94610": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "Namespace9B63B8C8": Object {
+      "Properties": Object {
+        "Name": "servicediscovery.internal",
+        "Vpc": "vpcIdxxx",
+      },
+      "Type": "AWS::ServiceDiscovery::PrivateDnsNamespace",
+    },
+  },
+}
+`;
