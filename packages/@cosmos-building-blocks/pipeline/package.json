@@ -25,6 +25,9 @@
     "lint": "eslint . --ext .js,.ts",
     "clean": "rm -rf lib"
   },
+  "dependencies": {
+    "@cosmos-building-blocks/common": "^0.5.4"
+  },
   "peerDependencies": {
     "@aws-cdk/aws-codebuild": "^1.54.0",
     "@aws-cdk/aws-codecommit": "^1.54.0",

@@ -3,7 +3,7 @@ module.exports = {
   testEnvironment: 'node',
   roots: ['<rootDir>/src', '<rootDir>/test'],
   testMatch: ['**/*.test.ts'],
-  moduleDirectories: ['node_modules'],
+  moduleDirectories: [`${__dirname}/node_modules`],
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   setupFiles: [`${__dirname}/src/test/jest.setup.ts`],
@@ -12,6 +12,9 @@ module.exports = {
       tsConfig: `${__dirname}/tsconfig.base.json`,
     },
   },
+  // moduleNameMapper: {
+  //   fs: `${__dirname}/src/test/mocks/fs.ts`,
+  // },
   // TODO:
   // coverageThreshold: {
   //   global: {

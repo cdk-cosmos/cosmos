@@ -20,7 +20,7 @@ import {
 import { IRole } from '@aws-cdk/aws-iam';
 import { IVpc } from '@aws-cdk/aws-ec2';
 import { ISolarSystemCore, ISolarSystemExtension } from '../solar-system';
-import { SecureBucket } from '@cosmos-building-blocks/service';
+import { SecureBucket } from '@cosmos-building-blocks/common';
 
 export type BuildEnvironmentVariables = { [key: string]: BuildEnvironmentVariable };
 

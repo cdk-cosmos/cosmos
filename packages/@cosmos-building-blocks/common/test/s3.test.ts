@@ -1,6 +1,6 @@
 import { SynthUtils } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import * as s3 from '../src/index';
+import * as s3 from '../src';
 
 test('Empty Stack', () => {
   const app = new cdk.App();

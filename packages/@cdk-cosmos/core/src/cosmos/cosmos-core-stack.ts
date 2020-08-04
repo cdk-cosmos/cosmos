@@ -3,21 +3,20 @@ import { HostedZone, IPublicHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
-import { CrossAccountExportsFn } from '@cosmos-building-blocks/common';
-import { IFunction, Function } from '@aws-cdk/aws-lambda';
+import { createCrossAccountExportProvider } from '@cosmos-building-blocks/common';
 import { BaseStack, BaseStackProps } from '../components/base';
-import { RemoteZone, RemoteCodeRepo, RemoteFunction } from '../helpers/remote';
+import { RemoteZone, RemoteCodeRepo } from '../helpers/remote';
 import { getPackageVersion } from '../helpers/utils';
 import { ICosmosCoreLink, CosmosCoreLinkStack } from './cosmoc-core-link-stack';
 
 export interface ICosmosCore extends Construct {
+  networkBuilder?: NetworkBuilder;
   link?: ICosmosCoreLink;
   libVersion: string;
   cdkRepo: IRepository;
   rootZone: IPublicHostedZone;
   cdkMasterRoleStaticArn: string;
-  crossAccountExportsFn: IFunction;
-  networkBuilder?: NetworkBuilder;
+  crossAccountExportServiceToken: string;
 }
 
 export interface CosmosCoreStackProps extends BaseStackProps {
@@ -31,7 +30,7 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
   readonly rootZone: HostedZone;
   readonly cdkMasterRole: Role;
   readonly cdkMasterRoleStaticArn: string;
-  readonly crossAccountExportsFn: Function;
+  readonly crossAccountExportServiceToken: string;
 
   constructor(scope: Construct, id: string, props: CosmosCoreStackProps) {
     super(scope, id, {
@@ -67,9 +66,7 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     });
     this.cdkMasterRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
 
-    this.crossAccountExportsFn = new CrossAccountExportsFn(this, 'CrossAccountExportsFn', {
-      role: this.cdkMasterRole,
-    });
+    this.crossAccountExportServiceToken = createCrossAccountExportProvider(this, this.cdkMasterRole);
 
     new CfnOutput(this, 'CoreLibVersion', {
       exportName: this.singletonId('LibVersion'),
@@ -77,7 +74,11 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     });
     RemoteCodeRepo.export(this.cdkRepo, this.singletonId('CdkRepo'));
     RemoteZone.export(this.rootZone, this.singletonId('RootZone'));
-    RemoteFunction.export(this.crossAccountExportsFn, this.singletonId('CrossAccountExportsFn'));
+    // RemoteFunction.export(this.crossAccountExportsFn, this.singletonId('CrossAccountExportsFn'));
+    new CfnOutput(this, 'CrossAccountExportServiceToken', {
+      exportName: this.singletonId('CrossAccountExportServiceToken'),
+      value: this.crossAccountExportServiceToken,
+    });
     this.cdkMasterRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${cdkMasterRoleName}`;
 
     Tag.add(this, 'cosmos', id);

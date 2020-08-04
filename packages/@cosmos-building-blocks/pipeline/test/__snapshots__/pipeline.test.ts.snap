@@ -379,6 +379,7 @@ Object {
     "PipelineCodeArtifactBucket5C9D8055": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
+        "AccessControl": "LogDeliveryWrite",
         "BucketEncryption": Object {
           "ServerSideEncryptionConfiguration": Array [
             Object {
@@ -388,9 +389,50 @@ Object {
             },
           ],
         },
+        "LoggingConfiguration": Object {
+          "LogFilePrefix": "BucketAccessLogs/",
+        },
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
+    },
+    "PipelineCodeArtifactBucketPolicy953DFCE9": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "PipelineCodeArtifactBucket5C9D8055",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": false,
+                },
+              },
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "PipelineCodeArtifactBucket5C9D8055",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+              "Sid": "ForceSSLOnly",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
     },
     "PipelineEventsRole96280D9B": Object {
       "Properties": Object {
@@ -1098,6 +1140,7 @@ Object {
     "PipelineCodeArtifactBucket5C9D8055": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
+        "AccessControl": "LogDeliveryWrite",
         "BucketEncryption": Object {
           "ServerSideEncryptionConfiguration": Array [
             Object {
@@ -1107,9 +1150,50 @@ Object {
             },
           ],
         },
+        "LoggingConfiguration": Object {
+          "LogFilePrefix": "BucketAccessLogs/",
+        },
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
+    },
+    "PipelineCodeArtifactBucketPolicy953DFCE9": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "PipelineCodeArtifactBucket5C9D8055",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": false,
+                },
+              },
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "PipelineCodeArtifactBucket5C9D8055",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+              "Sid": "ForceSSLOnly",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
     },
     "PipelineEventsRole96280D9B": Object {
       "Properties": Object {
