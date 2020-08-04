@@ -1,5 +1,5 @@
 import { InstanceType, SecurityGroup, Peer, InstanceClass, InstanceSize } from '@aws-cdk/aws-ec2';
-import { Cluster, ICluster, ClusterProps, AddCapacityOptions, CpuUtilizationScalingProps } from '@aws-cdk/aws-ecs';
+import { Cluster, ICluster, ClusterProps, CpuUtilizationScalingProps } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
   ApplicationListener,
@@ -32,8 +32,7 @@ export interface IEcsSolarSystemCore extends ISolarSystemCore {
 }
 
 export interface EcsSolarSystemCoreProps extends SolarSystemCoreStackProps {
-  clusterProps?: Partial<ClusterProps>;
-  clusterCapacityProps?: Partial<AddCapacityOptions>;
+  clusterProps?: Partial<ClusterProps> | { capacity?: false };
   albProps?: Partial<ApplicationLoadBalancerProps>;
   listenerInboundCidr?: string;
 }
@@ -43,7 +42,6 @@ export const EcsSolarSystemCoreStackBuilder = (
 ): typeof EcsSolarSystemCoreStackBase => {
   return class EcsSolarSystemCoreStack extends base implements IEcsSolarSystemCore {
     readonly cluster: Cluster;
-    readonly clusterAutoScalingGroup: AutoScalingGroup;
     readonly alb: ApplicationLoadBalancer;
     readonly httpListener: ApplicationListener;
     readonly httpInternalListener: ApplicationListener;
@@ -56,13 +54,7 @@ export const EcsSolarSystemCoreStackBuilder = (
         ...props,
       });
 
-      const {
-        listenerInboundCidr = '0.0.0.0/0',
-        vpcProps = {},
-        clusterProps = {},
-        clusterCapacityProps = {},
-        albProps = {},
-      } = props || {};
+      const { listenerInboundCidr = '0.0.0.0/0', vpcProps = {}, clusterProps = {}, albProps = {} } = props || {};
       const { defaultEndpoints = true } = vpcProps;
 
       // Only add endpoints if this component owens the Vpc.
@@ -75,17 +67,22 @@ export const EcsSolarSystemCoreStackBuilder = (
         ...clusterProps,
         clusterName: this.singletonId('Cluster'),
         vpc: this.vpc,
+        capacity:
+          clusterProps.capacity !== false
+            ? {
+                vpcSubnets: { subnetGroupName: 'App' },
+                instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
+                minCapacity: 1,
+                maxCapacity: 5,
+                ...clusterProps.capacity,
+              }
+            : undefined,
       });
 
-      this.clusterAutoScalingGroup = this.cluster.addCapacity('Capacity', {
-        vpcSubnets: { subnetGroupName: 'App' },
-        instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
-        minCapacity: 1,
-        maxCapacity: 5,
-        ...clusterCapacityProps,
-      });
-
-      this.clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
+      const clusterAutoScalingGroup = this.cluster.autoscalingGroup as AutoScalingGroup | undefined;
+      if (clusterAutoScalingGroup) {
+        clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
+      }
 
       const albSecurityGroup =
         albProps.securityGroup ||
@@ -147,7 +144,8 @@ export const EcsSolarSystemCoreStackBuilder = (
     }
 
     addCpuAutoScaling(props: Partial<CpuUtilizationScalingProps>): void {
-      this.clusterAutoScalingGroup.scaleOnCpuUtilization('CpuScaling', {
+      if (!this.cluster.autoscalingGroup) throw new Error('No ASG found on cluster.');
+      this.cluster.autoscalingGroup.scaleOnCpuUtilization('CpuScaling', {
         ...props,
         targetUtilizationPercent: 50,
       });
@@ -172,7 +170,6 @@ export const EcsSolarSystemCoreStackBuilder = (
 
 declare class EcsSolarSystemCoreStackBase extends SolarSystemCoreStack implements IEcsSolarSystemCore {
   readonly cluster: Cluster;
-  readonly clusterAutoScalingGroup: AutoScalingGroup;
   readonly alb: ApplicationLoadBalancer;
   readonly httpListener: ApplicationListener;
   readonly httpInternalListener: ApplicationListener;

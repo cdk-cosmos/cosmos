@@ -109,6 +109,14 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
             "Key": "cosmos",
             "Value": "Cos",
           },
@@ -119,14 +127,6 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/SharedVpc/AppSubnet1",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "App",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
           },
         ],
         "VpcId": Object {
@@ -175,6 +175,14 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
             "Key": "cosmos",
             "Value": "Cos",
           },
@@ -185,14 +193,6 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal/SharedVpc/AppSubnet2",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "App",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
           },
         ],
         "VpcId": Object {
@@ -212,18 +212,7 @@ Object {
             ],
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".logs",
-            ],
-          ],
-        },
+        "ServiceName": "com.amazonaws.region.logs",
         "SubnetIds": Array [
           Object {
             "Ref": "SharedVpcAppSubnet1Subnet",
@@ -308,18 +297,7 @@ Object {
             ],
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".ecr.dkr",
-            ],
-          ],
-        },
+        "ServiceName": "com.amazonaws.region.ecr.dkr",
         "SubnetIds": Array [
           Object {
             "Ref": "SharedVpcAppSubnet1Subnet",
@@ -404,18 +382,7 @@ Object {
             ],
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".ecr.api",
-            ],
-          ],
-        },
+        "ServiceName": "com.amazonaws.region.ecr.api",
         "SubnetIds": Array [
           Object {
             "Ref": "SharedVpcAppSubnet1Subnet",
@@ -500,18 +467,7 @@ Object {
             ],
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".ecs-agent",
-            ],
-          ],
-        },
+        "ServiceName": "com.amazonaws.region.ecs-agent",
         "SubnetIds": Array [
           Object {
             "Ref": "SharedVpcAppSubnet1Subnet",
@@ -596,18 +552,7 @@ Object {
             ],
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".ecs",
-            ],
-          ],
-        },
+        "ServiceName": "com.amazonaws.region.ecs",
         "SubnetIds": Array [
           Object {
             "Ref": "SharedVpcAppSubnet1Subnet",
@@ -692,18 +637,7 @@ Object {
             ],
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".ecs-telemetry",
-            ],
-          ],
-        },
+        "ServiceName": "com.amazonaws.region.ecs-telemetry",
         "SubnetIds": Array [
           Object {
             "Ref": "SharedVpcAppSubnet1Subnet",
@@ -817,18 +751,7 @@ Object {
             ],
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".ssm",
-            ],
-          ],
-        },
+        "ServiceName": "com.amazonaws.region.ssm",
         "SubnetIds": Array [
           Object {
             "Ref": "SharedVpcAppSubnet1Subnet",
@@ -913,18 +836,7 @@ Object {
             ],
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".ssmmessages",
-            ],
-          ],
-        },
+        "ServiceName": "com.amazonaws.region.ssmmessages",
         "SubnetIds": Array [
           Object {
             "Ref": "SharedVpcAppSubnet1Subnet",
@@ -1430,6 +1342,14 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
             "Key": "cosmos",
             "Value": "Cos",
           },
@@ -1444,14 +1364,6 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet1",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "App",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
           },
         ],
         "VpcId": Object {
@@ -1504,6 +1416,14 @@ Object {
         "MapPublicIpOnLaunch": false,
         "Tags": Array [
           Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
             "Key": "cosmos",
             "Value": "Cos",
           },
@@ -1518,14 +1438,6 @@ Object {
           Object {
             "Key": "Name",
             "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet2",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "App",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
           },
         ],
         "VpcId": Object {
@@ -1545,18 +1457,7 @@ Object {
             ],
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".logs",
-            ],
-          ],
-        },
+        "ServiceName": "com.amazonaws.region2.logs",
         "SubnetIds": Array [
           Object {
             "Ref": "VpcAppSubnet1Subnet",
@@ -1674,18 +1575,7 @@ Object {
             ],
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".ssm",
-            ],
-          ],
-        },
+        "ServiceName": "com.amazonaws.region2.ssm",
         "SubnetIds": Array [
           Object {
             "Ref": "VpcAppSubnet1Subnet",
@@ -1774,18 +1664,7 @@ Object {
             ],
           },
         ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".ssmmessages",
-            ],
-          ],
-        },
+        "ServiceName": "com.amazonaws.region2.ssmmessages",
         "SubnetIds": Array [
           Object {
             "Ref": "VpcAppSubnet1Subnet",
