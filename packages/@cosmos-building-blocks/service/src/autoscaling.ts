@@ -12,9 +12,9 @@ import {
 } from '@aws-cdk/aws-autoscaling';
 
 /**
- * Properties for AutoScalingGroupV1
+ * Properties for AutoScalingGroupLT
  */
-export interface AutoScalingGroupV1Props extends AutoScalingGroupProps {
+export interface AutoScalingGroupLTProps extends AutoScalingGroupProps {
   /**
    * Set this to `true` if you want to use Instance Template instead of Launch Config.
    * You can fine tune your default LaunchTemplate with `instanceType`, `launchTemplateOverrides` and `instancesDistribution`
@@ -33,9 +33,9 @@ export interface AutoScalingGroupV1Props extends AutoScalingGroupProps {
    * Currently, the only supported override is instance type
    * https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-autoscaling-autoscalinggroup-launchtemplateoverrides.html
    * @default
-   * [{ instanceType: "t3.medium" }, { instanceType: "t3a.medium" }]
+   * [{ instanceType: "t3.medium" }, { instanceType: "t3.small" }]
    *
-   * This will use any Spot instances available, "t3.medium" or "t3a.medium"
+   * This will use any Spot instances available, "t3.medium" or "t3.small"
    * based on `spotAllocationStrategy` set in `instancesDistribution`
    */
   readonly launchTemplateOverrides?: Array<CfnAutoScalingGroup.LaunchTemplateOverridesProperty>;
@@ -58,7 +58,7 @@ export interface AutoScalingGroupV1Props extends AutoScalingGroupProps {
 }
 
 /**
- * Derived from Base class AutoScalingGroup with additional functionalities.
+ * Derived from Base class AutoScalingGroup with additional functionalities of using Launch Template (LT).
  *
  * Base AutoScalingGroup class uses Launch Config and have no ability to use more advanced Launch Templates
  * and MixedInstancesPolicies which gives ability to use Spot fleet and combination of spot and on-demand
@@ -67,8 +67,8 @@ export interface AutoScalingGroupV1Props extends AutoScalingGroupProps {
  *
  * With `launchTemplateOverrides` and `instancesDistribution`, it gives additional fine tuning.
  */
-export class AutoScalingGroupV1 extends AutoScalingGroup {
-  constructor(scope: Construct, id: string, props: AutoScalingGroupV1Props) {
+export class AutoScalingGroupLT extends AutoScalingGroup {
+  constructor(scope: Construct, id: string, props: AutoScalingGroupLTProps) {
     super(scope, id, props);
 
     // Check if useInstanceTemplate is set to true. If not, do nothing and rely on Base class to
@@ -120,7 +120,7 @@ export class AutoScalingGroupV1 extends AutoScalingGroup {
                 instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM).toString(),
               },
               {
-                instanceType: InstanceType.of(InstanceClass.T3A, InstanceSize.MEDIUM).toString(),
+                instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.SMALL).toString(),
               },
             ]
           : props.launchTemplateOverrides;

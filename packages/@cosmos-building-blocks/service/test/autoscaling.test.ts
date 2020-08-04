@@ -1,6 +1,6 @@
 import { SynthUtils, expect as cdkExpect, haveResourceLike, ABSENT, objectLike, arrayWith } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import { AutoScalingGroupV1 } from '../src/index';
+import { AutoScalingGroupLT } from '../src/index';
 import { Vpc, SubnetType, InstanceClass, InstanceType, InstanceSize, MachineImage } from '@aws-cdk/aws-ec2';
 import { BlockDeviceVolume } from '@aws-cdk/aws-autoscaling';
 import '@aws-cdk/assert/jest';
@@ -20,7 +20,7 @@ test('Should match snapshot', () => {
     ],
   });
   // ASG using Launch Template
-  new AutoScalingGroupV1(stack, 'SpotAsgLaunchTemplate', {
+  new AutoScalingGroupLT(stack, 'SpotAsgLaunchTemplate', {
     useInstanceTemplate: true,
     machineImage: MachineImage.latestAmazonLinux(),
     vpc,
@@ -29,12 +29,11 @@ test('Should match snapshot', () => {
     maxCapacity: 5,
     desiredCapacity: 1,
     instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
-    // blockDevices: [{volume: BlockDeviceVolume.ebs(20), deviceName: "xvdb"}],
     spotPrice: '0.03',
   });
 
   // ASG using Launch Config
-  new AutoScalingGroupV1(stack, 'DefaultAsgLaunchConfig', {
+  new AutoScalingGroupLT(stack, 'DefaultAsgLaunchConfig', {
     useInstanceTemplate: false,
     machineImage: MachineImage.latestAmazonLinux(),
     vpc,
@@ -43,7 +42,6 @@ test('Should match snapshot', () => {
     maxCapacity: 5,
     desiredCapacity: 1,
     instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
-    // blockDevices: [{volume: BlockDeviceVolume.ebs(20), deviceName: "xvdb"}],
     // spotPrice: '0.03',
   });
   // THEN
@@ -64,7 +62,7 @@ test('When useInstanceTemplate flag set to true, should create ASG with default 
       },
     ],
   });
-  const spotasg = new AutoScalingGroupV1(stack, 'DefaultSpotAsgLaunchTemplate', {
+  const spotasg = new AutoScalingGroupLT(stack, 'DefaultSpotAsgLaunchTemplate', {
     useInstanceTemplate: true,
     machineImage: MachineImage.latestAmazonLinux(),
     vpc,
@@ -73,7 +71,6 @@ test('When useInstanceTemplate flag set to true, should create ASG with default 
     maxCapacity: 5,
     desiredCapacity: 1,
     instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
-    // blockDevices: [{volume: BlockDeviceVolume.ebs(20), deviceName: "xvdb"}],
     spotPrice: '0.03',
   });
   spotasg.scaleOnCpuUtilization('CPUScale', { targetUtilizationPercent: 70 });
@@ -100,7 +97,7 @@ test('When useInstanceTemplate flag set to true, should create ASG with default 
           InstanceType: 't3.medium',
         },
         {
-          InstanceType: 't3a.medium',
+          InstanceType: 't3.small',
         },
       ],
     },
@@ -143,7 +140,7 @@ test('Switching off or not passing LauchTemplate flag should create standard ASG
     ],
   });
   // ASG LT with only required props
-  const spotasg = new AutoScalingGroupV1(stack, 'StandardASG', {
+  const spotasg = new AutoScalingGroupLT(stack, 'StandardASG', {
     machineImage: MachineImage.latestAmazonLinux(),
     vpc,
     vpcSubnets: { subnetGroupName: 'App' },
@@ -154,7 +151,7 @@ test('Switching off or not passing LauchTemplate flag should create standard ASG
   });
   spotasg.scaleOnCpuUtilization('CPUScale', { targetUtilizationPercent: 70 });
 
-  new AutoScalingGroupV1(stack1, 'StandardASGWithProp', {
+  new AutoScalingGroupLT(stack1, 'StandardASGWithProp', {
     useInstanceTemplate: false, // Use standard @aws-cdk Base Class AutoScalingGroup
     machineImage: MachineImage.latestAmazonLinux(),
     vpc: vpc1,
@@ -190,7 +187,7 @@ test('Should be able to overwrite LauchTemplate related properties', () => {
 
   // Overwrite launchTemplateOverrides and instancesDistribution (onDemandBaseCapacity, spotAllocationStrategy)
   // Also overwrite blockDevices to check if new volume mapping will be created or not
-  const spotasg = new AutoScalingGroupV1(stack, 'OverwriteLTASG', {
+  const spotasg = new AutoScalingGroupLT(stack, 'OverwriteLTASG', {
     useInstanceTemplate: true,
     launchTemplateOverrides: [{ instanceType: 'm2.small' }, { instanceType: 'm2.large' }],
     instancesDistribution: {

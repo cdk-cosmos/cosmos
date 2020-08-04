@@ -197,7 +197,7 @@ Object {
                 "InstanceType": "t3.medium",
               },
               Object {
-                "InstanceType": "t3a.medium",
+                "InstanceType": "t3.small",
               },
             ],
           },
