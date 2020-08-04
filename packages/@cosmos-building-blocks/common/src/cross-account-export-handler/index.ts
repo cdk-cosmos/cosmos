@@ -43,7 +43,7 @@ export const handler = async (
   return result;
 };
 
-const GetCredential = (props: AssumeRoleRequest) =>
+const GetCredential = (props: AssumeRoleRequest): Promise<ChainableTemporaryCredentials> =>
   new Promise<ChainableTemporaryCredentials>((res, rej) => {
     const credential = new ChainableTemporaryCredentials({
       params: props,
