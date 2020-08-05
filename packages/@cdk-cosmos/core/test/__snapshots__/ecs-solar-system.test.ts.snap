@@ -507,8 +507,8 @@ Object {
       ],
       "Properties": Object {
         "Code": Object {
-          "S3Bucket": "mock-s3BucketName",
-          "S3Key": "mock-s3ObjectKey",
+          "S3Bucket": "s3BucketName",
+          "S3Key": "s3ObjectKey",
         },
         "Handler": "index.certificateRequestHandler",
         "Role": Object {

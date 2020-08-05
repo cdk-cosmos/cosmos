@@ -1,2 +1,7 @@
 export { CDKToolKit } from './cdk-tool-kit';
-export { CrossAccountExports, CrossAccountExportsFn, CrossAccountExportsProps } from './cross-account-exports';
+export {
+  CrossAccountExports,
+  CrossAccountExportsProps,
+  createCrossAccountExportProvider,
+} from './cross-account-exports';
+export { SecureBucket } from './s3';

@@ -1,5 +1,5 @@
 import { Construct, Stack, StackProps, CfnOutput } from '@aws-cdk/core';
-import { SecureBucket } from '@cosmos-building-blocks/service';
+import { SecureBucket } from '.';
 
 export class CDKToolKit extends Stack {
   readonly bucket: SecureBucket;

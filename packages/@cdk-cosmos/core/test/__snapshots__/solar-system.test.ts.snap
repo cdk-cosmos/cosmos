@@ -1812,14 +1812,14 @@ Object {
     "Sys2ZoneDelegationExports": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "AssumeRoleArn": "arn:aws:iam::account2:role/CoreCdkCrossAccountRole",
-        "Exports": Array [
+        "ServiceToken": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCustomCrossAccountExportsCustomResourceProviderHandlerArn8CE3D38E",
+        },
+        "assumeRoleArn": "arn:aws:iam::account2:role/CoreCdkCrossAccountRole",
+        "exports": Array [
           "CoreGal2Sys2ZoneName",
           "CoreGal2Sys2ZoneNameServers",
         ],
-        "ServiceToken": Object {
-          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCrossAccountExportsFnArn5607FF8B",
-        },
       },
       "Type": "Custom::CrossAccountExports",
       "UpdateReplacePolicy": "Delete",
