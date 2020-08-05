@@ -1,3 +1,4 @@
+import '@aws-cdk/assert/jest';
 import { SynthUtils } from '@aws-cdk/assert';
 import { App, Stack } from '@aws-cdk/core';
 import { EcsService } from '../src';
@@ -34,5 +35,13 @@ new EcsService(stack, 'EcsService', {
 const synth = SynthUtils.toCloudFormation(stack);
 
 test('Ecs Service', () => {
+  expect(synth).toHaveResource('AWS::ECS::Service');
+  expect(synth).toHaveResource('AWS::ElasticLoadBalancingV2::ListenerRule');
+  expect(synth).toHaveResource('AWS::ElasticLoadBalancingV2::TargetGroup');
+  expect(synth).toHaveResource('AWS::ECS::TaskDefinition');
+  expect(synth).toHaveResource('AWS::Logs::LogGroup');
+});
+
+test('Ecs Service Snapshot', () => {
   expect(synth).toMatchSnapshot();
 });

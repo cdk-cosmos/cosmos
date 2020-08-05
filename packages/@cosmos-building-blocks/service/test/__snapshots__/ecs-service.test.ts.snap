@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Ecs Service 1`] = `
+exports[`Ecs Service Snapshot 1`] = `
 Object {
   "Resources": Object {
     "EcsService0A92EB77": Object {

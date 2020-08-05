@@ -1,3 +1,4 @@
+import '@aws-cdk/assert/jest';
 import { SynthUtils } from '@aws-cdk/assert';
 import { App, Stack } from '@aws-cdk/core';
 import { SecureBucket } from '../src';
