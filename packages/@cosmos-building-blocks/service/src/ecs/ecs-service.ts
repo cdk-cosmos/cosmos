@@ -27,7 +27,7 @@ import {
 import { IVpc } from '@aws-cdk/aws-ec2';
 import { LogGroup, LogGroupProps } from '@aws-cdk/aws-logs';
 import { EnableScalingProps } from '@aws-cdk/aws-applicationautoscaling';
-import { getRoutingPriority } from './utils';
+import { getRoutingPriority } from '../utils';
 
 export interface EcsServiceProps {
   vpc: IVpc;

@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@aws-cdk/core": "1.54.0",
-    "@cdk-cosmos/core": "../../packages/@cdk-cosmos/core",
     "source-map-support": "^0.5.16"
   },
   "devDependencies": {

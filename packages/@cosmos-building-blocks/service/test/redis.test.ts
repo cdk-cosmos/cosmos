@@ -1,13 +1,13 @@
-import { SynthUtils, expect as cdkExpect, haveResourceLike } from '@aws-cdk/assert';
-import * as cdk from '@aws-cdk/core';
-import { Redis } from '../src/index';
-import { Vpc, SubnetType, Instance, InstanceClass, InstanceType, InstanceSize, MachineImage } from '@aws-cdk/aws-ec2';
 import '@aws-cdk/assert/jest';
+import { SynthUtils, expect as cdkExpect, haveResourceLike } from '@aws-cdk/assert';
+import { App, Stack } from '@aws-cdk/core';
+import { Vpc, SubnetType, Instance, InstanceClass, InstanceType, InstanceSize, MachineImage } from '@aws-cdk/aws-ec2';
+import { Redis } from '../src/index';
 
 test('Should match snapshot', () => {
   //WHEN
-  const app = new cdk.App();
-  const stack = new cdk.Stack(app, 'aws-redis');
+  const app = new App();
+  const stack = new Stack(app, 'aws-redis');
   const vpc = new Vpc(stack, 'vpc', {
     maxAzs: 3,
     subnetConfiguration: [
@@ -57,8 +57,8 @@ test('Should match snapshot', () => {
 
 test('Should be able to overwrite props', () => {
   //WHEN
-  const app = new cdk.App();
-  const stack = new cdk.Stack(app, 'aws-redis');
+  const app = new App();
+  const stack = new Stack(app, 'aws-redis');
   const vpc = new Vpc(stack, 'vpc', {
     maxAzs: 3,
     subnetConfiguration: [
@@ -95,8 +95,8 @@ test('Should be able to overwrite props', () => {
 
 test('Default Redis should have all default properties', () => {
   //WHEN
-  const app = new cdk.App();
-  const stack = new cdk.Stack(app, 'redis-default');
+  const app = new App();
+  const stack = new Stack(app, 'redis-default');
   const vpc = new Vpc(stack, 'vpc', {
     maxAzs: 3,
     subnetConfiguration: [

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Empty Stack 1`] = `
+exports[`Secure Bucket 1`] = `
 Object {
   "Resources": Object {
     "SecureBucket1ED1C5CE": Object {

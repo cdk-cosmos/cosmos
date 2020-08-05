@@ -1,0 +1,279 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cloud Watch Agent 1`] = `
+"#!/bin/bash
+rpm -Uvh https://s3.region.amazonaws.com/amazoncloudwatch-agent-region/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+echo -e \\"{\\\\\\"agent\\\\\\":{\\\\\\"metrics_collection_interval\\\\\\":60,\\\\\\"omit_hostname\\\\\\":true,\\\\\\"run_as_user\\\\\\":\\\\\\"root\\\\\\"},\\\\\\"metrics\\\\\\":{\\\\\\"append_dimensions\\\\\\":{\\\\\\"InstanceId\\\\\\":\\\\\\"\\\\\${aws:InstanceId}\\\\\\",\\\\\\"InstanceType\\\\\\":\\\\\\"\\\\\${aws:InstanceType}\\\\\\"},\\\\\\"metrics_collected\\\\\\":{\\\\\\"cpu\\\\\\":{\\\\\\"totalcpu\\\\\\":true,\\\\\\"namespace\\\\\\":\\\\\\"CWAgent\\\\\\",\\\\\\"interval\\\\\\":60,\\\\\\"measurement\\\\\\":[\\\\\\"usage_nice\\\\\\"]},\\\\\\"mem\\\\\\":{\\\\\\"namespace\\\\\\":\\\\\\"CWAgent\\\\\\",\\\\\\"interval\\\\\\":60,\\\\\\"measurement\\\\\\":[\\\\\\"mem_used_percent\\\\\\"]},\\\\\\"disk\\\\\\":{\\\\\\"namespace\\\\\\":\\\\\\"CWAgent\\\\\\",\\\\\\"interval\\\\\\":60,\\\\\\"measurement\\\\\\":[\\\\\\"used_percent\\\\\\"],\\\\\\"resources\\\\\\":[\\\\\\"*\\\\\\"]},\\\\\\"netstat\\\\\\":{\\\\\\"namespace\\\\\\":\\\\\\"CWAgent\\\\\\",\\\\\\"interval\\\\\\":60,\\\\\\"measurement\\\\\\":[\\\\\\"tcp_established\\\\\\",\\\\\\"udp_socket\\\\\\"]},\\\\\\"test\\\\\\":{\\\\\\"namespace\\\\\\":\\\\\\"test_namespace\\\\\\",\\\\\\"interval\\\\\\":30,\\\\\\"measurement\\\\\\":[\\\\\\"test_measurement\\\\\\"]}}}}\\" > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json"
+`;
+
+exports[`Cloud Watch Agent Snapshot 1`] = `
+Object {
+  "Parameters": Object {
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": Object {
+    "InstanceC1063A87": Object {
+      "DependsOn": Array [
+        "InstanceInstanceRoleE9785DE5",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": "a",
+        "IamInstanceProfile": Object {
+          "Ref": "InstanceInstanceProfileAB5AEF02",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t3.nano",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "InstanceInstanceSecurityGroupF0E2D5BE",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": "a-sub-1",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Stack/Instance",
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": "#!/bin/bash
+rpm -Uvh https://s3.region.amazonaws.com/amazoncloudwatch-agent-region/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+echo -e \\"{\\\\\\"agent\\\\\\":{\\\\\\"metrics_collection_interval\\\\\\":60,\\\\\\"omit_hostname\\\\\\":true,\\\\\\"run_as_user\\\\\\":\\\\\\"root\\\\\\"},\\\\\\"metrics\\\\\\":{\\\\\\"append_dimensions\\\\\\":{\\\\\\"InstanceId\\\\\\":\\\\\\"\\\\\${aws:InstanceId}\\\\\\",\\\\\\"InstanceType\\\\\\":\\\\\\"\\\\\${aws:InstanceType}\\\\\\"},\\\\\\"metrics_collected\\\\\\":{\\\\\\"mem\\\\\\":{\\\\\\"namespace\\\\\\":\\\\\\"CWAgent\\\\\\",\\\\\\"interval\\\\\\":60,\\\\\\"measurement\\\\\\":[\\\\\\"mem_used_percent\\\\\\"]},\\\\\\"disk\\\\\\":{\\\\\\"namespace\\\\\\":\\\\\\"CWAgent\\\\\\",\\\\\\"interval\\\\\\":60,\\\\\\"measurement\\\\\\":[\\\\\\"used_percent\\\\\\"],\\\\\\"resources\\\\\\":[\\\\\\"*\\\\\\"]}}}}\\" > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json",
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "InstanceInstanceProfileAB5AEF02": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceInstanceRoleE9785DE5",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "InstanceInstanceRoleE9785DE5": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/CloudWatchAgentServerPolicy",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Stack/Instance",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "InstanceInstanceSecurityGroupF0E2D5BE": Object {
+      "Properties": Object {
+        "GroupDescription": "Stack/Instance/InstanceSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Stack/Instance",
+          },
+        ],
+        "VpcId": "Vpc",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+  },
+}
+`;
+
+exports[`Cloud Watch Agent with ASG 1`] = `
+Object {
+  "Parameters": Object {
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": Object {
+    "InstanceASG27CC400A": Object {
+      "Properties": Object {
+        "LaunchConfigurationName": Object {
+          "Ref": "InstanceLaunchConfig62D85C8D",
+        },
+        "MaxSize": "1",
+        "MinSize": "1",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "Stack/Instance",
+          },
+        ],
+        "VPCZoneIdentifier": Array [
+          "a-sub-1",
+        ],
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "UpdatePolicy": Object {
+        "AutoScalingScheduledAction": Object {
+          "IgnoreUnmodifiedGroupSizeProperties": true,
+        },
+      },
+    },
+    "InstanceInstanceProfileAB5AEF02": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceInstanceRoleE9785DE5",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "InstanceInstanceRoleE9785DE5": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/CloudWatchAgentServerPolicy",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Stack/Instance",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "InstanceInstanceSecurityGroupF0E2D5BE": Object {
+      "Properties": Object {
+        "GroupDescription": "Stack/Instance/InstanceSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Stack/Instance",
+          },
+        ],
+        "VpcId": "Vpc",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "InstanceLaunchConfig62D85C8D": Object {
+      "DependsOn": Array [
+        "InstanceInstanceRoleE9785DE5",
+      ],
+      "Properties": Object {
+        "IamInstanceProfile": Object {
+          "Ref": "InstanceInstanceProfileAB5AEF02",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t3.nano",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "InstanceInstanceSecurityGroupF0E2D5BE",
+              "GroupId",
+            ],
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": "#!/bin/bash
+rpm -Uvh https://s3.region.amazonaws.com/amazoncloudwatch-agent-region/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+echo -e \\"{\\\\\\"agent\\\\\\":{\\\\\\"metrics_collection_interval\\\\\\":60,\\\\\\"omit_hostname\\\\\\":true,\\\\\\"run_as_user\\\\\\":\\\\\\"root\\\\\\"},\\\\\\"metrics\\\\\\":{\\\\\\"append_dimensions\\\\\\":{\\\\\\"InstanceId\\\\\\":\\\\\\"\\\\\${aws:InstanceId}\\\\\\",\\\\\\"InstanceType\\\\\\":\\\\\\"\\\\\${aws:InstanceType}\\\\\\"},\\\\\\"metrics_collected\\\\\\":{\\\\\\"mem\\\\\\":{\\\\\\"namespace\\\\\\":\\\\\\"CWAgent\\\\\\",\\\\\\"interval\\\\\\":60,\\\\\\"measurement\\\\\\":[\\\\\\"mem_used_percent\\\\\\"]},\\\\\\"disk\\\\\\":{\\\\\\"namespace\\\\\\":\\\\\\"CWAgent\\\\\\",\\\\\\"interval\\\\\\":60,\\\\\\"measurement\\\\\\":[\\\\\\"used_percent\\\\\\"],\\\\\\"resources\\\\\\":[\\\\\\"*\\\\\\"]}}}}\\" > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json",
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+  },
+}
+`;
