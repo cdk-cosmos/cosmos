@@ -3,7 +3,7 @@ import { IHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository } from '@aws-cdk/aws-codecommit';
 import { ICosmosCore } from '../cosmos/cosmos-core-stack';
 import { BaseConstruct, BaseConstructProps } from '../components/base';
-import { RemoteZone, RemoteCodeRepo } from '../helpers/remote';
+import { RemoteZone, RemoteCodeRepo } from '../components/remote';
 
 export interface CosmosCoreImportProps extends BaseConstructProps {}
 

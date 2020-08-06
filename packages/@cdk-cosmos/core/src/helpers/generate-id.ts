@@ -8,7 +8,7 @@ export function nodeId(props: { context: IKeyValue[]; pattern: string; delimiter
   const selectors = new Selectors(pattern);
   context
     .filter(isNotHidden)
-    .filter(isUnique)
+    .reduce(isUnique, [])
     .forEach(x => selectors.visit(x));
   const selectedIds = selectors.render().map(x => x.value);
   return selectedIds.join(delimiter).slice(0, 240);
@@ -85,8 +85,23 @@ const isNotHidden = (item: IKeyValue): boolean => {
   return true;
 };
 
-const isUnique = (item: IKeyValue, index: number, context: IKeyValue[]): boolean => {
-  const previous = index ? context[index - 1] : null;
-  if (previous?.key === item.key && previous.value.endsWith(item.value)) return false;
-  return true;
+const isUnique = (result: IKeyValue[], item: IKeyValue): IKeyValue[] => {
+  const previous = result[result.length - 1];
+  if (previous?.key === item.key) {
+    if (previous.value.endsWith(item.value)) return result;
+    if (item.value.startsWith(previous.value)) {
+      result[result.length - 1] = item;
+      return result;
+    }
+  }
+  result[result.length] = item;
+  return result;
 };
+
+// const isUnique = (item: IKeyValue, index: number, context: IKeyValue[]): boolean => {
+//   const previous = index ? context[index - 1] : null;
+//   const next = index < context.length - 1 ? context[index + 1] : null;
+//   if (previous?.key === item.key && previous.value.endsWith(item.value)) return false;
+//   if (next?.key === item.key && next.value.startsWith(item.value)) return false;
+//   return true;
+// };

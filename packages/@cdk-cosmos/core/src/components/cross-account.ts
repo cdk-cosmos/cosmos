@@ -1,8 +1,7 @@
-import { Construct, Fn, Duration, Lazy, Stack } from '@aws-cdk/core';
+import { Construct, Fn, Duration, Lazy, Stack, CfnOutput, IConstruct } from '@aws-cdk/core';
 import { ZoneDelegationRecord } from '@aws-cdk/aws-route53';
 import { CrossAccountExports } from '@cosmos-building-blocks/common';
 import { ISolarSystemCore } from '../solar-system';
-import { Output } from '../helpers/remote';
 
 export interface CrossAccountZoneDelegationRecordProps {
   comment?: string;
@@ -21,33 +20,21 @@ export class CrossAccountZoneDelegationRecord extends Construct {
     const cosmos = solarSystem.galaxy.cosmos;
     if (!cosmos.link) throw new Error('Cosmos does not have a link stack. It is required');
 
-    const lazyExports = Lazy.listValue({
-      produce: () => {
-        const zoneName = solarSystem.zone.node.tryFindChild('ZoneName') as Output;
-        const zoneNameServers = solarSystem.zone.node.tryFindChild('NameServers') as Output;
-        if (!zoneName || !zoneNameServers) {
-          throw new Error("Look like the Zone has not been exported or doesn't have name servers");
-        }
-        return [zoneName.exportName, zoneNameServers.exportName];
-      },
-    });
+    const zoneNameExport = findLazyExportName(solarSystem.zone, 'ZoneName');
+    const zoneNameServersExport = findLazyExportName(solarSystem.zone, 'ZoneNameServers');
 
     this.exports = new CrossAccountExports(cosmos.link, `${solarSystem.node.id}${id}Exports`, {
       serviceToken: cosmos.crossAccountExportServiceToken,
-      exports: lazyExports,
+      exports: [zoneNameExport, zoneNameServersExport],
       assumeRoleArn: solarSystem.galaxy.cdkCrossAccountRoleStaticArn,
     });
 
-    const zoneNameRef = Lazy.stringValue({
-      produce: () => this.exports.get(Stack.of(this).resolve(lazyExports)[0]),
-    });
-    const zoneNameServersRef = Lazy.stringValue({
-      produce: () => this.exports.get(Stack.of(this).resolve(lazyExports)[1]),
-    });
+    const [zoneName, zoneNameServers] = this.exports.get([zoneNameExport, zoneNameServersExport]);
+
     this.delegationRecord = new ZoneDelegationRecord(cosmos.link, `${solarSystem.node.id}${id}`, {
       zone: cosmos.rootZone,
-      recordName: zoneNameRef + '.',
-      nameServers: Fn.split(',', zoneNameServersRef),
+      recordName: zoneName + '.',
+      nameServers: Fn.split(',', zoneNameServers),
       ttl,
       comment,
     });
@@ -55,3 +42,6 @@ export class CrossAccountZoneDelegationRecord extends Construct {
     cosmos.link.node.addDependency(solarSystem.zone);
   }
 }
+
+const findLazyExportName = (scope: IConstruct, id: string): string =>
+  Lazy.stringValue({ produce: () => (scope.node.findChild(id) as CfnOutput).exportName });

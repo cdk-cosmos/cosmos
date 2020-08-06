@@ -55,7 +55,7 @@ export class CdkPipeline extends Construct {
 
     const artifactBucket = new SecureBucket(this, 'CdkArtifactBucket');
 
-    this.deploy = new Project(this, 'CdkDeploy', {
+    this.deploy = new Project(this, 'Deploy', {
       projectName: deployName,
       role: deployRole,
       vpc: deployVpc,
@@ -111,7 +111,7 @@ export class CdkPipeline extends Construct {
     const sourceOutput = new Artifact('CdkCodeOutput');
     const cdkDeployOutput = new Artifact('CdkDeployOutput');
 
-    this.pipeline = new Pipeline(this, 'CdkPipeline', {
+    this.pipeline = new Pipeline(this, 'Pipeline', {
       pipelineName: pipelineName,
       artifactBucket: artifactBucket,
       role: deployRole,

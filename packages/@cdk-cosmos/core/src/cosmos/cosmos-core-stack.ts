@@ -5,7 +5,7 @@ import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { createCrossAccountExportProvider } from '@cosmos-building-blocks/common';
 import { BaseStack, BaseStackProps } from '../components/base';
-import { RemoteZone, RemoteCodeRepo } from '../helpers/remote';
+import { RemoteZone, RemoteCodeRepo } from '../components/remote';
 import { getPackageVersion } from '../helpers/utils';
 import { ICosmosCoreLink, CosmosCoreLinkStack } from './cosmoc-core-link-stack';
 
