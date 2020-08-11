@@ -88,13 +88,13 @@ Object {
       },
       "Value": Any<String>,
     },
-    "CrossAccountExportsFnFunctionArn": Object {
+    "CrossAccountExportServiceToken": Object {
       "Export": Object {
-        "Name": "CoreCrossAccountExportsFnArn",
+        "Name": "CoreCrossAccountExportServiceToken",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "CrossAccountExportsFn",
+          "CustomCrossAccountExportsCustomResourceProviderHandler",
           "Arn",
         ],
       },
@@ -128,6 +128,20 @@ Object {
         "Name": "CoreRootZoneName",
       },
       "Value": "cos.com",
+    },
+  },
+  "Parameters": Object {
+    "AssetParameterssourceHashArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"sourceHash\\"",
+      "Type": "String",
     },
   },
   "Resources": Object {
@@ -186,16 +200,51 @@ Object {
       },
       "Type": "AWS::CodeCommit::Repository",
     },
-    "CrossAccountExportsFn": Object {
+    "CustomCrossAccountExportsCustomResourceProviderHandler": Object {
       "DependsOn": Array [
         "CdkMasterRole",
       ],
       "Properties": Object {
         "Code": Object {
-          "S3Bucket": "mock-s3BucketName",
-          "S3Key": "mock-s3ObjectKey",
+          "S3Bucket": Object {
+            "Ref": "AssetParameterssourceHashS3Bucket",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
         },
-        "Handler": "index.handler",
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
         "Role": Object {
           "Fn::GetAtt": Array [
             "CdkMasterRole",
@@ -203,13 +252,7 @@ Object {
           ],
         },
         "Runtime": "nodejs12.x",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-        ],
-        "Timeout": 60,
+        "Timeout": 300,
       },
       "Type": "AWS::Lambda::Function",
     },

@@ -1,58 +1,42 @@
-import { Construct, Stack, Reference, Duration } from '@aws-cdk/core';
-import { CustomResource, CustomResourceProvider } from '@aws-cdk/aws-cloudformation';
-import { IFunction, Function, FunctionProps, Runtime, Code } from '@aws-cdk/aws-lambda';
-import { ManagedPolicy } from '@aws-cdk/aws-iam';
+import {
+  Construct,
+  Reference,
+  Duration,
+  CustomResource,
+  CustomResourceProvider,
+  CustomResourceProviderRuntime,
+  Stack,
+  CfnResource,
+} from '@aws-cdk/core';
+import { IRole, CfnRole } from '@aws-cdk/aws-iam';
 
-export class CrossAccountExportsFn extends Function {
-  constructor(scope: Construct, id: string, props?: Partial<FunctionProps>) {
-    super(scope, id, {
-      runtime: Runtime.NODEJS_12_X,
-      code: Code.fromAsset(`${__dirname}/cross-account-stack-ref-handler.zip`),
-      handler: 'index.handler',
-      timeout: Duration.seconds(60),
-      ...props,
-    });
-
-    // istanbul ignore next
-    if (!props?.role) {
-      this.role?.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSCloudFormationReadOnlyAccess'));
-    }
-  }
-}
+export const RESOURCE_TYPE = 'Custom::CrossAccountExports';
 
 export interface CrossAccountExportsProps {
   exports: string[];
+  serviceToken?: string;
   shouldErrorIfNotFound?: boolean;
   assumeRoleArn?: string;
-  fn?: IFunction;
   alwaysUpdate?: boolean;
 }
 
 export class CrossAccountExports extends Construct {
   readonly exports: string[];
   readonly resource: CustomResource;
-  readonly fn: IFunction;
+  readonly serviceToken: string;
 
   constructor(scope: Construct, id: string, props: CrossAccountExportsProps) {
     super(scope, id);
 
-    const { exports, shouldErrorIfNotFound, assumeRoleArn, alwaysUpdate = false } = props;
-    let { fn } = props;
+    const { shouldErrorIfNotFound, assumeRoleArn, alwaysUpdate = false, serviceToken } = props;
 
-    this.exports = exports;
+    this.exports = props.exports;
 
-    if (!fn) {
-      fn = Stack.of(this).node.tryFindChild('CrossAccountExportsFn') as IFunction | undefined;
-    }
-    if (!fn) {
-      fn = new CrossAccountExportsFn(Stack.of(this), 'CrossAccountExportsFn');
-    }
-
-    this.fn = fn;
+    this.serviceToken = serviceToken || createCrossAccountExportProvider(this);
 
     this.resource = new CustomResource(this, 'Resource', {
-      provider: CustomResourceProvider.fromLambda(fn),
-      resourceType: 'Custom::CrossAccountExports',
+      serviceToken: this.serviceToken,
+      resourceType: RESOURCE_TYPE,
       properties: {
         exports: this.exports,
         shouldErrorIfNotFound,
@@ -83,3 +67,24 @@ export class CrossAccountExports extends Construct {
     return this.exports.map(x => this.resource.getAtt(x));
   }
 }
+
+export const createCrossAccountExportProvider = (scope: Construct, role?: IRole): string => {
+  const serviceToken = CustomResourceProvider.getOrCreate(scope, RESOURCE_TYPE, {
+    codeDirectory: `${__dirname}/cross-account-export-handler`,
+    runtime: CustomResourceProviderRuntime.NODEJS_12,
+    timeout: Duration.minutes(5),
+  });
+
+  if (role) {
+    const provider = Stack.of(scope).node.findChild(`${RESOURCE_TYPE}CustomResourceProvider`) as CustomResourceProvider;
+    const providerRole = provider.node.findChild('Role') as CfnRole;
+    const providerHandler = provider.node.findChild('Handler') as CfnResource;
+    provider.node.tryRemoveChild(providerRole.node.id);
+    providerHandler.addPropertyOverride('Role', role.roleArn);
+    providerHandler.addDependsOn(role.node.defaultChild as CfnResource);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const deps = (providerHandler as any).dependsOn as Set<any>;
+    deps.delete(providerRole);
+  }
+  return serviceToken;
+};

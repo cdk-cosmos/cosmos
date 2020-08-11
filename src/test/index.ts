@@ -4,8 +4,6 @@ import * as path from 'path';
 import { Stack, App, NestedStack } from '@aws-cdk/core';
 import { CloudFormationStackArtifact } from '@aws-cdk/cx-api';
 
-export { mockProxy, MockCdkAsset } from './mocks';
-
 type SynthesizeStacks = (...stacks: Array<Stack | undefined>) => object[];
 export const synthesizeStacks: SynthesizeStacks = (...stacks) => {
   const _stacks: Array<Stack | NestedStack> = stacks.filter(x => x) as any;

@@ -1,5 +1,4 @@
-import { Construct, RemovalPolicy, Stack } from '@aws-cdk/core';
-import { Bucket, BucketEncryption } from '@aws-cdk/aws-s3';
+import { Construct, Stack } from '@aws-cdk/core';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Pipeline, Artifact } from '@aws-cdk/aws-codepipeline';
 import { CodeCommitSourceAction, CodeBuildAction } from '@aws-cdk/aws-codepipeline-actions';
@@ -15,6 +14,7 @@ import {
 } from '@aws-cdk/aws-codebuild';
 import { IRole } from '@aws-cdk/aws-iam';
 import { IVpc } from '@aws-cdk/aws-ec2';
+import { SecureBucket } from '@cosmos-building-blocks/common';
 import { BuildSpecObject, BuildSpecBuilder } from './build-spec';
 
 export interface StandardPipelineProps {
@@ -57,10 +57,7 @@ export class StandardPipeline extends Construct {
         ? Repository.fromRepositoryName(this, props.codeRepo.node.id, props.codeRepo.repositoryName)
         : props.codeRepo;
 
-    const artifactBucket = new Bucket(this, 'CodeArtifactBucket', {
-      encryption: BucketEncryption.S3_MANAGED,
-      removalPolicy: RemovalPolicy.RETAIN,
-    });
+    const artifactBucket = new SecureBucket(this, 'CodeArtifactBucket');
 
     this.build = new Project(this, 'Build', {
       projectName: buildName,
