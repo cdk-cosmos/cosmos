@@ -1,10 +1,9 @@
 import { Construct, Stack, Tag } from '@aws-cdk/core';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
-import { Vpc } from '@aws-cdk/aws-ec2';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { ICosmosCore } from '../cosmos/cosmos-core-stack';
-import { CoreVpcProps, CoreVpc, addCommonEndpoints, addEcsEndpoints } from '../components/core-vpc';
+import { CoreVpc } from '../components/core-vpc';
 import { PATTERN } from '../helpers/constants';
 import { isCrossAccount } from '../helpers/utils';
 
@@ -20,7 +19,7 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
   readonly cosmos: ICosmosCore;
   readonly cdkCrossAccountRole?: Role;
   readonly cdkCrossAccountRoleStaticArn?: string;
-  vpc?: Vpc;
+  vpc?: CoreVpc;
 
   constructor(cosmos: ICosmosCore, id: string, props?: GalaxyCoreStackProps) {
     super(cosmos, id, {
@@ -42,23 +41,5 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
     }
 
     Tag.add(this, 'cosmos:galaxy', this.node.id);
-  }
-
-  addSharedVpc(props?: Partial<CoreVpcProps> & { commonEndpoints?: boolean; ecsEndpoints?: boolean }): Vpc {
-    const { commonEndpoints = true, ecsEndpoints = true } = props || {};
-
-    if (!this.networkBuilder) {
-      throw new Error(`NetworkBuilder not found, please define cidr range here (Galaxy: ${this.node.id}) or Cosmos.`);
-    }
-
-    this.vpc = new CoreVpc(this, 'SharedVpc', {
-      ...props,
-      networkBuilder: this.networkBuilder,
-    });
-
-    if (commonEndpoints) addCommonEndpoints(this.vpc);
-    if (ecsEndpoints) addEcsEndpoints(this.vpc);
-
-    return this.vpc;
   }
 }

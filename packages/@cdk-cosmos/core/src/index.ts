@@ -4,7 +4,7 @@ export { GalaxyCoreStack, GalaxyCoreStackProps, GalaxyExtensionStack } from './g
 
 export { SolarSystemCoreStack, SolarSystemCoreStackProps, SolarSystemExtensionStack } from './solar-system';
 
-export { EcsSolarSystemCoreStack, EcsSolarSystemCoreProps, EcsSolarSystemExtensionStack } from './ecs-solar-system';
+export { EcsSolarSystemExtensionStack } from './ecs-solar-system';
 
 export {
   CiCdSolarSystemCoreStack,
@@ -14,3 +14,12 @@ export {
   CiCdEcsSolarSystemExtensionStack,
   CiCdSolarSystemExtensionStackProps,
 } from './cicd-solar-system';
+
+export {
+  ISharedVpc,
+  SharedVpcCoreStack,
+  SharedVpcCoreStackProps,
+  IEcsSolarSystemCore,
+  EcsSolarSystemCoreStack,
+  EcsSolarSystemCoreProps,
+} from './features';

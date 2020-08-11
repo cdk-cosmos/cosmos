@@ -1,8 +1,15 @@
-import { CfnResource, NestedStack, NestedStackProps } from '@aws-cdk/core';
+import { CfnElement, NestedStack, NestedStackProps } from '@aws-cdk/core';
 import { Construct } from '@aws-cdk/core/lib/construct-compat';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Stack, StackProps } from '@aws-cdk/core/lib/stack';
-import { PATTERN, COSMOS_PARTITION, COSMOS_VERSION, COSMOS_NETWORK_BUILDER, AWS_ENV } from '../helpers/constants';
+import {
+  PATTERN,
+  CONTEXT_COSMOS_PARTITION,
+  CONTEXT_COSMOS_VERSION,
+  CONTEXT_COSMOS_NETWORK_BUILDER,
+  CONTEXT_COSMOS_NAMING,
+  CONTEXT_AWS_ENV,
+} from '../helpers/constants';
 import { generateNodeId, generateScopeId, generateSingletonId } from '../helpers/generate-scope-id';
 
 export interface BaseConstructProps {
@@ -26,92 +33,80 @@ export class BaseConstruct extends Construct {
       Object.entries(context).forEach(([key, value]) => this.node.setContext(key, value));
     }
 
-    if (partition) this.node.setContext(COSMOS_PARTITION, partition);
-    if (version) this.node.setContext(COSMOS_VERSION, version);
+    if (partition) this.node.setContext(CONTEXT_COSMOS_PARTITION, partition);
+    if (version) this.node.setContext(CONTEXT_COSMOS_VERSION, version);
 
     this.hidden = new Construct(this, 'Default');
   }
 }
 
 export interface BaseStackProps extends BaseConstructProps, StackProps {
-  disableCosmosNaming?: boolean;
+  cosmosNaming?: boolean;
   cidr?: string;
 }
 
 export class BaseStack extends Stack {
-  private readonly disableCosmosNaming: boolean;
   protected readonly hidden: Construct;
-  public readonly networkBuilder?: NetworkBuilder;
+  public get cosmosNaming(): boolean {
+    return this.node.tryGetContext(CONTEXT_COSMOS_NAMING) || true;
+  }
+  public get networkBuilder(): NetworkBuilder | undefined {
+    return this.node.tryGetContext(CONTEXT_COSMOS_NETWORK_BUILDER);
+  }
 
-  constructor(scope: Construct, id: string, props?: BaseStackProps) {
-    const { type, context, partition, version, disableCosmosNaming = false, env, cidr } = props || {};
+  constructor(scope: Construct, id: string, props: BaseStackProps) {
+    const { type, context, partition, version, env, cidr, cosmosNaming } = props;
     const stackName = generateNodeId({ scope, id, type, partition, version, pattern: PATTERN.STACK });
 
     super(scope, id, {
       stackName,
-      env: scope.node.tryGetContext(AWS_ENV),
+      env: scope.node.tryGetContext(CONTEXT_AWS_ENV),
       ...props,
     });
 
     this.node.type = type;
-    this.disableCosmosNaming = disableCosmosNaming;
 
     if (context) {
       Object.entries(context).forEach(([key, value]) => this.node.setContext(key, value));
     }
 
-    if (partition) this.node.setContext(COSMOS_PARTITION, partition);
-    if (version) this.node.setContext(COSMOS_VERSION, version);
-    if (env) this.node.setContext(AWS_ENV, env);
-
-    if (cidr) this.networkBuilder = new NetworkBuilder(cidr);
-    if (this.networkBuilder) this.node.setContext(COSMOS_NETWORK_BUILDER, this.networkBuilder);
-    else this.networkBuilder = this.node.tryGetContext(COSMOS_NETWORK_BUILDER);
+    if (env) this.node.setContext(CONTEXT_AWS_ENV, env);
+    if (partition) this.node.setContext(CONTEXT_COSMOS_PARTITION, partition);
+    if (version) this.node.setContext(CONTEXT_COSMOS_VERSION, version);
+    if (cosmosNaming) this.node.setContext(CONTEXT_COSMOS_NAMING, cosmosNaming);
+    if (cidr) this.node.setContext(CONTEXT_COSMOS_NETWORK_BUILDER, new NetworkBuilder(cidr));
 
     this.hidden = new Construct(this, 'Default');
   }
 
-  public allocateLogicalId(scope: CfnResource): string {
-    if (this.disableCosmosNaming) return super.allocateLogicalId(scope);
+  protected allocateLogicalId(scope: CfnElement): string {
+    if (!this.cosmosNaming) return super.allocateLogicalId(scope);
     const id = generateScopeId({ scope, defaultPattern: PATTERN.RESOURCE });
     return removeNonAlphanumeric(id);
   }
 }
 
-export interface BaseNestedStackProps extends BaseConstructProps, NestedStackProps {
-  disableCosmosNaming?: boolean;
-  cidr?: string;
+export interface BaseNestedStackProps extends NestedStackProps {
+  type?: string;
 }
 
 export class BaseNestedStack extends NestedStack {
-  private readonly disableCosmosNaming: boolean;
-  protected readonly hidden: Construct;
-  public readonly networkBuilder?: NetworkBuilder;
-
-  constructor(scope: Construct, id: string, props?: BaseNestedStackProps) {
-    const { type, context, partition, version, disableCosmosNaming = false, cidr } = props || {};
-
-    super(scope, id, props);
-
-    this.node.type = type;
-    this.disableCosmosNaming = disableCosmosNaming;
-
-    if (context) {
-      Object.entries(context).forEach(([key, value]) => this.node.setContext(key, value));
-    }
-
-    if (partition) this.node.setContext(COSMOS_PARTITION, partition);
-    if (version) this.node.setContext(COSMOS_VERSION, version);
-
-    if (cidr) this.networkBuilder = new NetworkBuilder(cidr);
-    if (this.networkBuilder) this.node.setContext(COSMOS_NETWORK_BUILDER, this.networkBuilder);
-    else this.networkBuilder = this.node.tryGetContext(COSMOS_NETWORK_BUILDER);
-
-    this.hidden = new Construct(this, 'Default');
+  public get cosmosNaming(): boolean {
+    return this.node.tryGetContext(CONTEXT_COSMOS_NAMING) || true;
+  }
+  public get networkBuilder(): NetworkBuilder | undefined {
+    return this.node.tryGetContext(CONTEXT_COSMOS_NETWORK_BUILDER);
   }
 
-  public allocateLogicalId(scope: CfnResource): string {
-    if (this.disableCosmosNaming) return super.allocateLogicalId(scope);
+  constructor(scope: Construct, id: string, props?: BaseNestedStackProps) {
+    super(scope, id, props);
+    const { type } = props || {};
+
+    this.node.type = type;
+  }
+
+  protected allocateLogicalId(scope: CfnElement): string {
+    if (!this.cosmosNaming) return super.allocateLogicalId(scope);
     const id = generateScopeId({ scope, defaultPattern: PATTERN.RESOURCE });
     return removeNonAlphanumeric(id);
   }

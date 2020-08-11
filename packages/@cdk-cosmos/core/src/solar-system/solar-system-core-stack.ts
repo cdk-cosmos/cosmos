@@ -1,5 +1,5 @@
 import { Construct, Duration, Tag } from '@aws-cdk/core';
-import { IVpc, Vpc } from '@aws-cdk/aws-ec2';
+import { Vpc } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Certificate, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
 import {
@@ -9,29 +9,25 @@ import {
   PrivateHostedZone,
   ZoneDelegationRecord,
 } from '@aws-cdk/aws-route53';
-import { isCrossAccount, defaultProps, DeepPartial } from '../helpers/utils';
+import { isCrossAccount } from '../helpers/utils';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { IGalaxyCore } from '../galaxy/galaxy-core-stack';
-import { CoreVpc, CoreVpcProps, addCommonEndpoints } from '../components/core-vpc';
+import { CoreVpc, CoreVpcProps, ICoreVpc } from '../components/core-vpc';
 import { CrossAccountZoneDelegationRecord } from '../components/cross-account';
 import { RemoteVpc, RemoteZone } from '../helpers/remote';
-import { IEcsSolarSystemCore, EcsSolarSystemCoreStack, EcsSolarSystemCoreProps } from './feature';
 
 export interface ISolarSystemCore extends Construct {
   readonly galaxy: IGalaxyCore;
-  readonly vpc: IVpc;
+  readonly vpc: ICoreVpc;
   readonly zone: IPublicHostedZone;
   readonly privateZone: IPrivateHostedZone;
   readonly networkBuilder?: NetworkBuilder;
   readonly certificate?: Certificate;
-  readonly ecs?: IEcsSolarSystemCore;
 }
 
 export interface SolarSystemCoreStackProps extends BaseStackProps {
   vpc?: Vpc;
-  vpcProps?: Partial<CoreVpcProps> & {
-    defaultEndpoints?: boolean;
-  };
+  vpcProps?: Partial<CoreVpcProps>;
   zoneProps?: {
     linkZone?: boolean;
     ttl?: Duration;
@@ -41,54 +37,35 @@ export interface SolarSystemCoreStackProps extends BaseStackProps {
 
 export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore {
   readonly galaxy: IGalaxyCore;
-  readonly props: SolarSystemCoreStackProps;
   readonly vpc: Vpc;
   readonly zone: PublicHostedZone;
   readonly privateZone: PrivateHostedZone;
   readonly certificate?: Certificate;
-  ecs?: EcsSolarSystemCoreStack;
 
   constructor(galaxy: IGalaxyCore, id: string, props?: SolarSystemCoreStackProps) {
-    props = defaultProps<SolarSystemCoreStackProps>(
-      {
-        description: 'Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.',
-        certificate: false,
-        vpcProps: {
-          defaultEndpoints: true,
-        },
-        zoneProps: {
-          linkZone: true,
-          ttl: Duration.minutes(30),
-        },
-      },
-      props,
-      {
-        type: 'SolarSystem',
-      }
-    );
-    super(galaxy, id, props);
+    super(galaxy, id, {
+      description: 'Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.',
+      ...props,
+      type: 'SolarSystem',
+    });
+
+    const { vpc, certificate, vpcProps = {}, zoneProps = {} } = props || {};
+    const { linkZone = true, ttl = Duration.minutes(30) } = zoneProps;
 
     this.galaxy = galaxy;
-    this.props = props;
 
-    if (this.props.vpc) this.vpc = this.props.vpc as Vpc;
+    if (vpc) this.vpc = vpc as Vpc;
     else {
-      if (!this.networkBuilder) {
-        throw new Error(
-          `NetworkBuilder not found, please define cidr range here (SolarSystem: ${this.node.id}) or Galaxy or Cosmos.`
-        );
-      }
+      const networkBuilder = this.networkBuilder || vpcProps.networkBuilder;
+      if (!networkBuilder) throw this.node.addError('Network Builder must be provided');
 
       this.vpc = new CoreVpc(this, 'Vpc', {
-        ...this.props.vpcProps,
-        networkBuilder: this.networkBuilder,
+        ...vpcProps,
+        networkBuilder,
       });
     }
 
-    // Only add endpoints if this component owens the Vpc.
-    if (this.vpc.node.scope === this) {
-      if (this.props.vpcProps?.defaultEndpoints) addCommonEndpoints(this.vpc);
-    }
+    CoreVpc.addCommonEndpoints(this.vpc);
 
     const rootZone = this.galaxy.cosmos.rootZone;
     this.zone = new PublicHostedZone(this, 'Zone', {
@@ -102,21 +79,19 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
       comment: `Core Main Private Zone for ${this.node.id} SolarSystem`,
     });
 
-    if (this.props.certificate) {
+    if (certificate) {
       this.certificate = new DnsValidatedCertificate(this, 'Certificate', {
         hostedZone: this.zone,
         domainName: this.zone.zoneName,
         subjectAlternativeNames:
-          typeof this.props.certificate === 'object'
-            ? this.props.certificate.subDomains.map(x => `${x}.${this.zone.zoneName}`)
-            : undefined,
+          typeof certificate === 'object' ? certificate.subDomains.map(x => `${x}.${this.zone.zoneName}`) : undefined,
       });
     }
 
-    if (this.props.zoneProps?.linkZone) {
+    if (linkZone) {
       if (isCrossAccount(this.zone, rootZone)) {
         new CrossAccountZoneDelegationRecord(this, 'ZoneDelegation', {
-          ttl: this.props.zoneProps?.ttl,
+          ttl: ttl,
           comment: `Core Zone Delegation for ${this.node.id} SolarSystem.`,
         });
       } else {
@@ -124,7 +99,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
           zone: rootZone,
           recordName: this.zone.zoneName,
           nameServers: this.zone.hostedZoneNameServers as string[],
-          ttl: this.props.zoneProps?.ttl,
+          ttl: ttl,
           comment: `Core Zone Delegation for ${this.node.id} SolarSystem.`,
         });
       }
@@ -135,10 +110,5 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     RemoteZone.export(this.privateZone, this.singletonId('PrivateZone'));
 
     Tag.add(this, 'cosmos:solarsystem', this.node.id);
-  }
-
-  addEcs(props?: DeepPartial<EcsSolarSystemCoreProps>): EcsSolarSystemCoreStack {
-    this.ecs = new EcsSolarSystemCoreStack(this, 'Ecs', defaultProps(this.props, props));
-    return this.ecs;
   }
 }

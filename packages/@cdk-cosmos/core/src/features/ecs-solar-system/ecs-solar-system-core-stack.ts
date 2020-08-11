@@ -1,5 +1,5 @@
 import { InstanceType, SecurityGroup, Peer, InstanceClass, InstanceSize } from '@aws-cdk/aws-ec2';
-import { Cluster, ICluster, ClusterProps, AddCapacityOptions, CpuUtilizationScalingProps } from '@aws-cdk/aws-ecs';
+import { Cluster, ICluster, ClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
   ApplicationListener,
@@ -13,11 +13,11 @@ import { ManagedPolicy } from '@aws-cdk/aws-iam';
 import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 import { AutoScalingGroup } from '@aws-cdk/aws-autoscaling';
-import { ISolarSystemCore } from '../../solar-system-core-stack';
-import { addEcsEndpoints } from '../../../components/core-vpc';
-import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../../helpers/remote';
-import { defaultProps } from '../../../helpers/utils';
-import { BaseNestedStack, BaseNestedStackProps } from '../../../components/base';
+import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
+import { CoreVpc } from '../../components/core-vpc';
+import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../helpers/remote';
+import { BaseNestedStack, BaseNestedStackProps } from '../../components/base';
+import { Tag } from '@aws-cdk/core';
 
 export interface IEcsSolarSystemCore {
   readonly solarSystem: ISolarSystemCore;
@@ -30,7 +30,6 @@ export interface IEcsSolarSystemCore {
 }
 
 export interface EcsSolarSystemCoreProps extends BaseNestedStackProps {
-  vpcProps?: { defaultEndpoints?: boolean };
   clusterProps?: Partial<ClusterProps>;
   clusterCapacityProps?: Partial<AddCapacityOptions>;
   albProps?: Partial<ApplicationLoadBalancerProps>;
@@ -39,7 +38,6 @@ export interface EcsSolarSystemCoreProps extends BaseNestedStackProps {
 
 export class EcsSolarSystemCoreStack extends BaseNestedStack implements IEcsSolarSystemCore {
   readonly solarSystem: ISolarSystemCore;
-  readonly props: EcsSolarSystemCoreProps;
   readonly cluster: Cluster;
   readonly clusterAutoScalingGroup: AutoScalingGroup;
   readonly alb: ApplicationLoadBalancer;
@@ -49,29 +47,20 @@ export class EcsSolarSystemCoreStack extends BaseNestedStack implements IEcsSola
   readonly httpsInternalListener?: ApplicationListener;
 
   constructor(solarSystem: ISolarSystemCore, id: string, props?: EcsSolarSystemCoreProps) {
-    props = defaultProps<EcsSolarSystemCoreProps>(
-      {
-        vpcProps: {
-          defaultEndpoints: true,
-        },
-        albListenerCidr: '0.0.0.0/0',
-      },
-      props,
-      { type: 'Feature' }
-    );
-    super(solarSystem, id, props);
+    super(solarSystem, id, {
+      ...props,
+      type: 'Feature',
+    });
+
+    const { albListenerCidr = '0.0.0.0/0', clusterProps = {}, clusterCapacityProps = {}, albProps = {} } = props || {};
 
     this.solarSystem = solarSystem;
-    this.props = props;
 
-    // Only add endpoints if this component owens the Vpc.
-    if (this.solarSystem.vpc.node.scope === this) {
-      if (this.props.vpcProps?.defaultEndpoints) addEcsEndpoints(this.solarSystem.vpc);
-    }
+    CoreVpc.addEcsEndpoints(this.solarSystem.vpc);
 
     this.cluster = new Cluster(this, 'Cluster', {
       containerInsights: true,
-      ...this.props.clusterProps,
+      ...clusterProps,
       clusterName: this.singletonId('Cluster'),
       vpc: this.solarSystem.vpc,
     });
@@ -81,13 +70,13 @@ export class EcsSolarSystemCoreStack extends BaseNestedStack implements IEcsSola
       instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
       minCapacity: 1,
       maxCapacity: 5,
-      ...this.props.clusterCapacityProps,
+      ...clusterCapacityProps,
     });
 
     this.clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
 
     const albSecurityGroup =
-      this.props.albProps?.securityGroup ||
+      albProps.securityGroup ||
       new SecurityGroup(this, 'AlbSecurityGroup', {
         vpc: this.solarSystem.vpc,
         description: 'SecurityGroup for ALB.',
@@ -96,7 +85,7 @@ export class EcsSolarSystemCoreStack extends BaseNestedStack implements IEcsSola
 
     this.alb = new ApplicationLoadBalancer(this, 'Alb', {
       vpcSubnets: { subnetGroupName: 'App' },
-      ...this.props.albProps,
+      ...albProps,
       vpc: this.solarSystem.vpc,
       securityGroup: albSecurityGroup,
       loadBalancerName: this.singletonId('Alb'),
@@ -135,33 +124,48 @@ export class EcsSolarSystemCoreStack extends BaseNestedStack implements IEcsSola
       RemoteApplicationListener.export(this.httpsInternalListener, this.singletonId('HttpsInternalListener'));
     }
 
-    [this.httpListener, this.httpInternalListener, this.httpsListener, this.httpsInternalListener]
-      .filter(listener => listener)
-      .forEach(listener => this.configureListener(listener as ApplicationListener, this.props.albListenerCidr));
+    for (const listener of [
+      this.httpListener,
+      this.httpInternalListener,
+      this.httpsListener,
+      this.httpsInternalListener,
+    ]) {
+      if (listener) configureListener(listener, albListenerCidr);
+    }
 
     RemoteCluster.export(this.cluster, this.singletonId('Cluster'));
     RemoteAlb.export(this.alb, this.singletonId('Alb'));
     RemoteApplicationListener.export(this.httpListener, this.singletonId('HttpListener'));
     RemoteApplicationListener.export(this.httpInternalListener, this.singletonId('HttpInternalListener'));
-  }
 
-  addCpuAutoScaling(props: Partial<CpuUtilizationScalingProps>): void {
-    this.clusterAutoScalingGroup.scaleOnCpuUtilization('CpuScaling', {
-      ...props,
-      targetUtilizationPercent: 50,
-    });
-  }
-
-  private configureListener(listener: ApplicationListener, listenerInboundCidr?: string | null): void {
-    listener.addFixedResponse('Default', {
-      statusCode: '404',
-      contentType: ContentType.TEXT_PLAIN,
-      messageBody: 'Route Not Found.',
-    });
-    if (listenerInboundCidr) {
-      listener.connections.allowDefaultPortFrom(Peer.ipv4(listenerInboundCidr));
-    } else {
-      listener.connections.allowDefaultPortFrom(Peer.anyIpv4());
-    }
+    Tag.add(this, 'cosmos:feature', this.node.id);
   }
 }
+
+const configureListener = (listener: ApplicationListener, listenerInboundCidr?: string | null): void => {
+  listener.addFixedResponse('Default', {
+    statusCode: '404',
+    contentType: ContentType.TEXT_PLAIN,
+    messageBody: 'Route Not Found.',
+  });
+  if (listenerInboundCidr) {
+    listener.connections.allowDefaultPortFrom(Peer.ipv4(listenerInboundCidr));
+  } else {
+    listener.connections.allowDefaultPortFrom(Peer.anyIpv4());
+  }
+};
+
+declare module '../../solar-system/solar-system-core-stack' {
+  export interface ISolarSystemCore {
+    readonly ecs?: IEcsSolarSystemCore;
+  }
+  interface SolarSystemCoreStack {
+    ecs?: EcsSolarSystemCoreStack;
+    addEcs(props?: DeepPartial<EcsSolarSystemCoreProps>): EcsSolarSystemCoreStack;
+  }
+}
+
+SolarSystemCoreStack.prototype.addEcs = function(props?: EcsSolarSystemCoreProps): EcsSolarSystemCoreStack {
+  this.ecs = new EcsSolarSystemCoreStack(this, 'Ecs', props);
+  return this.ecs;
+};
