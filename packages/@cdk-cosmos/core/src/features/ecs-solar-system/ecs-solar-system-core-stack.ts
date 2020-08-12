@@ -28,10 +28,12 @@ export interface IEcsSolarSystemCore {
   readonly httpsListener?: IApplicationListener;
   readonly httpsInternalListener?: IApplicationListener;
 }
+
 export interface ClusterProps extends Partial<Omit<EcsClusterProps, 'capacity'>> {
   capacity?: Partial<AddCapacityOptions> | false;
 }
-export interface EcsSolarSystemCoreProps extends BaseNestedStackProps {
+
+export interface EcsSolarSystemCoreStackProps extends BaseNestedStackProps {
   clusterProps?: ClusterProps;
   albProps?: Partial<ApplicationLoadBalancerProps>;
   albListenerCidr?: string;
@@ -47,7 +49,7 @@ export class EcsSolarSystemCoreStack extends BaseNestedStack implements IEcsSola
   readonly httpsListener?: ApplicationListener;
   readonly httpsInternalListener?: ApplicationListener;
 
-  constructor(solarSystem: ISolarSystemCore, id: string, props?: EcsSolarSystemCoreProps) {
+  constructor(solarSystem: ISolarSystemCore, id: string, props?: EcsSolarSystemCoreStackProps) {
     super(solarSystem, id, {
       ...props,
       type: 'Feature',
@@ -167,11 +169,11 @@ declare module '../../solar-system/solar-system-core-stack' {
   }
   interface SolarSystemCoreStack {
     ecs?: EcsSolarSystemCoreStack;
-    addEcs(props?: EcsSolarSystemCoreProps): EcsSolarSystemCoreStack;
+    addEcs(props?: EcsSolarSystemCoreStackProps): EcsSolarSystemCoreStack;
   }
 }
 
-SolarSystemCoreStack.prototype.addEcs = function(props?: EcsSolarSystemCoreProps): EcsSolarSystemCoreStack {
+SolarSystemCoreStack.prototype.addEcs = function(props?: EcsSolarSystemCoreStackProps): EcsSolarSystemCoreStack {
   this.ecs = new EcsSolarSystemCoreStack(this, 'Ecs', props);
   return this.ecs;
 };

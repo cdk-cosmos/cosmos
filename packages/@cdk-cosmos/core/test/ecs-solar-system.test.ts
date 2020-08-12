@@ -7,7 +7,7 @@ import {
   GalaxyCoreStack,
   GalaxyExtensionStack,
   SolarSystemCoreStack,
-  EcsSolarSystemExtensionStack,
+  SolarSystemExtensionStack,
 } from '../src';
 
 const app = new App();
@@ -29,7 +29,7 @@ solarSystem2.addEcs({
 
 const cosmosExtension = new CosmosExtensionStack(app, 'Test');
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal');
-const solarSystemExtension = new EcsSolarSystemExtensionStack(galaxyExtension, 'Sys');
+const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys');
 
 const [
   solarSystemStack,

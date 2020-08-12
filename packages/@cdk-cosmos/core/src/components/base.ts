@@ -91,6 +91,7 @@ export interface BaseNestedStackProps extends NestedStackProps {
 }
 
 export class BaseNestedStack extends NestedStack {
+  protected readonly hidden: Construct;
   public get cosmosNaming(): boolean {
     return this.node.tryGetContext(CONTEXT_COSMOS_NAMING) || true;
   }
@@ -103,6 +104,7 @@ export class BaseNestedStack extends NestedStack {
     const { type } = props || {};
 
     this.node.type = type;
+    this.hidden = new Construct(this, 'Default');
   }
 
   protected allocateLogicalId(scope: CfnElement): string {

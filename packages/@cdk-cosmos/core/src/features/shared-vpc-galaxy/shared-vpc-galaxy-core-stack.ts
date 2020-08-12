@@ -4,6 +4,7 @@ import { IGalaxyCore, GalaxyCoreStack } from '../../galaxy/galaxy-core-stack';
 import { Tag } from '@aws-cdk/core';
 
 export interface ISharedVpc {
+  readonly galaxy: IGalaxyCore;
   readonly vpc: ICoreVpc;
 }
 
@@ -12,15 +13,18 @@ export interface SharedVpcCoreStackProps extends BaseNestedStackProps {
 }
 
 export class SharedVpcCoreStack extends BaseNestedStack implements ISharedVpc {
+  readonly galaxy: IGalaxyCore;
   readonly vpc: CoreVpc;
 
-  constructor(scope: IGalaxyCore, id: string, props?: SharedVpcCoreStackProps) {
-    super(scope, id, {
+  constructor(galaxy: IGalaxyCore, id: string, props?: SharedVpcCoreStackProps) {
+    super(galaxy, id, {
       ...props,
       type: 'Feature',
     });
 
     const { vpcProps } = props || {};
+
+    this.galaxy = galaxy;
 
     const networkBuilder = this.networkBuilder || vpcProps?.networkBuilder;
     if (!networkBuilder) throw new Error('Network Builder must be provided.');

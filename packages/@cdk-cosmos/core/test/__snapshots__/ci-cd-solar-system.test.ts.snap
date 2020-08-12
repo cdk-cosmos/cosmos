@@ -2,7 +2,7 @@
 
 exports[`CICD-Solar-System Extension should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos CiCdSolarSystem Extension: App resources dependant on Ci & Cd, like CodePipelines and CodeDeployments.",
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
   "Resources": Object {
     "CdkPipeline": Object {
       "Properties": Object {
@@ -441,106 +441,8 @@ Object {
 
 exports[`CICD-Solar-System should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos CiCdSolarSystem: Resources dependant on Ci & Cd, like CodePipelines and CodeDeployments.",
+  "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
-    "AlbAlbArn": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdAlbArn",
-      },
-      "Value": Object {
-        "Ref": "Alb",
-      },
-    },
-    "AlbAlbDnsHostZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdAlbDnsHostZoneId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "Alb",
-          "CanonicalHostedZoneID",
-        ],
-      },
-    },
-    "AlbAlbDnsName": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdAlbDnsName",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "Alb",
-          "DNSName",
-        ],
-      },
-    },
-    "AlbAlbSecurityGroupId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdAlbSecurityGroupId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "AlbSecurityGroup",
-          "GroupId",
-        ],
-      },
-    },
-    "AlbHttpInternalListenerAlArn": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdHttpInternalListenerArn",
-      },
-      "Value": Object {
-        "Ref": "AlbHttpInternalListener",
-      },
-    },
-    "AlbHttpInternalListenerAlSecurityGroupId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdHttpInternalListenerSecurityGroupId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "AlbSecurityGroup",
-          "GroupId",
-        ],
-      },
-    },
-    "AlbHttpListenerAlArn": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdHttpListenerArn",
-      },
-      "Value": Object {
-        "Ref": "AlbHttpListener",
-      },
-    },
-    "AlbHttpListenerAlSecurityGroupId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdHttpListenerSecurityGroupId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "AlbSecurityGroup",
-          "GroupId",
-        ],
-      },
-    },
-    "ClusterClusterName": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdClusterName",
-      },
-      "Value": Object {
-        "Ref": "Cluster",
-      },
-    },
-    "ClusterClusterSecurityGroup": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdClusterSecurityGroup",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "ClusterDefaultAutoScalingGroupInstanceSecurityGroup",
-          "GroupId",
-        ],
-      },
-    },
     "PrivateZoneZoneId": Object {
       "Export": Object {
         "Name": "CoreGalCiCdPrivateZoneId",
@@ -637,32 +539,22 @@ Object {
     },
   },
   "Parameters": Object {
-    "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
-      "Default": "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id",
-      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994\\"",
+      "Type": "String",
+    },
+    "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994\\"",
+      "Type": "String",
+    },
+    "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994\\"",
+      "Type": "String",
     },
   },
   "Resources": Object {
-    "Alb": Object {
+    "CiCdNestedStackCiCdNestedStackResource": Object {
       "Properties": Object {
-        "Name": "CoreGalCiCdAlb",
-        "Scheme": "internal",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "AlbSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "Subnets": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
         "Tags": Array [
           Object {
             "Key": "cosmos",
@@ -677,1195 +569,50 @@ Object {
             "Value": "CiCd",
           },
         ],
-        "Type": "application",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-    },
-    "AlbHttpInternalListener": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "FixedResponseConfig": Object {
-              "ContentType": "text/plain",
-              "MessageBody": "Route Not Found.",
-              "StatusCode": "404",
-            },
-            "Type": "fixed-response",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "Alb",
-        },
-        "Port": 8080,
-        "Protocol": "HTTP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "AlbHttpListener": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "FixedResponseConfig": Object {
-              "ContentType": "text/plain",
-              "MessageBody": "Route Not Found.",
-              "StatusCode": "404",
-            },
-            "Type": "fixed-response",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "Alb",
-        },
-        "Port": 80,
-        "Protocol": "HTTP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "AlbRecord": Object {
-      "Properties": Object {
-        "AliasTarget": Object {
-          "DNSName": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "dualstack.",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "Alb",
-                    "DNSName",
-                  ],
-                },
-              ],
-            ],
-          },
-          "HostedZoneId": Object {
-            "Fn::GetAtt": Array [
-              "Alb",
-              "CanonicalHostedZoneID",
-            ],
-          },
-        },
-        "HostedZoneId": Object {
-          "Ref": "Zone",
-        },
-        "Name": "cicd.cos.com.",
-        "Type": "A",
-      },
-      "Type": "AWS::Route53::RecordSet",
-    },
-    "AlbSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "SecurityGroup for ALB.",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "from 0.0.0.0/0:80",
-            "FromPort": 80,
-            "IpProtocol": "tcp",
-            "ToPort": 80,
-          },
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "from 0.0.0.0/0:8080",
-            "FromPort": 8080,
-            "IpProtocol": "tcp",
-            "ToPort": 8080,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "CdkPipeline": Object {
-      "Properties": Object {
-        "ArtifactStore": Object {
-          "Location": Object {
-            "Ref": "CdkPipelineCdkArtifactBucket",
-          },
-          "Type": "S3",
-        },
-        "Name": "Core-Cos-Cdk-Pipeline",
-        "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
-        "Stages": Array [
-          Object {
-            "Actions": Array [
+        "TemplateURL": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://s3.region.",
               Object {
-                "ActionTypeId": Object {
-                  "Category": "Source",
-                  "Owner": "AWS",
-                  "Provider": "CodeCommit",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "BranchName": "master",
-                  "PollForSourceChanges": false,
-                  "RepositoryName": Object {
-                    "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
-                  },
-                },
-                "Name": "CdkCheckout",
-                "OutputArtifacts": Array [
-                  Object {
-                    "Name": "CdkCodeOutput",
-                  },
-                ],
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
+                "Ref": "AWS::URLSuffix",
               },
-            ],
-            "Name": "Source",
-          },
-          Object {
-            "Actions": Array [
+              "/",
               Object {
-                "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCos*\\"}]",
-                  "ProjectName": Object {
-                    "Ref": "CdkPipelineCdkDeploy",
-                  },
-                },
-                "InputArtifacts": Array [
+                "Ref": "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994S3Bucket",
+              },
+              "/",
+              Object {
+                "Fn::Select": Array [
+                  0,
                   Object {
-                    "Name": "CdkCodeOutput",
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994S3VersionKey",
+                      },
+                    ],
                   },
                 ],
-                "Name": "CdkDeploy",
-                "OutputArtifacts": Array [
+              },
+              Object {
+                "Fn::Select": Array [
+                  1,
                   Object {
-                    "Name": "CdkDeployOutput",
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994S3VersionKey",
+                      },
+                    ],
                   },
                 ],
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDeployCdkDeployCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
               },
             ],
-            "Name": "Deploy",
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::CodePipeline::Pipeline",
-    },
-    "CdkPipelineCdkArtifactBucket": Object {
-      "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "AccessControl": "LogDeliveryWrite",
-        "BucketEncryption": Object {
-          "ServerSideEncryptionConfiguration": Array [
-            Object {
-              "ServerSideEncryptionByDefault": Object {
-                "SSEAlgorithm": "AES256",
-              },
-            },
-          ],
-        },
-        "LoggingConfiguration": Object {
-          "LogFilePrefix": "BucketAccessLogs/",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::S3::Bucket",
-      "UpdateReplacePolicy": "Retain",
-    },
-    "CdkPipelineCdkArtifactBucketPolicy": Object {
-      "Properties": Object {
-        "Bucket": Object {
-          "Ref": "CdkPipelineCdkArtifactBucket",
-        },
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "s3:*",
-              "Condition": Object {
-                "Bool": Object {
-                  "aws:SecureTransport": false,
-                },
-              },
-              "Effect": "Deny",
-              "Principal": "*",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    Object {
-                      "Fn::GetAtt": Array [
-                        "CdkPipelineCdkArtifactBucket",
-                        "Arn",
-                      ],
-                    },
-                    "/*",
-                  ],
-                ],
-              },
-              "Sid": "ForceSSLOnly",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::S3::BucketPolicy",
-    },
-    "CdkPipelineCdkDeploy": Object {
-      "Properties": Object {
-        "Artifacts": Object {
-          "Location": Object {
-            "Ref": "CdkPipelineCdkArtifactBucket",
-          },
-          "Name": "cdk.templates",
-          "NamespaceType": "BUILD_ID",
-          "Packaging": "ZIP",
-          "Path": "CodeBuild",
-          "Type": "S3",
-        },
-        "Environment": Object {
-          "ComputeType": "BUILD_GENERAL1_SMALL",
-          "EnvironmentVariables": Array [
-            Object {
-              "Name": "NPM_KEY",
-              "Type": "PLAINTEXT",
-              "Value": "",
-            },
-            Object {
-              "Name": "STACKS",
-              "Type": "PLAINTEXT",
-              "Value": "",
-            },
-          ],
-          "Image": "aws/codebuild/standard:3.0",
-          "PrivilegedMode": true,
-          "Type": "LINUX_CONTAINER",
-        },
-        "Name": "Core-Cos-Cdk-Deploy",
-        "ServiceRole": "arn:aws:iam::account:role/CoreCdkMasterRole",
-        "Source": Object {
-          "BuildSpec": "{
-  \\"version\\": \\"0.2\\",
-  \\"phases\\": {
-    \\"install\\": {
-      \\"runtime-versions\\": {
-        \\"nodejs\\": \\"12\\"
-      }
-    },
-    \\"pre_build\\": {
-      \\"commands\\": [
-        \\"echo \\\\\\"//registry.npmjs.org/:_authToken=\${NPM_KEY}\\\\\\" >> ~/.npmrc\\",
-        \\"npm ci\\"
-      ]
-    },
-    \\"build\\": {
-      \\"commands\\": [
-        \\"npx cdk synth \${STACKS}\\",
-        \\"npx cdk deploy --require-approval=never \${STACKS}\\"
-      ]
-    }
-  },
-  \\"artifacts\\": {
-    \\"base-directory\\": \\"cdk.out\\",
-    \\"files\\": [
-      \\"*.template.json\\"
-    ]
-  }
-}",
-          "Location": Object {
-            "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
-          },
-          "Type": "CODECOMMIT",
-        },
-        "SourceVersion": "master",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::CodeBuild::Project",
-    },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "CdkPipelineCdkDeploy",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "s3:GetObject*",
-                "s3:GetBucket*",
-                "s3:List*",
-                "s3:DeleteObject*",
-                "s3:PutObject*",
-                "s3:Abort*",
-              ],
-              "Effect": "Allow",
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineCdkArtifactBucket",
-                    "Arn",
-                  ],
-                },
-                Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
-                          "CdkPipelineCdkArtifactBucket",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-            Object {
-              "Action": Array [
-                "codecommit:GetBranch",
-                "codecommit:GetCommit",
-                "codecommit:UploadArchive",
-                "codecommit:GetUploadArchiveStatus",
-                "codecommit:CancelUploadArchive",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoArn941DDF84",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "Cluster": Object {
-      "Properties": Object {
-        "ClusterName": "CoreGalCiCdCluster",
-        "ClusterSettings": Array [
-          Object {
-            "Name": "containerInsights",
-            "Value": "enabled",
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::ECS::Cluster",
-    },
-    "ClusterDefaultAutoScalingGroupASG": Object {
-      "Properties": Object {
-        "LaunchConfigurationName": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLaunchConfig",
-        },
-        "MaxSize": "5",
-        "MinSize": "1",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "PropagateAtLaunch": true,
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "PropagateAtLaunch": true,
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "PropagateAtLaunch": true,
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "PropagateAtLaunch": true,
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-        "VPCZoneIdentifier": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
-      },
-      "Type": "AWS::AutoScaling::AutoScalingGroup",
-      "UpdatePolicy": Object {
-        "AutoScalingReplacingUpdate": Object {
-          "WillReplace": true,
-        },
-        "AutoScalingScheduledAction": Object {
-          "IgnoreUnmodifiedGroupSizeProperties": true,
-        },
-      },
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunction": Object {
-      "DependsOn": Array [
-        "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy",
-        "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "ZipFile": "import boto3, json, os, time
-
-ecs = boto3.client('ecs')
-autoscaling = boto3.client('autoscaling')
-
-
-def lambda_handler(event, context):
-  print(json.dumps(event))
-  cluster = os.environ['CLUSTER']
-  snsTopicArn = event['Records'][0]['Sns']['TopicArn']
-  lifecycle_event = json.loads(event['Records'][0]['Sns']['Message'])
-  instance_id = lifecycle_event.get('EC2InstanceId')
-  if not instance_id:
-    print('Got event without EC2InstanceId: %s', json.dumps(event))
-    return
-
-  instance_arn = container_instance_arn(cluster, instance_id)
-  print('Instance %s has container instance ARN %s' % (lifecycle_event['EC2InstanceId'], instance_arn))
-
-  if not instance_arn:
-    return
-
-  while has_tasks(cluster, instance_arn):
-    time.sleep(10)
-
-  try:
-    print('Terminating instance %s' % instance_id)
-    autoscaling.complete_lifecycle_action(
-        LifecycleActionResult='CONTINUE',
-        **pick(lifecycle_event, 'LifecycleHookName', 'LifecycleActionToken', 'AutoScalingGroupName'))
-  except Exception as e:
-    # Lifecycle action may have already completed.
-    print(str(e))
-
-
-def container_instance_arn(cluster, instance_id):
-  \\"\\"\\"Turn an instance ID into a container instance ARN.\\"\\"\\"
-  arns = ecs.list_container_instances(cluster=cluster, filter='ec2InstanceId==' + instance_id)['containerInstanceArns']
-  if not arns:
-    return None
-  return arns[0]
-
-
-def has_tasks(cluster, instance_arn):
-  \\"\\"\\"Return True if the instance is running tasks for the given cluster.\\"\\"\\"
-  instances = ecs.describe_container_instances(cluster=cluster, containerInstances=[instance_arn])['containerInstances']
-  if not instances:
-    return False
-  instance = instances[0]
-
-  if instance['status'] == 'ACTIVE':
-    # Start draining, then try again later
-    set_container_instance_to_draining(cluster, instance_arn)
-    return True
-
-  tasks = instance['runningTasksCount'] + instance['pendingTasksCount']
-  print('Instance %s has %s tasks' % (instance_arn, tasks))
-
-  return tasks > 0
-
-
-def set_container_instance_to_draining(cluster, instance_arn):
-  ecs.update_container_instances_state(
-      cluster=cluster,
-      containerInstances=[instance_arn], status='DRAINING')
-
-
-def pick(dct, *keys):
-  \\"\\"\\"Pick a subset of a dict.\\"\\"\\"
-  return {k: v for k, v in dct.items() if k in keys}
-",
-        },
-        "Environment": Object {
-          "Variables": Object {
-            "CLUSTER": Object {
-              "Ref": "Cluster",
-            },
-          },
-        },
-        "Handler": "index.lambda_handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-            "Arn",
-          ],
-        },
-        "Runtime": "python3.6",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-        "Timeout": 310,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionAllowInvokeCosGalCiCdClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopicE9F230F6": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunction",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "ec2:DescribeInstances",
-                "ec2:DescribeInstanceAttribute",
-                "ec2:DescribeInstanceStatus",
-                "ec2:DescribeHosts",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": "autoscaling:CompleteLifecycleAction",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":autoscaling:region:account:autoScalingGroup:*:autoScalingGroupName/",
-                    Object {
-                      "Ref": "ClusterDefaultAutoScalingGroupASG",
-                    },
-                  ],
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "ecs:DescribeContainerInstances",
-                "ecs:DescribeTasks",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": Array [
-                "ecs:ListContainerInstances",
-                "ecs:SubmitContainerStateChange",
-                "ecs:SubmitTaskStateChange",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "Cluster",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "ecs:UpdateContainerInstancesState",
-                "ecs:ListTasks",
-              ],
-              "Condition": Object {
-                "ArnEquals": Object {
-                  "ecs:cluster": Object {
-                    "Fn::GetAtt": Array [
-                      "Cluster",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionTopic": Object {
-      "Properties": Object {
-        "Endpoint": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunction",
-            "Arn",
-          ],
-        },
-        "Protocol": "lambda",
-        "TopicArn": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
-    "ClusterDefaultAutoScalingGroupInstanceProfile": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupInstanceRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "ClusterDefaultAutoScalingGroupInstanceRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "ec2.",
-                      Object {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/AmazonSSMFullAccess",
-              ],
-            ],
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ClusterDefaultAutoScalingGroupInstanceRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "ecs:CreateCluster",
-                "ecs:DeregisterContainerInstance",
-                "ecs:DiscoverPollEndpoint",
-                "ecs:Poll",
-                "ecs:RegisterContainerInstance",
-                "ecs:StartTelemetrySession",
-                "ecs:Submit*",
-                "ecr:GetAuthorizationToken",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ClusterDefaultAutoScalingGroupInstanceRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupInstanceRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ClusterDefaultAutoScalingGroupInstanceSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup/InstanceSecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "ClusterDefaultAutoScalingGroupLaunchConfig": Object {
-      "DependsOn": Array [
-        "ClusterDefaultAutoScalingGroupInstanceRoleDefaultPolicy",
-        "ClusterDefaultAutoScalingGroupInstanceRole",
-      ],
-      "Properties": Object {
-        "IamInstanceProfile": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupInstanceProfile",
-        },
-        "ImageId": Object {
-          "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter",
-        },
-        "InstanceType": "t3.medium",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "ClusterDefaultAutoScalingGroupInstanceSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "UserData": Object {
-          "Fn::Base64": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "#!/bin/bash
-echo ECS_CLUSTER=",
-                Object {
-                  "Ref": "Cluster",
-                },
-                " >> /etc/ecs/ecs.config
-sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
-sudo service iptables save
-echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
-              ],
-            ],
-          },
-        },
-      },
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHook": Object {
-      "DependsOn": Array [
-        "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy",
-        "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-      ],
-      "Properties": Object {
-        "AutoScalingGroupName": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupASG",
-        },
-        "DefaultResult": "CONTINUE",
-        "HeartbeatTimeout": 300,
-        "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
-        "NotificationTargetARN": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-        "RoleARN": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-            "Arn",
           ],
         },
       },
-      "Type": "AWS::AutoScaling::LifecycleHook",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "autoscaling.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sns:Publish",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::SNS::Topic",
+      "Type": "AWS::CloudFormation::Stack",
     },
     "PrivateZone": Object {
       "Properties": Object {
@@ -2409,6 +1156,444 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "Type": "NS",
       },
       "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;
+
+exports[`CICD-Solar-System should match snapshot 2`] = `
+Object {
+  "Resources": Object {
+    "CdkPipeline": Object {
+      "Properties": Object {
+        "ArtifactStore": Object {
+          "Location": Object {
+            "Ref": "CdkPipelineCdkArtifactBucket",
+          },
+          "Type": "S3",
+        },
+        "Name": "Core-Cos-Cdk-Pipeline",
+        "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
+        "Stages": Array [
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "CodeCommit",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "BranchName": "master",
+                  "PollForSourceChanges": false,
+                  "RepositoryName": Object {
+                    "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
+                  },
+                },
+                "Name": "CdkCheckout",
+                "OutputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Source",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCos*\\"}]",
+                  "ProjectName": Object {
+                    "Ref": "CdkPipelineCdkDeploy",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "Name": "CdkDeploy",
+                "OutputArtifacts": Array [
+                  Object {
+                    "Name": "CdkDeployOutput",
+                  },
+                ],
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDeployCdkDeployCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Deploy",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::CodePipeline::Pipeline",
+    },
+    "CdkPipelineCdkArtifactBucket": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "AccessControl": "LogDeliveryWrite",
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "LoggingConfiguration": Object {
+          "LogFilePrefix": "BucketAccessLogs/",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "CdkPipelineCdkArtifactBucketPolicy": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "CdkPipelineCdkArtifactBucket",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": false,
+                },
+              },
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "CdkPipelineCdkArtifactBucket",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+              "Sid": "ForceSSLOnly",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "CdkPipelineCdkDeploy": Object {
+      "Properties": Object {
+        "Artifacts": Object {
+          "Location": Object {
+            "Ref": "CdkPipelineCdkArtifactBucket",
+          },
+          "Name": "cdk.templates",
+          "NamespaceType": "BUILD_ID",
+          "Packaging": "ZIP",
+          "Path": "CodeBuild",
+          "Type": "S3",
+        },
+        "Environment": Object {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": Array [
+            Object {
+              "Name": "NPM_KEY",
+              "Type": "PLAINTEXT",
+              "Value": "",
+            },
+            Object {
+              "Name": "STACKS",
+              "Type": "PLAINTEXT",
+              "Value": "",
+            },
+          ],
+          "Image": "aws/codebuild/standard:3.0",
+          "PrivilegedMode": true,
+          "Type": "LINUX_CONTAINER",
+        },
+        "Name": "Core-Cos-Cdk-Deploy",
+        "ServiceRole": "arn:aws:iam::account:role/CoreCdkMasterRole",
+        "Source": Object {
+          "BuildSpec": "{
+  \\"version\\": \\"0.2\\",
+  \\"phases\\": {
+    \\"install\\": {
+      \\"runtime-versions\\": {
+        \\"nodejs\\": \\"12\\"
+      }
+    },
+    \\"pre_build\\": {
+      \\"commands\\": [
+        \\"echo \\\\\\"//registry.npmjs.org/:_authToken=\${NPM_KEY}\\\\\\" >> ~/.npmrc\\",
+        \\"npm ci\\"
+      ]
+    },
+    \\"build\\": {
+      \\"commands\\": [
+        \\"npx cdk synth \${STACKS}\\",
+        \\"npx cdk deploy --require-approval=never \${STACKS}\\"
+      ]
+    }
+  },
+  \\"artifacts\\": {
+    \\"base-directory\\": \\"cdk.out\\",
+    \\"files\\": [
+      \\"*.template.json\\"
+    ]
+  }
+}",
+          "Location": Object {
+            "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
+          },
+          "Type": "CODECOMMIT",
+        },
+        "SourceVersion": "master",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "CdkPipelineDeployCdkDeployCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "CdkPipelineCdkDeploy",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy",
+        "Roles": Array [
+          Object {
+            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineCdkArtifactBucket",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "CdkPipelineCdkArtifactBucket",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "codecommit:GetBranch",
+                "codecommit:GetCommit",
+                "codecommit:UploadArchive",
+                "codecommit:GetUploadArchiveStatus",
+                "codecommit:CancelUploadArchive",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoArn941DDF84",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy",
+        "Roles": Array [
+          Object {
+            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
   },
 }

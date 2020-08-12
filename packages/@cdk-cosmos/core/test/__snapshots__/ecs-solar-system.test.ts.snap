@@ -2,7 +2,7 @@
 
 exports[`ECS-Solar-System Extension should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos EcsSolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
 }
 `;
 
