@@ -29,7 +29,7 @@ const [cicdSolarSystemStack, cicdSolarSystemExtensionStack] = synthesizeStacks(
 
 describe('CICD-Solar-System', () => {
   test('should be a cicd-solar-system', () => {
-    expect(cicdSolarSystemStack.name).toEqual('CoreCosGalCiCdSolarSystem');
+    expect(cicdSolarSystem.stackName).toEqual('CoreCosGalCiCdSolarSystem');
     expect(cicdSolarSystemStack).toHaveResource('AWS::EC2::VPC');
     expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'CoreGalCiCdZoneName', outputValue: 'cicd.cos.com' });
     expect(cicdSolarSystemStack).toHaveOutput({ exportName: 'CoreGalCiCdZoneId' });
@@ -52,7 +52,7 @@ describe('CICD-Solar-System', () => {
       const cosmos = new CosmosCoreStack(app, 'Test', { tld: 'com' });
       const galaxy = new GalaxyCoreStack(cosmos, 'Test', {});
       new CiCdSolarSystemCoreStack(galaxy);
-    }).toThrowError('NetworkBuilder not found, please define cidr range here (SolarSystem: CiCd) or Galaxy or Cosmos.');
+    }).toThrowError('Network Builder must be provided.');
   });
 
   test('should have cird range', () => {
@@ -87,13 +87,13 @@ describe('CICD-Solar-System', () => {
   });
 
   test('should match snapshot', () => {
-    expect(cicdSolarSystemStack.template).toMatchSnapshot();
+    expect(cicdSolarSystemStack).toMatchSnapshot();
   });
 });
 
 describe('CICD-Solar-System Extension', () => {
   test('should be a solar-system extension', () => {
-    expect(cicdSolarSystemExtensionStack.name).toEqual('AppTestGalCiCdSolarSystem');
+    expect(cicdSolarSystemExtension.stackName).toEqual('AppTestGalCiCdSolarSystem');
   });
 
   test('should inherit env', () => {
@@ -105,6 +105,6 @@ describe('CICD-Solar-System Extension', () => {
   });
 
   test('should match snapshot', () => {
-    expect(cicdSolarSystemExtensionStack.template).toMatchSnapshot();
+    expect(cicdSolarSystemExtensionStack).toMatchSnapshot();
   });
 });

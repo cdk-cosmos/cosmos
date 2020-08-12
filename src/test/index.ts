@@ -2,9 +2,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Stack, App, NestedStack } from '@aws-cdk/core';
-import { CloudFormationStackArtifact } from '@aws-cdk/cx-api';
 
-type SynthesizeStacks = (...stacks: Array<Stack | undefined>) => object[];
+type SynthesizeStacks = (...stacks: Array<Stack | undefined>) => any[];
 export const synthesizeStacks: SynthesizeStacks = (...stacks) => {
   const _stacks: Array<Stack | NestedStack> = stacks.filter(x => x) as any;
   const app = _stacks.reduce<App | null>((res, item) => {
@@ -23,10 +22,10 @@ export const synthesizeStacks: SynthesizeStacks = (...stacks) => {
   });
 };
 
-export const toHaveResourceId = (stack: CloudFormationStackArtifact, id: string): void => {
-  expect(stack.template.Resources).toHaveProperty(id);
+export const toHaveResourceId = (stack: any, id: string): void => {
+  expect(stack.Resources).toHaveProperty(id);
 };
 
-export const toHaveResourceCount = (stack: CloudFormationStackArtifact, length: number): void => {
-  expect(Object.keys(stack.template.Resources)).toHaveLength(length);
+export const toHaveResourceCount = (stack: any, length: number): void => {
+  expect(Object.keys(stack.Resources)).toHaveLength(length);
 };

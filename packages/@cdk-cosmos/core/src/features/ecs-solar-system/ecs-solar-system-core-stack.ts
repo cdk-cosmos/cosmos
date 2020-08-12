@@ -1,5 +1,5 @@
 import { InstanceType, SecurityGroup, Peer, InstanceClass, InstanceSize } from '@aws-cdk/aws-ec2';
-import { Cluster, ICluster, ClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
+import { Cluster, ICluster, ClusterProps as EcsClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
   ApplicationListener,
@@ -28,10 +28,11 @@ export interface IEcsSolarSystemCore {
   readonly httpsListener?: IApplicationListener;
   readonly httpsInternalListener?: IApplicationListener;
 }
-
+export interface ClusterProps extends Partial<Omit<EcsClusterProps, 'capacity'>> {
+  capacity?: Partial<AddCapacityOptions> | false;
+}
 export interface EcsSolarSystemCoreProps extends BaseNestedStackProps {
-  clusterProps?: Partial<ClusterProps>;
-  clusterCapacityProps?: Partial<AddCapacityOptions>;
+  clusterProps?: ClusterProps;
   albProps?: Partial<ApplicationLoadBalancerProps>;
   albListenerCidr?: string;
 }
@@ -52,7 +53,7 @@ export class EcsSolarSystemCoreStack extends BaseNestedStack implements IEcsSola
       type: 'Feature',
     });
 
-    const { albListenerCidr = '0.0.0.0/0', clusterProps = {}, clusterCapacityProps = {}, albProps = {} } = props || {};
+    const { albListenerCidr = '0.0.0.0/0', clusterProps = {}, albProps = {} } = props || {};
 
     this.solarSystem = solarSystem;
 
@@ -63,17 +64,22 @@ export class EcsSolarSystemCoreStack extends BaseNestedStack implements IEcsSola
       ...clusterProps,
       clusterName: this.singletonId('Cluster'),
       vpc: this.solarSystem.vpc,
+      capacity:
+        clusterProps.capacity !== false
+          ? {
+              vpcSubnets: { subnetGroupName: 'App' },
+              instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
+              minCapacity: 1,
+              maxCapacity: 5,
+              ...clusterProps.capacity,
+            }
+          : undefined,
     });
 
-    this.clusterAutoScalingGroup = this.cluster.addCapacity('Capacity', {
-      vpcSubnets: { subnetGroupName: 'App' },
-      instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
-      minCapacity: 1,
-      maxCapacity: 5,
-      ...clusterCapacityProps,
-    });
-
-    this.clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
+    const clusterAutoScalingGroup = this.cluster.autoscalingGroup as AutoScalingGroup | undefined;
+    if (clusterAutoScalingGroup) {
+      clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
+    }
 
     const albSecurityGroup =
       albProps.securityGroup ||
@@ -161,7 +167,7 @@ declare module '../../solar-system/solar-system-core-stack' {
   }
   interface SolarSystemCoreStack {
     ecs?: EcsSolarSystemCoreStack;
-    addEcs(props?: DeepPartial<EcsSolarSystemCoreProps>): EcsSolarSystemCoreStack;
+    addEcs(props?: EcsSolarSystemCoreProps): EcsSolarSystemCoreStack;
   }
 }
 

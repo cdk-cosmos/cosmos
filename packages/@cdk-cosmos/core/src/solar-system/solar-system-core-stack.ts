@@ -57,7 +57,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     if (vpc) this.vpc = vpc as Vpc;
     else {
       const networkBuilder = this.networkBuilder || vpcProps.networkBuilder;
-      if (!networkBuilder) throw this.node.addError('Network Builder must be provided');
+      if (!networkBuilder) throw new Error('Network Builder must be provided.');
 
       this.vpc = new CoreVpc(this, 'Vpc', {
         ...vpcProps,

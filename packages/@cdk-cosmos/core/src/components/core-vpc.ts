@@ -6,6 +6,8 @@ import {
   GatewayVpcEndpointAwsService,
   InterfaceVpcEndpointAwsService,
   IVpc,
+  InterfaceVpcEndpoint,
+  InterfaceVpcEndpointOptions,
 } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 
@@ -49,15 +51,15 @@ export class CoreVpc extends Vpc implements ICoreVpc {
 
   static addCommonEndpoints(vpc: ICoreVpc): void {
     if (!vpc.disableEndpoints) {
-      vpc.addInterfaceEndpoint('SsmEndpoint', {
+      tryAddInterfaceEndpoint(vpc, 'SsmEndpoint', {
         service: InterfaceVpcEndpointAwsService.SSM,
         subnets: { subnetGroupName: 'App' },
       });
-      vpc.addInterfaceEndpoint('SsmMessageEndpoint', {
+      tryAddInterfaceEndpoint(vpc, 'SsmMessageEndpoint', {
         service: InterfaceVpcEndpointAwsService.SSM_MESSAGES,
         subnets: { subnetGroupName: 'App' },
       });
-      vpc.addInterfaceEndpoint('CloudWatchLogsEndpoint', {
+      tryAddInterfaceEndpoint(vpc, 'CloudWatchLogsEndpoint', {
         service: InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
         subnets: { subnetGroupName: 'App' },
       });
@@ -66,26 +68,37 @@ export class CoreVpc extends Vpc implements ICoreVpc {
 
   static addEcsEndpoints(vpc: ICoreVpc): void {
     if (!vpc.disableEndpoints) {
-      vpc.addInterfaceEndpoint('EcsEndpoint', {
+      tryAddInterfaceEndpoint(vpc, 'EcsEndpoint', {
         service: InterfaceVpcEndpointAwsService.ECS,
         subnets: { subnetGroupName: 'App' },
       });
-      vpc.addInterfaceEndpoint('EcsAgentEndpoint', {
+      tryAddInterfaceEndpoint(vpc, 'EcsAgentEndpoint', {
         service: InterfaceVpcEndpointAwsService.ECS_AGENT,
         subnets: { subnetGroupName: 'App' },
       });
-      vpc.addInterfaceEndpoint('EcsTelemetryEndpoint', {
+      tryAddInterfaceEndpoint(vpc, 'EcsTelemetryEndpoint', {
         service: InterfaceVpcEndpointAwsService.ECS_TELEMETRY,
         subnets: { subnetGroupName: 'App' },
       });
-      vpc.addInterfaceEndpoint('EcrEndpoint', {
+      tryAddInterfaceEndpoint(vpc, 'EcrEndpoint', {
         service: InterfaceVpcEndpointAwsService.ECR,
         subnets: { subnetGroupName: 'App' },
       });
-      vpc.addInterfaceEndpoint('EcrDockerEndpoint', {
+      tryAddInterfaceEndpoint(vpc, 'EcrDockerEndpoint', {
         service: InterfaceVpcEndpointAwsService.ECR_DOCKER,
         subnets: { subnetGroupName: 'App' },
       });
     }
   }
 }
+
+const tryAddInterfaceEndpoint = (
+  vpc: IVpc,
+  id: string,
+  options: InterfaceVpcEndpointOptions
+): InterfaceVpcEndpoint | undefined => {
+  if (!vpc.node.tryFindChild(id)) {
+    return vpc.addInterfaceEndpoint(id, options);
+  }
+  return undefined;
+};

@@ -23,7 +23,7 @@ export class SharedVpcCoreStack extends BaseNestedStack implements ISharedVpc {
     const { vpcProps } = props || {};
 
     const networkBuilder = this.networkBuilder || vpcProps?.networkBuilder;
-    if (!networkBuilder) throw this.node.addError('Network Builder must be provided');
+    if (!networkBuilder) throw new Error('Network Builder must be provided.');
 
     this.vpc = new CoreVpc(this, 'Vpc', {
       ...vpcProps,

@@ -1,5 +1,5 @@
 import { IConstruct } from '@aws-cdk/core';
-import { PATTERN, COSMOS_PARTITION, COSMOS_VERSION } from './constants';
+import { PATTERN, CONTEXT_COSMOS_PARTITION, CONTEXT_COSMOS_VERSION } from './constants';
 import { IKeyValue, nodeId } from './generate-id';
 
 export interface IScope {
@@ -55,9 +55,9 @@ export const generateScopeId = (props: {
   if (props.scopes) scopes.push(...props.scopes);
 
   const context = getContext(scopes);
-  const partition = props.partition || scope.node.tryGetContext(COSMOS_PARTITION);
+  const partition = props.partition || scope.node.tryGetContext(CONTEXT_COSMOS_PARTITION);
   if (partition) context.push({ key: 'Partition', value: partition });
-  const version = props.version || scope.node.tryGetContext(COSMOS_VERSION);
+  const version = props.version || scope.node.tryGetContext(CONTEXT_COSMOS_VERSION);
   if (version) context.push({ key: 'Version', value: version });
 
   const pattern = props.pattern || getPattern(scopes) || defaultPattern;

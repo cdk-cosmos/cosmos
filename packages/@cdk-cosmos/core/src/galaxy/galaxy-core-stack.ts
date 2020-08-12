@@ -3,7 +3,6 @@ import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { ICosmosCore } from '../cosmos/cosmos-core-stack';
-import { CoreVpc } from '../components/core-vpc';
 import { PATTERN } from '../helpers/constants';
 import { isCrossAccount } from '../helpers/utils';
 
@@ -19,7 +18,6 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
   readonly cosmos: ICosmosCore;
   readonly cdkCrossAccountRole?: Role;
   readonly cdkCrossAccountRoleStaticArn?: string;
-  vpc?: CoreVpc;
 
   constructor(cosmos: ICosmosCore, id: string, props?: GalaxyCoreStackProps) {
     super(cosmos, id, {
@@ -31,7 +29,7 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
     this.cosmos = cosmos;
 
     if (isCrossAccount(this, this.cosmos)) {
-      const CdkCrossAccountRoleName = this.nodeId('CdkCrossAccountRole', '', PATTERN.SINGLETON_COSMOS);
+      const CdkCrossAccountRoleName = this.cosmos.nodeId('CdkCrossAccountRole', '', PATTERN.SINGLETON_COSMOS);
       this.cdkCrossAccountRole = new Role(this, 'CdkCrossAccountRole', {
         roleName: CdkCrossAccountRoleName,
         assumedBy: new ArnPrincipal(this.cosmos.cdkMasterRoleStaticArn),

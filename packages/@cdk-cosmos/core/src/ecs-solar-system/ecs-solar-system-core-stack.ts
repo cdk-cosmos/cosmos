@@ -19,7 +19,6 @@ import {
   SolarSystemCoreStack,
   SolarSystemCoreStackProps,
 } from '../solar-system/solar-system-core-stack';
-import { addEcsEndpoints } from '../components/core-vpc';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../helpers/remote';
 
 export interface IEcsSolarSystemCore extends ISolarSystemCore {
@@ -55,11 +54,11 @@ export const EcsSolarSystemCoreStackBuilder = (
       });
 
       const { listenerInboundCidr = '0.0.0.0/0', vpcProps = {}, clusterProps = {}, albProps = {} } = props || {};
-      const { defaultEndpoints = true } = vpcProps;
+      // const { defaultEndpoints = true } = vpcProps;
 
       // Only add endpoints if this component owens the Vpc.
       if (this.vpc.node.scope === this) {
-        if (defaultEndpoints) addEcsEndpoints(this.vpc);
+        // if (defaultEndpoints) addEcsEndpoints(this.vpc);
       }
 
       this.cluster = new Cluster(this, 'Cluster', {

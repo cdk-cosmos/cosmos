@@ -15,12 +15,12 @@ const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'cos.com' });
 const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { cidr: '10.0.1.0/22' });
 galaxy.addSharedVpc();
 const solarSystem = new SolarSystemCoreStack(galaxy, 'Sys', {
-  vpc: galaxy.vpc,
+  vpc: galaxy.sharedVpc?.vpc,
   certificate: { subDomains: ['*'] },
 });
 solarSystem.addEcs();
 const solarSystem2 = new SolarSystemCoreStack(galaxy, 'Sys1', {
-  vpc: galaxy.vpc,
+  vpc: galaxy.sharedVpc?.vpc,
   certificate: false,
 });
 solarSystem2.addEcs({

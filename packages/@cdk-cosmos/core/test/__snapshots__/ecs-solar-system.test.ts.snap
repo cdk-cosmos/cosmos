@@ -57,7 +57,7 @@ Object {
         "Name": "CoreGalSysVpcId",
       },
       "Value": Object {
-        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
       },
     },
     "VpcIsolatedSubnetRouteTables": Object {
@@ -69,10 +69,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1RouteTable4F065E1D",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRef53808134",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2RouteTable885CD303",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4RefD3834381",
             },
           ],
         ],
@@ -87,10 +87,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
             },
           ],
         ],
@@ -128,16 +128,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters7a44e39c14663fcc852b0e30e158184d81cd5852b43868591a68c52120e1302bArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"7a44e39c14663fcc852b0e30e158184d81cd5852b43868591a68c52120e1302b\\"",
+    "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"bb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989c\\"",
       "Type": "String",
     },
-    "AssetParameters7a44e39c14663fcc852b0e30e158184d81cd5852b43868591a68c52120e1302bS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"7a44e39c14663fcc852b0e30e158184d81cd5852b43868591a68c52120e1302b\\"",
+    "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"bb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989c\\"",
       "Type": "String",
     },
-    "AssetParameters7a44e39c14663fcc852b0e30e158184d81cd5852b43868591a68c52120e1302bS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"7a44e39c14663fcc852b0e30e158184d81cd5852b43868591a68c52120e1302b\\"",
+    "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"bb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989c\\"",
       "Type": "String",
     },
   },
@@ -149,8 +149,8 @@ Object {
       ],
       "Properties": Object {
         "Code": Object {
-          "S3Bucket": "mock-s3BucketName",
-          "S3Key": "mock-s3ObjectKey",
+          "S3Bucket": "s3BucketName",
+          "S3Key": "s3ObjectKey",
         },
         "Handler": "index.certificateRequestHandler",
         "Role": Object {
@@ -333,7 +333,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters7a44e39c14663fcc852b0e30e158184d81cd5852b43868591a68c52120e1302bS3Bucket",
+                "Ref": "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cS3Bucket",
               },
               "/",
               Object {
@@ -343,7 +343,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters7a44e39c14663fcc852b0e30e158184d81cd5852b43868591a68c52120e1302bS3VersionKey",
+                        "Ref": "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cS3VersionKey",
                       },
                     ],
                   },
@@ -356,7 +356,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters7a44e39c14663fcc852b0e30e158184d81cd5852b43868591a68c52120e1302bS3VersionKey",
+                        "Ref": "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cS3VersionKey",
                       },
                     ],
                   },
@@ -391,7 +391,7 @@ Object {
         "VPCs": Array [
           Object {
             "VPCId": Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
             },
             "VPCRegion": Object {
               "Ref": "AWS::Region",
@@ -580,7 +580,7 @@ Object {
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "ClusterCapacityInstanceSecurityGroup",
+          "ClusterDefaultAutoScalingGroupInstanceSecurityGroup",
           "GroupId",
         ],
       },
@@ -613,16 +613,20 @@ Object {
         ],
         "Subnets": Array [
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
           },
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
           },
         ],
         "Tags": Array [
           Object {
             "Key": "cosmos",
             "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
           },
           Object {
             "Key": "cosmos:galaxy",
@@ -735,9 +739,17 @@ Object {
       "Properties": Object {
         "AliasTarget": Object {
           "DNSName": Object {
-            "Fn::GetAtt": Array [
-              "Alb",
-              "DNSName",
+            "Fn::Join": Array [
+              "",
+              Array [
+                "dualstack.",
+                Object {
+                  "Fn::GetAtt": Array [
+                    "Alb",
+                    "DNSName",
+                  ],
+                },
+              ],
             ],
           },
           "HostedZoneId": Object {
@@ -801,6 +813,10 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -810,7 +826,7 @@ Object {
           },
         ],
         "VpcId": Object {
-          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
@@ -830,6 +846,10 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -841,10 +861,10 @@ Object {
       },
       "Type": "AWS::ECS::Cluster",
     },
-    "ClusterCapacityASG": Object {
+    "ClusterDefaultAutoScalingGroupASG": Object {
       "Properties": Object {
         "LaunchConfigurationName": Object {
-          "Ref": "ClusterCapacityLaunchConfig",
+          "Ref": "ClusterDefaultAutoScalingGroupLaunchConfig",
         },
         "MaxSize": "5",
         "MinSize": "1",
@@ -853,6 +873,11 @@ Object {
             "Key": "cosmos",
             "PropagateAtLaunch": true,
             "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "PropagateAtLaunch": true,
+            "Value": "Ecs",
           },
           Object {
             "Key": "cosmos:galaxy",
@@ -867,15 +892,15 @@ Object {
           Object {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "Cos/Gal/Sys/Ecs/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
         "VPCZoneIdentifier": Array [
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
           },
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
           },
         ],
       },
@@ -889,10 +914,10 @@ Object {
         },
       },
     },
-    "ClusterCapacityDrainECSHookFunction": Object {
+    "ClusterDefaultAutoScalingGroupDrainECSHookFunction": Object {
       "DependsOn": Array [
-        "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicy",
-        "ClusterCapacityDrainECSHookFunctionServiceRole",
+        "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy",
+        "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
       ],
       "Properties": Object {
         "Code": Object {
@@ -978,7 +1003,7 @@ def pick(dct, *keys):
         "Handler": "index.lambda_handler",
         "Role": Object {
           "Fn::GetAtt": Array [
-            "ClusterCapacityDrainECSHookFunctionServiceRole",
+            "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
             "Arn",
           ],
         },
@@ -987,6 +1012,10 @@ def pick(dct, *keys):
           Object {
             "Key": "cosmos",
             "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
           },
           Object {
             "Key": "cosmos:galaxy",
@@ -998,30 +1027,30 @@ def pick(dct, *keys):
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Ecs/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
         "Timeout": 310,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ClusterCapacityDrainECSHookFunctionAllowInvokeCosGalSysEcsClusterCapacityLifecycleHookDrainHookTopic59F21244": Object {
+    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionAllowInvokeCosGalSysEcsClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic4E49EAF2": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
           "Fn::GetAtt": Array [
-            "ClusterCapacityDrainECSHookFunction",
+            "ClusterDefaultAutoScalingGroupDrainECSHookFunction",
             "Arn",
           ],
         },
         "Principal": "sns.amazonaws.com",
         "SourceArn": Object {
-          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
+          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
         },
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ClusterCapacityDrainECSHookFunctionServiceRole": Object {
+    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1055,6 +1084,10 @@ def pick(dct, *keys):
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -1064,13 +1097,13 @@ def pick(dct, *keys):
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Ecs/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicy": Object {
+    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1105,7 +1138,7 @@ def pick(dct, *keys):
                     },
                     ":autoScalingGroup:*:autoScalingGroupName/",
                     Object {
-                      "Ref": "ClusterCapacityASG",
+                      "Ref": "ClusterDefaultAutoScalingGroupASG",
                     },
                   ],
                 ],
@@ -1154,41 +1187,41 @@ def pick(dct, *keys):
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "ClusterCapacityDrainECSHookFunctionServiceRoleDefaultPolicy",
+        "PolicyName": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityDrainECSHookFunctionServiceRole",
+            "Ref": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ClusterCapacityDrainECSHookFunctionTopic": Object {
+    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionTopic": Object {
       "Properties": Object {
         "Endpoint": Object {
           "Fn::GetAtt": Array [
-            "ClusterCapacityDrainECSHookFunction",
+            "ClusterDefaultAutoScalingGroupDrainECSHookFunction",
             "Arn",
           ],
         },
         "Protocol": "lambda",
         "TopicArn": Object {
-          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
+          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
         },
       },
       "Type": "AWS::SNS::Subscription",
     },
-    "ClusterCapacityInstanceProfile": Object {
+    "ClusterDefaultAutoScalingGroupInstanceProfile": Object {
       "Properties": Object {
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityInstanceRole",
+            "Ref": "ClusterDefaultAutoScalingGroupInstanceRole",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "ClusterCapacityInstanceRole": Object {
+    "ClusterDefaultAutoScalingGroupInstanceRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1232,6 +1265,10 @@ def pick(dct, *keys):
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -1241,13 +1278,13 @@ def pick(dct, *keys):
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Ecs/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "ClusterCapacityInstanceRoleDefaultPolicy": Object {
+    "ClusterDefaultAutoScalingGroupInstanceRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1270,18 +1307,18 @@ def pick(dct, *keys):
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "ClusterCapacityInstanceRoleDefaultPolicy",
+        "PolicyName": "ClusterDefaultAutoScalingGroupInstanceRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityInstanceRole",
+            "Ref": "ClusterDefaultAutoScalingGroupInstanceRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ClusterCapacityInstanceSecurityGroup": Object {
+    "ClusterDefaultAutoScalingGroupInstanceSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Gal/Sys/Ecs/Cluster/Capacity/InstanceSecurityGroup",
+        "GroupDescription": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup/InstanceSecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1295,6 +1332,10 @@ def pick(dct, *keys):
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -1304,23 +1345,23 @@ def pick(dct, *keys):
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Ecs/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
         "VpcId": Object {
-          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "ClusterCapacityLaunchConfig": Object {
+    "ClusterDefaultAutoScalingGroupLaunchConfig": Object {
       "DependsOn": Array [
-        "ClusterCapacityInstanceRoleDefaultPolicy",
-        "ClusterCapacityInstanceRole",
+        "ClusterDefaultAutoScalingGroupInstanceRoleDefaultPolicy",
+        "ClusterDefaultAutoScalingGroupInstanceRole",
       ],
       "Properties": Object {
         "IamInstanceProfile": Object {
-          "Ref": "ClusterCapacityInstanceProfile",
+          "Ref": "ClusterDefaultAutoScalingGroupInstanceProfile",
         },
         "ImageId": Object {
           "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter",
@@ -1329,7 +1370,7 @@ def pick(dct, *keys):
         "SecurityGroups": Array [
           Object {
             "Fn::GetAtt": Array [
-              "ClusterCapacityInstanceSecurityGroup",
+              "ClusterDefaultAutoScalingGroupInstanceSecurityGroup",
               "GroupId",
             ],
           },
@@ -1355,31 +1396,31 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
-    "ClusterCapacityLifecycleHookDrainHook": Object {
+    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHook": Object {
       "DependsOn": Array [
-        "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy",
-        "ClusterCapacityLifecycleHookDrainHookRole",
+        "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy",
+        "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
       ],
       "Properties": Object {
         "AutoScalingGroupName": Object {
-          "Ref": "ClusterCapacityASG",
+          "Ref": "ClusterDefaultAutoScalingGroupASG",
         },
         "DefaultResult": "CONTINUE",
         "HeartbeatTimeout": 300,
         "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
         "NotificationTargetARN": Object {
-          "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
+          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
         },
         "RoleARN": Object {
           "Fn::GetAtt": Array [
-            "ClusterCapacityLifecycleHookDrainHookRole",
+            "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
             "Arn",
           ],
         },
       },
       "Type": "AWS::AutoScaling::LifecycleHook",
     },
-    "ClusterCapacityLifecycleHookDrainHookRole": Object {
+    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -1399,6 +1440,10 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -1408,13 +1453,13 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Ecs/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy": Object {
+    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -1422,27 +1467,31 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
               "Action": "sns:Publish",
               "Effect": "Allow",
               "Resource": Object {
-                "Ref": "ClusterCapacityLifecycleHookDrainHookTopic",
+                "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "ClusterCapacityLifecycleHookDrainHookRoleDefaultPolicy",
+        "PolicyName": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "ClusterCapacityLifecycleHookDrainHookRole",
+            "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ClusterCapacityLifecycleHookDrainHookTopic": Object {
+    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
             "Key": "cosmos",
             "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
           },
           Object {
             "Key": "cosmos:galaxy",
@@ -1454,7 +1503,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Ecs/Cluster/Capacity",
+            "Value": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
       },
@@ -1515,7 +1564,7 @@ Object {
         "Name": "CoreGalSys1VpcId",
       },
       "Value": Object {
-        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
       },
     },
     "VpcIsolatedSubnetRouteTables": Object {
@@ -1527,10 +1576,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1RouteTable4F065E1D",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRef53808134",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2RouteTable885CD303",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4RefD3834381",
             },
           ],
         ],
@@ -1545,10 +1594,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
             },
           ],
         ],
@@ -1586,16 +1635,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParametersefd30f084e52d43148a990aedc7be8614257125a8aa18129182de369b583137dArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"efd30f084e52d43148a990aedc7be8614257125a8aa18129182de369b583137d\\"",
+    "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772\\"",
       "Type": "String",
     },
-    "AssetParametersefd30f084e52d43148a990aedc7be8614257125a8aa18129182de369b583137dS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"efd30f084e52d43148a990aedc7be8614257125a8aa18129182de369b583137d\\"",
+    "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772\\"",
       "Type": "String",
     },
-    "AssetParametersefd30f084e52d43148a990aedc7be8614257125a8aa18129182de369b583137dS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"efd30f084e52d43148a990aedc7be8614257125a8aa18129182de369b583137d\\"",
+    "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772\\"",
       "Type": "String",
     },
   },
@@ -1635,7 +1684,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParametersefd30f084e52d43148a990aedc7be8614257125a8aa18129182de369b583137dS3Bucket",
+                "Ref": "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772S3Bucket",
               },
               "/",
               Object {
@@ -1645,7 +1694,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersefd30f084e52d43148a990aedc7be8614257125a8aa18129182de369b583137dS3VersionKey",
+                        "Ref": "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772S3VersionKey",
                       },
                     ],
                   },
@@ -1658,7 +1707,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersefd30f084e52d43148a990aedc7be8614257125a8aa18129182de369b583137dS3VersionKey",
+                        "Ref": "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772S3VersionKey",
                       },
                     ],
                   },
@@ -1693,7 +1742,7 @@ Object {
         "VPCs": Array [
           Object {
             "VPCId": Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
             },
             "VPCRegion": Object {
               "Ref": "AWS::Region",
@@ -1874,16 +1923,20 @@ Object {
         ],
         "Subnets": Array [
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
           },
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
           },
         ],
         "Tags": Array [
           Object {
             "Key": "cosmos",
             "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
           },
           Object {
             "Key": "cosmos:galaxy",
@@ -2002,6 +2055,10 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -2011,160 +2068,10 @@ Object {
           },
         ],
         "VpcId": Object {
-          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
-    },
-    "CertificateCertificateRequestorFunction": Object {
-      "DependsOn": Array [
-        "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy",
-        "CertificateCertificateRequestorFunctionServiceRole",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": "s3BucketName",
-          "S3Key": "s3ObjectKey",
-        },
-        "Handler": "index.certificateRequestHandler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "CertificateCertificateRequestorFunctionServiceRole",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs10.x",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys",
-          },
-        ],
-        "Timeout": 900,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "CertificateCertificateRequestorFunctionServiceRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "acm:RequestCertificate",
-                "acm:DescribeCertificate",
-                "acm:DeleteCertificate",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": "route53:GetChange",
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": "route53:changeResourceRecordSets",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":route53:::hostedzone/",
-                    Object {
-                      "Ref": "Zone",
-                    },
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CertificateCertificateRequestorFunctionServiceRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "CertificateCertificateRequestorResource": Object {
-      "DeletionPolicy": "Delete",
-      "Properties": Object {
-        "DomainName": "sys.cos.com",
-        "HostedZoneId": Object {
-          "Ref": "Zone",
-        },
-        "ServiceToken": Object {
-          "Fn::GetAtt": Array [
-            "CertificateCertificateRequestorFunction",
-            "Arn",
-          ],
-        },
-        "SubjectAlternativeNames": Array [
-          "*.sys.cos.com",
-        ],
-      },
-      "Type": "AWS::CloudFormation::CustomResource",
-      "UpdateReplacePolicy": "Delete",
     },
     "Cluster": Object {
       "Properties": Object {
@@ -2179,6 +2086,10 @@ Object {
           Object {
             "Key": "cosmos",
             "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
           },
           Object {
             "Key": "cosmos:galaxy",
@@ -2206,6 +2117,11 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "PropagateAtLaunch": true,
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "PropagateAtLaunch": true,
             "Value": "Gal",
@@ -2218,15 +2134,15 @@ Object {
           Object {
             "Key": "Name",
             "PropagateAtLaunch": true,
-            "Value": "Cos/Gal/Sys/Cluster/DefaultAutoScalingGroup",
+            "Value": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
         "VPCZoneIdentifier": Array [
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
           },
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
           },
         ],
       },
@@ -2340,6 +2256,10 @@ def pick(dct, *keys):
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -2349,14 +2269,14 @@ def pick(dct, *keys):
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/DefaultAutoScalingGroup",
+            "Value": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
         "Timeout": 310,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionAllowInvokeCosGalSysClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic2C094186": Object {
+    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionAllowInvokeCosGalSys1EcsClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic29C1AC8A": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -2406,6 +2326,10 @@ def pick(dct, *keys):
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -2415,7 +2339,7 @@ def pick(dct, *keys):
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/DefaultAutoScalingGroup",
+            "Value": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
       },
@@ -2583,6 +2507,10 @@ def pick(dct, *keys):
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -2592,7 +2520,7 @@ def pick(dct, *keys):
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/DefaultAutoScalingGroup",
+            "Value": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
       },
@@ -2632,7 +2560,7 @@ def pick(dct, *keys):
     },
     "ClusterDefaultAutoScalingGroupInstanceSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Gal/Sys/Cluster/DefaultAutoScalingGroup/InstanceSecurityGroup",
+        "GroupDescription": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup/InstanceSecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -2646,6 +2574,10 @@ def pick(dct, *keys):
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -2655,11 +2587,11 @@ def pick(dct, *keys):
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/DefaultAutoScalingGroup",
+            "Value": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
         "VpcId": Object {
-          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
@@ -2750,6 +2682,10 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -2759,7 +2695,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/DefaultAutoScalingGroup",
+            "Value": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
       },
@@ -2796,6 +2732,10 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -2805,7 +2745,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys/Cluster/DefaultAutoScalingGroup",
+            "Value": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup",
           },
         ],
       },
