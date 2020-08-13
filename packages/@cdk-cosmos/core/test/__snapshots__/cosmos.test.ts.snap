@@ -99,7 +99,21 @@ Object {
         ],
       },
     },
-    "RootZoneNameServers": Object {
+    "RootZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreRootZoneId",
+      },
+      "Value": Object {
+        "Ref": "RootZone",
+      },
+    },
+    "RootZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreRootZoneName",
+      },
+      "Value": "cos.com",
+    },
+    "RootZoneZoneNameServers": Object {
       "Export": Object {
         "Name": "CoreRootZoneNameServers",
       },
@@ -114,20 +128,6 @@ Object {
           },
         ],
       },
-    },
-    "RootZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreRootZoneId",
-      },
-      "Value": Object {
-        "Ref": "RootZone",
-      },
-    },
-    "RootZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreRootZoneName",
-      },
-      "Value": "cos.com",
     },
   },
   "Parameters": Object {

@@ -96,6 +96,20 @@ Object {
         ],
       },
     },
+    "ZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneId",
+      },
+      "Value": Object {
+        "Ref": "Zone",
+      },
+    },
+    "ZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneName",
+      },
+      "Value": "sys.cos.com",
+    },
     "ZoneNameServers": Object {
       "Export": Object {
         "Name": "CoreGalSysZoneNameServers",
@@ -112,40 +126,26 @@ Object {
         ],
       },
     },
-    "ZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalSysZoneId",
-      },
-      "Value": Object {
-        "Ref": "Zone",
-      },
-    },
-    "ZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGalSysZoneName",
-      },
-      "Value": "sys.cos.com",
-    },
   },
   "Parameters": Object {
-    "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77\\"",
+    "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036\\"",
       "Type": "String",
     },
-    "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77\\"",
+    "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036\\"",
       "Type": "String",
     },
-    "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77\\"",
+    "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036\\"",
       "Type": "String",
     },
   },
   "Resources": Object {
-    "CertificateCertificateRequestorFunction": Object {
+    "CertificateRequestorFunction": Object {
       "DependsOn": Array [
-        "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy",
-        "CertificateCertificateRequestorFunctionServiceRole",
+        "CertificateRequestorFunctionServiceRoleDefaultPolicy",
+        "CertificateRequestorFunctionServiceRole",
       ],
       "Properties": Object {
         "Code": Object {
@@ -155,7 +155,7 @@ Object {
         "Handler": "index.certificateRequestHandler",
         "Role": Object {
           "Fn::GetAtt": Array [
-            "CertificateCertificateRequestorFunctionServiceRole",
+            "CertificateRequestorFunctionServiceRole",
             "Arn",
           ],
         },
@@ -178,7 +178,7 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "CertificateCertificateRequestorFunctionServiceRole": Object {
+    "CertificateRequestorFunctionServiceRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -223,7 +223,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy": Object {
+    "CertificateRequestorFunctionServiceRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -263,16 +263,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy",
+        "PolicyName": "CertificateRequestorFunctionServiceRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "CertificateCertificateRequestorFunctionServiceRole",
+            "Ref": "CertificateRequestorFunctionServiceRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "CertificateCertificateRequestorResource": Object {
+    "CertificateRequestorResource": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
         "DomainName": "sys.cos.com",
@@ -281,7 +281,7 @@ Object {
         },
         "ServiceToken": Object {
           "Fn::GetAtt": Array [
-            "CertificateCertificateRequestorFunction",
+            "CertificateRequestorFunction",
             "Arn",
           ],
         },
@@ -297,7 +297,7 @@ Object {
         "Parameters": Object {
           "referencetoCosGalSysCertificateCertificateRequestorResourceA8D7E5EEArn": Object {
             "Fn::GetAtt": Array [
-              "CertificateCertificateRequestorResource",
+              "CertificateRequestorResource",
               "Arn",
             ],
           },
@@ -333,7 +333,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77S3Bucket",
+                "Ref": "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036S3Bucket",
               },
               "/",
               Object {
@@ -343,7 +343,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77S3VersionKey",
+                        "Ref": "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036S3VersionKey",
                       },
                     ],
                   },
@@ -356,7 +356,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77S3VersionKey",
+                        "Ref": "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036S3VersionKey",
                       },
                     ],
                   },
@@ -449,7 +449,7 @@ Object {
 exports[`ECS-Solar-System should match snapshot 2`] = `
 Object {
   "Outputs": Object {
-    "AlbAlbArn": Object {
+    "AlbArn": Object {
       "Export": Object {
         "Name": "CoreGalSysAlbArn",
       },
@@ -457,7 +457,7 @@ Object {
         "Ref": "Alb",
       },
     },
-    "AlbAlbDnsHostZoneId": Object {
+    "AlbDnsHostZoneId": Object {
       "Export": Object {
         "Name": "CoreGalSysAlbDnsHostZoneId",
       },
@@ -468,7 +468,7 @@ Object {
         ],
       },
     },
-    "AlbAlbDnsName": Object {
+    "AlbDnsName": Object {
       "Export": Object {
         "Name": "CoreGalSysAlbDnsName",
       },
@@ -476,17 +476,6 @@ Object {
         "Fn::GetAtt": Array [
           "Alb",
           "DNSName",
-        ],
-      },
-    },
-    "AlbAlbSecurityGroupId": Object {
-      "Export": Object {
-        "Name": "CoreGalSysAlbSecurityGroupId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "AlbSecurityGroup",
-          "GroupId",
         ],
       },
     },
@@ -566,7 +555,18 @@ Object {
         ],
       },
     },
-    "ClusterClusterName": Object {
+    "AlbSecurityGroupId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysAlbSecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "AlbSecurityGroup",
+          "GroupId",
+        ],
+      },
+    },
+    "ClusterName": Object {
       "Export": Object {
         "Name": "CoreGalSysClusterName",
       },
@@ -574,7 +574,7 @@ Object {
         "Ref": "Cluster",
       },
     },
-    "ClusterClusterSecurityGroup": Object {
+    "ClusterSecurityGroup": Object {
       "Export": Object {
         "Name": "CoreGalSysClusterSecurityGroup",
       },
@@ -1603,6 +1603,20 @@ Object {
         ],
       },
     },
+    "ZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSys1ZoneId",
+      },
+      "Value": Object {
+        "Ref": "Zone",
+      },
+    },
+    "ZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSys1ZoneName",
+      },
+      "Value": "sys1.cos.com",
+    },
     "ZoneNameServers": Object {
       "Export": Object {
         "Name": "CoreGalSys1ZoneNameServers",
@@ -1619,32 +1633,18 @@ Object {
         ],
       },
     },
-    "ZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalSys1ZoneId",
-      },
-      "Value": Object {
-        "Ref": "Zone",
-      },
-    },
-    "ZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGalSys1ZoneName",
-      },
-      "Value": "sys1.cos.com",
-    },
   },
   "Parameters": Object {
-    "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206\\"",
+    "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8\\"",
       "Type": "String",
     },
-    "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206\\"",
+    "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8\\"",
       "Type": "String",
     },
-    "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206\\"",
+    "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8\\"",
       "Type": "String",
     },
   },
@@ -1684,7 +1684,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206S3Bucket",
+                "Ref": "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8S3Bucket",
               },
               "/",
               Object {
@@ -1694,7 +1694,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206S3VersionKey",
+                        "Ref": "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8S3VersionKey",
                       },
                     ],
                   },
@@ -1707,7 +1707,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206S3VersionKey",
+                        "Ref": "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8S3VersionKey",
                       },
                     ],
                   },
@@ -1800,7 +1800,7 @@ Object {
 exports[`ECS-Solar-System should match snapshot 4`] = `
 Object {
   "Outputs": Object {
-    "AlbAlbArn": Object {
+    "AlbArn": Object {
       "Export": Object {
         "Name": "CoreGalSys1AlbArn",
       },
@@ -1808,7 +1808,7 @@ Object {
         "Ref": "Alb",
       },
     },
-    "AlbAlbDnsHostZoneId": Object {
+    "AlbDnsHostZoneId": Object {
       "Export": Object {
         "Name": "CoreGalSys1AlbDnsHostZoneId",
       },
@@ -1819,7 +1819,7 @@ Object {
         ],
       },
     },
-    "AlbAlbDnsName": Object {
+    "AlbDnsName": Object {
       "Export": Object {
         "Name": "CoreGalSys1AlbDnsName",
       },
@@ -1827,17 +1827,6 @@ Object {
         "Fn::GetAtt": Array [
           "Alb",
           "DNSName",
-        ],
-      },
-    },
-    "AlbAlbSecurityGroupId": Object {
-      "Export": Object {
-        "Name": "CoreGalSys1AlbSecurityGroupId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "AlbSecurityGroup",
-          "GroupId",
         ],
       },
     },
@@ -1879,7 +1868,18 @@ Object {
         ],
       },
     },
-    "ClusterClusterName": Object {
+    "AlbSecurityGroupId": Object {
+      "Export": Object {
+        "Name": "CoreGalSys1AlbSecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "AlbSecurityGroup",
+          "GroupId",
+        ],
+      },
+    },
+    "ClusterName": Object {
       "Export": Object {
         "Name": "CoreGalSys1ClusterName",
       },
@@ -1887,7 +1887,7 @@ Object {
         "Ref": "Cluster",
       },
     },
-    "ClusterClusterSecurityGroup": Object {
+    "ClusterSecurityGroup": Object {
       "Export": Object {
         "Name": "CoreGalSys1ClusterSecurityGroup",
       },

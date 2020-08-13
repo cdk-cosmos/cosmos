@@ -14,7 +14,7 @@ import { BaseStack, BaseStackProps } from '../components/base';
 import { IGalaxyCore } from '../galaxy/galaxy-core-stack';
 import { CoreVpc, CoreVpcProps, ICoreVpc } from '../components/core-vpc';
 import { CrossAccountZoneDelegationRecord } from '../components/cross-account';
-import { RemoteVpc, RemoteZone } from '../helpers/remote';
+import { RemoteVpc, RemoteZone } from '../components/remote';
 
 export interface ISolarSystemCore extends Construct {
   readonly galaxy: IGalaxyCore;

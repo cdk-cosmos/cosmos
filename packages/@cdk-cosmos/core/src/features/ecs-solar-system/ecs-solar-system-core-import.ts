@@ -5,7 +5,7 @@ import { ISolarSystemCore } from '../../solar-system/solar-system-core-stack';
 import { SolarSystemCoreImport } from '../../solar-system/solar-system-core-import';
 import { IEcsSolarSystemCore } from './ecs-solar-system-core-stack';
 import { BaseConstruct, BaseConstructProps } from '../../components/base';
-import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../helpers/remote';
+import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../components/remote';
 
 export interface EcsSolarSystemCoreImportProps extends BaseConstructProps {
   solarSystem: ISolarSystemCore;

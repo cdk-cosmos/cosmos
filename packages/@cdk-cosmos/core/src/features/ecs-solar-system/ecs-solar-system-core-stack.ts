@@ -15,7 +15,7 @@ import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 import { AutoScalingGroup } from '@aws-cdk/aws-autoscaling';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
 import { CoreVpc } from '../../components/core-vpc';
-import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../helpers/remote';
+import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../components/remote';
 import { BaseNestedStack, BaseNestedStackProps } from '../../components/base';
 import { Tag } from '@aws-cdk/core';
 

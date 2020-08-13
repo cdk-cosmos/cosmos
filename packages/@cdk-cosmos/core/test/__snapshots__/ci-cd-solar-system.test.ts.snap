@@ -60,7 +60,7 @@ Object {
                 "Configuration": Object {
                   "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTest*\\"}]",
                   "ProjectName": Object {
-                    "Ref": "CdkPipelineCdkDeploy",
+                    "Ref": "CdkPipelineDeploy",
                   },
                 },
                 "InputArtifacts": Array [
@@ -175,7 +175,7 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "CdkPipelineCdkDeploy": Object {
+    "CdkPipelineDeploy": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Location": Object {
@@ -314,7 +314,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "CdkPipelineCdkDeploy",
+                  "CdkPipelineDeploy",
                   "Arn",
                 ],
               },
@@ -507,6 +507,20 @@ Object {
         ],
       },
     },
+    "ZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalCiCdZoneId",
+      },
+      "Value": Object {
+        "Ref": "Zone",
+      },
+    },
+    "ZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalCiCdZoneName",
+      },
+      "Value": "cicd.cos.com",
+    },
     "ZoneNameServers": Object {
       "Export": Object {
         "Name": "CoreGalCiCdZoneNameServers",
@@ -523,32 +537,18 @@ Object {
         ],
       },
     },
-    "ZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdZoneId",
-      },
-      "Value": Object {
-        "Ref": "Zone",
-      },
-    },
-    "ZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdZoneName",
-      },
-      "Value": "cicd.cos.com",
-    },
   },
   "Parameters": Object {
-    "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994\\"",
+    "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"e16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693\\"",
       "Type": "String",
     },
-    "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994\\"",
+    "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"e16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693\\"",
       "Type": "String",
     },
-    "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994\\"",
+    "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"e16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693\\"",
       "Type": "String",
     },
   },
@@ -579,7 +579,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994S3Bucket",
+                "Ref": "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3Bucket",
               },
               "/",
               Object {
@@ -589,7 +589,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994S3VersionKey",
+                        "Ref": "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3VersionKey",
                       },
                     ],
                   },
@@ -602,7 +602,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters211cb7e66b908efe313fb0b9ea7599b146fdb3d5c215b74b36b2c8a8102fa994S3VersionKey",
+                        "Ref": "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3VersionKey",
                       },
                     ],
                   },
@@ -1220,7 +1220,7 @@ Object {
                 "Configuration": Object {
                   "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCos*\\"}]",
                   "ProjectName": Object {
-                    "Ref": "CdkPipelineCdkDeploy",
+                    "Ref": "CdkPipelineDeploy",
                   },
                 },
                 "InputArtifacts": Array [
@@ -1335,7 +1335,7 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "CdkPipelineCdkDeploy": Object {
+    "CdkPipelineDeploy": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Location": Object {
@@ -1474,7 +1474,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "CdkPipelineCdkDeploy",
+                  "CdkPipelineDeploy",
                   "Arn",
                 ],
               },
