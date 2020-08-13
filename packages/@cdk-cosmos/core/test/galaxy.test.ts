@@ -18,7 +18,7 @@ const [galaxyStack, galaxy2Stack, galaxyExtensionStack] = synthesizeStacks(galax
 
 describe('Galaxy', () => {
   test('should be a galaxy', () => {
-    expect(galaxyStack.name).toEqual('CoreCosGalGalaxy');
+    expect(galaxy.stackName).toEqual('CoreCosGalGalaxy');
   });
 
   test('should inherit env', () => {
@@ -47,14 +47,14 @@ describe('Galaxy', () => {
   });
 
   test('should match snapshot', () => {
-    expect(galaxyStack.template).toMatchSnapshot();
-    expect(galaxy2Stack.template).toMatchSnapshot();
+    expect(galaxyStack).toMatchSnapshot();
+    expect(galaxy2Stack).toMatchSnapshot();
   });
 });
 
 describe('Galaxy Extension', () => {
   test('should be a galaxy extension', () => {
-    expect(galaxyExtensionStack.name).toEqual('AppTestGalGalaxy');
+    expect(galaxyExtension.stackName).toEqual('AppTestGalGalaxy');
   });
 
   test('should inherit env', () => {
@@ -65,6 +65,6 @@ describe('Galaxy Extension', () => {
   });
 
   test('should match snapshot', () => {
-    expect(galaxyExtensionStack.template).toMatchSnapshot();
+    expect(galaxyExtensionStack).toMatchSnapshot();
   });
 });

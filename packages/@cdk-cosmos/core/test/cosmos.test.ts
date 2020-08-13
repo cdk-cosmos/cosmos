@@ -1,4 +1,5 @@
 import '@aws-cdk/assert/jest';
+import {} from '@aws-cdk/assert';
 import { App, Construct } from '@aws-cdk/core';
 import { synthesizeStacks, toHaveResourceId, toHaveResourceCount } from '../../../../src/test';
 import { CosmosCoreStack, CosmosExtensionStack } from '../src';
@@ -11,7 +12,7 @@ const [cosmosStack, cosmosExtensionStack] = synthesizeStacks(cosmos, cosmosExten
 
 describe('Cosmos', () => {
   test('should be a cosmos', () => {
-    expect(cosmosStack.name).toEqual('CoreCosCosmos');
+    expect(cosmos.stackName).toEqual('CoreCosCosmos');
     expect(cosmosStack).toHaveOutput({ exportName: 'CoreLibVersion' });
     toHaveResourceCount(cosmosStack, 4);
   });
@@ -40,7 +41,7 @@ describe('Cosmos', () => {
   });
 
   test('should match snapshot', () => {
-    expect(cosmosStack.template).toMatchSnapshot({
+    expect(cosmosStack).toMatchSnapshot({
       Outputs: {
         CoreLibVersion: {
           Value: expect.any(String),
@@ -52,7 +53,7 @@ describe('Cosmos', () => {
 
 describe('Cosmos Extension', () => {
   test('should be a cosmos extension', () => {
-    expect(cosmosExtensionStack.name).toEqual('AppTestCosmos');
+    expect(cosmosExtension.stackName).toEqual('AppTestCosmos');
     toHaveResourceCount(cosmosExtensionStack, 1);
   });
 
@@ -71,12 +72,12 @@ describe('Cosmos Extension', () => {
       domainName: 'test',
     });
     const [cosmosExtensionStack] = synthesizeStacks(cosmosExtension);
-    expect(cosmosExtensionStack.template).toMatchSnapshot();
+    expect(cosmosExtensionStack).toMatchSnapshot();
   });
 
   //TODO: Check if imports align
 
   test('should match snapshot', () => {
-    expect(cosmosExtensionStack.template).toMatchSnapshot();
+    expect(cosmosExtensionStack).toMatchSnapshot();
   });
 });

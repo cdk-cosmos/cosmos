@@ -47,12 +47,12 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
 
     this.cdkRepo = new Repository(this, 'CdkRepo', {
       repositoryName: this.nodeId('Cdk-Repo', '-').toLowerCase(),
-      description: `Core CDK Repo for ${id} Cosmos.`,
+      description: `Core CDK Repo for ${this.node.id} Cosmos.`,
     });
 
     this.rootZone = new HostedZone(this, 'RootZone', {
       zoneName: `${tld}`.toLowerCase(),
-      comment: `Core TLD Root Zone for ${id} Cosmos.`,
+      comment: `Core TLD Root Zone for ${this.node.id} Cosmos.`,
     });
 
     const cdkMasterRoleName = this.singletonId('CdkMasterRole');
@@ -81,6 +81,6 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     });
     this.cdkMasterRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${cdkMasterRoleName}`;
 
-    Tag.add(this, 'cosmos', id);
+    Tag.add(this, 'cosmos', this.node.id);
   }
 }

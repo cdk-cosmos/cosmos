@@ -2,7 +2,7 @@
 
 exports[`CICD-Solar-System Extension should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos CiCdSolarSystem Extension: App resources dependant on Ci & Cd, like CodePipelines and CodeDeployments.",
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
   "Resources": Object {
     "CdkPipeline": Object {
       "Properties": Object {
@@ -441,106 +441,8 @@ Object {
 
 exports[`CICD-Solar-System should match snapshot 1`] = `
 Object {
-  "Description": "Cosmos CiCdSolarSystem: Resources dependant on Ci & Cd, like CodePipelines and CodeDeployments.",
+  "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
-    "AlbArn": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdAlbArn",
-      },
-      "Value": Object {
-        "Ref": "Alb",
-      },
-    },
-    "AlbDnsHostZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdAlbDnsHostZoneId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "Alb",
-          "CanonicalHostedZoneID",
-        ],
-      },
-    },
-    "AlbDnsName": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdAlbDnsName",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "Alb",
-          "DNSName",
-        ],
-      },
-    },
-    "AlbHttpInternalListenerAlArn": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdHttpInternalListenerArn",
-      },
-      "Value": Object {
-        "Ref": "AlbHttpInternalListener",
-      },
-    },
-    "AlbHttpInternalListenerAlSecurityGroupId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdHttpInternalListenerSecurityGroupId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "AlbSecurityGroup",
-          "GroupId",
-        ],
-      },
-    },
-    "AlbHttpListenerAlArn": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdHttpListenerArn",
-      },
-      "Value": Object {
-        "Ref": "AlbHttpListener",
-      },
-    },
-    "AlbHttpListenerAlSecurityGroupId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdHttpListenerSecurityGroupId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "AlbSecurityGroup",
-          "GroupId",
-        ],
-      },
-    },
-    "AlbSecurityGroupId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdAlbSecurityGroupId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "AlbSecurityGroup",
-          "GroupId",
-        ],
-      },
-    },
-    "ClusterName": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdClusterName",
-      },
-      "Value": Object {
-        "Ref": "Cluster",
-      },
-    },
-    "ClusterSecurityGroup": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdClusterSecurityGroup",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "ClusterDefaultAutoScalingGroupInstanceSecurityGroup",
-          "GroupId",
-        ],
-      },
-    },
     "PrivateZoneZoneId": Object {
       "Export": Object {
         "Name": "CoreGalCiCdPrivateZoneId",
@@ -637,32 +539,22 @@ Object {
     },
   },
   "Parameters": Object {
-    "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
-      "Default": "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id",
-      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"e16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693\\"",
+      "Type": "String",
+    },
+    "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"e16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693\\"",
+      "Type": "String",
+    },
+    "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"e16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693\\"",
+      "Type": "String",
     },
   },
   "Resources": Object {
-    "Alb": Object {
+    "CiCd": Object {
       "Properties": Object {
-        "Name": "CoreGalCiCdAlb",
-        "Scheme": "internal",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "AlbSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "Subnets": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
         "Tags": Array [
           Object {
             "Key": "cosmos",
@@ -677,85 +569,287 @@ Object {
             "Value": "CiCd",
           },
         ],
-        "Type": "application",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-    },
-    "AlbHttpInternalListener": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "FixedResponseConfig": Object {
-              "ContentType": "text/plain",
-              "MessageBody": "Route Not Found.",
-              "StatusCode": "404",
-            },
-            "Type": "fixed-response",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "Alb",
-        },
-        "Port": 8080,
-        "Protocol": "HTTP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "AlbHttpListener": Object {
-      "Properties": Object {
-        "DefaultActions": Array [
-          Object {
-            "FixedResponseConfig": Object {
-              "ContentType": "text/plain",
-              "MessageBody": "Route Not Found.",
-              "StatusCode": "404",
-            },
-            "Type": "fixed-response",
-          },
-        ],
-        "LoadBalancerArn": Object {
-          "Ref": "Alb",
-        },
-        "Port": 80,
-        "Protocol": "HTTP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "AlbRecord": Object {
-      "Properties": Object {
-        "AliasTarget": Object {
-          "DNSName": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "dualstack.",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "Alb",
-                    "DNSName",
-                  ],
-                },
-              ],
+        "TemplateURL": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://s3.region.",
+              Object {
+                "Ref": "AWS::URLSuffix",
+              },
+              "/",
+              Object {
+                "Ref": "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3Bucket",
+              },
+              "/",
+              Object {
+                "Fn::Select": Array [
+                  0,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
+              Object {
+                "Fn::Select": Array [
+                  1,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
             ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::Stack",
+    },
+    "PrivateZone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Private Zone for CiCd SolarSystem",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
           },
-          "HostedZoneId": Object {
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+        ],
+        "Name": "cicd.internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Ref": "Vpc",
+            },
+            "VPCRegion": "region",
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "Vpc": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.4.0/24",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/CiCd/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VpcAppSubnet1RouteTable": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet1RouteTableAssociation": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet1RouteTable",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet1Subnet",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet1Subnet": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.4.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcAppSubnet2RouteTable": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet2RouteTableAssociation": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet2RouteTable",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet2Subnet",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet2Subnet": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.4.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcCloudWatchLogsEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
             "Fn::GetAtt": Array [
-              "Alb",
-              "CanonicalHostedZoneID",
+              "VpcCloudWatchLogsEndpointSecurityGroup",
+              "GroupId",
             ],
           },
+        ],
+        "ServiceName": "com.amazonaws.region.logs",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
         },
-        "HostedZoneId": Object {
-          "Ref": "Zone",
-        },
-        "Name": "cicd.cos.com.",
-        "Type": "A",
       },
-      "Type": "AWS::Route53::RecordSet",
+      "Type": "AWS::EC2::VPCEndpoint",
     },
-    "AlbSecurityGroup": Object {
+    "VpcCloudWatchLogsEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "SecurityGroup for ALB.",
+        "GroupDescription": "Cos/Gal/CiCd/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -765,18 +859,30 @@ Object {
         ],
         "SecurityGroupIngress": Array [
           Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "from 0.0.0.0/0:80",
-            "FromPort": 80,
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
             "IpProtocol": "tcp",
-            "ToPort": 80,
-          },
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "from 0.0.0.0/0:8080",
-            "FromPort": 8080,
-            "IpProtocol": "tcp",
-            "ToPort": 8080,
+            "ToPort": 443,
           },
         ],
         "Tags": Array [
@@ -792,6 +898,10 @@ Object {
             "Key": "cosmos:solarsystem",
             "Value": "CiCd",
           },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/CiCd/Vpc",
+          },
         ],
         "VpcId": Object {
           "Ref": "Vpc",
@@ -799,6 +909,261 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
+    "VpcS3Gateway": Object {
+      "Properties": Object {
+        "RouteTableIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1RouteTable",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2RouteTable",
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".s3",
+            ],
+          ],
+        },
+        "VpcEndpointType": "Gateway",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region.ssm",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/CiCd/Vpc/SsmEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/CiCd/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcSsmMessageEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmMessageEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region.ssmmessages",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmMessageEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/CiCd/Vpc/SsmMessageEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/CiCd/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "Zone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Zone for CiCd SolarSystem",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+        ],
+        "Name": "cicd.cos.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "ZoneDelegation": Object {
+      "Properties": Object {
+        "Comment": "Core Zone Delegation for CiCd SolarSystem.",
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputRefRootZone2F3E9CEF",
+        },
+        "Name": "cicd.cos.com.",
+        "ResourceRecords": Object {
+          "Fn::GetAtt": Array [
+            "Zone",
+            "NameServers",
+          ],
+        },
+        "TTL": "1800",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;
+
+exports[`CICD-Solar-System should match snapshot 2`] = `
+Object {
+  "Resources": Object {
     "CdkPipeline": Object {
       "Properties": Object {
         "ArtifactStore": Object {
@@ -1229,1631 +1594,6 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
-    },
-    "Cluster": Object {
-      "Properties": Object {
-        "ClusterName": "CoreGalCiCdCluster",
-        "ClusterSettings": Array [
-          Object {
-            "Name": "containerInsights",
-            "Value": "enabled",
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::ECS::Cluster",
-    },
-    "ClusterDefaultAutoScalingGroupASG": Object {
-      "Properties": Object {
-        "LaunchConfigurationName": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLaunchConfig",
-        },
-        "MaxSize": "5",
-        "MinSize": "1",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "PropagateAtLaunch": true,
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "PropagateAtLaunch": true,
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "PropagateAtLaunch": true,
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "PropagateAtLaunch": true,
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-        "VPCZoneIdentifier": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
-      },
-      "Type": "AWS::AutoScaling::AutoScalingGroup",
-      "UpdatePolicy": Object {
-        "AutoScalingReplacingUpdate": Object {
-          "WillReplace": true,
-        },
-        "AutoScalingScheduledAction": Object {
-          "IgnoreUnmodifiedGroupSizeProperties": true,
-        },
-      },
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunction": Object {
-      "DependsOn": Array [
-        "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy",
-        "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "ZipFile": "import boto3, json, os, time
-
-ecs = boto3.client('ecs')
-autoscaling = boto3.client('autoscaling')
-
-
-def lambda_handler(event, context):
-  print(json.dumps(event))
-  cluster = os.environ['CLUSTER']
-  snsTopicArn = event['Records'][0]['Sns']['TopicArn']
-  lifecycle_event = json.loads(event['Records'][0]['Sns']['Message'])
-  instance_id = lifecycle_event.get('EC2InstanceId')
-  if not instance_id:
-    print('Got event without EC2InstanceId: %s', json.dumps(event))
-    return
-
-  instance_arn = container_instance_arn(cluster, instance_id)
-  print('Instance %s has container instance ARN %s' % (lifecycle_event['EC2InstanceId'], instance_arn))
-
-  if not instance_arn:
-    return
-
-  while has_tasks(cluster, instance_arn):
-    time.sleep(10)
-
-  try:
-    print('Terminating instance %s' % instance_id)
-    autoscaling.complete_lifecycle_action(
-        LifecycleActionResult='CONTINUE',
-        **pick(lifecycle_event, 'LifecycleHookName', 'LifecycleActionToken', 'AutoScalingGroupName'))
-  except Exception as e:
-    # Lifecycle action may have already completed.
-    print(str(e))
-
-
-def container_instance_arn(cluster, instance_id):
-  \\"\\"\\"Turn an instance ID into a container instance ARN.\\"\\"\\"
-  arns = ecs.list_container_instances(cluster=cluster, filter='ec2InstanceId==' + instance_id)['containerInstanceArns']
-  if not arns:
-    return None
-  return arns[0]
-
-
-def has_tasks(cluster, instance_arn):
-  \\"\\"\\"Return True if the instance is running tasks for the given cluster.\\"\\"\\"
-  instances = ecs.describe_container_instances(cluster=cluster, containerInstances=[instance_arn])['containerInstances']
-  if not instances:
-    return False
-  instance = instances[0]
-
-  if instance['status'] == 'ACTIVE':
-    # Start draining, then try again later
-    set_container_instance_to_draining(cluster, instance_arn)
-    return True
-
-  tasks = instance['runningTasksCount'] + instance['pendingTasksCount']
-  print('Instance %s has %s tasks' % (instance_arn, tasks))
-
-  return tasks > 0
-
-
-def set_container_instance_to_draining(cluster, instance_arn):
-  ecs.update_container_instances_state(
-      cluster=cluster,
-      containerInstances=[instance_arn], status='DRAINING')
-
-
-def pick(dct, *keys):
-  \\"\\"\\"Pick a subset of a dict.\\"\\"\\"
-  return {k: v for k, v in dct.items() if k in keys}
-",
-        },
-        "Environment": Object {
-          "Variables": Object {
-            "CLUSTER": Object {
-              "Ref": "Cluster",
-            },
-          },
-        },
-        "Handler": "index.lambda_handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-            "Arn",
-          ],
-        },
-        "Runtime": "python3.6",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-        "Timeout": 310,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionAllowInvokeCosGalCiCdClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopicE9F230F6": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunction",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "ec2:DescribeInstances",
-                "ec2:DescribeInstanceAttribute",
-                "ec2:DescribeInstanceStatus",
-                "ec2:DescribeHosts",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": "autoscaling:CompleteLifecycleAction",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":autoscaling:region:account:autoScalingGroup:*:autoScalingGroupName/",
-                    Object {
-                      "Ref": "ClusterDefaultAutoScalingGroupASG",
-                    },
-                  ],
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "ecs:DescribeContainerInstances",
-                "ecs:DescribeTasks",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": Array [
-                "ecs:ListContainerInstances",
-                "ecs:SubmitContainerStateChange",
-                "ecs:SubmitTaskStateChange",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "Cluster",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "ecs:UpdateContainerInstancesState",
-                "ecs:ListTasks",
-              ],
-              "Condition": Object {
-                "ArnEquals": Object {
-                  "ecs:cluster": Object {
-                    "Fn::GetAtt": Array [
-                      "Cluster",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionTopic": Object {
-      "Properties": Object {
-        "Endpoint": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunction",
-            "Arn",
-          ],
-        },
-        "Protocol": "lambda",
-        "TopicArn": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
-    },
-    "ClusterDefaultAutoScalingGroupInstanceProfile": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupInstanceRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "ClusterDefaultAutoScalingGroupInstanceRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "ec2.",
-                      Object {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/AmazonSSMFullAccess",
-              ],
-            ],
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ClusterDefaultAutoScalingGroupInstanceRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "ecs:CreateCluster",
-                "ecs:DeregisterContainerInstance",
-                "ecs:DiscoverPollEndpoint",
-                "ecs:Poll",
-                "ecs:RegisterContainerInstance",
-                "ecs:StartTelemetrySession",
-                "ecs:Submit*",
-                "ecr:GetAuthorizationToken",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ClusterDefaultAutoScalingGroupInstanceRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupInstanceRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ClusterDefaultAutoScalingGroupInstanceSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup/InstanceSecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "ClusterDefaultAutoScalingGroupLaunchConfig": Object {
-      "DependsOn": Array [
-        "ClusterDefaultAutoScalingGroupInstanceRoleDefaultPolicy",
-        "ClusterDefaultAutoScalingGroupInstanceRole",
-      ],
-      "Properties": Object {
-        "IamInstanceProfile": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupInstanceProfile",
-        },
-        "ImageId": Object {
-          "Ref": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter",
-        },
-        "InstanceType": "t3.medium",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "ClusterDefaultAutoScalingGroupInstanceSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "UserData": Object {
-          "Fn::Base64": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "#!/bin/bash
-echo ECS_CLUSTER=",
-                Object {
-                  "Ref": "Cluster",
-                },
-                " >> /etc/ecs/ecs.config
-sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
-sudo service iptables save
-echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
-              ],
-            ],
-          },
-        },
-      },
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHook": Object {
-      "DependsOn": Array [
-        "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy",
-        "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-      ],
-      "Properties": Object {
-        "AutoScalingGroupName": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupASG",
-        },
-        "DefaultResult": "CONTINUE",
-        "HeartbeatTimeout": 300,
-        "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
-        "NotificationTargetARN": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-        "RoleARN": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::AutoScaling::LifecycleHook",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "autoscaling.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sns:Publish",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::SNS::Topic",
-    },
-    "PrivateZone": Object {
-      "Properties": Object {
-        "HostedZoneConfig": Object {
-          "Comment": "Core Main Private Zone for CiCd SolarSystem",
-        },
-        "HostedZoneTags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-        "Name": "cicd.internal.",
-        "VPCs": Array [
-          Object {
-            "VPCId": Object {
-              "Ref": "Vpc",
-            },
-            "VPCRegion": "region",
-          },
-        ],
-      },
-      "Type": "AWS::Route53::HostedZone",
-    },
-    "Vpc": Object {
-      "Properties": Object {
-        "CidrBlock": "10.0.4.0/24",
-        "EnableDnsHostnames": true,
-        "EnableDnsSupport": true,
-        "InstanceTenancy": "default",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::VPC",
-    },
-    "VpcAppSubnet1RouteTable": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcAppSubnet1RouteTableAssociation": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcAppSubnet1RouteTable",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcAppSubnet1Subnet",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcAppSubnet1Subnet": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1a",
-        "CidrBlock": "10.0.4.0/26",
-        "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "App",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet1",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcAppSubnet2RouteTable": Object {
-      "Properties": Object {
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::RouteTable",
-    },
-    "VpcAppSubnet2RouteTableAssociation": Object {
-      "Properties": Object {
-        "RouteTableId": Object {
-          "Ref": "VpcAppSubnet2RouteTable",
-        },
-        "SubnetId": Object {
-          "Ref": "VpcAppSubnet2Subnet",
-        },
-      },
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-    },
-    "VpcAppSubnet2Subnet": Object {
-      "Properties": Object {
-        "AvailabilityZone": "dummy1b",
-        "CidrBlock": "10.0.4.64/26",
-        "MapPublicIpOnLaunch": false,
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:subnet-name",
-            "Value": "App",
-          },
-          Object {
-            "Key": "aws-cdk:subnet-type",
-            "Value": "Isolated",
-          },
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc/AppSubnet2",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::Subnet",
-    },
-    "VpcCloudWatchLogsEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcCloudWatchLogsEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.logs",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "VpcCloudWatchLogsEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/CiCd/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "Vpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "Vpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcEcrDockerEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcEcrDockerEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ecr.dkr",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "VpcEcrDockerEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/CiCd/Vpc/EcrDockerEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "Vpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "Vpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcEcrEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcEcrEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ecr.api",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "VpcEcrEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/CiCd/Vpc/EcrEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "Vpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "Vpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcEcsAgentEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcEcsAgentEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ecs-agent",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "VpcEcsAgentEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/CiCd/Vpc/EcsAgentEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "Vpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "Vpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcEcsEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcEcsEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ecs",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "VpcEcsEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/CiCd/Vpc/EcsEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "Vpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "Vpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcEcsTelemetryEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcEcsTelemetryEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ecs-telemetry",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "VpcEcsTelemetryEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/CiCd/Vpc/EcsTelemetryEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "Vpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "Vpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcS3Gateway": Object {
-      "Properties": Object {
-        "RouteTableIds": Array [
-          Object {
-            "Ref": "VpcAppSubnet1RouteTable",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2RouteTable",
-          },
-        ],
-        "ServiceName": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "com.amazonaws.",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ".s3",
-            ],
-          ],
-        },
-        "VpcEndpointType": "Gateway",
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "VpcSsmEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcSsmEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ssm",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "VpcSsmEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/CiCd/Vpc/SsmEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "Vpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "Vpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcSsmMessageEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "VpcSsmMessageEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ssmmessages",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "VpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "VpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "VpcSsmMessageEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/CiCd/Vpc/SsmMessageEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "Vpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "Vpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "Zone": Object {
-      "Properties": Object {
-        "HostedZoneConfig": Object {
-          "Comment": "Core Main Zone for CiCd SolarSystem",
-        },
-        "HostedZoneTags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-        "Name": "cicd.cos.com.",
-      },
-      "Type": "AWS::Route53::HostedZone",
-    },
-    "ZoneDelegation": Object {
-      "Properties": Object {
-        "Comment": "Core Zone Delegation for CiCd SolarSystem.",
-        "HostedZoneId": Object {
-          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputRefRootZone2F3E9CEF",
-        },
-        "Name": "cicd.cos.com.",
-        "ResourceRecords": Object {
-          "Fn::GetAtt": Array [
-            "Zone",
-            "NameServers",
-          ],
-        },
-        "TTL": "1800",
-        "Type": "NS",
-      },
-      "Type": "AWS::Route53::RecordSet",
     },
   },
 }

@@ -19,8 +19,8 @@ export class SolarSystemCoreImport extends BaseConstruct implements ISolarSystem
 
   constructor(scope: Construct, id: string, props: SolarSystemCoreImportProps) {
     super(scope, id, {
-      type: 'SolarSystem',
       partition: 'Core',
+      type: 'SolarSystem',
       ...props,
     });
 

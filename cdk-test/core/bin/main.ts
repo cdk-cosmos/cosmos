@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import { App } from '@aws-cdk/core';
-import { CosmosCoreStack, GalaxyCoreStack, CiCdSolarSystemCoreStack, EcsSolarSystemCoreStack } from '@cdk-cosmos/core';
+import { CosmosCoreStack, GalaxyCoreStack, SolarSystemCoreStack } from '@cdk-cosmos/core';
 
 const app = new App();
 
@@ -17,18 +17,21 @@ const mgtGalaxy = new GalaxyCoreStack(cosmos, 'Mgt', {
   cidr: '10.0.0.0/22',
 });
 
-const ciCd = new CiCdSolarSystemCoreStack(mgtGalaxy);
+const ciCd = new SolarSystemCoreStack(mgtGalaxy, 'CiCd');
+ciCd.addCiCd();
 
 const devGalaxy = new GalaxyCoreStack(cosmos, 'Dev', {
   cidr: '10.0.1.0/22',
   env: devEnvConfig,
 });
-const devSharedVpc = devGalaxy.addSharedVpc();
+devGalaxy.addSharedVpc();
 
-const dev = new EcsSolarSystemCoreStack(devGalaxy, 'Dev', {
-  vpc: devSharedVpc,
+const dev = new SolarSystemCoreStack(devGalaxy, 'Dev', {
+  vpc: devGalaxy.sharedVpc?.vpc,
 });
+dev.addEcs();
 
-const tst = new EcsSolarSystemCoreStack(devGalaxy, 'Tst', {
-  vpc: devSharedVpc,
+const tst = new SolarSystemCoreStack(devGalaxy, 'Tst', {
+  vpc: devGalaxy.sharedVpc?.vpc,
 });
+tst.addEcs();

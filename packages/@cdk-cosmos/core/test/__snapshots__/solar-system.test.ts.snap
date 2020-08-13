@@ -4,49 +4,169 @@ exports[`Solar-System should match snapshot 1`] = `
 Object {
   "Description": "Cosmos Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
   "Outputs": Object {
-    "ExportsOutputRefSharedVpc": Object {
+    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRef": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRefC3174DB1",
       },
       "Value": Object {
-        "Ref": "SharedVpc",
+        "Fn::GetAtt": Array [
+          "SharedVpc",
+          "Outputs.CosGalSharedVpcAppSubnet1RouteTable688214BDRef",
+        ],
       },
     },
-    "ExportsOutputRefSharedVpcAppSubnet1RouteTable": Object {
+    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1RouteTable4F065E1D",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERefB0DC012F",
       },
       "Value": Object {
-        "Ref": "SharedVpcAppSubnet1RouteTable",
+        "Fn::GetAtt": Array [
+          "SharedVpc",
+          "Outputs.CosGalSharedVpcAppSubnet1Subnet4ACE937ERef",
+        ],
       },
     },
-    "ExportsOutputRefSharedVpcAppSubnet1Subnet": Object {
+    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref27E06E84",
       },
       "Value": Object {
-        "Ref": "SharedVpcAppSubnet1Subnet",
+        "Fn::GetAtt": Array [
+          "SharedVpc",
+          "Outputs.CosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref",
+        ],
       },
     },
-    "ExportsOutputRefSharedVpcAppSubnet2RouteTable": Object {
+    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84Ref": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2RouteTable885CD303",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB858A527",
       },
       "Value": Object {
-        "Ref": "SharedVpcAppSubnet2RouteTable",
+        "Fn::GetAtt": Array [
+          "SharedVpc",
+          "Outputs.CosGalSharedVpcAppSubnet2Subnet0D4DDC84Ref",
+        ],
       },
     },
-    "ExportsOutputRefSharedVpcAppSubnet2Subnet": Object {
+    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
       },
       "Value": Object {
-        "Ref": "SharedVpcAppSubnet2Subnet",
+        "Fn::GetAtt": Array [
+          "SharedVpc",
+          "Outputs.CosGalSharedVpcEA1B9578Ref",
+        ],
       },
+    },
+  },
+  "Parameters": Object {
+    "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"ccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98eb\\"",
+      "Type": "String",
+    },
+    "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"ccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98eb\\"",
+      "Type": "String",
+    },
+    "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"ccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98eb\\"",
+      "Type": "String",
     },
   },
   "Resources": Object {
     "SharedVpc": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+        ],
+        "TemplateURL": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://s3.region.",
+              Object {
+                "Ref": "AWS::URLSuffix",
+              },
+              "/",
+              Object {
+                "Ref": "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebS3Bucket",
+              },
+              "/",
+              Object {
+                "Fn::Select": Array [
+                  0,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebS3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
+              Object {
+                "Fn::Select": Array [
+                  1,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebS3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::Stack",
+    },
+  },
+}
+`;
+
+exports[`Solar-System should match snapshot 2`] = `
+Object {
+  "Outputs": Object {
+    "CosGalSharedVpcAppSubnet1RouteTable688214BDRef": Object {
+      "Value": Object {
+        "Ref": "VpcAppSubnet1RouteTable",
+      },
+    },
+    "CosGalSharedVpcAppSubnet1Subnet4ACE937ERef": Object {
+      "Value": Object {
+        "Ref": "VpcAppSubnet1Subnet",
+      },
+    },
+    "CosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref": Object {
+      "Value": Object {
+        "Ref": "VpcAppSubnet2RouteTable",
+      },
+    },
+    "CosGalSharedVpcAppSubnet2Subnet0D4DDC84Ref": Object {
+      "Value": Object {
+        "Ref": "VpcAppSubnet2Subnet",
+      },
+    },
+    "CosGalSharedVpcEA1B9578Ref": Object {
+      "Value": Object {
+        "Ref": "Vpc",
+      },
+    },
+  },
+  "Resources": Object {
+    "Vpc": Object {
       "Properties": Object {
         "CidrBlock": "10.0.4.0/24",
         "EnableDnsHostnames": true,
@@ -58,18 +178,22 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "SharedVpc",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc",
+            "Value": "Cos/Gal/SharedVpc/Vpc",
           },
         ],
       },
       "Type": "AWS::EC2::VPC",
     },
-    "SharedVpcAppSubnet1RouteTable": Object {
+    "VpcAppSubnet1RouteTable": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
@@ -77,32 +201,36 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "SharedVpc",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc/AppSubnet1",
+            "Value": "Cos/Gal/SharedVpc/Vpc/AppSubnet1",
           },
         ],
         "VpcId": Object {
-          "Ref": "SharedVpc",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "SharedVpcAppSubnet1RouteTableAssociation": Object {
+    "VpcAppSubnet1RouteTableAssociation": Object {
       "Properties": Object {
         "RouteTableId": Object {
-          "Ref": "SharedVpcAppSubnet1RouteTable",
+          "Ref": "VpcAppSubnet1RouteTable",
         },
         "SubnetId": Object {
-          "Ref": "SharedVpcAppSubnet1Subnet",
+          "Ref": "VpcAppSubnet1Subnet",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "SharedVpcAppSubnet1Subnet": Object {
+    "VpcAppSubnet1Subnet": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1a",
         "CidrBlock": "10.0.4.0/26",
@@ -121,21 +249,25 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "SharedVpc",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc/AppSubnet1",
+            "Value": "Cos/Gal/SharedVpc/Vpc/AppSubnet1",
           },
         ],
         "VpcId": Object {
-          "Ref": "SharedVpc",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "SharedVpcAppSubnet2RouteTable": Object {
+    "VpcAppSubnet2RouteTable": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
@@ -143,32 +275,36 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "SharedVpc",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc/AppSubnet2",
+            "Value": "Cos/Gal/SharedVpc/Vpc/AppSubnet2",
           },
         ],
         "VpcId": Object {
-          "Ref": "SharedVpc",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::RouteTable",
     },
-    "SharedVpcAppSubnet2RouteTableAssociation": Object {
+    "VpcAppSubnet2RouteTableAssociation": Object {
       "Properties": Object {
         "RouteTableId": Object {
-          "Ref": "SharedVpcAppSubnet2RouteTable",
+          "Ref": "VpcAppSubnet2RouteTable",
         },
         "SubnetId": Object {
-          "Ref": "SharedVpcAppSubnet2Subnet",
+          "Ref": "VpcAppSubnet2Subnet",
         },
       },
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
-    "SharedVpcAppSubnet2Subnet": Object {
+    "VpcAppSubnet2Subnet": Object {
       "Properties": Object {
         "AvailabilityZone": "dummy1b",
         "CidrBlock": "10.0.4.64/26",
@@ -187,27 +323,31 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "SharedVpc",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc/AppSubnet2",
+            "Value": "Cos/Gal/SharedVpc/Vpc/AppSubnet2",
           },
         ],
         "VpcId": Object {
-          "Ref": "SharedVpc",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::Subnet",
     },
-    "SharedVpcCloudWatchLogsEndpoint": Object {
+    "VpcCloudWatchLogsEndpoint": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "SharedVpcCloudWatchLogsEndpointSecurityGroup",
+              "VpcCloudWatchLogsEndpointSecurityGroup",
               "GroupId",
             ],
           },
@@ -215,22 +355,22 @@ Object {
         "ServiceName": "com.amazonaws.region.logs",
         "SubnetIds": Array [
           Object {
-            "Ref": "SharedVpcAppSubnet1Subnet",
+            "Ref": "VpcAppSubnet1Subnet",
           },
           Object {
-            "Ref": "SharedVpcAppSubnet2Subnet",
+            "Ref": "VpcAppSubnet2Subnet",
           },
         ],
         "VpcEndpointType": "Interface",
         "VpcId": Object {
-          "Ref": "SharedVpc",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "SharedVpcCloudWatchLogsEndpointSecurityGroup": Object {
+    "VpcCloudWatchLogsEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Gal/SharedVpc/CloudWatchLogsEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/SharedVpc/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -242,7 +382,7 @@ Object {
           Object {
             "CidrIp": Object {
               "Fn::GetAtt": Array [
-                "SharedVpc",
+                "Vpc",
                 "CidrBlock",
               ],
             },
@@ -253,7 +393,7 @@ Object {
                   "from ",
                   Object {
                     "Fn::GetAtt": Array [
-                      "SharedVpc",
+                      "Vpc",
                       "CidrBlock",
                     ],
                   },
@@ -272,89 +412,8 @@ Object {
             "Value": "Cos",
           },
           Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "SharedVpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "SharedVpcEcrDockerEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "SharedVpcEcrDockerEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ecr.dkr",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "SharedVpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "SharedVpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "SharedVpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "SharedVpcEcrDockerEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/SharedVpc/EcrDockerEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "SharedVpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "SharedVpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
+            "Key": "cosmos:feature",
+            "Value": "SharedVpc",
           },
           Object {
             "Key": "cosmos:galaxy",
@@ -362,363 +421,23 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc",
+            "Value": "Cos/Gal/SharedVpc/Vpc",
           },
         ],
         "VpcId": Object {
-          "Ref": "SharedVpc",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "SharedVpcEcrEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "SharedVpcEcrEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ecr.api",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "SharedVpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "SharedVpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "SharedVpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "SharedVpcEcrEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/SharedVpc/EcrEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "SharedVpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "SharedVpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "SharedVpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "SharedVpcEcsAgentEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "SharedVpcEcsAgentEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ecs-agent",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "SharedVpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "SharedVpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "SharedVpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "SharedVpcEcsAgentEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/SharedVpc/EcsAgentEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "SharedVpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "SharedVpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "SharedVpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "SharedVpcEcsEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "SharedVpcEcsEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ecs",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "SharedVpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "SharedVpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "SharedVpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "SharedVpcEcsEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/SharedVpc/EcsEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "SharedVpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "SharedVpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "SharedVpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "SharedVpcEcsTelemetryEndpoint": Object {
-      "Properties": Object {
-        "PrivateDnsEnabled": true,
-        "SecurityGroupIds": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "SharedVpcEcsTelemetryEndpointSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "ServiceName": "com.amazonaws.region.ecs-telemetry",
-        "SubnetIds": Array [
-          Object {
-            "Ref": "SharedVpcAppSubnet1Subnet",
-          },
-          Object {
-            "Ref": "SharedVpcAppSubnet2Subnet",
-          },
-        ],
-        "VpcEndpointType": "Interface",
-        "VpcId": Object {
-          "Ref": "SharedVpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCEndpoint",
-    },
-    "SharedVpcEcsTelemetryEndpointSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Cos/Gal/SharedVpc/EcsTelemetryEndpoint/SecurityGroup",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "CidrIp": Object {
-              "Fn::GetAtt": Array [
-                "SharedVpc",
-                "CidrBlock",
-              ],
-            },
-            "Description": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "from ",
-                  Object {
-                    "Fn::GetAtt": Array [
-                      "SharedVpc",
-                      "CidrBlock",
-                    ],
-                  },
-                  ":443",
-                ],
-              ],
-            },
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "SharedVpc",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "SharedVpcS3Gateway": Object {
+    "VpcS3Gateway": Object {
       "Properties": Object {
         "RouteTableIds": Array [
           Object {
-            "Ref": "SharedVpcAppSubnet1RouteTable",
+            "Ref": "VpcAppSubnet1RouteTable",
           },
           Object {
-            "Ref": "SharedVpcAppSubnet2RouteTable",
+            "Ref": "VpcAppSubnet2RouteTable",
           },
         ],
         "ServiceName": Object {
@@ -735,18 +454,18 @@ Object {
         },
         "VpcEndpointType": "Gateway",
         "VpcId": Object {
-          "Ref": "SharedVpc",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "SharedVpcSsmEndpoint": Object {
+    "VpcSsmEndpoint": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "SharedVpcSsmEndpointSecurityGroup",
+              "VpcSsmEndpointSecurityGroup",
               "GroupId",
             ],
           },
@@ -754,22 +473,22 @@ Object {
         "ServiceName": "com.amazonaws.region.ssm",
         "SubnetIds": Array [
           Object {
-            "Ref": "SharedVpcAppSubnet1Subnet",
+            "Ref": "VpcAppSubnet1Subnet",
           },
           Object {
-            "Ref": "SharedVpcAppSubnet2Subnet",
+            "Ref": "VpcAppSubnet2Subnet",
           },
         ],
         "VpcEndpointType": "Interface",
         "VpcId": Object {
-          "Ref": "SharedVpc",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "SharedVpcSsmEndpointSecurityGroup": Object {
+    "VpcSsmEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Gal/SharedVpc/SsmEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/SharedVpc/Vpc/SsmEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -781,7 +500,7 @@ Object {
           Object {
             "CidrIp": Object {
               "Fn::GetAtt": Array [
-                "SharedVpc",
+                "Vpc",
                 "CidrBlock",
               ],
             },
@@ -792,7 +511,7 @@ Object {
                   "from ",
                   Object {
                     "Fn::GetAtt": Array [
-                      "SharedVpc",
+                      "Vpc",
                       "CidrBlock",
                     ],
                   },
@@ -811,27 +530,31 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "SharedVpc",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc",
+            "Value": "Cos/Gal/SharedVpc/Vpc",
           },
         ],
         "VpcId": Object {
-          "Ref": "SharedVpc",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "SharedVpcSsmMessageEndpoint": Object {
+    "VpcSsmMessageEndpoint": Object {
       "Properties": Object {
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "SharedVpcSsmMessageEndpointSecurityGroup",
+              "VpcSsmMessageEndpointSecurityGroup",
               "GroupId",
             ],
           },
@@ -839,22 +562,22 @@ Object {
         "ServiceName": "com.amazonaws.region.ssmmessages",
         "SubnetIds": Array [
           Object {
-            "Ref": "SharedVpcAppSubnet1Subnet",
+            "Ref": "VpcAppSubnet1Subnet",
           },
           Object {
-            "Ref": "SharedVpcAppSubnet2Subnet",
+            "Ref": "VpcAppSubnet2Subnet",
           },
         ],
         "VpcEndpointType": "Interface",
         "VpcId": Object {
-          "Ref": "SharedVpc",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::VPCEndpoint",
     },
-    "SharedVpcSsmMessageEndpointSecurityGroup": Object {
+    "VpcSsmMessageEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Gal/SharedVpc/SsmMessageEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal/SharedVpc/Vpc/SsmMessageEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -866,7 +589,7 @@ Object {
           Object {
             "CidrIp": Object {
               "Fn::GetAtt": Array [
-                "SharedVpc",
+                "Vpc",
                 "CidrBlock",
               ],
             },
@@ -877,7 +600,7 @@ Object {
                   "from ",
                   Object {
                     "Fn::GetAtt": Array [
-                      "SharedVpc",
+                      "Vpc",
                       "CidrBlock",
                     ],
                   },
@@ -896,16 +619,20 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "SharedVpc",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc",
+            "Value": "Cos/Gal/SharedVpc/Vpc",
           },
         ],
         "VpcId": Object {
-          "Ref": "SharedVpc",
+          "Ref": "Vpc",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
@@ -914,7 +641,7 @@ Object {
 }
 `;
 
-exports[`Solar-System should match snapshot 2`] = `
+exports[`Solar-System should match snapshot 3`] = `
 Object {
   "Description": "Cosmos Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
   "Resources": Object {
@@ -964,7 +691,7 @@ Object {
 }
 `;
 
-exports[`Solar-System should match snapshot 3`] = `
+exports[`Solar-System should match snapshot 4`] = `
 Object {
   "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
@@ -993,7 +720,7 @@ Object {
         "Name": "CoreGalSysVpcId",
       },
       "Value": Object {
-        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
       },
     },
     "VpcIsolatedSubnetRouteTables": Object {
@@ -1005,10 +732,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1RouteTable4F065E1D",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRefC3174DB1",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2RouteTable885CD303",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref27E06E84",
             },
           ],
         ],
@@ -1023,10 +750,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet1Subnet415CBBC7",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERefB0DC012F",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcAppSubnet2Subnet7353E307",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB858A527",
             },
           ],
         ],
@@ -1087,7 +814,7 @@ Object {
         "VPCs": Array [
           Object {
             "VPCId": Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputRefSharedVpcE991AEE7",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
             },
             "VPCRegion": "region",
           },
@@ -1140,7 +867,7 @@ Object {
 }
 `;
 
-exports[`Solar-System should match snapshot 4`] = `
+exports[`Solar-System should match snapshot 5`] = `
 Object {
   "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
@@ -1769,7 +1496,7 @@ Object {
 }
 `;
 
-exports[`Solar-System should match snapshot 5`] = `
+exports[`Solar-System should match snapshot 6`] = `
 Object {
   "Description": "Cosmos Link: Resources to link the Cosmos, like Route53 zone delegation",
   "Resources": Object {
