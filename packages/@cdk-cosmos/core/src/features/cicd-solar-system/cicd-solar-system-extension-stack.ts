@@ -29,20 +29,18 @@ export class CiCdSolarSystemExtensionStack extends BaseConstruct implements ICiC
 
     this.solarSystem = solarSystem;
 
+    const cdkMasterRoleStaticArn = this.solarSystem.galaxy.cosmos.portal.cdkMasterRoleStaticArn;
+    const cdkRepo = this.solarSystem.galaxy.cosmos.cdkRepo;
+
     this.deployPipeline = new CdkPipeline(this, 'CdkPipeline', {
-      deployRole: Role.fromRoleArn(
-        this,
-        'CdkMasterRole',
-        this.solarSystem.galaxy.cosmos.portal.cdkMasterRoleStaticArn,
-        {
-          mutable: false,
-        }
-      ),
+      deployRole: Role.fromRoleArn(this, 'CdkMasterRole', cdkMasterRoleStaticArn, {
+        mutable: false,
+      }),
       deployStacks: [this.solarSystem.nodeId('*', '', CDK_PIPELINE_STACK_PATTERN)],
       ...cdkPipelineProps,
       pipelineName: this.solarSystem.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
       deployName: this.solarSystem.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
-      cdkRepo: this.solarSystem.galaxy.cosmos.cdkRepo,
+      cdkRepo: cdkRepo,
       // deployVpc: vpc,
     });
     this.deployProject = this.deployPipeline.deploy;
