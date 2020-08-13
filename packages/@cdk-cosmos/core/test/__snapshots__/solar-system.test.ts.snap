@@ -1032,6 +1032,20 @@ Object {
         ],
       },
     },
+    "ZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneId",
+      },
+      "Value": Object {
+        "Ref": "Zone",
+      },
+    },
+    "ZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneName",
+      },
+      "Value": "sys.cos.com",
+    },
     "ZoneNameServers": Object {
       "Export": Object {
         "Name": "CoreGalSysZoneNameServers",
@@ -1047,20 +1061,6 @@ Object {
           },
         ],
       },
-    },
-    "ZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalSysZoneId",
-      },
-      "Value": Object {
-        "Ref": "Zone",
-      },
-    },
-    "ZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGalSysZoneName",
-      },
-      "Value": "sys.cos.com",
     },
   },
   "Resources": Object {
@@ -1208,6 +1208,20 @@ Object {
         ],
       },
     },
+    "ZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGal2Sys2ZoneId",
+      },
+      "Value": Object {
+        "Ref": "Zone",
+      },
+    },
+    "ZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGal2Sys2ZoneName",
+      },
+      "Value": "sys2.cos.com",
+    },
     "ZoneNameServers": Object {
       "Export": Object {
         "Name": "CoreGal2Sys2ZoneNameServers",
@@ -1223,20 +1237,6 @@ Object {
           },
         ],
       },
-    },
-    "ZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGal2Sys2ZoneId",
-      },
-      "Value": Object {
-        "Ref": "Zone",
-      },
-    },
-    "ZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGal2Sys2ZoneName",
-      },
-      "Value": "sys2.cos.com",
     },
   },
   "Resources": Object {

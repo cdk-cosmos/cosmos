@@ -1,7 +1,7 @@
 import { Construct } from '@aws-cdk/core';
 import { ICluster } from '@aws-cdk/aws-ecs';
 import { IApplicationLoadBalancer, IApplicationListener } from '@aws-cdk/aws-elasticloadbalancingv2';
-import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../helpers/remote';
+import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../components/remote';
 import { SolarSystemCoreImport, SolarSystemCoreImportProps } from '../solar-system/solar-system-core-import';
 import { IEcsSolarSystemCore } from './ecs-solar-system-core-stack';
 

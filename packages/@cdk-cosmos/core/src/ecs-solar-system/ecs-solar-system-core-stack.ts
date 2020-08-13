@@ -20,7 +20,7 @@ import {
   SolarSystemCoreStackProps,
 } from '../solar-system/solar-system-core-stack';
 import { addEcsEndpoints } from '../components/core-vpc';
-import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../helpers/remote';
+import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../components/remote';
 
 export interface IEcsSolarSystemCore extends ISolarSystemCore {
   readonly cluster: ICluster;

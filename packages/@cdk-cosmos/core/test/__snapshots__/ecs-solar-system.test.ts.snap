@@ -10,7 +10,7 @@ exports[`ECS-Solar-System should match snapshot 1`] = `
 Object {
   "Description": "Cosmos EcsSolarSystem: Resources dependant on each App Env, like ECS & ALB",
   "Outputs": Object {
-    "AlbAlbArn": Object {
+    "AlbArn": Object {
       "Export": Object {
         "Name": "CoreGalSysAlbArn",
       },
@@ -18,7 +18,7 @@ Object {
         "Ref": "Alb",
       },
     },
-    "AlbAlbDnsHostZoneId": Object {
+    "AlbDnsHostZoneId": Object {
       "Export": Object {
         "Name": "CoreGalSysAlbDnsHostZoneId",
       },
@@ -29,7 +29,7 @@ Object {
         ],
       },
     },
-    "AlbAlbDnsName": Object {
+    "AlbDnsName": Object {
       "Export": Object {
         "Name": "CoreGalSysAlbDnsName",
       },
@@ -37,17 +37,6 @@ Object {
         "Fn::GetAtt": Array [
           "Alb",
           "DNSName",
-        ],
-      },
-    },
-    "AlbAlbSecurityGroupId": Object {
-      "Export": Object {
-        "Name": "CoreGalSysAlbSecurityGroupId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "AlbSecurityGroup",
-          "GroupId",
         ],
       },
     },
@@ -127,7 +116,18 @@ Object {
         ],
       },
     },
-    "ClusterClusterName": Object {
+    "AlbSecurityGroupId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysAlbSecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "AlbSecurityGroup",
+          "GroupId",
+        ],
+      },
+    },
+    "ClusterName": Object {
       "Export": Object {
         "Name": "CoreGalSysClusterName",
       },
@@ -135,7 +135,7 @@ Object {
         "Ref": "Cluster",
       },
     },
-    "ClusterClusterSecurityGroup": Object {
+    "ClusterSecurityGroup": Object {
       "Export": Object {
         "Name": "CoreGalSysClusterSecurityGroup",
       },
@@ -232,6 +232,20 @@ Object {
         ],
       },
     },
+    "ZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneId",
+      },
+      "Value": Object {
+        "Ref": "Zone",
+      },
+    },
+    "ZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneName",
+      },
+      "Value": "sys.cos.com",
+    },
     "ZoneNameServers": Object {
       "Export": Object {
         "Name": "CoreGalSysZoneNameServers",
@@ -247,20 +261,6 @@ Object {
           },
         ],
       },
-    },
-    "ZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalSysZoneId",
-      },
-      "Value": Object {
-        "Ref": "Zone",
-      },
-    },
-    "ZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGalSysZoneName",
-      },
-      "Value": "sys.cos.com",
     },
   },
   "Parameters": Object {
@@ -354,7 +354,7 @@ Object {
           Object {
             "CertificateArn": Object {
               "Fn::GetAtt": Array [
-                "CertificateCertificateRequestorResource",
+                "CertificateRequestorResource",
                 "Arn",
               ],
             },
@@ -384,7 +384,7 @@ Object {
           Object {
             "CertificateArn": Object {
               "Fn::GetAtt": Array [
-                "CertificateCertificateRequestorResource",
+                "CertificateRequestorResource",
                 "Arn",
               ],
             },
@@ -500,10 +500,10 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "CertificateCertificateRequestorFunction": Object {
+    "CertificateRequestorFunction": Object {
       "DependsOn": Array [
-        "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy",
-        "CertificateCertificateRequestorFunctionServiceRole",
+        "CertificateRequestorFunctionServiceRoleDefaultPolicy",
+        "CertificateRequestorFunctionServiceRole",
       ],
       "Properties": Object {
         "Code": Object {
@@ -513,7 +513,7 @@ Object {
         "Handler": "index.certificateRequestHandler",
         "Role": Object {
           "Fn::GetAtt": Array [
-            "CertificateCertificateRequestorFunctionServiceRole",
+            "CertificateRequestorFunctionServiceRole",
             "Arn",
           ],
         },
@@ -536,7 +536,7 @@ Object {
       },
       "Type": "AWS::Lambda::Function",
     },
-    "CertificateCertificateRequestorFunctionServiceRole": Object {
+    "CertificateRequestorFunctionServiceRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -581,7 +581,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy": Object {
+    "CertificateRequestorFunctionServiceRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -621,16 +621,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy",
+        "PolicyName": "CertificateRequestorFunctionServiceRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "CertificateCertificateRequestorFunctionServiceRole",
+            "Ref": "CertificateRequestorFunctionServiceRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "CertificateCertificateRequestorResource": Object {
+    "CertificateRequestorResource": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
         "DomainName": "sys.cos.com",
@@ -639,7 +639,7 @@ Object {
         },
         "ServiceToken": Object {
           "Fn::GetAtt": Array [
-            "CertificateCertificateRequestorFunction",
+            "CertificateRequestorFunction",
             "Arn",
           ],
         },

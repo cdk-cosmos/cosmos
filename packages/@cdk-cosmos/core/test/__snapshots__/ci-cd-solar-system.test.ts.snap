@@ -60,7 +60,7 @@ Object {
                 "Configuration": Object {
                   "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTest*\\"}]",
                   "ProjectName": Object {
-                    "Ref": "CdkPipelineCdkDeploy",
+                    "Ref": "CdkPipelineDeploy",
                   },
                 },
                 "InputArtifacts": Array [
@@ -175,7 +175,7 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "CdkPipelineCdkDeploy": Object {
+    "CdkPipelineDeploy": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Location": Object {
@@ -314,7 +314,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "CdkPipelineCdkDeploy",
+                  "CdkPipelineDeploy",
                   "Arn",
                 ],
               },
@@ -443,7 +443,7 @@ exports[`CICD-Solar-System should match snapshot 1`] = `
 Object {
   "Description": "Cosmos CiCdSolarSystem: Resources dependant on Ci & Cd, like CodePipelines and CodeDeployments.",
   "Outputs": Object {
-    "AlbAlbArn": Object {
+    "AlbArn": Object {
       "Export": Object {
         "Name": "CoreGalCiCdAlbArn",
       },
@@ -451,7 +451,7 @@ Object {
         "Ref": "Alb",
       },
     },
-    "AlbAlbDnsHostZoneId": Object {
+    "AlbDnsHostZoneId": Object {
       "Export": Object {
         "Name": "CoreGalCiCdAlbDnsHostZoneId",
       },
@@ -462,7 +462,7 @@ Object {
         ],
       },
     },
-    "AlbAlbDnsName": Object {
+    "AlbDnsName": Object {
       "Export": Object {
         "Name": "CoreGalCiCdAlbDnsName",
       },
@@ -470,17 +470,6 @@ Object {
         "Fn::GetAtt": Array [
           "Alb",
           "DNSName",
-        ],
-      },
-    },
-    "AlbAlbSecurityGroupId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdAlbSecurityGroupId",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "AlbSecurityGroup",
-          "GroupId",
         ],
       },
     },
@@ -522,7 +511,18 @@ Object {
         ],
       },
     },
-    "ClusterClusterName": Object {
+    "AlbSecurityGroupId": Object {
+      "Export": Object {
+        "Name": "CoreGalCiCdAlbSecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "AlbSecurityGroup",
+          "GroupId",
+        ],
+      },
+    },
+    "ClusterName": Object {
       "Export": Object {
         "Name": "CoreGalCiCdClusterName",
       },
@@ -530,7 +530,7 @@ Object {
         "Ref": "Cluster",
       },
     },
-    "ClusterClusterSecurityGroup": Object {
+    "ClusterSecurityGroup": Object {
       "Export": Object {
         "Name": "CoreGalCiCdClusterSecurityGroup",
       },
@@ -605,6 +605,20 @@ Object {
         ],
       },
     },
+    "ZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalCiCdZoneId",
+      },
+      "Value": Object {
+        "Ref": "Zone",
+      },
+    },
+    "ZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalCiCdZoneName",
+      },
+      "Value": "cicd.cos.com",
+    },
     "ZoneNameServers": Object {
       "Export": Object {
         "Name": "CoreGalCiCdZoneNameServers",
@@ -620,20 +634,6 @@ Object {
           },
         ],
       },
-    },
-    "ZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdZoneId",
-      },
-      "Value": Object {
-        "Ref": "Zone",
-      },
-    },
-    "ZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdZoneName",
-      },
-      "Value": "cicd.cos.com",
     },
   },
   "Parameters": Object {
@@ -855,7 +855,7 @@ Object {
                 "Configuration": Object {
                   "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCos*\\"}]",
                   "ProjectName": Object {
-                    "Ref": "CdkPipelineCdkDeploy",
+                    "Ref": "CdkPipelineDeploy",
                   },
                 },
                 "InputArtifacts": Array [
@@ -970,7 +970,7 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "CdkPipelineCdkDeploy": Object {
+    "CdkPipelineDeploy": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Location": Object {
@@ -1109,7 +1109,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "CdkPipelineCdkDeploy",
+                  "CdkPipelineDeploy",
                   "Arn",
                 ],
               },
