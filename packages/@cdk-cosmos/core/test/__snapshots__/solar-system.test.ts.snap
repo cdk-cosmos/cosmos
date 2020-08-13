@@ -4,57 +4,57 @@ exports[`Solar-System should match snapshot 1`] = `
 Object {
   "Description": "Cosmos Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
   "Outputs": Object {
-    "ExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRef": Object {
+    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRef": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRef53808134",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRefC3174DB1",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "SharedVpcNestedStackSharedVpcNestedStackResource",
+          "SharedVpc",
           "Outputs.CosGalSharedVpcAppSubnet1RouteTable688214BDRef",
         ],
       },
     },
-    "ExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef": Object {
+    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERefB0DC012F",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "SharedVpcNestedStackSharedVpcNestedStackResource",
+          "SharedVpc",
           "Outputs.CosGalSharedVpcAppSubnet1Subnet4ACE937ERef",
         ],
       },
     },
-    "ExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref": Object {
+    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4RefD3834381",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref27E06E84",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "SharedVpcNestedStackSharedVpcNestedStackResource",
+          "SharedVpc",
           "Outputs.CosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref",
         ],
       },
     },
-    "ExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84Ref": Object {
+    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84Ref": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB858A527",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "SharedVpcNestedStackSharedVpcNestedStackResource",
+          "SharedVpc",
           "Outputs.CosGalSharedVpcAppSubnet2Subnet0D4DDC84Ref",
         ],
       },
     },
-    "ExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref": Object {
+    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref": Object {
       "Export": Object {
-        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
+        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
-          "SharedVpcNestedStackSharedVpcNestedStackResource",
+          "SharedVpc",
           "Outputs.CosGalSharedVpcEA1B9578Ref",
         ],
       },
@@ -75,7 +75,7 @@ Object {
     },
   },
   "Resources": Object {
-    "SharedVpcNestedStackSharedVpcNestedStackResource": Object {
+    "SharedVpc": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
@@ -720,7 +720,7 @@ Object {
         "Name": "CoreGalSysVpcId",
       },
       "Value": Object {
-        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
       },
     },
     "VpcIsolatedSubnetRouteTables": Object {
@@ -732,10 +732,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRef53808134",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRefC3174DB1",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4RefD3834381",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref27E06E84",
             },
           ],
         ],
@@ -750,10 +750,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERefB0DC012F",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB858A527",
             },
           ],
         ],
@@ -814,7 +814,7 @@ Object {
         "VPCs": Array [
           Object {
             "VPCId": Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
             },
             "VPCRegion": "region",
           },

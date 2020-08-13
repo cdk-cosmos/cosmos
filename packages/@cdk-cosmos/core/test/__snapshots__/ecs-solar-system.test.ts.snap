@@ -57,7 +57,7 @@ Object {
         "Name": "CoreGalSysVpcId",
       },
       "Value": Object {
-        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
       },
     },
     "VpcIsolatedSubnetRouteTables": Object {
@@ -69,10 +69,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRef53808134",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRefC3174DB1",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4RefD3834381",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref27E06E84",
             },
           ],
         ],
@@ -87,10 +87,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERefB0DC012F",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB858A527",
             },
           ],
         ],
@@ -128,16 +128,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"bb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989c\\"",
+    "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77\\"",
       "Type": "String",
     },
-    "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"bb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989c\\"",
+    "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77\\"",
       "Type": "String",
     },
-    "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"bb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989c\\"",
+    "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77\\"",
       "Type": "String",
     },
   },
@@ -292,7 +292,7 @@ Object {
       "Type": "AWS::CloudFormation::CustomResource",
       "UpdateReplacePolicy": "Delete",
     },
-    "EcsNestedStackEcsNestedStackResource": Object {
+    "Ecs": Object {
       "Properties": Object {
         "Parameters": Object {
           "referencetoCosGalSysCertificateCertificateRequestorResourceA8D7E5EEArn": Object {
@@ -333,7 +333,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cS3Bucket",
+                "Ref": "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77S3Bucket",
               },
               "/",
               Object {
@@ -343,7 +343,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cS3VersionKey",
+                        "Ref": "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77S3VersionKey",
                       },
                     ],
                   },
@@ -356,7 +356,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersbb4d197f26c5efdffc310e3bba3fc1d57cc9335b601b4a0b1e4035555631989cS3VersionKey",
+                        "Ref": "AssetParameters85f9ea1a9dce966598d090643d6c76c26f1becd991658302b3e98abb9cd3ad77S3VersionKey",
                       },
                     ],
                   },
@@ -391,7 +391,7 @@ Object {
         "VPCs": Array [
           Object {
             "VPCId": Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
             },
             "VPCRegion": Object {
               "Ref": "AWS::Region",
@@ -613,10 +613,10 @@ Object {
         ],
         "Subnets": Array [
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERefB0DC012F",
           },
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB858A527",
           },
         ],
         "Tags": Array [
@@ -826,7 +826,7 @@ Object {
           },
         ],
         "VpcId": Object {
-          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
@@ -897,10 +897,10 @@ Object {
         ],
         "VPCZoneIdentifier": Array [
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERefB0DC012F",
           },
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB858A527",
           },
         ],
       },
@@ -1349,7 +1349,7 @@ def pick(dct, *keys):
           },
         ],
         "VpcId": Object {
-          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
@@ -1564,7 +1564,7 @@ Object {
         "Name": "CoreGalSys1VpcId",
       },
       "Value": Object {
-        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
       },
     },
     "VpcIsolatedSubnetRouteTables": Object {
@@ -1576,10 +1576,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRef53808134",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1RouteTable688214BDRefC3174DB1",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4RefD3834381",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2RouteTable4054ECB4Ref27E06E84",
             },
           ],
         ],
@@ -1594,10 +1594,10 @@ Object {
           ",",
           Array [
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERefB0DC012F",
             },
             Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB858A527",
             },
           ],
         ],
@@ -1635,21 +1635,21 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772\\"",
+    "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206\\"",
       "Type": "String",
     },
-    "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772\\"",
+    "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206\\"",
       "Type": "String",
     },
-    "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772\\"",
+    "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206\\"",
       "Type": "String",
     },
   },
   "Resources": Object {
-    "EcsNestedStackEcsNestedStackResource": Object {
+    "Ecs": Object {
       "Properties": Object {
         "Parameters": Object {
           "referencetoCosGalSys1ZoneD618DEF9Ref": Object {
@@ -1684,7 +1684,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772S3Bucket",
+                "Ref": "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206S3Bucket",
               },
               "/",
               Object {
@@ -1694,7 +1694,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772S3VersionKey",
+                        "Ref": "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206S3VersionKey",
                       },
                     ],
                   },
@@ -1707,7 +1707,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters761afe767885572ed934c070cfc094384c25c8496cd22d2f0dc239a41736a772S3VersionKey",
+                        "Ref": "AssetParameters65fd31d28e88757be2b5d80d7653c2f1eb12f8baf852e895c1aef15f23a9a206S3VersionKey",
                       },
                     ],
                   },
@@ -1742,7 +1742,7 @@ Object {
         "VPCs": Array [
           Object {
             "VPCId": Object {
-              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
+              "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
             },
             "VPCRegion": Object {
               "Ref": "AWS::Region",
@@ -1923,10 +1923,10 @@ Object {
         ],
         "Subnets": Array [
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERefB0DC012F",
           },
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB858A527",
           },
         ],
         "Tags": Array [
@@ -2068,7 +2068,7 @@ Object {
           },
         ],
         "VpcId": Object {
-          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
@@ -2139,10 +2139,10 @@ Object {
         ],
         "VPCZoneIdentifier": Array [
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERef5B584747",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet1Subnet4ACE937ERefB0DC012F",
           },
           Object {
-            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB336091C",
+            "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcAppSubnet2Subnet0D4DDC84RefB858A527",
           },
         ],
       },
@@ -2591,7 +2591,7 @@ def pick(dct, *keys):
           },
         ],
         "VpcId": Object {
-          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcNestedStackSharedVpcNestedStackResourceOutputsCosGalSharedVpcEA1B9578Ref0C619D92",
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",

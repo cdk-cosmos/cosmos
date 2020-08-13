@@ -553,7 +553,7 @@ Object {
     },
   },
   "Resources": Object {
-    "CiCdNestedStackCiCdNestedStackResource": Object {
+    "CiCd": Object {
       "Properties": Object {
         "Tags": Array [
           Object {
