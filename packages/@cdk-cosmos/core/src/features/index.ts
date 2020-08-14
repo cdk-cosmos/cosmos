@@ -1,7 +1,7 @@
 export {
   ISharedVpc,
-  SharedVpcCoreStack,
-  SharedVpcCoreStackProps,
+  SharedVpcGalaxyCoreStack,
+  SharedVpcGalaxyCoreStackProps,
 } from './shared-vpc-galaxy/shared-vpc-galaxy-core-stack';
 
 export {

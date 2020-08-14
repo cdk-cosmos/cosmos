@@ -1,3 +1,4 @@
+import { Construct } from '@aws-cdk/core';
 import { InstanceType, SecurityGroup, Peer, InstanceClass, InstanceSize } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster, ClusterProps as EcsClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
 import {
@@ -16,10 +17,9 @@ import { AutoScalingGroup } from '@aws-cdk/aws-autoscaling';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
 import { CoreVpc } from '../../components/core-vpc';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../components/remote';
-import { BaseNestedStack, BaseNestedStackProps } from '../../components/base';
-import { Tag } from '@aws-cdk/core';
+import { BaseFeature, BaseFeatureProps } from '../../components/base';
 
-export interface IEcsSolarSystemCore {
+export interface IEcsSolarSystemCore extends Construct {
   readonly solarSystem: ISolarSystemCore;
   readonly cluster: ICluster;
   readonly alb: IApplicationLoadBalancer;
@@ -33,13 +33,13 @@ export interface ClusterProps extends Partial<Omit<EcsClusterProps, 'capacity'>>
   capacity?: Partial<AddCapacityOptions> | false;
 }
 
-export interface EcsSolarSystemCoreStackProps extends BaseNestedStackProps {
+export interface EcsSolarSystemCoreStackProps extends BaseFeatureProps {
   clusterProps?: ClusterProps;
   albProps?: Partial<ApplicationLoadBalancerProps>;
   albListenerCidr?: string;
 }
 
-export class EcsSolarSystemCoreStack extends BaseNestedStack implements IEcsSolarSystemCore {
+export class EcsSolarSystemCoreStack extends BaseFeature implements IEcsSolarSystemCore {
   readonly solarSystem: ISolarSystemCore;
   readonly cluster: Cluster;
   readonly clusterAutoScalingGroup: AutoScalingGroup;
@@ -145,8 +145,6 @@ export class EcsSolarSystemCoreStack extends BaseNestedStack implements IEcsSola
     RemoteAlb.export(this.alb, this.singletonId('Alb'));
     RemoteApplicationListener.export(this.httpListener, this.singletonId('HttpListener'));
     RemoteApplicationListener.export(this.httpInternalListener, this.singletonId('HttpInternalListener'));
-
-    Tag.add(this, 'cosmos:feature', this.node.id);
   }
 }
 

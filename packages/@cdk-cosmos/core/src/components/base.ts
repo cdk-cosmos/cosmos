@@ -1,4 +1,4 @@
-import { CfnElement, NestedStack, NestedStackProps } from '@aws-cdk/core';
+import { CfnElement, NestedStack, NestedStackProps, Tag } from '@aws-cdk/core';
 import { Construct } from '@aws-cdk/core/lib/construct-compat';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Stack, StackProps } from '@aws-cdk/core/lib/stack';
@@ -116,6 +116,19 @@ export class BaseNestedStack extends NestedStack {
     if (!this.cosmosNaming) return super.allocateLogicalId(scope);
     const id = generateScopeId({ scope, defaultPattern: PATTERN.RESOURCE });
     return removeNonAlphanumeric(id);
+  }
+}
+
+export interface BaseFeatureProps extends BaseNestedStackProps {}
+
+export class BaseFeature extends BaseNestedStack {
+  constructor(scope: Construct, id: string, props?: BaseFeatureProps) {
+    super(scope, id, {
+      ...props,
+      type: 'Feature',
+    });
+
+    Tag.add(this, 'cosmos:feature', this.node.id);
   }
 }
 
