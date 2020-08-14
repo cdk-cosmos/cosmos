@@ -109,7 +109,7 @@ export class BaseNestedStack extends NestedStack {
     // Change Nested Stack Naming
     this.nestedStackResource?.overrideLogicalId(id);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this as any).templateFile = `${this.parentStack?.stackName}${id}.nested.template.json`;
+    (this as any).templateFile = `${this.nestedStackParent?.stackName}${id}.nested.template.json`;
   }
 
   protected allocateLogicalId(scope: CfnElement): string {
