@@ -11,6 +11,10 @@ export const isCrossAccount = (x: IConstruct, y: IConstruct, includeRegion?: boo
   return includeRegion ? diffAccount && diffRegion : diffAccount;
 };
 
+export const isCrossStack = (x: IConstruct, y: IConstruct): boolean => {
+  return Stack.of(x) !== Stack.of(y);
+};
+
 export const getPackageVersion: () => string = () => {
   const file = fs.readFileSync(path.resolve(__dirname, '../../package.json')).toString();
   return JSON.parse(file).version as string;

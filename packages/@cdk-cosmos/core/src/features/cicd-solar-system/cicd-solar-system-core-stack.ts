@@ -1,31 +1,29 @@
+import { Construct } from '@aws-cdk/core';
 import { Role } from '@aws-cdk/aws-iam';
 import { Project, IProject } from '@aws-cdk/aws-codebuild';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
-import { BaseNestedStackProps, BaseNestedStack } from '../../components/base';
+import { BaseFeature, BaseFeatureProps } from '../../components/base';
 import { CdkPipeline, CdkPipelineProps } from '../../components/cdk-pipeline';
 
 export const CDK_PIPELINE_PATTERN = '{Partition}{Cosmos}{Resource}';
 export const CDK_PIPELINE_STACK_PATTERN = '{Partition}{Cosmos}{Resource}';
 
-export interface ICiCdSolarSystemCore {
+export interface ICiCdSolarSystemCore extends Construct {
   readonly solarSystem: ISolarSystemCore;
   readonly deployProject?: IProject;
 }
 
-export interface CiCdSolarSystemCoreStackProps extends BaseNestedStackProps {
+export interface CiCdSolarSystemCoreStackProps extends BaseFeatureProps {
   cdkPipelineProps?: Partial<CdkPipelineProps>;
 }
 
-export class CiCdSolarSystemCoreStack extends BaseNestedStack implements ICiCdSolarSystemCore {
+export class CiCdSolarSystemCoreStack extends BaseFeature implements ICiCdSolarSystemCore {
   readonly solarSystem: ISolarSystemCore;
   readonly deployPipeline: CdkPipeline;
   readonly deployProject: Project;
 
   constructor(solarSystem: ISolarSystemCore, id: string, props?: CiCdSolarSystemCoreStackProps) {
-    super(solarSystem, id, {
-      ...props,
-      type: 'Feature',
-    });
+    super(solarSystem, id, props);
 
     const { cdkPipelineProps } = props || {};
 

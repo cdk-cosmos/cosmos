@@ -1,4 +1,4 @@
-import { CfnElement, NestedStack, NestedStackProps } from '@aws-cdk/core';
+import { CfnElement, NestedStack, NestedStackProps, Tag } from '@aws-cdk/core';
 import { Construct } from '@aws-cdk/core/lib/construct-compat';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Stack, StackProps } from '@aws-cdk/core/lib/stack';
@@ -109,13 +109,26 @@ export class BaseNestedStack extends NestedStack {
     // Change Nested Stack Naming
     this.nestedStackResource?.overrideLogicalId(id);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this as any).templateFile = `${this.parentStack?.stackName}${id}.nested.template.json`;
+    (this as any).templateFile = `${this.nestedStackParent?.stackName}${id}.nested.template.json`;
   }
 
   protected allocateLogicalId(scope: CfnElement): string {
     if (!this.cosmosNaming) return super.allocateLogicalId(scope);
     const id = generateScopeId({ scope, defaultPattern: PATTERN.RESOURCE });
     return removeNonAlphanumeric(id);
+  }
+}
+
+export interface BaseFeatureProps extends BaseNestedStackProps {}
+
+export class BaseFeature extends BaseNestedStack {
+  constructor(scope: Construct, id: string, props?: BaseFeatureProps) {
+    super(scope, id, {
+      ...props,
+      type: 'Feature',
+    });
+
+    Tag.add(this, 'cosmos:feature', this.node.id);
   }
 }
 

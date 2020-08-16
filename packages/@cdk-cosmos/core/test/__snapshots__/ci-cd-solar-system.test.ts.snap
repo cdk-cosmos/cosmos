@@ -4,11 +4,11 @@ exports[`CICD-Solar-System Extension should match snapshot 1`] = `
 Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
   "Resources": Object {
-    "CdkPipeline": Object {
+    "CiCdCdkPipeline": Object {
       "Properties": Object {
         "ArtifactStore": Object {
           "Location": Object {
-            "Ref": "CdkPipelineCdkArtifactBucket",
+            "Ref": "CiCdCdkPipelineCdkArtifactBucket",
           },
           "Type": "S3",
         },
@@ -39,7 +39,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
+                    "CiCdCdkPipelineSourceCdkCheckoutCodePipelineActionRole",
                     "Arn",
                   ],
                 },
@@ -60,7 +60,7 @@ Object {
                 "Configuration": Object {
                   "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTest*\\"}]",
                   "ProjectName": Object {
-                    "Ref": "CdkPipelineDeploy",
+                    "Ref": "CiCdCdkPipelineDeploy",
                   },
                 },
                 "InputArtifacts": Array [
@@ -76,7 +76,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "CdkPipelineDeployCdkDeployCodePipelineActionRole",
+                    "CiCdCdkPipelineDeployCdkDeployCodePipelineActionRole",
                     "Arn",
                   ],
                 },
@@ -103,7 +103,7 @@ Object {
       },
       "Type": "AWS::CodePipeline::Pipeline",
     },
-    "CdkPipelineCdkArtifactBucket": Object {
+    "CiCdCdkPipelineCdkArtifactBucket": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "AccessControl": "LogDeliveryWrite",
@@ -137,10 +137,10 @@ Object {
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
     },
-    "CdkPipelineCdkArtifactBucketPolicy": Object {
+    "CiCdCdkPipelineCdkArtifactBucketPolicy": Object {
       "Properties": Object {
         "Bucket": Object {
-          "Ref": "CdkPipelineCdkArtifactBucket",
+          "Ref": "CiCdCdkPipelineCdkArtifactBucket",
         },
         "PolicyDocument": Object {
           "Statement": Array [
@@ -159,7 +159,7 @@ Object {
                   Array [
                     Object {
                       "Fn::GetAtt": Array [
-                        "CdkPipelineCdkArtifactBucket",
+                        "CiCdCdkPipelineCdkArtifactBucket",
                         "Arn",
                       ],
                     },
@@ -175,11 +175,11 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "CdkPipelineDeploy": Object {
+    "CiCdCdkPipelineDeploy": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Location": Object {
-            "Ref": "CdkPipelineCdkArtifactBucket",
+            "Ref": "CiCdCdkPipelineCdkArtifactBucket",
           },
           "Name": "cdk.templates",
           "NamespaceType": "BUILD_ID",
@@ -259,7 +259,7 @@ Object {
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRole": Object {
+    "CiCdCdkPipelineDeployCdkDeployCodePipelineActionRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -301,7 +301,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy": Object {
+    "CiCdCdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -314,7 +314,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "CdkPipelineDeploy",
+                  "CiCdCdkPipelineDeploy",
                   "Arn",
                 ],
               },
@@ -322,16 +322,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy",
+        "PolicyName": "CiCdCdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
+            "Ref": "CiCdCdkPipelineDeployCdkDeployCodePipelineActionRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole": Object {
+    "CiCdCdkPipelineSourceCdkCheckoutCodePipelineActionRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -373,7 +373,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy": Object {
+    "CiCdCdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -390,7 +390,7 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "CdkPipelineCdkArtifactBucket",
+                    "CiCdCdkPipelineCdkArtifactBucket",
                     "Arn",
                   ],
                 },
@@ -400,7 +400,7 @@ Object {
                     Array [
                       Object {
                         "Fn::GetAtt": Array [
-                          "CdkPipelineCdkArtifactBucket",
+                          "CiCdCdkPipelineCdkArtifactBucket",
                           "Arn",
                         ],
                       },
@@ -426,10 +426,10 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy",
+        "PolicyName": "CiCdCdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
+            "Ref": "CiCdCdkPipelineSourceCdkCheckoutCodePipelineActionRole",
           },
         ],
       },
@@ -539,16 +539,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"e16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693\\"",
+    "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"b282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57d\\"",
       "Type": "String",
     },
-    "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"e16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693\\"",
+    "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"b282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57d\\"",
       "Type": "String",
     },
-    "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"e16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693\\"",
+    "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"b282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57d\\"",
       "Type": "String",
     },
   },
@@ -579,7 +579,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3Bucket",
+                "Ref": "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dS3Bucket",
               },
               "/",
               Object {
@@ -589,7 +589,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3VersionKey",
+                        "Ref": "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dS3VersionKey",
                       },
                     ],
                   },
@@ -602,7 +602,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameterse16225f77ecbeacb79ef92b23cdbd740017ffade41b2816ec0bc0f161baea693S3VersionKey",
+                        "Ref": "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dS3VersionKey",
                       },
                     ],
                   },
@@ -1252,6 +1252,10 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -1283,6 +1287,10 @@ Object {
           Object {
             "Key": "cosmos",
             "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
           },
           Object {
             "Key": "cosmos:galaxy",
@@ -1408,6 +1416,10 @@ Object {
             "Value": "Cos",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
             "Key": "cosmos:galaxy",
             "Value": "Gal",
           },
@@ -1448,6 +1460,10 @@ Object {
           Object {
             "Key": "cosmos",
             "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
           },
           Object {
             "Key": "cosmos:galaxy",
@@ -1520,6 +1536,10 @@ Object {
           Object {
             "Key": "cosmos",
             "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
           },
           Object {
             "Key": "cosmos:galaxy",

@@ -1,3 +1,4 @@
+import { Construct } from '@aws-cdk/core';
 import { Role } from '@aws-cdk/aws-iam';
 import { Project, IProject } from '@aws-cdk/aws-codebuild';
 import { ISolarSystemExtension, SolarSystemExtensionStack } from '../../solar-system/solar-system-extension-stack';
@@ -5,7 +6,7 @@ import { BaseConstruct, BaseConstructProps } from '../../components/base';
 import { CdkPipeline, CdkPipelineProps } from '../../components/cdk-pipeline';
 import { CDK_PIPELINE_STACK_PATTERN, CDK_PIPELINE_PATTERN } from './cicd-solar-system-core-stack';
 
-export interface ICiCdSolarSystemExtension {
+export interface ICiCdSolarSystemExtension extends Construct {
   readonly solarSystem: ISolarSystemExtension;
   readonly deployProject?: IProject;
 }
@@ -20,10 +21,7 @@ export class CiCdSolarSystemExtensionStack extends BaseConstruct implements ICiC
   readonly deployProject: Project;
 
   constructor(solarSystem: ISolarSystemExtension, id: string, props?: CiCdSolarSystemExtensionStackProps) {
-    super(solarSystem, id, {
-      ...props,
-      type: 'Feature',
-    });
+    super(solarSystem, id, props);
 
     const { cdkPipelineProps } = props || {};
 
