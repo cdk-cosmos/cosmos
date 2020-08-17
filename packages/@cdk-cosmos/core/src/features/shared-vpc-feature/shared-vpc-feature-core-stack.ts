@@ -1,22 +1,22 @@
 import { Construct } from '@aws-cdk/core';
-import { BaseFeature, BaseFeatureProps } from '../../components/base';
+import { BaseFeatureStack, BaseFeatureStackProps } from '../../components/base';
 import { CoreVpcProps, ICoreVpc, CoreVpc } from '../../components/core-vpc';
 import { IGalaxyCore, GalaxyCoreStack } from '../../galaxy/galaxy-core-stack';
 
-export interface ISharedVpc extends Construct {
+export interface ISharedVpcFeature extends Construct {
   readonly galaxy: IGalaxyCore;
   readonly vpc: ICoreVpc;
 }
 
-export interface SharedVpcGalaxyCoreStackProps extends BaseFeatureProps {
+export interface SharedVpcFeatureCoreStackProps extends BaseFeatureStackProps {
   vpcProps?: Partial<CoreVpcProps>;
 }
 
-export class SharedVpcGalaxyCoreStack extends BaseFeature implements ISharedVpc {
+export class SharedVpcFeatureCoreStack extends BaseFeatureStack implements ISharedVpcFeature {
   readonly galaxy: IGalaxyCore;
   readonly vpc: CoreVpc;
 
-  constructor(galaxy: IGalaxyCore, id: string, props?: SharedVpcGalaxyCoreStackProps) {
+  constructor(galaxy: IGalaxyCore, id: string, props?: SharedVpcFeatureCoreStackProps) {
     super(galaxy, id, {
       ...props,
       type: 'Feature',
@@ -38,15 +38,15 @@ export class SharedVpcGalaxyCoreStack extends BaseFeature implements ISharedVpc 
 
 declare module '../../galaxy/galaxy-core-stack' {
   export interface IGalaxyCore {
-    readonly sharedVpc?: ISharedVpc;
+    readonly sharedVpc?: ISharedVpcFeature;
   }
   interface GalaxyCoreStack {
-    sharedVpc?: SharedVpcGalaxyCoreStack;
-    addSharedVpc(props?: SharedVpcGalaxyCoreStackProps): SharedVpcGalaxyCoreStack;
+    sharedVpc?: SharedVpcFeatureCoreStack;
+    addSharedVpc(props?: SharedVpcFeatureCoreStackProps): SharedVpcFeatureCoreStack;
   }
 }
 
-GalaxyCoreStack.prototype.addSharedVpc = function(props?: SharedVpcGalaxyCoreStackProps): SharedVpcGalaxyCoreStack {
-  this.sharedVpc = new SharedVpcGalaxyCoreStack(this, 'SharedVpc', props);
+GalaxyCoreStack.prototype.addSharedVpc = function(props?: SharedVpcFeatureCoreStackProps): SharedVpcFeatureCoreStack {
+  this.sharedVpc = new SharedVpcFeatureCoreStack(this, 'SharedVpc', props);
   return this.sharedVpc;
 };

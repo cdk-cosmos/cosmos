@@ -1,28 +1,25 @@
 export {
-  ISharedVpc,
-  SharedVpcGalaxyCoreStack,
-  SharedVpcGalaxyCoreStackProps,
-} from './shared-vpc-galaxy/shared-vpc-galaxy-core-stack';
+  ISharedVpcFeature,
+  SharedVpcFeatureCoreStack,
+  SharedVpcFeatureCoreStackProps,
+} from './shared-vpc-feature/shared-vpc-feature-core-stack';
 
 export {
-  IEcsSolarSystemCore,
-  EcsSolarSystemCoreStack,
+  IEcsFeatureCore,
+  EcsFeatureCoreStack,
   EcsSolarSystemCoreStackProps,
-} from './ecs-solar-system/ecs-solar-system-core-stack';
+} from './ecs-feature/ecs-feature-core-stack';
+
+export { EcsFeatureCoreImport, EcsFeatureCoreImportProps } from './ecs-feature/ecs-feature-core-import';
 
 export {
-  EcsSolarSystemCoreImport,
-  EcsSolarSystemCoreImportProps,
-} from './ecs-solar-system/ecs-solar-system-core-import';
-
-export {
-  ICiCdSolarSystemCore,
-  CiCdSolarSystemCoreStack,
-  CiCdSolarSystemCoreStackProps,
+  ICiCdFeatureCore,
+  CiCdFeatureCoreStack,
+  CiCdFeatureCoreStackProps,
 } from './cicd-solar-system/cicd-solar-system-core-stack';
 
 export {
-  ICiCdSolarSystemExtension,
-  CiCdSolarSystemExtensionStack,
-  CiCdSolarSystemExtensionStackProps,
+  ICiCdFeatureExtension,
+  CiCdSFeatureExtensionStack,
+  CiCdFeatureExtensionStackProps,
 } from './cicd-solar-system/cicd-solar-system-extension-stack';

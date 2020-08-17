@@ -119,10 +119,10 @@ export class BaseNestedStack extends NestedStack {
   }
 }
 
-export interface BaseFeatureProps extends BaseNestedStackProps {}
+export interface BaseFeatureStackProps extends BaseNestedStackProps {}
 
-export class BaseFeature extends BaseNestedStack {
-  constructor(scope: Construct, id: string, props?: BaseFeatureProps) {
+export class BaseFeatureStack extends BaseNestedStack {
+  constructor(scope: Construct, id: string, props?: BaseFeatureStackProps) {
     super(scope, id, {
       ...props,
       type: 'Feature',

@@ -1,4 +1,4 @@
-import { Construct, Duration, Tag } from '@aws-cdk/core';
+import { Construct, Duration, Tag, IConstruct } from '@aws-cdk/core';
 import { Vpc } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Certificate, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
@@ -15,6 +15,8 @@ import { IGalaxyCore } from '../galaxy/galaxy-core-stack';
 import { CoreVpc, CoreVpcProps, ICoreVpc } from '../components/core-vpc';
 import { CrossAccountZoneDelegationRecord } from '../components/cross-account';
 import { RemoteVpc, RemoteZone } from '../components/remote';
+
+const SOLAR_SYSTEM_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.CosmosCore');
 
 export interface ISolarSystemCore extends Construct {
   readonly galaxy: IGalaxyCore;
@@ -48,6 +50,8 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
       ...props,
       type: 'SolarSystem',
     });
+
+    Object.defineProperty(this, SOLAR_SYSTEM_CORE_SYMBOL, { value: true });
 
     const { vpc, certificate, vpcProps = {}, zoneProps = {} } = props || {};
     const { linkZone = true, ttl = Duration.minutes(30) } = zoneProps;
@@ -110,5 +114,19 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     RemoteZone.export(this.privateZone, this.singletonId('PrivateZone'));
 
     Tag.add(this, 'cosmos:solarsystem', this.node.id);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static isSolarSystemCore(x: any): x is SolarSystemCoreStack {
+    return typeof x === 'object' && x !== null && SOLAR_SYSTEM_CORE_SYMBOL in x;
+  }
+
+  static of(construct: IConstruct): SolarSystemCoreStack {
+    const scopes = [construct, ...construct.node.scopes];
+    for (const scope of scopes) {
+      if (SolarSystemCoreStack.isSolarSystemCore(scope)) return scope;
+    }
+
+    throw new Error(`No Galaxy Core Stack could be identified for the construct at path ${construct.node.path}`);
   }
 }

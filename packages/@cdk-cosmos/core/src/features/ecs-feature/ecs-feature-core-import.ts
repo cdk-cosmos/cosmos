@@ -3,15 +3,15 @@ import { ICluster } from '@aws-cdk/aws-ecs';
 import { IApplicationLoadBalancer, IApplicationListener } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { ISolarSystemCore } from '../../solar-system/solar-system-core-stack';
 import { SolarSystemCoreImport } from '../../solar-system/solar-system-core-import';
-import { IEcsSolarSystemCore } from './ecs-solar-system-core-stack';
+import { IEcsFeatureCore } from './ecs-feature-core-stack';
 import { BaseConstruct, BaseConstructProps } from '../../components/base';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../components/remote';
 
-export interface EcsSolarSystemCoreImportProps extends BaseConstructProps {
+export interface EcsFeatureCoreImportProps extends BaseConstructProps {
   solarSystem: ISolarSystemCore;
 }
 
-export class EcsSolarSystemCoreImport extends BaseConstruct implements IEcsSolarSystemCore {
+export class EcsFeatureCoreImport extends BaseConstruct implements IEcsFeatureCore {
   readonly solarSystem: ISolarSystemCore;
   readonly cluster: ICluster;
   readonly alb: IApplicationLoadBalancer;
@@ -20,7 +20,7 @@ export class EcsSolarSystemCoreImport extends BaseConstruct implements IEcsSolar
   readonly httpsListener: IApplicationListener;
   readonly httpsInternalListener: IApplicationListener;
 
-  constructor(scope: Construct, id: string, props: EcsSolarSystemCoreImportProps) {
+  constructor(scope: Construct, id: string, props: EcsFeatureCoreImportProps) {
     super(scope, id, props);
 
     const { solarSystem } = props;
@@ -46,15 +46,13 @@ export class EcsSolarSystemCoreImport extends BaseConstruct implements IEcsSolar
 
 declare module '../../solar-system/solar-system-core-import' {
   interface SolarSystemCoreImport {
-    ecs?: EcsSolarSystemCoreImport;
-    addEcs(props?: Partial<EcsSolarSystemCoreImportProps>): EcsSolarSystemCoreImport;
+    ecs?: EcsFeatureCoreImport;
+    addEcs(props?: Partial<EcsFeatureCoreImportProps>): EcsFeatureCoreImport;
   }
 }
 
-SolarSystemCoreImport.prototype.addEcs = function(
-  props?: Partial<EcsSolarSystemCoreImportProps>
-): EcsSolarSystemCoreImport {
-  this.ecs = new EcsSolarSystemCoreImport(this, 'Ecs', {
+SolarSystemCoreImport.prototype.addEcs = function(props?: Partial<EcsFeatureCoreImportProps>): EcsFeatureCoreImport {
+  this.ecs = new EcsFeatureCoreImport(this, 'Ecs', {
     solarSystem: this,
     ...props,
   });

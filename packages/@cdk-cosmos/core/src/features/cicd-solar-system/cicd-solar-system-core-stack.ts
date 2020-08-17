@@ -2,27 +2,27 @@ import { Construct } from '@aws-cdk/core';
 import { Role } from '@aws-cdk/aws-iam';
 import { Project, IProject } from '@aws-cdk/aws-codebuild';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
-import { BaseFeature, BaseFeatureProps } from '../../components/base';
+import { BaseFeatureStack, BaseFeatureStackProps } from '../../components/base';
 import { CdkPipeline, CdkPipelineProps } from '../../components/cdk-pipeline';
 
 export const CDK_PIPELINE_PATTERN = '{Partition}{Cosmos}{Resource}';
 export const CDK_PIPELINE_STACK_PATTERN = '{Partition}{Cosmos}{Resource}';
 
-export interface ICiCdSolarSystemCore extends Construct {
+export interface ICiCdFeatureCore extends Construct {
   readonly solarSystem: ISolarSystemCore;
   readonly deployProject?: IProject;
 }
 
-export interface CiCdSolarSystemCoreStackProps extends BaseFeatureProps {
+export interface CiCdFeatureCoreStackProps extends BaseFeatureStackProps {
   cdkPipelineProps?: Partial<CdkPipelineProps>;
 }
 
-export class CiCdSolarSystemCoreStack extends BaseFeature implements ICiCdSolarSystemCore {
+export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatureCore {
   readonly solarSystem: ISolarSystemCore;
   readonly deployPipeline: CdkPipeline;
   readonly deployProject: Project;
 
-  constructor(solarSystem: ISolarSystemCore, id: string, props?: CiCdSolarSystemCoreStackProps) {
+  constructor(solarSystem: ISolarSystemCore, id: string, props?: CiCdFeatureCoreStackProps) {
     super(solarSystem, id, props);
 
     const { cdkPipelineProps } = props || {};
@@ -49,15 +49,16 @@ export class CiCdSolarSystemCoreStack extends BaseFeature implements ICiCdSolarS
 
 declare module '../../solar-system/solar-system-core-stack' {
   export interface ISolarSystemCore {
-    readonly cicd?: ICiCdSolarSystemCore;
+    readonly ciCd?: ICiCdFeatureCore;
   }
+
   interface SolarSystemCoreStack {
-    cicd?: CiCdSolarSystemCoreStack;
-    addCiCd(props?: CiCdSolarSystemCoreStackProps): CiCdSolarSystemCoreStack;
+    ciCd?: CiCdFeatureCoreStack;
+    addCiCd(props?: CiCdFeatureCoreStackProps): CiCdFeatureCoreStack;
   }
 }
 
-SolarSystemCoreStack.prototype.addCiCd = function(props?: CiCdSolarSystemCoreStackProps): CiCdSolarSystemCoreStack {
-  this.cicd = new CiCdSolarSystemCoreStack(this, 'CiCd', props);
-  return this.cicd;
+SolarSystemCoreStack.prototype.addCiCd = function(props?: CiCdFeatureCoreStackProps): CiCdFeatureCoreStack {
+  this.ciCd = new CiCdFeatureCoreStack(this, 'CiCd', props);
+  return this.ciCd;
 };
