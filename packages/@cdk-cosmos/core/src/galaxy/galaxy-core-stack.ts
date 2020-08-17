@@ -1,10 +1,12 @@
-import { Construct, Stack, Tag } from '@aws-cdk/core';
+import { Construct, Stack, Tag, IConstruct } from '@aws-cdk/core';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { ICosmosCore } from '../cosmos/cosmos-core-stack';
 import { PATTERN } from '../helpers/constants';
 import { isCrossAccount } from '../helpers/utils';
+
+const GALAXY_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.CosmosCore');
 
 export interface IGalaxyCore extends Construct {
   cosmos: ICosmosCore;
@@ -26,6 +28,8 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
       ...props,
     });
 
+    Object.defineProperty(this, GALAXY_CORE_SYMBOL, { value: true });
+
     this.cosmos = cosmos;
 
     if (isCrossAccount(this, this.cosmos)) {
@@ -39,5 +43,19 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
     }
 
     Tag.add(this, 'cosmos:galaxy', this.node.id);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static isGalaxyCore(x: any): x is GalaxyCoreStack {
+    return typeof x === 'object' && x !== null && GALAXY_CORE_SYMBOL in x;
+  }
+
+  static of(construct: IConstruct): GalaxyCoreStack {
+    const scopes = [construct, ...construct.node.scopes];
+    for (const scope of scopes) {
+      if (GalaxyCoreStack.isGalaxyCore(scope)) return scope;
+    }
+
+    throw new Error(`No Galaxy Core Stack could be identified for the construct at path ${construct.node.path}`);
   }
 }

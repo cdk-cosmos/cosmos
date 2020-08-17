@@ -6,21 +6,21 @@ import { BaseConstruct, BaseConstructProps } from '../../components/base';
 import { CdkPipeline, CdkPipelineProps } from '../../components/cdk-pipeline';
 import { CDK_PIPELINE_STACK_PATTERN, CDK_PIPELINE_PATTERN } from './cicd-solar-system-core-stack';
 
-export interface ICiCdSolarSystemExtension extends Construct {
+export interface ICiCdFeatureExtension extends Construct {
   readonly solarSystem: ISolarSystemExtension;
   readonly deployProject?: IProject;
 }
 
-export interface CiCdSolarSystemExtensionStackProps extends BaseConstructProps {
+export interface CiCdFeatureExtensionStackProps extends BaseConstructProps {
   cdkPipelineProps?: Partial<CdkPipelineProps>;
 }
 
-export class CiCdSolarSystemExtensionStack extends BaseConstruct implements ICiCdSolarSystemExtension {
+export class CiCdSFeatureExtensionStack extends BaseConstruct implements ICiCdFeatureExtension {
   readonly solarSystem: ISolarSystemExtension;
   readonly deployPipeline: CdkPipeline;
   readonly deployProject: Project;
 
-  constructor(solarSystem: ISolarSystemExtension, id: string, props?: CiCdSolarSystemExtensionStackProps) {
+  constructor(solarSystem: ISolarSystemExtension, id: string, props?: CiCdFeatureExtensionStackProps) {
     super(solarSystem, id, props);
 
     const { cdkPipelineProps } = props || {};
@@ -47,17 +47,18 @@ export class CiCdSolarSystemExtensionStack extends BaseConstruct implements ICiC
 
 declare module '../../solar-system/solar-system-extension-stack' {
   export interface ISolarSystemExtension {
-    readonly cicd?: ICiCdSolarSystemExtension;
+    readonly ciCd?: ICiCdFeatureExtension;
   }
+
   interface SolarSystemExtensionStack {
-    cicd?: CiCdSolarSystemExtensionStack;
-    addCiCd(props?: CiCdSolarSystemExtensionStackProps): CiCdSolarSystemExtensionStack;
+    ciCd?: CiCdSFeatureExtensionStack;
+    addCiCd(props?: CiCdFeatureExtensionStackProps): CiCdSFeatureExtensionStack;
   }
 }
 
 SolarSystemExtensionStack.prototype.addCiCd = function(
-  props?: CiCdSolarSystemExtensionStackProps
-): CiCdSolarSystemExtensionStack {
-  this.cicd = new CiCdSolarSystemExtensionStack(this, 'CiCd', props);
-  return this.cicd;
+  props?: CiCdFeatureExtensionStackProps
+): CiCdSFeatureExtensionStack {
+  this.ciCd = new CiCdSFeatureExtensionStack(this, 'CiCd', props);
+  return this.ciCd;
 };

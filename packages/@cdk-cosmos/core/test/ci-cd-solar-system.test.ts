@@ -25,7 +25,7 @@ solarSystemExtension.addCiCd();
 
 const [solarSystemStack, cicdSolarSystemStack, cicdSolarSystemExtensionStack] = synthesizeStacks(
   solarSystem,
-  solarSystem.cicd,
+  solarSystem.ciCd,
   solarSystemExtension
 );
 

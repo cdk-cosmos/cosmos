@@ -17,9 +17,9 @@ import { AutoScalingGroup } from '@aws-cdk/aws-autoscaling';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
 import { CoreVpc } from '../../components/core-vpc';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../components/remote';
-import { BaseFeature, BaseFeatureProps } from '../../components/base';
+import { BaseFeatureStack, BaseFeatureStackProps } from '../../components/base';
 
-export interface IEcsSolarSystemCore extends Construct {
+export interface IEcsFeatureCore extends Construct {
   readonly solarSystem: ISolarSystemCore;
   readonly cluster: ICluster;
   readonly alb: IApplicationLoadBalancer;
@@ -33,13 +33,13 @@ export interface ClusterProps extends Partial<Omit<EcsClusterProps, 'capacity'>>
   capacity?: Partial<AddCapacityOptions> | false;
 }
 
-export interface EcsSolarSystemCoreStackProps extends BaseFeatureProps {
+export interface EcsSolarSystemCoreStackProps extends BaseFeatureStackProps {
   clusterProps?: ClusterProps;
   albProps?: Partial<ApplicationLoadBalancerProps>;
   albListenerCidr?: string;
 }
 
-export class EcsSolarSystemCoreStack extends BaseFeature implements IEcsSolarSystemCore {
+export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeatureCore {
   readonly solarSystem: ISolarSystemCore;
   readonly cluster: Cluster;
   readonly clusterAutoScalingGroup: AutoScalingGroup;
@@ -50,10 +50,7 @@ export class EcsSolarSystemCoreStack extends BaseFeature implements IEcsSolarSys
   readonly httpsInternalListener?: ApplicationListener;
 
   constructor(solarSystem: ISolarSystemCore, id: string, props?: EcsSolarSystemCoreStackProps) {
-    super(solarSystem, id, {
-      ...props,
-      type: 'Feature',
-    });
+    super(solarSystem, id, props);
 
     const { albListenerCidr = '0.0.0.0/0', clusterProps = {}, albProps = {} } = props || {};
 
@@ -163,15 +160,15 @@ const configureListener = (listener: ApplicationListener, listenerInboundCidr?: 
 
 declare module '../../solar-system/solar-system-core-stack' {
   export interface ISolarSystemCore {
-    readonly ecs?: IEcsSolarSystemCore;
+    readonly ecs?: IEcsFeatureCore;
   }
   interface SolarSystemCoreStack {
-    ecs?: EcsSolarSystemCoreStack;
-    addEcs(props?: EcsSolarSystemCoreStackProps): EcsSolarSystemCoreStack;
+    ecs?: EcsFeatureCoreStack;
+    addEcs(props?: EcsSolarSystemCoreStackProps): EcsFeatureCoreStack;
   }
 }
 
-SolarSystemCoreStack.prototype.addEcs = function(props?: EcsSolarSystemCoreStackProps): EcsSolarSystemCoreStack {
-  this.ecs = new EcsSolarSystemCoreStack(this, 'Ecs', props);
+SolarSystemCoreStack.prototype.addEcs = function(props?: EcsSolarSystemCoreStackProps): EcsFeatureCoreStack {
+  this.ecs = new EcsFeatureCoreStack(this, 'Ecs', props);
   return this.ecs;
 };
