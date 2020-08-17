@@ -17,10 +17,7 @@ export class SharedVpcFeatureCoreStack extends BaseFeatureStack implements IShar
   readonly vpc: CoreVpc;
 
   constructor(galaxy: IGalaxyCore, id: string, props?: SharedVpcFeatureCoreStackProps) {
-    super(galaxy, id, {
-      ...props,
-      type: 'Feature',
-    });
+    super(galaxy, id, props);
 
     const { vpcProps } = props || {};
 

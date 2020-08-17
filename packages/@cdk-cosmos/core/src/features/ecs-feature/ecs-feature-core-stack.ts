@@ -50,10 +50,7 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
   readonly httpsInternalListener?: ApplicationListener;
 
   constructor(solarSystem: ISolarSystemCore, id: string, props?: EcsSolarSystemCoreStackProps) {
-    super(solarSystem, id, {
-      ...props,
-      type: 'Feature',
-    });
+    super(solarSystem, id, props);
 
     const { albListenerCidr = '0.0.0.0/0', clusterProps = {}, albProps = {} } = props || {};
 
