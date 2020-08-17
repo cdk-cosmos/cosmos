@@ -1,23 +1,24 @@
-import { Construct, Stack, CfnOutput, Tag } from '@aws-cdk/core';
+import { Construct, Stack, CfnOutput, Tag, IConstruct } from '@aws-cdk/core';
 import { HostedZone, IPublicHostedZone } from '@aws-cdk/aws-route53';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
-import { CrossAccountExportsFn } from '@cosmos-building-blocks/common';
-import { IFunction, Function } from '@aws-cdk/aws-lambda';
+import { createCrossAccountExportProvider } from '@cosmos-building-blocks/common';
 import { BaseStack, BaseStackProps } from '../components/base';
-import { RemoteZone, RemoteCodeRepo, RemoteFunction } from '../helpers/remote';
+import { RemoteZone, RemoteCodeRepo } from '../components/remote';
 import { getPackageVersion } from '../helpers/utils';
 import { ICosmosCoreLink, CosmosCoreLinkStack } from './cosmoc-core-link-stack';
 
+const COSMOS_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.CosmosCore');
+
 export interface ICosmosCore extends Construct {
+  networkBuilder?: NetworkBuilder;
   link?: ICosmosCoreLink;
   libVersion: string;
   cdkRepo: IRepository;
   rootZone: IPublicHostedZone;
   cdkMasterRoleStaticArn: string;
-  crossAccountExportsFn: IFunction;
-  networkBuilder?: NetworkBuilder;
+  crossAccountExportServiceToken: string;
 }
 
 export interface CosmosCoreStackProps extends BaseStackProps {
@@ -31,7 +32,7 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
   readonly rootZone: HostedZone;
   readonly cdkMasterRole: Role;
   readonly cdkMasterRoleStaticArn: string;
-  readonly crossAccountExportsFn: Function;
+  readonly crossAccountExportServiceToken: string;
 
   constructor(scope: Construct, id: string, props: CosmosCoreStackProps) {
     super(scope, id, {
@@ -41,6 +42,8 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
       ...props,
     });
 
+    Object.defineProperty(this, COSMOS_CORE_SYMBOL, { value: true });
+
     const { tld } = props;
 
     this.libVersion = getPackageVersion();
@@ -48,12 +51,12 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
 
     this.cdkRepo = new Repository(this, 'CdkRepo', {
       repositoryName: this.nodeId('Cdk-Repo', '-').toLowerCase(),
-      description: `Core CDK Repo for ${id} Cosmos.`,
+      description: `Core CDK Repo for ${this.node.id} Cosmos.`,
     });
 
     this.rootZone = new HostedZone(this, 'RootZone', {
       zoneName: `${tld}`.toLowerCase(),
-      comment: `Core TLD Root Zone for ${id} Cosmos.`,
+      comment: `Core TLD Root Zone for ${this.node.id} Cosmos.`,
     });
 
     const cdkMasterRoleName = this.singletonId('CdkMasterRole');
@@ -67,9 +70,7 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     });
     this.cdkMasterRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
 
-    this.crossAccountExportsFn = new CrossAccountExportsFn(this, 'CrossAccountExportsFn', {
-      role: this.cdkMasterRole,
-    });
+    this.crossAccountExportServiceToken = createCrossAccountExportProvider(this, this.cdkMasterRole);
 
     new CfnOutput(this, 'CoreLibVersion', {
       exportName: this.singletonId('LibVersion'),
@@ -77,9 +78,27 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     });
     RemoteCodeRepo.export(this.cdkRepo, this.singletonId('CdkRepo'));
     RemoteZone.export(this.rootZone, this.singletonId('RootZone'));
-    RemoteFunction.export(this.crossAccountExportsFn, this.singletonId('CrossAccountExportsFn'));
+    // RemoteFunction.export(this.crossAccountExportsFn, this.singletonId('CrossAccountExportsFn'));
+    new CfnOutput(this, 'CrossAccountExportServiceToken', {
+      exportName: this.singletonId('CrossAccountExportServiceToken'),
+      value: this.crossAccountExportServiceToken,
+    });
     this.cdkMasterRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${cdkMasterRoleName}`;
 
-    Tag.add(this, 'cosmos', id);
+    Tag.add(this, 'cosmos', this.node.id);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static isCosmosCore(x: any): x is CosmosCoreStack {
+    return typeof x === 'object' && x !== null && COSMOS_CORE_SYMBOL in x;
+  }
+
+  static of(construct: IConstruct): CosmosCoreStack {
+    const scopes = [construct, ...construct.node.scopes];
+    for (const scope of scopes) {
+      if (CosmosCoreStack.isCosmosCore(scope)) return scope;
+    }
+
+    throw new Error(`No Cosmos Core Stack could be identified for the construct at path ${construct.node.path}`);
   }
 }

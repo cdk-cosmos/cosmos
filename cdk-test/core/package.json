@@ -5,18 +5,5 @@
     "build": "tsc",
     "watch": "tsc -w",
     "cdk": "cdk"
-  },
-  "dependencies": {
-    "@aws-cdk/core": "1.37.0",
-    "@cdk-cosmos/core": "../../packages/@cdk-cosmos/core",
-    "@cosmos-building-blocks/common": "../../packages/@cosmos-building-blocks/common",
-    "source-map-support": "^0.5.16"
-  },
-  "devDependencies": {
-    "@aws-cdk/assert": "1.37.0",
-    "@types/node": "^10.17.5",
-    "aws-cdk": "1.37.0",
-    "ts-node": "^8.1.0",
-    "typescript": "^3.7.2"
   }
 }

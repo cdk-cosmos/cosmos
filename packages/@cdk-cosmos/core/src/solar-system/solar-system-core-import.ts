@@ -3,7 +3,7 @@ import { Construct } from '@aws-cdk/core';
 import { IPublicHostedZone, IPrivateHostedZone } from '@aws-cdk/aws-route53';
 import { IGalaxyCore } from '../galaxy/galaxy-core-stack';
 import { BaseConstruct, BaseConstructProps } from '../components/base';
-import { RemoteVpc, RemoteZone, RemoteVpcImportProps } from '../helpers/remote';
+import { RemoteVpc, RemoteZone, RemoteVpcImportProps } from '../components/remote';
 import { ISolarSystemCore } from './solar-system-core-stack';
 
 export interface SolarSystemCoreImportProps extends BaseConstructProps {
@@ -19,8 +19,8 @@ export class SolarSystemCoreImport extends BaseConstruct implements ISolarSystem
 
   constructor(scope: Construct, id: string, props: SolarSystemCoreImportProps) {
     super(scope, id, {
-      type: 'SolarSystem',
       partition: 'Core',
+      type: 'SolarSystem',
       ...props,
     });
 

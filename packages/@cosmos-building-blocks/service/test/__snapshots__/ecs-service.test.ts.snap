@@ -1,0 +1,213 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ecs Service Snapshot 1`] = `
+Object {
+  "Resources": Object {
+    "EcsService0A92EB77": Object {
+      "DependsOn": Array [
+        "EcsServiceServiceRuleA3A6B98E",
+      ],
+      "Properties": Object {
+        "Cluster": "Cluster",
+        "DeploymentConfiguration": Object {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "EC2",
+        "LoadBalancers": Array [
+          Object {
+            "ContainerName": "Container",
+            "ContainerPort": 80,
+            "TargetGroupArn": Object {
+              "Ref": "EcsServiceServiceTargetGroup6E35E6BD",
+            },
+          },
+        ],
+        "PlacementStrategies": Array [
+          Object {
+            "Field": "attribute:ecs.availability-zone",
+            "Type": "spread",
+          },
+        ],
+        "SchedulingStrategy": "REPLICA",
+        "TaskDefinition": Object {
+          "Ref": "EcsServiceTask59467FF8",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "EcsServiceLogs91D515DC": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "EcsServiceServiceRuleA3A6B98E": Object {
+      "Properties": Object {
+        "Actions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "EcsServiceServiceTargetGroup6E35E6BD",
+            },
+            "Type": "forward",
+          },
+        ],
+        "Conditions": Array [
+          Object {
+            "Field": "path-pattern",
+            "Values": Array [
+              "/path",
+            ],
+          },
+        ],
+        "ListenerArn": "Listener",
+        "Priority": 20283,
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+    },
+    "EcsServiceServiceTargetGroup6E35E6BD": Object {
+      "Properties": Object {
+        "Port": 80,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "0",
+          },
+        ],
+        "TargetType": "instance",
+        "VpcId": "Vpc",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "EcsServiceTask59467FF8": Object {
+      "Properties": Object {
+        "ContainerDefinitions": Array [
+          Object {
+            "Essential": true,
+            "Image": "Image",
+            "LogConfiguration": Object {
+              "LogDriver": "awslogs",
+              "Options": Object {
+                "awslogs-group": Object {
+                  "Ref": "EcsServiceLogs91D515DC",
+                },
+                "awslogs-region": Object {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "Container",
+              },
+            },
+            "Memory": 256,
+            "Name": "Container",
+            "PortMappings": Array [
+              Object {
+                "ContainerPort": 80,
+                "HostPort": 0,
+                "Protocol": "tcp",
+              },
+            ],
+          },
+        ],
+        "ExecutionRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "EcsServiceTaskExecutionRole485D054B",
+            "Arn",
+          ],
+        },
+        "Family": "StackEcsServiceTask7FDBD854",
+        "NetworkMode": "bridge",
+        "RequiresCompatibilities": Array [
+          "EC2",
+        ],
+        "TaskRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "EcsServiceTaskTaskRoleA0BA68C2",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "EcsServiceTaskExecutionRole485D054B": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "EcsServiceTaskExecutionRoleDefaultPolicy80218B89": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "EcsServiceLogs91D515DC",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "EcsServiceTaskExecutionRoleDefaultPolicy80218B89",
+        "Roles": Array [
+          Object {
+            "Ref": "EcsServiceTaskExecutionRole485D054B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "EcsServiceTaskTaskRoleA0BA68C2": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "SecurityGroupfromStackSecurityGroup277A41033276865535DAF39B3F": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "FromPort": 32768,
+        "GroupId": "SecurityGroup",
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": "SecurityGroup",
+        "ToPort": 65535,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+  },
+}
+`;

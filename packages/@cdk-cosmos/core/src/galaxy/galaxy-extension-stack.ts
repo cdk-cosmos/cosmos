@@ -32,6 +32,6 @@ export class GalaxyExtensionStack extends BaseStack implements IGalaxyExtension 
       cosmos: this.cosmos.portal,
     });
 
-    Tag.add(this, 'cosmos:galaxy:extension', id);
+    Tag.add(this, 'cosmos:galaxy:extension', this.node.id);
   }
 }

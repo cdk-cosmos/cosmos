@@ -1,6 +1,6 @@
 {
   "name": "@cosmos-building-blocks/common",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -18,20 +18,16 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc && yarn copy-files",
+    "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
     "format": "prettier --write **/*.ts !**/*.d.ts",
     "lint": "eslint . --ext .js,.ts",
-    "clean": "rm -rf lib",
-    "copy-files": "cp ../../private/cross-account-stack-ref-handler/lib/bundle.zip lib/cross-account-stack-ref-handler.zip"
+    "clean": "rm -rf lib"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-cloudformation": "^1.37.0",
-    "@aws-cdk/aws-lambda": "^1.37.0",
-    "@aws-cdk/core": "^1.37.0"
-  },
-  "devDependencies": {
-    "cross-account-stack-ref-handler": "^0.5.4"
+    "@aws-cdk/aws-iam": "^1.54.0",
+    "@aws-cdk/aws-s3": "^1.54.0",
+    "@aws-cdk/core": "^1.54.0"
   }
 }

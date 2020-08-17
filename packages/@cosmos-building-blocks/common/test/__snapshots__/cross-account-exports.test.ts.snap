@@ -2,81 +2,66 @@
 
 exports[`should match snapshot 1`] = `
 Object {
+  "Parameters": Object {
+    "AssetParameterssourceHashArtifactHash4AD140F3": Object {
+      "Description": "Artifact hash for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3Bucket55D9AB30": Object {
+      "Description": "S3 bucket for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3VersionKey491A8CF8": Object {
+      "Description": "S3 key for asset version \\"sourceHash\\"",
+      "Type": "String",
+    },
+  },
   "Resources": Object {
-    "CrossAccountExportsFnBB7349E9": Object {
-      "DependsOn": Array [
-        "CrossAccountExportsFnServiceRoleC7F2C6BD",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": "mock-s3BucketName",
-          "S3Key": "mock-s3ObjectKey",
-        },
-        "Handler": "index.handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "CrossAccountExportsFnServiceRoleC7F2C6BD",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs12.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "CrossAccountExportsFnServiceRoleC7F2C6BD": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/AWSCloudFormationReadOnlyAccess",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CustomFnFE03B841": Object {
+    "CustomCrossAccountExportsCustomResourceProviderHandler2315F6D6": Object {
       "DependsOn": Array [
         "TestRoleARN194013B0",
       ],
       "Properties": Object {
         "Code": Object {
-          "S3Bucket": "mock-s3BucketName",
-          "S3Key": "mock-s3ObjectKey",
+          "S3Bucket": Object {
+            "Ref": "AssetParameterssourceHashS3Bucket55D9AB30",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey491A8CF8",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey491A8CF8",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
         },
-        "Handler": "index.handler",
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
         "Role": Object {
           "Fn::GetAtt": Array [
             "TestRoleARN194013B0",
@@ -84,20 +69,20 @@ Object {
           ],
         },
         "Runtime": "nodejs12.x",
-        "Timeout": 60,
+        "Timeout": 300,
       },
       "Type": "AWS::Lambda::Function",
     },
     "TestExports28BDC79A7": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "Exports": Array [],
         "ServiceToken": Object {
           "Fn::GetAtt": Array [
-            "CrossAccountExportsFnBB7349E9",
+            "CustomCrossAccountExportsCustomResourceProviderHandler2315F6D6",
             "Arn",
           ],
         },
+        "exports": Array [],
       },
       "Type": "Custom::CrossAccountExports",
       "UpdateReplacePolicy": "Delete",
@@ -105,14 +90,14 @@ Object {
     "TestExports3FD94762A": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "Exports": Array [],
-        "RunAt": "2020-01-01T00:00:00.000Z",
         "ServiceToken": Object {
           "Fn::GetAtt": Array [
-            "CrossAccountExportsFnBB7349E9",
+            "CustomCrossAccountExportsCustomResourceProviderHandler2315F6D6",
             "Arn",
           ],
         },
+        "exports": Array [],
+        "runAt": "2020-01-01T00:00:00.000Z",
       },
       "Type": "Custom::CrossAccountExports",
       "UpdateReplacePolicy": "Delete",
@@ -120,15 +105,15 @@ Object {
     "TestExportsED6808F1": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
-        "Exports": Array [
-          "Test-Export",
-        ],
         "ServiceToken": Object {
           "Fn::GetAtt": Array [
-            "CustomFnFE03B841",
+            "CustomCrossAccountExportsCustomResourceProviderHandler2315F6D6",
             "Arn",
           ],
         },
+        "exports": Array [
+          "Test-Export",
+        ],
       },
       "Type": "Custom::CrossAccountExports",
       "UpdateReplacePolicy": "Delete",

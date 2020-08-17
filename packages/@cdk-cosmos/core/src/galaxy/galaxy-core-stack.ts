@@ -1,12 +1,12 @@
-import { Construct, Stack, Tag } from '@aws-cdk/core';
+import { Construct, Stack, Tag, IConstruct } from '@aws-cdk/core';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
-import { Vpc } from '@aws-cdk/aws-ec2';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { ICosmosCore } from '../cosmos/cosmos-core-stack';
-import { CoreVpcProps, CoreVpc, addCommonEndpoints, addEcsEndpoints } from '../components/core-vpc';
 import { PATTERN } from '../helpers/constants';
 import { isCrossAccount } from '../helpers/utils';
+
+const GALAXY_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.CosmosCore');
 
 export interface IGalaxyCore extends Construct {
   cosmos: ICosmosCore;
@@ -20,7 +20,6 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
   readonly cosmos: ICosmosCore;
   readonly cdkCrossAccountRole?: Role;
   readonly cdkCrossAccountRoleStaticArn?: string;
-  vpc?: Vpc;
 
   constructor(cosmos: ICosmosCore, id: string, props?: GalaxyCoreStackProps) {
     super(cosmos, id, {
@@ -29,10 +28,12 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
       ...props,
     });
 
+    Object.defineProperty(this, GALAXY_CORE_SYMBOL, { value: true });
+
     this.cosmos = cosmos;
 
     if (isCrossAccount(this, this.cosmos)) {
-      const CdkCrossAccountRoleName = this.nodeId('CdkCrossAccountRole', '', PATTERN.SINGLETON_COSMOS);
+      const CdkCrossAccountRoleName = this.cosmos.nodeId('CdkCrossAccountRole', '', PATTERN.SINGLETON_COSMOS);
       this.cdkCrossAccountRole = new Role(this, 'CdkCrossAccountRole', {
         roleName: CdkCrossAccountRoleName,
         assumedBy: new ArnPrincipal(this.cosmos.cdkMasterRoleStaticArn),
@@ -41,24 +42,20 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
       this.cdkCrossAccountRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${CdkCrossAccountRoleName}`;
     }
 
-    Tag.add(this, 'cosmos:galaxy', id);
+    Tag.add(this, 'cosmos:galaxy', this.node.id);
   }
 
-  addSharedVpc(props?: Partial<CoreVpcProps> & { commonEndpoints?: boolean; ecsEndpoints?: boolean }): Vpc {
-    const { commonEndpoints = true, ecsEndpoints = true } = props || {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static isGalaxyCore(x: any): x is GalaxyCoreStack {
+    return typeof x === 'object' && x !== null && GALAXY_CORE_SYMBOL in x;
+  }
 
-    if (!this.networkBuilder) {
-      throw new Error(`NetworkBuilder not found, please define cidr range here (Galaxy: ${this.node.id}) or Cosmos.`);
+  static of(construct: IConstruct): GalaxyCoreStack {
+    const scopes = [construct, ...construct.node.scopes];
+    for (const scope of scopes) {
+      if (GalaxyCoreStack.isGalaxyCore(scope)) return scope;
     }
 
-    this.vpc = new CoreVpc(this, 'SharedVpc', {
-      ...props,
-      networkBuilder: this.networkBuilder,
-    });
-
-    if (commonEndpoints) addCommonEndpoints(this.vpc);
-    if (ecsEndpoints) addEcsEndpoints(this.vpc);
-
-    return this.vpc;
+    throw new Error(`No Galaxy Core Stack could be identified for the construct at path ${construct.node.path}`);
   }
 }

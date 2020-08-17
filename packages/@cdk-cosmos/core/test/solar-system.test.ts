@@ -19,8 +19,8 @@ const env2 = { account: 'account2', region: 'region2' };
 
 const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'cos.com', cidr: '10.0.1.0/22', env });
 const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { env });
-const galaxyVpc = galaxy.addSharedVpc();
-const solarSystem = new SolarSystemCoreStack(galaxy, 'Sys', { env, vpc: galaxyVpc });
+galaxy.addSharedVpc();
+const solarSystem = new SolarSystemCoreStack(galaxy, 'Sys', { env, vpc: galaxy.sharedVpc?.vpc });
 const galaxy2 = new GalaxyCoreStack(cosmos, 'Gal2', { env: env2 });
 const solarSystem2 = new SolarSystemCoreStack(galaxy2, 'Sys2', { env: env2 });
 
@@ -35,6 +35,7 @@ new ARecord(solarSystemExtension, 'test', {
 
 const [
   galaxyStack,
+  galaxySharedVpcStack,
   galaxy2Stack,
   solarSystemStack,
   solarSystem2Stack,
@@ -42,6 +43,7 @@ const [
   cosmosLinkStack,
 ] = synthesizeStacks(
   galaxy,
+  galaxy.sharedVpc,
   galaxy2,
   solarSystem,
   solarSystem2,
@@ -52,7 +54,7 @@ const [
 
 describe('Solar-System', () => {
   test('should be a solar system', () => {
-    expect(solarSystemStack.name).toEqual('CoreCosGalSysSolarSystem');
+    expect(solarSystem.stackName).toEqual('CoreCosGalSysSolarSystem');
     expect(solarSystemStack).toHaveResource('AWS::Route53::RecordSet');
 
     expect(solarSystemStack).toHaveOutput({ exportName: 'CoreGalSysZoneId' });
@@ -71,7 +73,7 @@ describe('Solar-System', () => {
   });
 
   test('should create shared vpc in galaxy', () => {
-    expect(galaxyStack).toHaveResource('AWS::EC2::VPC');
+    expect(galaxySharedVpcStack).toHaveResource('AWS::EC2::VPC');
   });
 
   test('should inherit env', () => {
@@ -88,7 +90,7 @@ describe('Solar-System', () => {
       const cosmos = new CosmosCoreStack(app, 'Test', { tld: 'com' });
       const galaxy = new GalaxyCoreStack(cosmos, 'Test');
       new SolarSystemCoreStack(galaxy, 'Test');
-    }).toThrowError('NetworkBuilder not found, please define cidr range here (SolarSystem: Test) or Galaxy or Cosmos.');
+    }).toThrowError('Network Builder must be provided.');
   });
 
   test('should have cidr range', () => {
@@ -122,17 +124,18 @@ describe('Solar-System', () => {
   });
 
   test('should match snapshot', () => {
-    expect(galaxyStack.template).toMatchSnapshot();
-    expect(galaxy2Stack.template).toMatchSnapshot();
-    expect(solarSystemStack.template).toMatchSnapshot();
-    expect(solarSystem2Stack.template).toMatchSnapshot();
-    expect(cosmosLinkStack.template).toMatchSnapshot();
+    expect(galaxyStack).toMatchSnapshot();
+    expect(galaxySharedVpcStack).toMatchSnapshot();
+    expect(galaxy2Stack).toMatchSnapshot();
+    expect(solarSystemStack).toMatchSnapshot();
+    expect(solarSystem2Stack).toMatchSnapshot();
+    expect(cosmosLinkStack).toMatchSnapshot();
   });
 });
 
 describe('SolarSystem Extension', () => {
   test('should be a solar system extension', () => {
-    expect(solarSystemExtensionStack.name).toEqual('AppTestGalSysSolarSystem');
+    expect(solarSystemExtension.stackName).toEqual('AppTestGalSysSolarSystem');
   });
 
   test('should inherit env', () => {
@@ -177,7 +180,7 @@ describe('SolarSystem Extension', () => {
     });
 
     const [stack] = synthesizeStacks(sys);
-    expect(stack.template).toMatchSnapshot();
+    expect(stack).toMatchSnapshot();
   });
 
   test('should be able to target the same SolarSystem from multiple Stacks', () => {
@@ -197,8 +200,8 @@ describe('SolarSystem Extension', () => {
     });
 
     const [stack1, stack2] = synthesizeStacks(sys, sys2);
-    expect(stack1.template).toMatchSnapshot();
-    expect(stack2.template).toMatchSnapshot();
+    expect(stack1).toMatchSnapshot();
+    expect(stack2).toMatchSnapshot();
   });
 
   test('should allow resourced to be created in portal', () => {
@@ -213,10 +216,10 @@ describe('SolarSystem Extension', () => {
       domainName: 'test',
     });
     const [solarSystemExtensionStack] = synthesizeStacks(solarSystemExtension);
-    expect(solarSystemExtensionStack.template).toMatchSnapshot();
+    expect(solarSystemExtensionStack).toMatchSnapshot();
   });
 
   test('should match snapshot', () => {
-    expect(solarSystemExtensionStack.template).toMatchSnapshot();
+    expect(solarSystemExtensionStack).toMatchSnapshot();
   });
 });

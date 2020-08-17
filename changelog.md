@@ -1,4 +1,34 @@
 
+## v0.6.0 (2020-08-17)
+
+#### 💥 Breaking Change:
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/common`
+  * [#167](https://github.com/cdk-cosmos/cosmos/pull/167) Breaking Change: Feature Pattern for extending Constructs ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`
+  * [#166](https://github.com/cdk-cosmos/cosmos/pull/166) Clean up Logical Ids + General Clean up ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`, `private`
+  * [#157](https://github.com/cdk-cosmos/cosmos/pull/157) Fix cross account exports (Deprecated AWS CDK Package) ([@timpur](https://github.com/timpur))
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`
+  * [#171](https://github.com/cdk-cosmos/cosmos/pull/171) Clean up Naming + .of and .is static funtions to find constructs ([@timpur](https://github.com/timpur))
+* `@cosmos-building-blocks/common`, `@cosmos-building-blocks/service`
+  * [#160](https://github.com/cdk-cosmos/cosmos/pull/160) Add EC2 Cloud Watch Agent (#158) ([@timpur](https://github.com/timpur))
+* `@cosmos-building-blocks/service`
+  * [#162](https://github.com/cdk-cosmos/cosmos/pull/162) ASG construct with ability to use Launch Template ([@jbnaik](https://github.com/jbnaik))
+  * [#155](https://github.com/cdk-cosmos/cosmos/pull/155) Added Redis Building block ([@jbnaik](https://github.com/jbnaik))
+* `@cdk-cosmos/cdk-credentials-plugin`, `@cdk-cosmos/core`, `@cosmos-building-blocks/app-ec2`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/network`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#156](https://github.com/cdk-cosmos/cosmos/pull/156) Update AWS CDK + Default ASG for ECS ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`
+  * [#166](https://github.com/cdk-cosmos/cosmos/pull/166) Clean up Logical Ids + General Clean up ([@timpur](https://github.com/timpur))
+
+#### Committers: 2
+- Tim P ([@timpur](https://github.com/timpur))
+- [@jbnaik](https://github.com/jbnaik)
+
+
 ## v0.5.4 (2020-07-16)
 
 #### 🐛 Bug Fix
