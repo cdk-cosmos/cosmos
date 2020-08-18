@@ -2,7 +2,7 @@ import { Construct } from '@aws-cdk/core';
 import { Role } from '@aws-cdk/aws-iam';
 import { Project, IProject } from '@aws-cdk/aws-codebuild';
 import { ISolarSystemExtension, SolarSystemExtensionStack } from '../../solar-system/solar-system-extension-stack';
-import { BaseConstruct, BaseConstructProps } from '../../components/base';
+import { BaseFeatureConstruct, BaseFeatureConstructProps } from '../../components/base';
 import { CdkPipeline, CdkPipelineProps } from '../../components/cdk-pipeline';
 import { CDK_PIPELINE_STACK_PATTERN, CDK_PIPELINE_PATTERN } from './cicd-solar-system-core-stack';
 
@@ -11,11 +11,11 @@ export interface ICiCdFeatureExtension extends Construct {
   readonly deployProject?: IProject;
 }
 
-export interface CiCdFeatureExtensionStackProps extends BaseConstructProps {
-  cdkPipelineProps?: Partial<CdkPipelineProps>;
+export interface CiCdFeatureExtensionStackProps extends BaseFeatureConstructProps {
+  cdkPipelineProps?: Partial<CdkPipelineProps> & { useSolarSystemVpc?: boolean };
 }
 
-export class CiCdSFeatureExtensionStack extends BaseConstruct implements ICiCdFeatureExtension {
+export class CiCdFeatureExtensionStack extends BaseFeatureConstruct implements ICiCdFeatureExtension {
   readonly solarSystem: ISolarSystemExtension;
   readonly deployPipeline: CdkPipeline;
   readonly deployProject: Project;
@@ -24,6 +24,7 @@ export class CiCdSFeatureExtensionStack extends BaseConstruct implements ICiCdFe
     super(solarSystem, id, props);
 
     const { cdkPipelineProps } = props || {};
+    const { useSolarSystemVpc = false } = cdkPipelineProps || {};
 
     this.solarSystem = solarSystem;
 
@@ -35,6 +36,8 @@ export class CiCdSFeatureExtensionStack extends BaseConstruct implements ICiCdFe
         mutable: false,
       }),
       deployStacks: [this.solarSystem.nodeId('*', '', CDK_PIPELINE_STACK_PATTERN)],
+      deployVpc: useSolarSystemVpc ? this.solarSystem.portal.vpc : undefined,
+      deploySubnets: { subnetGroupName: 'App' },
       ...cdkPipelineProps,
       pipelineName: this.solarSystem.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
       deployName: this.solarSystem.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
@@ -51,14 +54,14 @@ declare module '../../solar-system/solar-system-extension-stack' {
   }
 
   interface SolarSystemExtensionStack {
-    ciCd?: CiCdSFeatureExtensionStack;
-    addCiCd(props?: CiCdFeatureExtensionStackProps): CiCdSFeatureExtensionStack;
+    ciCd?: CiCdFeatureExtensionStack;
+    addCiCd(props?: CiCdFeatureExtensionStackProps): CiCdFeatureExtensionStack;
   }
 }
 
 SolarSystemExtensionStack.prototype.addCiCd = function(
   props?: CiCdFeatureExtensionStackProps
-): CiCdSFeatureExtensionStack {
-  this.ciCd = new CiCdSFeatureExtensionStack(this, 'CiCd', props);
+): CiCdFeatureExtensionStack {
+  this.ciCd = new CiCdFeatureExtensionStack(this, 'CiCd', props);
   return this.ciCd;
 };

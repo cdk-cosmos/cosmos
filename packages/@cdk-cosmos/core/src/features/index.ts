@@ -20,6 +20,6 @@ export {
 
 export {
   ICiCdFeatureExtension,
-  CiCdSFeatureExtensionStack,
+  CiCdFeatureExtensionStack,
   CiCdFeatureExtensionStackProps,
 } from './cicd-solar-system/cicd-solar-system-extension-stack';

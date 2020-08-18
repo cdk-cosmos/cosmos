@@ -132,6 +132,19 @@ export class BaseFeatureStack extends BaseNestedStack {
   }
 }
 
+export interface BaseFeatureConstructProps extends BaseConstructProps {}
+
+export class BaseFeatureConstruct extends BaseConstruct {
+  constructor(scope: Construct, id: string, props?: BaseFeatureConstructProps) {
+    super(scope, id, {
+      ...props,
+      type: 'Feature',
+    });
+
+    Tag.add(this, 'cosmos:feature', this.node.id);
+  }
+}
+
 declare module '@aws-cdk/core/lib/construct-compat' {
   interface ConstructNode {
     type?: string;
