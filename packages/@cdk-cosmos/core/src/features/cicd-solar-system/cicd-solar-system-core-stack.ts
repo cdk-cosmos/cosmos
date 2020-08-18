@@ -14,7 +14,7 @@ export interface ICiCdFeatureCore extends Construct {
 }
 
 export interface CiCdFeatureCoreStackProps extends BaseFeatureStackProps {
-  cdkPipelineProps?: Partial<CdkPipelineProps>;
+  cdkPipelineProps?: Partial<CdkPipelineProps> & { useSolarSystemVpc?: boolean };
 }
 
 export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatureCore {
@@ -26,6 +26,7 @@ export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatu
     super(solarSystem, id, props);
 
     const { cdkPipelineProps } = props || {};
+    const { useSolarSystemVpc = false } = cdkPipelineProps || {};
 
     this.solarSystem = solarSystem;
 
@@ -37,11 +38,12 @@ export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatu
         mutable: false,
       }),
       deployStacks: [this.solarSystem.nodeId('*', '', CDK_PIPELINE_STACK_PATTERN)],
+      deployVpc: useSolarSystemVpc ? this.solarSystem.vpc : undefined,
+      deploySubnets: { subnetGroupName: 'App' },
       ...cdkPipelineProps,
       pipelineName: this.solarSystem.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
       deployName: this.solarSystem.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
       cdkRepo: cdkRepo,
-      // deployVpc: vpc,
     });
     this.deployProject = this.deployPipeline.deploy;
   }
