@@ -72,6 +72,8 @@ export class TransparentProxy extends Construct {
           instanceId: initialInstanceId,
         });
       }
+    } else {
+      this.node.addWarning('TransparentProxy routes will need to be created manually initially at lest once.');
     }
   }
 

@@ -4,11 +4,11 @@ exports[`CICD-Solar-System Extension should match snapshot 1`] = `
 Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
   "Resources": Object {
-    "CiCdCdkPipeline": Object {
+    "CdkPipeline": Object {
       "Properties": Object {
         "ArtifactStore": Object {
           "Location": Object {
-            "Ref": "CiCdCdkPipelineCdkArtifactBucket",
+            "Ref": "CdkPipelineCdkArtifactBucket",
           },
           "Type": "S3",
         },
@@ -39,7 +39,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "CiCdCdkPipelineSourceCdkCheckoutCodePipelineActionRole",
+                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
                     "Arn",
                   ],
                 },
@@ -60,7 +60,7 @@ Object {
                 "Configuration": Object {
                   "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTest*\\"}]",
                   "ProjectName": Object {
-                    "Ref": "CiCdCdkPipelineDeploy",
+                    "Ref": "CdkPipelineDeploy",
                   },
                 },
                 "InputArtifacts": Array [
@@ -76,7 +76,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "CiCdCdkPipelineDeployCdkDeployCodePipelineActionRole",
+                    "CdkPipelineDeployCdkDeployCodePipelineActionRole",
                     "Arn",
                   ],
                 },
@@ -92,6 +92,10 @@ Object {
             "Value": "Test",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
             "Key": "cosmos:galaxy:extension",
             "Value": "Gal",
           },
@@ -103,7 +107,7 @@ Object {
       },
       "Type": "AWS::CodePipeline::Pipeline",
     },
-    "CiCdCdkPipelineCdkArtifactBucket": Object {
+    "CdkPipelineCdkArtifactBucket": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "AccessControl": "LogDeliveryWrite",
@@ -125,6 +129,10 @@ Object {
             "Value": "Test",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
             "Key": "cosmos:galaxy:extension",
             "Value": "Gal",
           },
@@ -137,10 +145,10 @@ Object {
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
     },
-    "CiCdCdkPipelineCdkArtifactBucketPolicy": Object {
+    "CdkPipelineCdkArtifactBucketPolicy": Object {
       "Properties": Object {
         "Bucket": Object {
-          "Ref": "CiCdCdkPipelineCdkArtifactBucket",
+          "Ref": "CdkPipelineCdkArtifactBucket",
         },
         "PolicyDocument": Object {
           "Statement": Array [
@@ -159,7 +167,7 @@ Object {
                   Array [
                     Object {
                       "Fn::GetAtt": Array [
-                        "CiCdCdkPipelineCdkArtifactBucket",
+                        "CdkPipelineCdkArtifactBucket",
                         "Arn",
                       ],
                     },
@@ -175,11 +183,11 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "CiCdCdkPipelineDeploy": Object {
+    "CdkPipelineDeploy": Object {
       "Properties": Object {
         "Artifacts": Object {
           "Location": Object {
-            "Ref": "CiCdCdkPipelineCdkArtifactBucket",
+            "Ref": "CdkPipelineCdkArtifactBucket",
           },
           "Name": "cdk.templates",
           "NamespaceType": "BUILD_ID",
@@ -248,6 +256,10 @@ Object {
             "Value": "Test",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
             "Key": "cosmos:galaxy:extension",
             "Value": "Gal",
           },
@@ -259,7 +271,7 @@ Object {
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "CiCdCdkPipelineDeployCdkDeployCodePipelineActionRole": Object {
+    "CdkPipelineDeployCdkDeployCodePipelineActionRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -290,6 +302,10 @@ Object {
             "Value": "Test",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
             "Key": "cosmos:galaxy:extension",
             "Value": "Gal",
           },
@@ -301,7 +317,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "CiCdCdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy": Object {
+    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -314,7 +330,7 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "CiCdCdkPipelineDeploy",
+                  "CdkPipelineDeploy",
                   "Arn",
                 ],
               },
@@ -322,16 +338,16 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CiCdCdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy",
+        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "CiCdCdkPipelineDeployCdkDeployCodePipelineActionRole",
+            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "CiCdCdkPipelineSourceCdkCheckoutCodePipelineActionRole": Object {
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -362,6 +378,10 @@ Object {
             "Value": "Test",
           },
           Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
             "Key": "cosmos:galaxy:extension",
             "Value": "Gal",
           },
@@ -373,7 +393,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "CiCdCdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy": Object {
+    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -390,7 +410,7 @@ Object {
               "Resource": Array [
                 Object {
                   "Fn::GetAtt": Array [
-                    "CiCdCdkPipelineCdkArtifactBucket",
+                    "CdkPipelineCdkArtifactBucket",
                     "Arn",
                   ],
                 },
@@ -400,7 +420,7 @@ Object {
                     Array [
                       Object {
                         "Fn::GetAtt": Array [
-                          "CiCdCdkPipelineCdkArtifactBucket",
+                          "CdkPipelineCdkArtifactBucket",
                           "Arn",
                         ],
                       },
@@ -426,10 +446,10 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CiCdCdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy",
+        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy",
         "Roles": Array [
           Object {
-            "Ref": "CiCdCdkPipelineSourceCdkCheckoutCodePipelineActionRole",
+            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
           },
         ],
       },

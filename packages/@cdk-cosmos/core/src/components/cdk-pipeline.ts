@@ -18,7 +18,7 @@ import {
   IProject,
 } from '@aws-cdk/aws-codebuild';
 import { IRole } from '@aws-cdk/aws-iam';
-import { IVpc } from '@aws-cdk/aws-ec2';
+import { IVpc, SubnetSelection, Peer, Port } from '@aws-cdk/aws-ec2';
 import { ISolarSystemCore, ISolarSystemExtension } from '../solar-system';
 import { SecureBucket } from '@cosmos-building-blocks/common';
 
@@ -31,6 +31,7 @@ export interface CdkPipelineProps {
   cdkBranch?: string;
   deployRole?: IRole;
   deployVpc?: IVpc;
+  deploySubnets?: SubnetSelection;
   deployEnvs?: BuildEnvironmentVariables;
   deployStacks?: string[];
 }
@@ -49,6 +50,7 @@ export class CdkPipeline extends Construct {
       cdkBranch = 'master',
       deployRole,
       deployVpc,
+      deploySubnets,
       deployEnvs,
       deployStacks = [],
     } = props;
@@ -59,6 +61,7 @@ export class CdkPipeline extends Construct {
       projectName: deployName,
       role: deployRole,
       vpc: deployVpc,
+      subnetSelection: deploySubnets,
       source: Source.codeCommit({
         repository: cdkRepo,
         branchOrRef: cdkBranch,
@@ -107,6 +110,9 @@ export class CdkPipeline extends Construct {
         packageZip: true,
       }),
     });
+
+    const defaultSG = deployVpc ? this.deploy.connections.securityGroups[0] : undefined;
+    if (defaultSG) defaultSG.addIngressRule(Peer.anyIpv4(), Port.allTraffic(), 'Allow all Inbound traffic by default');
 
     const sourceOutput = new Artifact('CdkCodeOutput');
     const cdkDeployOutput = new Artifact('CdkDeployOutput');

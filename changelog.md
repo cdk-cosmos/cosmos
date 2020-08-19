@@ -1,4 +1,16 @@
 
+## v0.6.1 (2020-08-19)
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`
+  * [#176](https://github.com/cdk-cosmos/cosmos/pull/176) Fix ASG prop for ECS ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/network`
+  * [#175](https://github.com/cdk-cosmos/cosmos/pull/175) Fix Typeo in CiCd Extension Stack + Expose using vpc for cdk pipeline ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.6.0 (2020-08-17)
 
 #### 💥 Breaking Change:
