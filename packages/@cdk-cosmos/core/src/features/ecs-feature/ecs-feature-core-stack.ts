@@ -42,7 +42,7 @@ export interface EcsSolarSystemCoreStackProps extends BaseFeatureStackProps {
 export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeatureCore {
   readonly solarSystem: ISolarSystemCore;
   readonly cluster: Cluster;
-  readonly clusterAutoScalingGroup: AutoScalingGroup;
+  readonly clusterAutoScalingGroup?: AutoScalingGroup;
   readonly alb: ApplicationLoadBalancer;
   readonly httpListener: ApplicationListener;
   readonly httpInternalListener: ApplicationListener;
@@ -74,10 +74,10 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
             }
           : undefined,
     });
+    this.clusterAutoScalingGroup = this.cluster.autoscalingGroup as AutoScalingGroup | undefined;
 
-    const clusterAutoScalingGroup = this.cluster.autoscalingGroup as AutoScalingGroup | undefined;
-    if (clusterAutoScalingGroup) {
-      clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
+    if (this.clusterAutoScalingGroup) {
+      this.clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
     }
 
     const albSecurityGroup =
