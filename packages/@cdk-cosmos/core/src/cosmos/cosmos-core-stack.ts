@@ -64,11 +64,12 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
       roleName: cdkMasterRoleName,
       assumedBy: new CompositePrincipal(
         new ServicePrincipal('codebuild.amazonaws.com'),
-        new ServicePrincipal('codepipeline.amazonaws.com'),
-        new ServicePrincipal('lambda.amazonaws.com')
+        new ServicePrincipal('codepipeline.amazonaws.com')
       ),
     });
     this.cdkMasterRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
+
+    this.cdkMasterRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${cdkMasterRoleName}`;
 
     this.crossAccountExportServiceToken = createCrossAccountExportProvider(this, this.cdkMasterRole);
 
@@ -78,12 +79,10 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     });
     RemoteCodeRepo.export(this.cdkRepo, this.singletonId('CdkRepo'));
     RemoteZone.export(this.rootZone, this.singletonId('RootZone'));
-    // RemoteFunction.export(this.crossAccountExportsFn, this.singletonId('CrossAccountExportsFn'));
     new CfnOutput(this, 'CrossAccountExportServiceToken', {
       exportName: this.singletonId('CrossAccountExportServiceToken'),
       value: this.crossAccountExportServiceToken,
     });
-    this.cdkMasterRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${cdkMasterRoleName}`;
 
     Tag.add(this, 'cosmos', this.node.id);
   }
