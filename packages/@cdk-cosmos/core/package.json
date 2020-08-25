@@ -26,7 +26,8 @@
     "clean": "rm -rf lib"
   },
   "dependencies": {
-    "@cosmos-building-blocks/common": "^0.6.1"
+    "@cosmos-building-blocks/common": "^0.6.1",
+    "@cosmos-building-blocks/pipeline": "^0.6.1"
   },
   "peerDependencies": {
     "@aws-cdk/aws-certificatemanager": "^1.54.0",

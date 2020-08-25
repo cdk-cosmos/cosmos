@@ -3,8 +3,8 @@ import { Role } from '@aws-cdk/aws-iam';
 import { Project, IProject } from '@aws-cdk/aws-codebuild';
 import { ISolarSystemExtension, SolarSystemExtensionStack } from '../../solar-system/solar-system-extension-stack';
 import { BaseFeatureConstruct, BaseFeatureConstructProps } from '../../components/base';
-import { CdkPipeline, CdkPipelineProps } from '../../components/cdk-pipeline';
-import { CDK_PIPELINE_STACK_PATTERN, CDK_PIPELINE_PATTERN } from './cicd-solar-system-core-stack';
+import { CdkPipeline, CdkPipelineProps } from '@cosmos-building-blocks/pipeline';
+import { CDK_PIPELINE_PATTERN } from './cicd-solar-system-core-stack';
 
 export interface ICiCdFeatureExtension extends Construct {
   readonly solarSystem: ISolarSystemExtension;
@@ -17,7 +17,7 @@ export interface CiCdFeatureExtensionStackProps extends BaseFeatureConstructProp
 
 export class CiCdFeatureExtensionStack extends BaseFeatureConstruct implements ICiCdFeatureExtension {
   readonly solarSystem: ISolarSystemExtension;
-  readonly deployPipeline: CdkPipeline;
+  readonly cdkPipeline: CdkPipeline;
   readonly deployProject: Project;
 
   constructor(solarSystem: ISolarSystemExtension, id: string, props?: CiCdFeatureExtensionStackProps) {
@@ -30,18 +30,17 @@ export class CiCdFeatureExtensionStack extends BaseFeatureConstruct implements I
     const cdkMasterRoleStaticArn = this.solarSystem.galaxy.cosmos.portal.cdkMasterRoleStaticArn;
     const cdkRepo = this.solarSystem.galaxy.cosmos.cdkRepo;
 
-    this.deployPipeline = new CdkPipeline(this, 'CdkPipeline', {
+    this.cdkPipeline = new CdkPipeline(this, 'CdkPipeline', {
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', cdkMasterRoleStaticArn, {
         mutable: false,
       }),
-      deployStacks: [this.solarSystem.nodeId('*', '', CDK_PIPELINE_STACK_PATTERN)],
-      deploySubnets: { subnetGroupName: 'App' },
+
       ...cdkPipelineProps,
       pipelineName: this.solarSystem.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
       deployName: this.solarSystem.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
       cdkRepo: cdkRepo,
     });
-    this.deployProject = this.deployPipeline.deploy;
+    this.deployProject = this.cdkPipeline.deploy;
   }
 }
 

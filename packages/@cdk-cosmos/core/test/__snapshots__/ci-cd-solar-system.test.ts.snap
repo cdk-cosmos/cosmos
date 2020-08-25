@@ -58,7 +58,39 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTest*\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"}]",
+                  "ProjectName": Object {
+                    "Ref": "CdkPipelineDeploy",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "Name": "CdkDiff",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDiffCdkDiffCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Diff",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -69,11 +101,6 @@ Object {
                   },
                 ],
                 "Name": "CdkDeploy",
-                "OutputArtifacts": Array [
-                  Object {
-                    "Name": "CdkDeployOutput",
-                  },
-                ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
                     "CdkPipelineDeployCdkDeployCodePipelineActionRole",
@@ -204,9 +231,19 @@ Object {
               "Value": "",
             },
             Object {
+              "Name": "DIFF",
+              "Type": "PLAINTEXT",
+              "Value": "true",
+            },
+            Object {
+              "Name": "DEPLOY",
+              "Type": "PLAINTEXT",
+              "Value": "true",
+            },
+            Object {
               "Name": "STACKS",
               "Type": "PLAINTEXT",
-              "Value": "",
+              "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem",
             },
           ],
           "Image": "aws/codebuild/standard:3.0",
@@ -220,6 +257,7 @@ Object {
   \\"version\\": \\"0.2\\",
   \\"phases\\": {
     \\"install\\": {
+      \\"commands\\": [],
       \\"runtime-versions\\": {
         \\"nodejs\\": \\"12\\"
       }
@@ -232,17 +270,20 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"npx cdk synth \${STACKS}\\",
-        \\"npx cdk deploy --require-approval=never \${STACKS}\\"
+        \\"if [ $DIFF = true ]; then npx cdk diff \${STACKS}; fi;\\",
+        \\"if [ $DEPLOY = true ]; then npx cdk deploy --require-approval=never \${STACKS}; fi;\\"
       ]
     }
   },
-  \\"artifacts\\": {
-    \\"base-directory\\": \\"cdk.out\\",
-    \\"files\\": [
-      \\"*.template.json\\"
-    ]
-  }
+  \\"env\\": {},
+  \\"artifacts\\": [
+    {
+      \\"base-directory\\": \\"cdk.out\\",
+      \\"files\\": [
+        \\"*.template.json\\"
+      ]
+    }
+  ]
 }",
           "Location": Object {
             "Fn::ImportValue": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
@@ -296,24 +337,6 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos:extension",
-            "Value": "Test",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy:extension",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem:extension",
-            "Value": "CiCd",
-          },
-        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -342,6 +365,82 @@ Object {
         "Roles": Array [
           Object {
             "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CdkPipelineDiffCdkDiffCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineDiffCdkDiffCodePipelineActionRoleDefaultPolicy": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "CdkPipelineDeploy",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPipelineDiffCdkDiffCodePipelineActionRoleDefaultPolicy",
+        "Roles": Array [
+          Object {
+            "Ref": "CdkPipelineDiffCdkDiffCodePipelineActionRole",
           },
         ],
       },
@@ -559,16 +658,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"b282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57d\\"",
+    "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55\\"",
       "Type": "String",
     },
-    "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"b282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57d\\"",
+    "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55\\"",
       "Type": "String",
     },
-    "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"b282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57d\\"",
+    "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55\\"",
       "Type": "String",
     },
   },
@@ -599,7 +698,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dS3Bucket",
+                "Ref": "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55S3Bucket",
               },
               "/",
               Object {
@@ -609,7 +708,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dS3VersionKey",
+                        "Ref": "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55S3VersionKey",
                       },
                     ],
                   },
@@ -622,7 +721,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersb282cf107855f859616e56f6f524c18b55fad5eaffb85cba903de71fade9a57dS3VersionKey",
+                        "Ref": "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55S3VersionKey",
                       },
                     ],
                   },
@@ -1238,7 +1337,39 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCos*\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"}]",
+                  "ProjectName": Object {
+                    "Ref": "CdkPipelineDeploy",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "Name": "CdkDiff",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDiffCdkDiffCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Diff",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -1249,11 +1380,6 @@ Object {
                   },
                 ],
                 "Name": "CdkDeploy",
-                "OutputArtifacts": Array [
-                  Object {
-                    "Name": "CdkDeployOutput",
-                  },
-                ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
                     "CdkPipelineDeployCdkDeployCodePipelineActionRole",
@@ -1384,9 +1510,19 @@ Object {
               "Value": "",
             },
             Object {
+              "Name": "DIFF",
+              "Type": "PLAINTEXT",
+              "Value": "true",
+            },
+            Object {
+              "Name": "DEPLOY",
+              "Type": "PLAINTEXT",
+              "Value": "true",
+            },
+            Object {
               "Name": "STACKS",
               "Type": "PLAINTEXT",
-              "Value": "",
+              "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem",
             },
           ],
           "Image": "aws/codebuild/standard:3.0",
@@ -1400,6 +1536,7 @@ Object {
   \\"version\\": \\"0.2\\",
   \\"phases\\": {
     \\"install\\": {
+      \\"commands\\": [],
       \\"runtime-versions\\": {
         \\"nodejs\\": \\"12\\"
       }
@@ -1412,17 +1549,20 @@ Object {
     },
     \\"build\\": {
       \\"commands\\": [
-        \\"npx cdk synth \${STACKS}\\",
-        \\"npx cdk deploy --require-approval=never \${STACKS}\\"
+        \\"if [ $DIFF = true ]; then npx cdk diff \${STACKS}; fi;\\",
+        \\"if [ $DEPLOY = true ]; then npx cdk deploy --require-approval=never \${STACKS}; fi;\\"
       ]
     }
   },
-  \\"artifacts\\": {
-    \\"base-directory\\": \\"cdk.out\\",
-    \\"files\\": [
-      \\"*.template.json\\"
-    ]
-  }
+  \\"env\\": {},
+  \\"artifacts\\": [
+    {
+      \\"base-directory\\": \\"cdk.out\\",
+      \\"files\\": [
+        \\"*.template.json\\"
+      ]
+    }
+  ]
 }",
           "Location": Object {
             "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
@@ -1476,24 +1616,6 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -1522,6 +1644,82 @@ Object {
         "Roles": Array [
           Object {
             "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CdkPipelineDiffCdkDiffCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineDiffCdkDiffCodePipelineActionRoleDefaultPolicy": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "CdkPipelineDeploy",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPipelineDiffCdkDiffCodePipelineActionRoleDefaultPolicy",
+        "Roles": Array [
+          Object {
+            "Ref": "CdkPipelineDiffCdkDiffCodePipelineActionRole",
           },
         ],
       },

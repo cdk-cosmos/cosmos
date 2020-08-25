@@ -13,7 +13,7 @@ import {
   IBuildImage,
 } from '@aws-cdk/aws-codebuild';
 import { IRole } from '@aws-cdk/aws-iam';
-import { IVpc } from '@aws-cdk/aws-ec2';
+import { IVpc, SubnetSelection } from '@aws-cdk/aws-ec2';
 import { SecureBucket } from '@cosmos-building-blocks/common';
 import { BuildSpecObject, BuildSpecBuilder } from './build-spec';
 
@@ -24,6 +24,7 @@ export interface StandardPipelineProps {
   codeBranch?: string;
   buildRole?: IRole;
   buildVpc?: IVpc;
+  buildSubnets?: SubnetSelection;
   buildEnvs?: BuildEnvironmentVariables;
   buildSpec?: BuildSpec | BuildSpecObject;
   buildImage?: IBuildImage;
@@ -44,6 +45,7 @@ export class StandardPipeline extends Construct {
       codeBranch = 'master',
       buildRole,
       buildVpc,
+      buildSubnets,
       buildEnvs,
       buildSpec,
       buildImage = LinuxBuildImage.STANDARD_3_0,
@@ -63,6 +65,7 @@ export class StandardPipeline extends Construct {
       projectName: buildName,
       role: buildRole,
       vpc: buildVpc,
+      subnetSelection: buildSubnets,
       source: Source.codeCommit({
         repository: codeRepo,
         branchOrRef: codeBranch,
