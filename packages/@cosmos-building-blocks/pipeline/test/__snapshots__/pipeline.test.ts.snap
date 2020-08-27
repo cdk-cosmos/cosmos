@@ -87,6 +87,25 @@ Object {
                 },
                 "RunOrder": 1,
               },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Approval",
+                  "Owner": "AWS",
+                  "Provider": "Manual",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "CustomData": "Please review the CdkDiff build.",
+                },
+                "Name": "CdkDiffApproval",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineDiffCdkDiffApprovalCodePipelineActionRole8B081ECC",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
             ],
             "Name": "Diff",
           },
@@ -581,6 +600,38 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
+    "PipelineDiffCdkDiffApprovalCodePipelineActionRole8B081ECC": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
     "PipelineDiffCdkDiffCodePipelineActionRole32B8303F": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -713,6 +764,16 @@ Object {
               "Resource": Object {
                 "Fn::GetAtt": Array [
                   "PipelineDiffCdkDiffCodePipelineActionRole32B8303F",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "PipelineDiffCdkDiffApprovalCodePipelineActionRole8B081ECC",
                   "Arn",
                 ],
               },
@@ -1042,6 +1103,25 @@ Object {
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
                     "PipelineDiffCdkDiffCodePipelineActionRole32B8303F",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Approval",
+                  "Owner": "AWS",
+                  "Provider": "Manual",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "CustomData": "Please review the CdkDiff build.",
+                },
+                "Name": "CdkDiffApproval",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineDiffCdkDiffApprovalCodePipelineActionRole8B081ECC",
                     "Arn",
                   ],
                 },
@@ -1635,6 +1715,38 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
+    "PipelineDiffCdkDiffApprovalCodePipelineActionRole8B081ECC": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
     "PipelineDiffCdkDiffCodePipelineActionRole32B8303F": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -1767,6 +1879,16 @@ Object {
               "Resource": Object {
                 "Fn::GetAtt": Array [
                   "PipelineDiffCdkDiffCodePipelineActionRole32B8303F",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "PipelineDiffCdkDiffApprovalCodePipelineActionRole8B081ECC",
                   "Arn",
                 ],
               },
@@ -2106,6 +2228,25 @@ Object {
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
                     "PipelineDiffCdkDiffCodePipelineActionRole32B8303F",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Approval",
+                  "Owner": "AWS",
+                  "Provider": "Manual",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "CustomData": "Please review the CdkDiff build.",
+                },
+                "Name": "CdkDiffApproval",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineDiffCdkDiffApprovalCodePipelineActionRole8B081ECC",
                     "Arn",
                   ],
                 },
@@ -2557,6 +2698,38 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
+    "PipelineDiffCdkDiffApprovalCodePipelineActionRole8B081ECC": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
     "PipelineDiffCdkDiffCodePipelineActionRole32B8303F": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -2689,6 +2862,16 @@ Object {
               "Resource": Object {
                 "Fn::GetAtt": Array [
                   "PipelineDiffCdkDiffCodePipelineActionRole32B8303F",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "PipelineDiffCdkDiffApprovalCodePipelineActionRole8B081ECC",
                   "Arn",
                 ],
               },

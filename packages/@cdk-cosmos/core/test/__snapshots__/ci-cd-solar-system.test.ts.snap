@@ -77,6 +77,25 @@ Object {
                 },
                 "RunOrder": 1,
               },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Approval",
+                  "Owner": "AWS",
+                  "Provider": "Manual",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "CustomData": "Please review the CdkDiff build.",
+                },
+                "Name": "CdkDiffApproval",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDiffCdkDiffApprovalCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
             ],
             "Name": "Diff",
           },
@@ -370,6 +389,52 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
+    "CdkPipelineDiffCdkDiffApprovalCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
     "CdkPipelineDiffCdkDiffCodePipelineActionRole": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -658,16 +723,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55\\"",
+    "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"bed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfead\\"",
       "Type": "String",
     },
-    "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55\\"",
+    "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"bed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfead\\"",
       "Type": "String",
     },
-    "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55\\"",
+    "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"bed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfead\\"",
       "Type": "String",
     },
   },
@@ -698,7 +763,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55S3Bucket",
+                "Ref": "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadS3Bucket",
               },
               "/",
               Object {
@@ -708,7 +773,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55S3VersionKey",
+                        "Ref": "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadS3VersionKey",
                       },
                     ],
                   },
@@ -721,7 +786,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters5aca36e49d902725545c130844b42f0152f6d376a48c29b1364996c5c99c2a55S3VersionKey",
+                        "Ref": "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadS3VersionKey",
                       },
                     ],
                   },
@@ -1356,6 +1421,25 @@ Object {
                 },
                 "RunOrder": 1,
               },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Approval",
+                  "Owner": "AWS",
+                  "Provider": "Manual",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "CustomData": "Please review the CdkDiff build.",
+                },
+                "Name": "CdkDiffApproval",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDiffCdkDiffApprovalCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
             ],
             "Name": "Diff",
           },
@@ -1648,6 +1732,52 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "CdkPipelineDiffCdkDiffApprovalCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "CdkPipelineDiffCdkDiffCodePipelineActionRole": Object {
       "Properties": Object {

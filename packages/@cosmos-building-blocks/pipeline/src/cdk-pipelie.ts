@@ -164,6 +164,10 @@ export class CdkPipeline extends Construct {
               },
             },
           }),
+          new ManualApprovalAction({
+            actionName: 'CdkDiffApproval',
+            additionalInformation: 'Please review the CdkDiff build.',
+          }),
         ],
       });
       this.hasDiffStage = true;
