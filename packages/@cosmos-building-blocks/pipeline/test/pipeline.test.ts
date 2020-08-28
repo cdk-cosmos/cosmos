@@ -62,7 +62,6 @@ describe('Cdk Pipeline', () => {
     const app = new App();
     const stack = new Stack(app, 'Test');
     const stack2 = new Stack(app, 'Test2');
-    const stack3 = new Stack(app, 'Test3');
 
     const repo = new Repository(stack, 'Repo', {
       repositoryName: 'repo',
@@ -73,6 +72,9 @@ describe('Cdk Pipeline', () => {
     });
 
     cdk.addDeployStackStage({ name: 'TestStage', stacks: [stack2] });
+
+    // Should be able to add stacks after CdkPipeline
+    new Stack(app, 'Test3');
 
     const synth = SynthUtils.synthesize(stack);
 
@@ -84,9 +86,6 @@ describe('Cdk Pipeline', () => {
     const app = new App();
     const stack = new Stack(app, 'Test');
     const stack2 = new Stack(app, 'Test2');
-    const stack3 = new Stack(app, 'Test3');
-
-    stack3.addDependency(stack2);
 
     const repo = new Repository(stack, 'Repo', {
       repositoryName: 'repo',
@@ -97,6 +96,12 @@ describe('Cdk Pipeline', () => {
     });
 
     cdk.addDeployStackStage({ name: 'TestStage', stacks: [stack2] });
+
+    // Should be able to add stacks after CdkPipeline
+    const stack3 = new Stack(app, 'Test3');
+    stack3.addDependency(stack2);
+    const stack4 = new Stack(app, 'Test4');
+    stack4.node.addDependency(stack3);
 
     const synth = SynthUtils.synthesize(stack);
 

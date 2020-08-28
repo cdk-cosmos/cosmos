@@ -12,16 +12,27 @@ import {
 
 const app = new App();
 const env = { account: 'account', region: 'region' };
+const env2 = { account: 'account2', region: 'region' };
 
 const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'cos.com', cidr: '10.0.1.0/22', env });
 const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { env });
 const solarSystem = new SolarSystemCoreStack(galaxy, 'CiCd', { env });
 solarSystem.addCiCd();
+const solarSystem2 = new SolarSystemCoreStack(galaxy, 'Sys2', { env: env2 });
+solarSystem.addDeployStackStage({
+  name: 'DeployTest',
+  stacks: [solarSystem2],
+});
 
 const cosmosExtension = new CosmosExtensionStack(app, 'Test', { env });
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });
 const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'CiCd', { env });
 solarSystemExtension.addCiCd();
+const solarSystemExtension2 = new SolarSystemExtensionStack(galaxyExtension, 'Sys2', { env: env2 });
+solarSystemExtension.addDeployStackStage({
+  name: 'DeployTest',
+  stacks: [solarSystemExtension2],
+});
 
 const [
   cosmosStack,

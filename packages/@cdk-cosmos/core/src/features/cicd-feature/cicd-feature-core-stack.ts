@@ -4,7 +4,7 @@ import { Project, IProject } from '@aws-cdk/aws-codebuild';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
 import { BaseFeatureStack, BaseFeatureStackProps } from '../../components/base';
-import { CdkPipeline, CdkPipelineProps } from '@cosmos-building-blocks/pipeline';
+import { CdkPipeline, CdkPipelineProps, AddDeployStackStageProps } from '@cosmos-building-blocks/pipeline';
 
 export const CDK_PIPELINE_PATTERN = '{Partition}{Cosmos}{Resource}';
 
@@ -59,10 +59,17 @@ declare module '../../solar-system/solar-system-core-stack' {
   interface SolarSystemCoreStack {
     ciCd?: CiCdFeatureCoreStack;
     addCiCd(props?: CiCdFeatureCoreStackProps): CiCdFeatureCoreStack;
+    addDeployStackStage(props: AddDeployStackStageProps): void;
   }
 }
 
 SolarSystemCoreStack.prototype.addCiCd = function(props?: CiCdFeatureCoreStackProps): CiCdFeatureCoreStack {
   this.ciCd = new CiCdFeatureCoreStack(this, 'CiCd', props);
   return this.ciCd;
+};
+
+SolarSystemCoreStack.prototype.addDeployStackStage = function(props): void {
+  if (!this.ciCd) throw new Error('Can not addDeployStackStage to SolarSytem without an CiCd feature.');
+
+  this.ciCd.cdkPipeline.addDeployStackStage(props);
 };

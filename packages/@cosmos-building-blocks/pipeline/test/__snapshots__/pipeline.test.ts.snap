@@ -1220,7 +1220,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"Test3\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"Test3 Test4\\"}]",
                   "ProjectName": Object {
                     "Ref": "PipelineDeployAD96A9BD",
                   },
@@ -1337,7 +1337,7 @@ Object {
             Object {
               "Name": "STACKS",
               "Type": "PLAINTEXT",
-              "Value": "Test Test2 Test3",
+              "Value": "Test Test2 Test3 Test4",
             },
           ],
           "Image": "aws/codebuild/standard:3.0",

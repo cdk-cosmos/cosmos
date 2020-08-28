@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Construct, Stack, IConstruct } from '@aws-cdk/core';
+import { Construct, Stack, IConstruct, Lazy, IResolvable } from '@aws-cdk/core';
 import { IRepository } from '@aws-cdk/aws-codecommit';
 import { Pipeline, Artifact, IAction, IStage } from '@aws-cdk/aws-codepipeline';
 import {
@@ -38,8 +38,16 @@ export interface CdkPipelineProps {
   deployDiffStage?: boolean;
 }
 
+export interface AddDeployStackStageProps {
+  name: string;
+  stacks: Array<Stack | string>;
+  pipeline?: Pipeline;
+  envs?: BuildEnvironmentVariables;
+  isManualApprovalRequired?: boolean;
+}
+
 export class CdkPipeline extends Construct {
-  readonly stacks: Array<Stack | string>;
+  readonly stacks: IResolvable;
   readonly cdkRepo: IRepository;
   readonly deploy: Project;
   readonly pipeline: Pipeline;
@@ -57,11 +65,17 @@ export class CdkPipeline extends Construct {
       deployVpc,
       deploySubnets,
       deployEnvs,
-      deployStacks = findAllStacksFromCdkApp(scope),
+      deployStacks,
       deployDiffStage = true,
     } = props;
 
-    this.stacks = deployStacks;
+    if (deployStacks && deployStacks.length === 0) {
+      throw new Error('DeployStacks must be >= 1');
+    }
+
+    this.stacks = Lazy.anyValue({
+      produce: () => stackNames(deployStacks || findAllStacksFromCdkApp(scope)),
+    });
     this.cdkRepo = cdkRepo;
 
     const artifactBucket = new SecureBucket(this, 'CdkArtifactBucket');
@@ -106,7 +120,9 @@ export class CdkPipeline extends Construct {
           },
           STACKS: {
             type: BuildEnvironmentVariableType.PLAINTEXT,
-            value: stackNames(this.stacks).join(' '),
+            value: Lazy.stringValue({
+              produce: context => this.stacks.resolve(context).join(' '),
+            }),
           },
           ...deployEnvs,
         },
@@ -176,14 +192,12 @@ export class CdkPipeline extends Construct {
     (this.pipeline as any).prepare = this.preparePipeline.bind(this);
   }
 
-  addDeployStackStage(props: {
-    name: string;
-    stacks: Array<Stack | string>;
-    pipeline?: Pipeline;
-    envs?: BuildEnvironmentVariables;
-    isManualApprovalRequired?: boolean;
-  }): void {
+  addDeployStackStage(props: AddDeployStackStageProps): void {
     const { name, stacks, pipeline = this.pipeline, envs = {}, isManualApprovalRequired = true } = props || {};
+
+    if (stacks && stacks.length === 0) {
+      throw new Error('Stacks must be >= 1');
+    }
 
     let cdkOutputArtifact = findOutputFromCdkCheckout(pipeline.stages);
     if (!cdkOutputArtifact) {
@@ -214,20 +228,24 @@ export class CdkPipeline extends Construct {
         project: this.deploy,
         input: cdkOutputArtifact,
         environmentVariables: envs,
-        stacks: stacks,
+        stacks: stackNames(stacks),
         hasDiffStage: this.hasDiffStage,
       })
     );
   }
 
   preparePipeline(): void {
+    const allStacks = findAllStacksFromCdkApp(this);
+    const stacks = Stack.of(this).resolve(this.stacks) as string[];
     const stackStages = findStacksFromCdkDeployActions(this.pipeline.stages);
-    const remainingStacks = stackNames(this.stacks).filter(x => !stackNames(stackStages).includes(x));
-    const depStacks = this.stacks
-      .filter(Stack.isStack)
-      .filter(x => stackNames(x.dependencies).some(x => stackNames(stackStages).includes(x)));
-    const beforeStacks = remainingStacks.filter(x => !stackNames(depStacks).includes(x));
-    const afterStacks = remainingStacks.filter(x => stackNames(depStacks).includes(x));
+    const remainingStacks = stacks.filter(x => !stackStages.includes(x));
+    const depStacks = stacks
+      .map(x => allStacks.find(y => x === y.stackName) as Stack)
+      .filter(x => x)
+      .filter(x => stackNames(findStackDependencies(x)).some(x => stackStages.includes(x)))
+      .map(x => x.stackName);
+    const beforeStacks = remainingStacks.filter(x => !depStacks.includes(x));
+    const afterStacks = remainingStacks.filter(x => depStacks.includes(x));
 
     const cdkOutputArtifact = findOutputFromCdkCheckout(this.pipeline.stages) as Artifact;
 
@@ -268,8 +286,8 @@ export class CdkPipeline extends Construct {
 
 export class CdkDeployAction extends CodeBuildAction {
   // readonly actionProperties: ActionProperties & { environmentVariables?: BuildEnvironmentVariables };
-  stacks: Array<Stack | string>;
-  constructor(props: CodeBuildActionProps & { stacks?: Array<Stack | string>; hasDiffStage?: boolean }) {
+  stacks: string[];
+  constructor(props: CodeBuildActionProps & { stacks?: string[]; hasDiffStage?: boolean }) {
     const { stacks = [], hasDiffStage, environmentVariables } = props;
     const envs: BuildEnvironmentVariables = {
       DIFF: {
@@ -285,7 +303,7 @@ export class CdkDeployAction extends CodeBuildAction {
     if (stacks) {
       envs.STACKS = {
         type: BuildEnvironmentVariableType.PLAINTEXT,
-        value: stackNames(stacks).join(' '),
+        value: stacks.join(' '),
       };
     }
 
@@ -325,18 +343,34 @@ const findOutputFromCdkCheckout = (stages: IStage[]): Artifact | undefined => {
   return action.actionProperties.outputs[0];
 };
 
-const findStacksFromCdkDeployActions = (stages: IStage[]): Array<Stack | string> =>
+const findStacksFromCdkDeployActions = (stages: IStage[]): string[] =>
   stages
     .reduce<IAction[]>((res, item) => {
       res.push(...item.actions);
       return res;
     }, [])
     .filter(CdkDeployAction.isCdkDeployAction)
-    .reduce<Array<Stack | string>>((res, item) => {
+    .reduce<string[]>((res, item) => {
       if (item.stacks) res.push(...item.stacks);
       return res;
     }, []);
 
 const stackNames = (stacks: Array<Stack | string>): string[] => {
   return stacks.map(x => (typeof x === 'string' ? x : x.stackName));
+};
+
+const findStackDependencies = (stack: Stack): Stack[] => {
+  const deps = [
+    ...stack.dependencies,
+    ...stack.node.dependencies.filter(x => Stack.of(x.source) === stack).map(x => Stack.of(x.target)),
+  ]
+    .filter(x => x !== stack)
+    .reduce<Stack[]>((res, item) => {
+      if (!res.includes(item)) {
+        res.push(item, ...findStackDependencies(item));
+      }
+      return res;
+    }, []);
+
+  return deps;
 };
