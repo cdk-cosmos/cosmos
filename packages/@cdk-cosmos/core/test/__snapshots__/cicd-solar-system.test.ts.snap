@@ -109,7 +109,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -130,6 +130,54 @@ Object {
               },
             ],
             "Name": "Deploy",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Approval",
+                  "Owner": "AWS",
+                  "Provider": "Manual",
+                  "Version": "1",
+                },
+                "Name": "StackApproval",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDeployTestStackApprovalCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTestGalSys2SolarSystem\\"}]",
+                  "ProjectName": Object {
+                    "Ref": "CdkPipelineDeploy",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "Name": "StackDeploy",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDeployTestStackDeployCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "DeployTest",
           },
         ],
         "Tags": Array [
@@ -262,7 +310,7 @@ Object {
             Object {
               "Name": "STACKS",
               "Type": "PLAINTEXT",
-              "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem",
+              "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
             },
           ],
           "Image": "aws/codebuild/standard:3.0",
@@ -384,6 +432,128 @@ Object {
         "Roles": Array [
           Object {
             "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CdkPipelineDeployTestStackApprovalCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineDeployTestStackDeployCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "Test",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineDeployTestStackDeployCodePipelineActionRoleDefaultPolicy": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "CdkPipelineDeploy",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPipelineDeployTestStackDeployCodePipelineActionRoleDefaultPolicy",
+        "Roles": Array [
+          Object {
+            "Ref": "CdkPipelineDeployTestStackDeployCodePipelineActionRole",
           },
         ],
       },
@@ -723,16 +893,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"bed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfead\\"",
+    "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9\\"",
       "Type": "String",
     },
-    "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"bed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfead\\"",
+    "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9\\"",
       "Type": "String",
     },
-    "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"bed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfead\\"",
+    "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9\\"",
       "Type": "String",
     },
   },
@@ -763,7 +933,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadS3Bucket",
+                "Ref": "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9S3Bucket",
               },
               "/",
               Object {
@@ -773,7 +943,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadS3VersionKey",
+                        "Ref": "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9S3VersionKey",
                       },
                     ],
                   },
@@ -786,7 +956,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersbed181fa08c287cb4fa11764edc5277243972b610795f0e0791b13b739edfeadS3VersionKey",
+                        "Ref": "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9S3VersionKey",
                       },
                     ],
                   },
@@ -1453,7 +1623,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -1474,6 +1644,86 @@ Object {
               },
             ],
             "Name": "Deploy",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Approval",
+                  "Owner": "AWS",
+                  "Provider": "Manual",
+                  "Version": "1",
+                },
+                "Name": "StackApproval",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDeployTestStackApprovalCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosGalSys2SolarSystem\\"}]",
+                  "ProjectName": Object {
+                    "Ref": "CdkPipelineDeploy",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "Name": "StackDeploy",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDeployTestStackDeployCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "DeployTest",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosLink\\"}]",
+                  "ProjectName": Object {
+                    "Ref": "CdkPipelineDeploy",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "Name": "DependantStackDeploy",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "CdkPipelineDeployDependantStacksDependantStackDeployCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "DeployDependantStacks",
           },
         ],
         "Tags": Array [
@@ -1606,7 +1856,7 @@ Object {
             Object {
               "Name": "STACKS",
               "Type": "PLAINTEXT",
-              "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem",
+              "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
             },
           ],
           "Image": "aws/codebuild/standard:3.0",
@@ -1728,6 +1978,186 @@ Object {
         "Roles": Array [
           Object {
             "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CdkPipelineDeployDependantStacksDependantStackDeployCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineDeployDependantStacksDependantStackDeployCodePipelineActionRoleDefaultPolicy": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "CdkPipelineDeploy",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPipelineDeployDependantStacksDependantStackDeployCodePipelineActionRoleDefaultPolicy",
+        "Roles": Array [
+          Object {
+            "Ref": "CdkPipelineDeployDependantStacksDependantStackDeployCodePipelineActionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CdkPipelineDeployTestStackApprovalCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineDeployTestStackDeployCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPipelineDeployTestStackDeployCodePipelineActionRoleDefaultPolicy": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "CdkPipelineDeploy",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPipelineDeployTestStackDeployCodePipelineActionRoleDefaultPolicy",
+        "Roles": Array [
+          Object {
+            "Ref": "CdkPipelineDeployTestStackDeployCodePipelineActionRole",
           },
         ],
       },

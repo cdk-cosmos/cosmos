@@ -152,10 +152,18 @@ declare module '@aws-cdk/core/lib/construct-compat' {
   }
 
   interface Construct {
+    evalId(pattern: string): string;
     nodeId(id?: string, delimiter?: string, pattern?: string, type?: string): string;
     singletonId(id?: string, delimiter?: string, type?: string): string;
   }
 }
+
+Construct.prototype.evalId = function(pattern): string {
+  return generateScopeId({
+    scope: this,
+    pattern: pattern,
+  });
+};
 
 Construct.prototype.nodeId = function(id, delimiter, pattern, type): string {
   return generateNodeId({ scope: this, pattern, id, type, delimiter });

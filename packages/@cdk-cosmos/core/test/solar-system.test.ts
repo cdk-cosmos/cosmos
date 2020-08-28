@@ -15,7 +15,7 @@ import { SolarSystemCoreImport } from '../src/solar-system';
 
 const app = new App();
 const env = { account: 'account', region: 'region' };
-const env2 = { account: 'account2', region: 'region2' };
+const env2 = { account: 'account2', region: 'region' };
 
 const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'cos.com', cidr: '10.0.1.0/22', env });
 const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { env });

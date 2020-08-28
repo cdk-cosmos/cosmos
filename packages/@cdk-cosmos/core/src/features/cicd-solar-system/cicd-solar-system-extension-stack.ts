@@ -1,9 +1,9 @@
-import { Construct } from '@aws-cdk/core';
+import { Construct, Stack } from '@aws-cdk/core';
 import { Role } from '@aws-cdk/aws-iam';
 import { Project, IProject } from '@aws-cdk/aws-codebuild';
 import { ISolarSystemExtension, SolarSystemExtensionStack } from '../../solar-system/solar-system-extension-stack';
 import { BaseFeatureConstruct, BaseFeatureConstructProps } from '../../components/base';
-import { CdkPipeline, CdkPipelineProps } from '@cosmos-building-blocks/pipeline';
+import { CdkPipeline, CdkPipelineProps, AddDeployStackStageProps } from '@cosmos-building-blocks/pipeline';
 import { CDK_PIPELINE_PATTERN } from './cicd-solar-system-core-stack';
 
 export interface ICiCdFeatureExtension extends Construct {
@@ -52,6 +52,7 @@ declare module '../../solar-system/solar-system-extension-stack' {
   interface SolarSystemExtensionStack {
     ciCd?: CiCdFeatureExtensionStack;
     addCiCd(props?: CiCdFeatureExtensionStackProps): CiCdFeatureExtensionStack;
+    addDeployStackStage(props: AddDeployStackStageProps): void;
   }
 }
 
@@ -60,4 +61,10 @@ SolarSystemExtensionStack.prototype.addCiCd = function(
 ): CiCdFeatureExtensionStack {
   this.ciCd = new CiCdFeatureExtensionStack(this, 'CiCd', props);
   return this.ciCd;
+};
+
+SolarSystemExtensionStack.prototype.addDeployStackStage = function(props): void {
+  if (!this.ciCd) throw new Error('Can not addDeployStackStage to SolarSytem without an CiCd feature.');
+
+  this.ciCd.cdkPipeline.addDeployStackStage(props);
 };
