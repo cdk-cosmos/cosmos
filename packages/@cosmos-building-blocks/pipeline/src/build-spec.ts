@@ -28,7 +28,6 @@ export interface Artifact {
   name?: string;
   'discard-paths'?: string;
   'base-directory'?: string;
-  'secondary-artifacts'?: object[];
 }
 
 export type BuildSpecObject = {
@@ -52,7 +51,7 @@ export type BuildSpecObject = {
     logs?: boolean;
   };
   reports?: Report[];
-  artifacts?: Artifact[];
+  artifacts?: Artifact & { 'secondary-artifacts'?: Artifact[] };
   cache?: {
     paths: string[];
   };
@@ -116,9 +115,16 @@ export class BuildSpecBuilder extends BuildSpec {
     return this;
   }
 
-  addArtifacts(...artifact: Artifact[]): BuildSpecBuilder {
-    if (!this.spec.artifacts) this.spec.artifacts = [];
-    this.spec.artifacts.push(...artifact);
+  setArtifact(artifact: Artifact): BuildSpecBuilder {
+    this.spec.artifacts = artifact;
+
+    return this;
+  }
+
+  addSecondaryArtifacts(...artifact: Artifact[]): BuildSpecBuilder {
+    if (!this.spec.artifacts) throw new Error('An Artifact must be set first.');
+    if (!this.spec.artifacts['secondary-artifacts']) this.spec.artifacts['secondary-artifacts'] = [];
+    this.spec.artifacts['secondary-artifacts'].push(...artifact);
 
     return this;
   }

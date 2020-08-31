@@ -104,7 +104,7 @@ Object {
                     "Arn",
                   ],
                 },
-                "RunOrder": 1,
+                "RunOrder": 2,
               },
             ],
             "Name": "Diff",
@@ -184,7 +184,7 @@ Object {
                     "Arn",
                   ],
                 },
-                "RunOrder": 1,
+                "RunOrder": 2,
               },
             ],
             "Name": "TestStage",
@@ -321,14 +321,12 @@ Object {
     }
   },
   \\"env\\": {},
-  \\"artifacts\\": [
-    {
-      \\"base-directory\\": \\"cdk.out\\",
-      \\"files\\": [
-        \\"*.template.json\\"
-      ]
-    }
-  ]
+  \\"artifacts\\": {
+    \\"base-directory\\": \\"cdk.out\\",
+    \\"files\\": [
+      \\"*.template.json\\"
+    ]
+  }
 }",
           "Location": Object {
             "Fn::GetAtt": Array [
@@ -1125,7 +1123,7 @@ Object {
                     "Arn",
                   ],
                 },
-                "RunOrder": 1,
+                "RunOrder": 2,
               },
             ],
             "Name": "Diff",
@@ -1205,7 +1203,7 @@ Object {
                     "Arn",
                   ],
                 },
-                "RunOrder": 1,
+                "RunOrder": 2,
               },
             ],
             "Name": "TestStage",
@@ -1374,14 +1372,12 @@ Object {
     }
   },
   \\"env\\": {},
-  \\"artifacts\\": [
-    {
-      \\"base-directory\\": \\"cdk.out\\",
-      \\"files\\": [
-        \\"*.template.json\\"
-      ]
-    }
-  ]
+  \\"artifacts\\": {
+    \\"base-directory\\": \\"cdk.out\\",
+    \\"files\\": [
+      \\"*.template.json\\"
+    ]
+  }
 }",
           "Location": Object {
             "Fn::GetAtt": Array [
@@ -2250,7 +2246,7 @@ Object {
                     "Arn",
                   ],
                 },
-                "RunOrder": 1,
+                "RunOrder": 2,
               },
             ],
             "Name": "Diff",
@@ -2419,14 +2415,12 @@ Object {
     }
   },
   \\"env\\": {},
-  \\"artifacts\\": [
-    {
-      \\"base-directory\\": \\"cdk.out\\",
-      \\"files\\": [
-        \\"*.template.json\\"
-      ]
-    }
-  ]
+  \\"artifacts\\": {
+    \\"base-directory\\": \\"cdk.out\\",
+    \\"files\\": [
+      \\"*.template.json\\"
+    ]
+  }
 }",
           "Location": Object {
             "Fn::GetAtt": Array [

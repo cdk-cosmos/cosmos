@@ -88,7 +88,7 @@ export class CdkPipeline extends Construct {
         'if [ $DIFF = true ]; then npx cdk diff ${STACKS}; fi;',
         'if [ $DEPLOY = true ]; then npx cdk deploy --require-approval=never ${STACKS}; fi;'
       )
-      .addArtifacts({
+      .setArtifact({
         'base-directory': 'cdk.out',
         files: ['*.template.json'],
       });
@@ -167,6 +167,7 @@ export class CdkPipeline extends Construct {
         actions: [
           new CodeBuildAction({
             actionName: 'CdkDiff',
+            runOrder: 1,
             project: this.deploy,
             input: sourceOutput,
             environmentVariables: {
@@ -182,6 +183,7 @@ export class CdkPipeline extends Construct {
           }),
           new ManualApprovalAction({
             actionName: 'CdkDiffApproval',
+            runOrder: 2,
             additionalInformation: 'Please review the CdkDiff build.',
           }),
         ],
@@ -218,6 +220,7 @@ export class CdkPipeline extends Construct {
       deployStage.addAction(
         new ManualApprovalAction({
           actionName: 'StackApproval',
+          runOrder: 1,
         })
       );
     }
@@ -225,6 +228,7 @@ export class CdkPipeline extends Construct {
     deployStage.addAction(
       new CdkDeployAction({
         actionName: 'StackDeploy',
+        runOrder: 2,
         project: this.deploy,
         input: cdkOutputArtifact,
         environmentVariables: envs,
