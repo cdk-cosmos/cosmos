@@ -18,7 +18,7 @@ module.exports = new CdkCosmosCredentialsPlugin();
 
 export class CdkCosmosCredentialsProvider implements CredentialProviderSource {
   readonly name = 'cdk-cosmos-credentials-plugin';
-  private readonly cache: { [key: string]: ChainableTemporaryCredentials | undefined } = {};
+  private readonly cache: { [key: string]: ChainableTemporaryCredentials } = {};
 
   async isAvailable(): Promise<boolean> {
     if (CDK_COSMOS_CREDENTIALS_PLUGIN_DISABLE === 'true') return false;
@@ -26,10 +26,11 @@ export class CdkCosmosCredentialsProvider implements CredentialProviderSource {
   }
 
   async canProvideCredentials(accountId: string): Promise<boolean> {
-    if (this.cache[accountId] && !this.cache[accountId]?.expired) return true;
+    let cred = this.cache[accountId];
+    if (cred && !cred.needsRefresh()) return true;
 
     try {
-      const cred = new ChainableTemporaryCredentials({
+      cred = new ChainableTemporaryCredentials({
         params: {
           RoleArn: `arn:aws:iam::${accountId}:role/${CDK_COSMOS_CREDENTIALS_PLUGIN_ROLE}`,
           RoleSessionName: 'cdk-cosmos-credentials-provider',
