@@ -94,7 +94,7 @@ Object {
                     "Arn",
                   ],
                 },
-                "RunOrder": 1,
+                "RunOrder": 2,
               },
             ],
             "Name": "Diff",
@@ -174,7 +174,7 @@ Object {
                     "Arn",
                   ],
                 },
-                "RunOrder": 1,
+                "RunOrder": 2,
               },
             ],
             "Name": "DeployTest",
@@ -343,14 +343,12 @@ Object {
     }
   },
   \\"env\\": {},
-  \\"artifacts\\": [
-    {
-      \\"base-directory\\": \\"cdk.out\\",
-      \\"files\\": [
-        \\"*.template.json\\"
-      ]
-    }
-  ]
+  \\"artifacts\\": {
+    \\"base-directory\\": \\"cdk.out\\",
+    \\"files\\": [
+      \\"*.template.json\\"
+    ]
+  }
 }",
           "Location": Object {
             "Fn::ImportValue": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
@@ -893,16 +891,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9\\"",
+    "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407\\"",
       "Type": "String",
     },
-    "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9\\"",
+    "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407\\"",
       "Type": "String",
     },
-    "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9\\"",
+    "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407\\"",
       "Type": "String",
     },
   },
@@ -933,7 +931,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9S3Bucket",
+                "Ref": "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407S3Bucket",
               },
               "/",
               Object {
@@ -943,7 +941,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9S3VersionKey",
+                        "Ref": "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407S3VersionKey",
                       },
                     ],
                   },
@@ -956,7 +954,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters45a09cdcd6b3f1c5a11f97e74700ff43ff5e444dee411c06291486e9750d12e9S3VersionKey",
+                        "Ref": "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407S3VersionKey",
                       },
                     ],
                   },
@@ -1608,7 +1606,7 @@ Object {
                     "Arn",
                   ],
                 },
-                "RunOrder": 1,
+                "RunOrder": 2,
               },
             ],
             "Name": "Diff",
@@ -1688,7 +1686,7 @@ Object {
                     "Arn",
                   ],
                 },
-                "RunOrder": 1,
+                "RunOrder": 2,
               },
             ],
             "Name": "DeployTest",
@@ -1889,14 +1887,12 @@ Object {
     }
   },
   \\"env\\": {},
-  \\"artifacts\\": [
-    {
-      \\"base-directory\\": \\"cdk.out\\",
-      \\"files\\": [
-        \\"*.template.json\\"
-      ]
-    }
-  ]
+  \\"artifacts\\": {
+    \\"base-directory\\": \\"cdk.out\\",
+    \\"files\\": [
+      \\"*.template.json\\"
+    ]
+  }
 }",
           "Location": Object {
             "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
