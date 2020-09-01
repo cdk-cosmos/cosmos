@@ -16,10 +16,10 @@ export {
   ICiCdFeatureCore,
   CiCdFeatureCoreStack,
   CiCdFeatureCoreStackProps,
-} from './cicd-solar-system/cicd-solar-system-core-stack';
+} from './cicd-feature/cicd-feature-core-stack';
 
 export {
   ICiCdFeatureExtension,
   CiCdFeatureExtensionStack,
   CiCdFeatureExtensionStackProps,
-} from './cicd-solar-system/cicd-solar-system-extension-stack';
+} from './cicd-feature/cicd-feature-extension-stack';

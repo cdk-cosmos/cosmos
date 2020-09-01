@@ -1,4 +1,4 @@
-import { Construct, Fn, Duration, Lazy, Stack, CfnOutput, IConstruct } from '@aws-cdk/core';
+import { Construct, Fn, Duration, Lazy, CfnOutput, IConstruct } from '@aws-cdk/core';
 import { ZoneDelegationRecord } from '@aws-cdk/aws-route53';
 import { CrossAccountExports } from '@cosmos-building-blocks/common';
 import { ISolarSystemCore } from '../solar-system';
