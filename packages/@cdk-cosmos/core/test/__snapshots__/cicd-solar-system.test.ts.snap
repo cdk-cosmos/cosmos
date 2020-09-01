@@ -1,5 +1,50 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`CICD-Solar-System Extension should have a CdkRepo 1`] = `
+Object {
+  "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
+  "Outputs": Object {
+    "ExportsOutputFnGetAttCdkRepoCloneUrlHttp": Object {
+      "Export": Object {
+        "Name": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CdkRepo",
+          "CloneUrlHttp",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttCdkRepoName": Object {
+      "Export": Object {
+        "Name": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CdkRepo",
+          "Name",
+        ],
+      },
+    },
+  },
+  "Resources": Object {
+    "CdkRepo": Object {
+      "Properties": Object {
+        "RepositoryDescription": "Core CDK Repo for Test Cosmos.",
+        "RepositoryName": "app-test-cdk-repo",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "Test",
+          },
+        ],
+      },
+      "Type": "AWS::CodeCommit::Repository",
+    },
+  },
+}
+`;
+
 exports[`CICD-Solar-System Extension should match snapshot 1`] = `
 Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
@@ -346,6 +391,255 @@ Object {
         ],
       },
       "Type": "AWS::CodeBuild::Project",
+    },
+  },
+}
+`;
+
+exports[`CICD-Solar-System should have a CdkRepo 1`] = `
+Object {
+  "Description": "Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole",
+  "Outputs": Object {
+    "CoreLibVersion": Object {
+      "Export": Object {
+        "Name": "CoreLibVersion",
+      },
+      "Value": "0.6.1",
+    },
+    "CrossAccountExportServiceToken": Object {
+      "Export": Object {
+        "Name": "CoreCrossAccountExportServiceToken",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CustomCrossAccountExportsCustomResourceProviderHandler",
+          "Arn",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttCdkRepoCloneUrlHttp": Object {
+      "Export": Object {
+        "Name": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CdkRepo",
+          "CloneUrlHttp",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttCdkRepoName": Object {
+      "Export": Object {
+        "Name": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CdkRepo",
+          "Name",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttCustomCrossAccountExportsCustomResourceProviderHandlerArn": Object {
+      "Export": Object {
+        "Name": "CoreCosCosmos:ExportsOutputFnGetAttCustomCrossAccountExportsCustomResourceProviderHandlerArn8CE3D38E",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CustomCrossAccountExportsCustomResourceProviderHandler",
+          "Arn",
+        ],
+      },
+    },
+    "ExportsOutputRefRootZone": Object {
+      "Export": Object {
+        "Name": "CoreCosCosmos:ExportsOutputRefRootZone2F3E9CEF",
+      },
+      "Value": Object {
+        "Ref": "RootZone",
+      },
+    },
+    "RootZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreRootZoneId",
+      },
+      "Value": Object {
+        "Ref": "RootZone",
+      },
+    },
+    "RootZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreRootZoneName",
+      },
+      "Value": "cos.com",
+    },
+    "RootZoneZoneNameServers": Object {
+      "Export": Object {
+        "Name": "CoreRootZoneNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "RootZone",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "AssetParameterssourceHashArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"sourceHash\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "CdkMasterRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Array [
+                  "codebuild.amazonaws.com",
+                  "codepipeline.amazonaws.com",
+                ],
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::GetAtt": Array [
+                    "CustomCrossAccountExportsCustomResourceProviderHandler",
+                    "Arn",
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AdministratorAccess",
+              ],
+            ],
+          },
+        ],
+        "RoleName": "CoreCdkMasterRole",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkRepo": Object {
+      "Properties": Object {
+        "RepositoryDescription": "Core CDK Repo for Cos Cosmos.",
+        "RepositoryName": "core-cos-cdk-repo",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+        ],
+      },
+      "Type": "AWS::CodeCommit::Repository",
+    },
+    "CustomCrossAccountExportsCustomResourceProviderHandler": Object {
+      "DependsOn": Array [
+        "CdkMasterRole",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameterssourceHashS3Bucket",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CdkMasterRole",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "RootZone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core TLD Root Zone for Cos Cosmos.",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+        ],
+        "Name": "cos.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
     },
   },
 }

@@ -35,7 +35,7 @@ export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatu
 
     this.cdkRepo = new Repository(this.solarSystem.galaxy.cosmos, 'CdkRepo', {
       repositoryName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Repo', '-').toLowerCase(),
-      description: `Core CDK Repo for ${this.node.id} Cosmos.`,
+      description: `Core CDK Repo for ${this.solarSystem.galaxy.cosmos.node.id} Cosmos.`,
     });
 
     this.cdkPipeline = new CdkPipeline(this, 'CdkPipeline', {

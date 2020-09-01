@@ -53,6 +53,7 @@ describe('CICD-Solar-System', () => {
   test('should have a CdkRepo', () => {
     expect(cosmosStack).toHaveResource('AWS::CodeCommit::Repository', { RepositoryName: 'core-cos-cdk-repo' });
     toHaveResourceId(cosmosStack, 'CdkRepo');
+    expect(cosmosStack).toMatchSnapshot();
   });
 
   test('should have master cdk pipeline', () => {
@@ -84,6 +85,7 @@ describe('CICD-Solar-System Extension', () => {
   test('should have a CdkRepo', () => {
     expect(cosmosExtensionStack).toHaveResource('AWS::CodeCommit::Repository', { RepositoryName: 'app-test-cdk-repo' });
     toHaveResourceId(cosmosExtensionStack, 'CdkRepo');
+    expect(cosmosExtensionStack).toMatchSnapshot();
   });
 
   test('should have master cdk pipeline', () => {
