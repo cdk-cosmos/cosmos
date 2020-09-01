@@ -1,4 +1,4 @@
-import { Construct, Stack } from '@aws-cdk/core';
+import { Construct } from '@aws-cdk/core';
 import { Role } from '@aws-cdk/aws-iam';
 import { Project, IProject } from '@aws-cdk/aws-codebuild';
 import { ISolarSystemExtension, SolarSystemExtensionStack } from '../../solar-system/solar-system-extension-stack';

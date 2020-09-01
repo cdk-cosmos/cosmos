@@ -37,12 +37,7 @@ Object {
                     "Name": "CdkCodeOutput",
                   },
                 ],
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 1,
               },
             ],
@@ -69,12 +64,7 @@ Object {
                   },
                 ],
                 "Name": "CdkDiff",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDiffCdkDiffCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 1,
               },
               Object {
@@ -88,12 +78,7 @@ Object {
                   "CustomData": "Please review the CdkDiff build.",
                 },
                 "Name": "CdkDiffApproval",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDiffCdkDiffApprovalCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 2,
               },
             ],
@@ -120,12 +105,7 @@ Object {
                   },
                 ],
                 "Name": "CdkDeploy",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDeployCdkDeployCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 1,
               },
             ],
@@ -141,12 +121,7 @@ Object {
                   "Version": "1",
                 },
                 "Name": "StackApproval",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDeployTestStackApprovalCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 1,
               },
               Object {
@@ -168,12 +143,7 @@ Object {
                   },
                 ],
                 "Name": "StackDeploy",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDeployTestStackDeployCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 2,
               },
             ],
@@ -377,416 +347,6 @@ Object {
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "CdkPipelineDeploy",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "CdkPipelineDeployTestStackApprovalCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos:extension",
-            "Value": "Test",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy:extension",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem:extension",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDeployTestStackDeployCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos:extension",
-            "Value": "Test",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy:extension",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem:extension",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDeployTestStackDeployCodePipelineActionRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "CdkPipelineDeploy",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineDeployTestStackDeployCodePipelineActionRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineDeployTestStackDeployCodePipelineActionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "CdkPipelineDiffCdkDiffApprovalCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos:extension",
-            "Value": "Test",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy:extension",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem:extension",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDiffCdkDiffCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos:extension",
-            "Value": "Test",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy:extension",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem:extension",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDiffCdkDiffCodePipelineActionRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "CdkPipelineDeploy",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineDiffCdkDiffCodePipelineActionRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineDiffCdkDiffCodePipelineActionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos:extension",
-            "Value": "Test",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy:extension",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem:extension",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "s3:GetObject*",
-                "s3:GetBucket*",
-                "s3:List*",
-                "s3:DeleteObject*",
-                "s3:PutObject*",
-                "s3:Abort*",
-              ],
-              "Effect": "Allow",
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineCdkArtifactBucket",
-                    "Arn",
-                  ],
-                },
-                Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
-                          "CdkPipelineCdkArtifactBucket",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-            Object {
-              "Action": Array [
-                "codecommit:GetBranch",
-                "codecommit:GetCommit",
-                "codecommit:UploadArchive",
-                "codecommit:GetUploadArchiveStatus",
-                "codecommit:CancelUploadArchive",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::ImportValue": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoArn941DDF84",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
   },
 }
 `;
@@ -891,16 +451,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407\\"",
+    "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268d\\"",
       "Type": "String",
     },
-    "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407\\"",
+    "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268d\\"",
       "Type": "String",
     },
-    "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407\\"",
+    "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268d\\"",
       "Type": "String",
     },
   },
@@ -931,7 +491,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407S3Bucket",
+                "Ref": "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3Bucket",
               },
               "/",
               Object {
@@ -941,7 +501,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407S3VersionKey",
+                        "Ref": "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3VersionKey",
                       },
                     ],
                   },
@@ -954,7 +514,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters159e5b4760744207d901cacb97a7a88a2c89caa54134b6160bbe42f80b4d3407S3VersionKey",
+                        "Ref": "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3VersionKey",
                       },
                     ],
                   },
@@ -1549,12 +1109,7 @@ Object {
                     "Name": "CdkCodeOutput",
                   },
                 ],
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 1,
               },
             ],
@@ -1581,12 +1136,7 @@ Object {
                   },
                 ],
                 "Name": "CdkDiff",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDiffCdkDiffCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 1,
               },
               Object {
@@ -1600,12 +1150,7 @@ Object {
                   "CustomData": "Please review the CdkDiff build.",
                 },
                 "Name": "CdkDiffApproval",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDiffCdkDiffApprovalCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 2,
               },
             ],
@@ -1632,12 +1177,7 @@ Object {
                   },
                 ],
                 "Name": "CdkDeploy",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDeployCdkDeployCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 1,
               },
             ],
@@ -1653,12 +1193,7 @@ Object {
                   "Version": "1",
                 },
                 "Name": "StackApproval",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDeployTestStackApprovalCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 1,
               },
               Object {
@@ -1680,12 +1215,7 @@ Object {
                   },
                 ],
                 "Name": "StackDeploy",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDeployTestStackDeployCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 2,
               },
             ],
@@ -1712,12 +1242,7 @@ Object {
                   },
                 ],
                 "Name": "DependantStackDeploy",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineDeployDependantStacksDependantStackDeployCodePipelineActionRole",
-                    "Arn",
-                  ],
-                },
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 1,
               },
             ],
@@ -1920,474 +1445,6 @@ Object {
         ],
       },
       "Type": "AWS::CodeBuild::Project",
-    },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "CdkPipelineDeploy",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineDeployCdkDeployCodePipelineActionRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineDeployCdkDeployCodePipelineActionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "CdkPipelineDeployDependantStacksDependantStackDeployCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDeployDependantStacksDependantStackDeployCodePipelineActionRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "CdkPipelineDeploy",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineDeployDependantStacksDependantStackDeployCodePipelineActionRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineDeployDependantStacksDependantStackDeployCodePipelineActionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "CdkPipelineDeployTestStackApprovalCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDeployTestStackDeployCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDeployTestStackDeployCodePipelineActionRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "CdkPipelineDeploy",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineDeployTestStackDeployCodePipelineActionRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineDeployTestStackDeployCodePipelineActionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "CdkPipelineDiffCdkDiffApprovalCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDiffCdkDiffCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineDiffCdkDiffCodePipelineActionRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "CdkPipelineDeploy",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineDiffCdkDiffCodePipelineActionRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineDiffCdkDiffCodePipelineActionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "s3:GetObject*",
-                "s3:GetBucket*",
-                "s3:List*",
-                "s3:DeleteObject*",
-                "s3:PutObject*",
-                "s3:Abort*",
-              ],
-              "Effect": "Allow",
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "CdkPipelineCdkArtifactBucket",
-                    "Arn",
-                  ],
-                },
-                Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
-                          "CdkPipelineCdkArtifactBucket",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-            Object {
-              "Action": Array [
-                "codecommit:GetBranch",
-                "codecommit:GetCommit",
-                "codecommit:UploadArchive",
-                "codecommit:GetUploadArchiveStatus",
-                "codecommit:CancelUploadArchive",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoArn941DDF84",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineSourceCdkCheckoutCodePipelineActionRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineSourceCdkCheckoutCodePipelineActionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
     },
   },
 }

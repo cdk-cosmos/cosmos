@@ -49,6 +49,7 @@ export interface AddDeployStackStageProps {
 export class CdkPipeline extends Construct {
   readonly stacks: IResolvable;
   readonly cdkRepo: IRepository;
+  readonly deployRole?: IRole;
   readonly deploy: Project;
   readonly pipeline: Pipeline;
   readonly hasDiffStage: boolean;
@@ -77,6 +78,7 @@ export class CdkPipeline extends Construct {
       produce: () => stackNames(deployStacks || findAllStacksFromCdkApp(scope)),
     });
     this.cdkRepo = cdkRepo;
+    this.deployRole = deployRole;
 
     const artifactBucket = new SecureBucket(this, 'CdkArtifactBucket');
 
@@ -95,7 +97,7 @@ export class CdkPipeline extends Construct {
 
     this.deploy = new Project(this, 'Deploy', {
       projectName: deployName,
-      role: deployRole,
+      role: this.deployRole,
       vpc: deployVpc,
       subnetSelection: deploySubnets,
       source: Source.codeCommit({
@@ -145,7 +147,7 @@ export class CdkPipeline extends Construct {
     this.pipeline = new Pipeline(this, 'Pipeline', {
       pipelineName: pipelineName,
       artifactBucket: artifactBucket,
-      role: deployRole,
+      role: this.deployRole,
     });
 
     this.pipeline.addStage({
@@ -153,6 +155,7 @@ export class CdkPipeline extends Construct {
       actions: [
         new CodeCommitSourceAction({
           actionName: 'CdkCheckout',
+          role: this.deployRole,
           repository: cdkRepo,
           branch: cdkBranch,
           output: sourceOutput,
@@ -167,6 +170,7 @@ export class CdkPipeline extends Construct {
         actions: [
           new CodeBuildAction({
             actionName: 'CdkDiff',
+            role: this.deployRole,
             runOrder: 1,
             project: this.deploy,
             input: sourceOutput,
@@ -183,6 +187,7 @@ export class CdkPipeline extends Construct {
           }),
           new ManualApprovalAction({
             actionName: 'CdkDiffApproval',
+            role: this.deployRole,
             runOrder: 2,
             additionalInformation: 'Please review the CdkDiff build.',
           }),
@@ -207,6 +212,7 @@ export class CdkPipeline extends Construct {
       pipeline.stages[0].addAction(
         new CodeCommitSourceAction({
           actionName: 'CdkCheckout',
+          role: this.deployRole,
           repository: this.cdkRepo,
           output: cdkOutputArtifact,
           trigger: CodeCommitTrigger.NONE,
@@ -220,6 +226,7 @@ export class CdkPipeline extends Construct {
       deployStage.addAction(
         new ManualApprovalAction({
           actionName: 'StackApproval',
+          role: this.deployRole,
           runOrder: 1,
         })
       );
@@ -228,6 +235,7 @@ export class CdkPipeline extends Construct {
     deployStage.addAction(
       new CdkDeployAction({
         actionName: 'StackDeploy',
+        role: this.deployRole,
         runOrder: 2,
         project: this.deploy,
         input: cdkOutputArtifact,
@@ -262,6 +270,7 @@ export class CdkPipeline extends Construct {
         actions: [
           new CdkDeployAction({
             actionName: 'CdkDeploy',
+            role: this.deployRole,
             project: this.deploy,
             input: cdkOutputArtifact,
             stacks: beforeStacks,
@@ -277,6 +286,7 @@ export class CdkPipeline extends Construct {
         actions: [
           new CdkDeployAction({
             actionName: 'DependantStackDeploy',
+            role: this.deployRole,
             project: this.deploy,
             input: cdkOutputArtifact,
             stacks: afterStacks,
