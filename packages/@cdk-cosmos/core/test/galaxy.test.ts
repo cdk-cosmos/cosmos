@@ -5,7 +5,7 @@ import { CosmosCoreStack, CosmosExtensionStack, GalaxyCoreStack, GalaxyExtension
 
 const app = new App();
 const env = { account: 'account', region: 'region' };
-const env2 = { account: 'account2', region: 'region2' };
+const env2 = { account: 'account2', region: 'region' };
 
 const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'com', cidr: '10.0.0.0/24', env });
 const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { env });

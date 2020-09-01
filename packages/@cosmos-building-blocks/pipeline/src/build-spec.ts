@@ -4,6 +4,8 @@ import { BuildSpec } from '@aws-cdk/aws-codebuild';
 
 // https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec-ref-example
 
+export type EnvironmentVariables = 'variables' | 'parameter-store' | 'secrets-manager';
+
 export type Phase = 'install' | 'pre_build' | 'build' | 'post_build';
 export type Runtime = 'android' | 'dotnet' | 'golang' | 'nodejs' | 'java' | 'php' | 'python' | 'ruby';
 export type Version = 'latest' | string;
@@ -26,13 +28,16 @@ export interface Artifact {
   name?: string;
   'discard-paths'?: string;
   'base-directory'?: string;
-  'secondary-artifacts': object[];
 }
 
 export type BuildSpecObject = {
   version: '0.2';
   'run-as'?: string;
   env: {
+    shell?: string;
+    variables?: Record<string, string>;
+    'parameter-store'?: Record<string, string>;
+    'secrets-manager'?: Record<string, string>;
     'exported-variables'?: string[];
     'git-credential-helper'?: boolean;
   };
@@ -46,7 +51,7 @@ export type BuildSpecObject = {
     logs?: boolean;
   };
   reports?: Report[];
-  artifacts?: Artifact[];
+  artifacts?: Artifact & { 'secondary-artifacts'?: Artifact[] };
   cache?: {
     paths: string[];
   };
@@ -54,7 +59,7 @@ export type BuildSpecObject = {
 
 export class BuildSpecBuilder extends BuildSpec {
   readonly isImmediate: boolean;
-  readonly spec: BuildSpecObject;
+  spec: BuildSpecObject;
 
   constructor() {
     super();
@@ -96,9 +101,50 @@ export class BuildSpecBuilder extends BuildSpec {
     return this;
   }
 
-  addExportedVariables(name: string): BuildSpecBuilder {
+  addEnvironmentVariables(type: EnvironmentVariables, env: Record<string, string>): BuildSpecBuilder {
+    if (!this.spec.env[type]) this.spec.env[type] = {};
+    Object.assign(this.spec.env[type], env);
+
+    return this;
+  }
+
+  addExportedVariables(...name: string[]): BuildSpecBuilder {
     if (!this.spec.env['exported-variables']) this.spec.env['exported-variables'] = [];
-    this.spec.env['exported-variables'].push(name);
+    this.spec.env['exported-variables'].push(...name);
+
+    return this;
+  }
+
+  setArtifact(artifact: Artifact): BuildSpecBuilder {
+    this.spec.artifacts = artifact;
+
+    return this;
+  }
+
+  addSecondaryArtifacts(...artifact: Artifact[]): BuildSpecBuilder {
+    if (!this.spec.artifacts) throw new Error('An Artifact must be set first.');
+    if (!this.spec.artifacts['secondary-artifacts']) this.spec.artifacts['secondary-artifacts'] = [];
+    this.spec.artifacts['secondary-artifacts'].push(...artifact);
+
+    return this;
+  }
+
+  addReports(...report: Report[]): BuildSpecBuilder {
+    if (!this.spec.reports) this.spec.reports = [];
+    this.spec.reports.push(...report);
+
+    return this;
+  }
+
+  addCachePaths(...path: string[]): BuildSpecBuilder {
+    if (!this.spec.cache) this.spec.cache = { paths: [] };
+    this.spec.cache.paths.push(...path);
+
+    return this;
+  }
+
+  edit(fn: (spec: BuildSpecObject) => BuildSpecObject | undefined): BuildSpecBuilder {
+    this.spec = fn(this.spec) || this.spec;
 
     return this;
   }
