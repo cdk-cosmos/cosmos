@@ -27,5 +27,5 @@ export const toHaveResourceId = (stack: any, id: string): void => {
 };
 
 export const toHaveResourceCount = (stack: any, length: number): void => {
-  expect(Object.keys(stack.Resources)).toHaveLength(length);
+  expect(Object.keys(stack.Resources || {})).toHaveLength(length);
 };
