@@ -8,7 +8,7 @@ import {
   Stack,
   CfnResource,
 } from '@aws-cdk/core';
-import { CfnRole, ArnPrincipal, PolicyStatement, Role } from '@aws-cdk/aws-iam';
+import { CfnRole, IRole } from '@aws-cdk/aws-iam';
 
 export const RESOURCE_TYPE = 'Custom::CrossAccountExports';
 
@@ -68,7 +68,7 @@ export class CrossAccountExports extends Construct {
   }
 }
 
-export const createCrossAccountExportProvider = (scope: Construct, role?: Role): string => {
+export const createCrossAccountExportProvider = (scope: Construct, role?: IRole): string => {
   const serviceToken = CustomResourceProvider.getOrCreate(scope, RESOURCE_TYPE, {
     codeDirectory: `${__dirname}/cross-account-export-handler`,
     runtime: CustomResourceProviderRuntime.NODEJS_12,
@@ -83,14 +83,7 @@ export const createCrossAccountExportProvider = (scope: Construct, role?: Role):
     providerHandler.addPropertyOverride('Role', role.roleArn);
     providerHandler.addDependsOn(role.node.defaultChild as CfnResource);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const deps = (providerHandler as any).dependsOn as Set<any>;
-    deps.delete(providerRole);
-
-    const handlerArnPrincipal = new ArnPrincipal(providerHandler.getAtt('Arn').toString());
-    const statement = new PolicyStatement();
-    statement.addPrincipals(handlerArnPrincipal);
-    statement.addActions(handlerArnPrincipal.assumeRoleAction);
-    role.assumeRolePolicy?.addStatements(statement);
+    ((providerHandler as any).dependsOn as Set<any>).delete(providerRole);
   }
   return serviceToken;
 };

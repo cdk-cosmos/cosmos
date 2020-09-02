@@ -56,7 +56,8 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
       roleName: cdkMasterRoleName,
       assumedBy: new CompositePrincipal(
         new ServicePrincipal('codebuild.amazonaws.com'),
-        new ServicePrincipal('codepipeline.amazonaws.com')
+        new ServicePrincipal('codepipeline.amazonaws.com'),
+        new ServicePrincipal('lambda.amazonaws.com')
       ),
     });
     this.cdkMasterRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));

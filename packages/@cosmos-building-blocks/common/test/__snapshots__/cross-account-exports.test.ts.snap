@@ -129,18 +129,6 @@ Object {
                 "AWS": "*",
               },
             },
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::GetAtt": Array [
-                    "CustomCrossAccountExportsCustomResourceProviderHandler2315F6D6",
-                    "Arn",
-                  ],
-                },
-              },
-            },
           ],
           "Version": "2012-10-17",
         },
