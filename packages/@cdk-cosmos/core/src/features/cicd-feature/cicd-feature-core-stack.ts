@@ -49,6 +49,10 @@ export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatu
     });
     this.deployProject = this.cdkPipeline.deploy;
   }
+
+  addDeployStackStage(props: AddDeployStackStageProps): void {
+    this.cdkPipeline.addDeployStackStage(props);
+  }
 }
 
 declare module '../../solar-system/solar-system-core-stack' {
@@ -59,17 +63,10 @@ declare module '../../solar-system/solar-system-core-stack' {
   interface SolarSystemCoreStack {
     ciCd?: CiCdFeatureCoreStack;
     addCiCd(props?: CiCdFeatureCoreStackProps): CiCdFeatureCoreStack;
-    addDeployStackStage(props: AddDeployStackStageProps): void;
   }
 }
 
 SolarSystemCoreStack.prototype.addCiCd = function(props?: CiCdFeatureCoreStackProps): CiCdFeatureCoreStack {
   this.ciCd = new CiCdFeatureCoreStack(this, 'CiCd', props);
   return this.ciCd;
-};
-
-SolarSystemCoreStack.prototype.addDeployStackStage = function(props): void {
-  if (!this.ciCd) throw new Error('Can not addDeployStackStage to SolarSytem without an CiCd feature.');
-
-  this.ciCd.cdkPipeline.addDeployStackStage(props);
 };

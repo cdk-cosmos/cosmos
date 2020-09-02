@@ -36,7 +36,7 @@ Object {
   "Resources": Object {
     "CdkRepo": Object {
       "Properties": Object {
-        "RepositoryDescription": "Core CDK Repo for Test Cosmos.",
+        "RepositoryDescription": "App CDK Repo for Test Cosmos.",
         "RepositoryName": "app-test-cdk-repo",
         "Tags": Array [
           Object {

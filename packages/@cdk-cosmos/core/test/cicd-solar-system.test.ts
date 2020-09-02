@@ -19,7 +19,7 @@ const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { env });
 const solarSystem = new SolarSystemCoreStack(galaxy, 'CiCd', { env });
 solarSystem.addCiCd();
 const solarSystem2 = new SolarSystemCoreStack(galaxy, 'Sys2', { env: env2 });
-solarSystem.addDeployStackStage({
+solarSystem.ciCd?.addDeployStackStage({
   name: 'DeployTest',
   stacks: [solarSystem2],
 });
@@ -29,7 +29,7 @@ const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env }
 const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'CiCd', { env });
 solarSystemExtension.addCiCd();
 const solarSystemExtension2 = new SolarSystemExtensionStack(galaxyExtension, 'Sys2', { env: env2 });
-solarSystemExtension.addDeployStackStage({
+solarSystemExtension.ciCd?.addDeployStackStage({
   name: 'DeployTest',
   stacks: [solarSystemExtension2],
 });
