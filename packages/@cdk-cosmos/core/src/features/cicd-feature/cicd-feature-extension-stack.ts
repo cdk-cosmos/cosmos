@@ -34,7 +34,7 @@ export class CiCdFeatureExtensionStack extends BaseFeatureConstruct implements I
 
     this.cdkRepo = new Repository(this.solarSystem.galaxy.cosmos, 'CdkRepo', {
       repositoryName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Repo', '-').toLowerCase(),
-      description: `Core CDK Repo for ${this.solarSystem.galaxy.cosmos.node.id} Cosmos.`,
+      description: `App CDK Repo for ${this.solarSystem.galaxy.cosmos.node.id} Cosmos.`,
     });
 
     this.cdkPipeline = new CdkPipeline(this, 'CdkPipeline', {
@@ -48,6 +48,10 @@ export class CiCdFeatureExtensionStack extends BaseFeatureConstruct implements I
     });
     this.deployProject = this.cdkPipeline.deploy;
   }
+
+  addDeployStackStage(props: AddDeployStackStageProps): void {
+    this.cdkPipeline.addDeployStackStage(props);
+  }
 }
 
 declare module '../../solar-system/solar-system-extension-stack' {
@@ -58,7 +62,6 @@ declare module '../../solar-system/solar-system-extension-stack' {
   interface SolarSystemExtensionStack {
     ciCd?: CiCdFeatureExtensionStack;
     addCiCd(props?: CiCdFeatureExtensionStackProps): CiCdFeatureExtensionStack;
-    addDeployStackStage(props: AddDeployStackStageProps): void;
   }
 }
 
@@ -67,10 +70,4 @@ SolarSystemExtensionStack.prototype.addCiCd = function(
 ): CiCdFeatureExtensionStack {
   this.ciCd = new CiCdFeatureExtensionStack(this, 'CiCd', props);
   return this.ciCd;
-};
-
-SolarSystemExtensionStack.prototype.addDeployStackStage = function(props): void {
-  if (!this.ciCd) throw new Error('Can not addDeployStackStage to SolarSytem without an CiCd feature.');
-
-  this.ciCd.cdkPipeline.addDeployStackStage(props);
 };
