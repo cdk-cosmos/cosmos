@@ -3,6 +3,14 @@
 exports[`Cosmos Extension should allow resourced to be created in portal 1`] = `
 Object {
   "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
+  "Outputs": Object {
+    "CoreLibVersion": Object {
+      "Export": Object {
+        "Name": "AppLibVersion",
+      },
+      "Value": Any<String>,
+    },
+  },
   "Resources": Object {
     "RootZoneTest": Object {
       "Properties": Object {
@@ -36,6 +44,14 @@ Object {
 exports[`Cosmos Extension should match snapshot 1`] = `
 Object {
   "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
+  "Outputs": Object {
+    "CoreLibVersion": Object {
+      "Export": Object {
+        "Name": "AppLibVersion",
+      },
+      "Value": Any<String>,
+    },
+  },
 }
 `;
 

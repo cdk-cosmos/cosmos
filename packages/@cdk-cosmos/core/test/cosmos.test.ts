@@ -61,12 +61,24 @@ describe('Cosmos Extension', () => {
       domainName: 'test',
     });
     const [cosmosExtensionStack] = synthesizeStacks(cosmosExtension);
-    expect(cosmosExtensionStack).toMatchSnapshot();
+    expect(cosmosExtensionStack).toMatchSnapshot({
+      Outputs: {
+        CoreLibVersion: {
+          Value: expect.any(String),
+        },
+      },
+    });
   });
 
   //TODO: Check if imports align
 
   test('should match snapshot', () => {
-    expect(cosmosExtensionStack).toMatchSnapshot();
+    expect(cosmosExtensionStack).toMatchSnapshot({
+      Outputs: {
+        CoreLibVersion: {
+          Value: expect.any(String),
+        },
+      },
+    });
   });
 });
