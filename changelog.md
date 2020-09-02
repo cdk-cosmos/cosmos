@@ -1,4 +1,22 @@
 
+## v0.6.2 (2020-09-02)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/cdk-credentials-plugin`
+  * [#184](https://github.com/cdk-cosmos/cosmos/pull/184) Enhance cdk-credentials-plugin to support different Role Names #169 ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`
+  * [#183](https://github.com/cdk-cosmos/cosmos/pull/183) #168 Move code repo into cicd feature ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`
+  * [#182](https://github.com/cdk-cosmos/cosmos/pull/182) Show Diff in CDK Pipeline before deploying #179 + Core-Cdk-Pipeline add Prod as a separate stage #78 ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/common`
+  * [#181](https://github.com/cdk-cosmos/cosmos/pull/181) Fix Cross Account assume in Master Role + Fix Ecs import issue with bad output names ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.6.1 (2020-08-19)
 
 #### 🐛 Bug Fix
