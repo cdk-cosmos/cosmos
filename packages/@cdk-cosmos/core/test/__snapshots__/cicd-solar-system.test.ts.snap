@@ -4,6 +4,12 @@ exports[`CICD-Solar-System Extension should have a CdkRepo 1`] = `
 Object {
   "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
   "Outputs": Object {
+    "CoreLibVersion": Object {
+      "Export": Object {
+        "Name": "AppLibVersion",
+      },
+      "Value": Any<String>,
+    },
     "ExportsOutputFnGetAttCdkRepoCloneUrlHttp": Object {
       "Export": Object {
         "Name": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
@@ -404,7 +410,7 @@ Object {
       "Export": Object {
         "Name": "CoreLibVersion",
       },
-      "Value": "0.6.1",
+      "Value": Any<String>,
     },
     "CrossAccountExportServiceToken": Object {
       "Export": Object {

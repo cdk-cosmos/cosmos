@@ -1,4 +1,4 @@
-import { Construct, Tag } from '@aws-cdk/core';
+import { Construct, Tag, CfnOutput } from '@aws-cdk/core';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { ICosmosCore } from './cosmos-core-stack';
 import { CosmosCoreImportProps, CosmosCoreImport } from './cosmos-core-import';
@@ -32,6 +32,11 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
     });
 
     this.libVersion = getPackageVersion();
+
+    new CfnOutput(this, 'CoreLibVersion', {
+      exportName: this.singletonId('LibVersion'),
+      value: this.libVersion,
+    });
 
     Tag.add(this, 'cosmos:extension', this.node.id);
   }
