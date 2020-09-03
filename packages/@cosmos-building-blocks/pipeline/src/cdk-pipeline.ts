@@ -43,6 +43,7 @@ export interface AddDeployStackStageProps {
   stacks: Array<Stack | string>;
   pipeline?: Pipeline;
   envs?: BuildEnvironmentVariables;
+  exclusive?: boolean;
   isManualApprovalRequired?: boolean;
 }
 
@@ -214,7 +215,8 @@ export class CdkPipeline extends Construct {
   }
 
   addDeployStackStage(props: AddDeployStackStageProps): void {
-    const { name, stacks, pipeline = this.pipeline, envs = {}, isManualApprovalRequired = true } = props || {};
+    const { name, stacks, pipeline = this.pipeline, envs = {}, isManualApprovalRequired = true, exclusive = true } =
+      props || {};
 
     if (stacks && stacks.length === 0) {
       throw new Error('Stacks must be >= 1');
@@ -256,6 +258,7 @@ export class CdkPipeline extends Construct {
         environmentVariables: envs,
         stacks: stackNames(stacks),
         hasDiffStage: pipeline === this.pipeline && this.hasDiffStage,
+        exclusive: exclusive,
       })
     );
   }
@@ -289,6 +292,7 @@ export class CdkPipeline extends Construct {
             input: cdkOutputArtifact,
             stacks: beforeStacks,
             hasDiffStage: this.hasDiffStage,
+            exclusive: true,
           }),
         ],
       });
@@ -305,6 +309,7 @@ export class CdkPipeline extends Construct {
             input: cdkOutputArtifact,
             stacks: afterStacks,
             hasDiffStage: this.hasDiffStage,
+            exclusive: true,
           }),
         ],
       });
@@ -315,8 +320,8 @@ export class CdkPipeline extends Construct {
 export class CdkDeployAction extends CodeBuildAction {
   // readonly actionProperties: ActionProperties & { environmentVariables?: BuildEnvironmentVariables };
   stacks: string[];
-  constructor(props: CodeBuildActionProps & { stacks?: string[]; hasDiffStage?: boolean }) {
-    const { stacks = [], hasDiffStage, environmentVariables } = props;
+  constructor(props: CodeBuildActionProps & { stacks?: string[]; hasDiffStage?: boolean; exclusive?: boolean }) {
+    const { stacks = [], hasDiffStage, environmentVariables, exclusive } = props;
     const envs: BuildEnvironmentVariables = {
       DIFF: {
         type: BuildEnvironmentVariableType.PLAINTEXT,
@@ -331,7 +336,7 @@ export class CdkDeployAction extends CodeBuildAction {
     if (stacks) {
       envs.STACKS = {
         type: BuildEnvironmentVariableType.PLAINTEXT,
-        value: stacks.join(' '),
+        value: (exclusive ? '-e ' : '') + stacks.join(' '),
       };
     }
 
