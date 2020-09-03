@@ -134,7 +134,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -172,7 +172,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTestGalSys2SolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e AppTestGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -730,16 +730,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6\\"",
+    "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4\\"",
       "Type": "String",
     },
-    "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6\\"",
+    "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4\\"",
       "Type": "String",
     },
-    "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6\\"",
+    "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4\\"",
       "Type": "String",
     },
   },
@@ -770,7 +770,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6S3Bucket",
+                "Ref": "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3Bucket",
               },
               "/",
               Object {
@@ -780,7 +780,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6S3VersionKey",
+                        "Ref": "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3VersionKey",
                       },
                     ],
                   },
@@ -793,7 +793,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6S3VersionKey",
+                        "Ref": "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3VersionKey",
                       },
                     ],
                   },
@@ -1445,7 +1445,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -1483,7 +1483,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosGalSys2SolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -1510,7 +1510,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosLink\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosLink\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
