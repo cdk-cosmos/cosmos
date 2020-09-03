@@ -3,20 +3,15 @@
 exports[`Cosmos Extension should allow resourced to be created in portal 1`] = `
 Object {
   "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
-  "Resources": Object {
-    "CdkRepo": Object {
-      "Properties": Object {
-        "RepositoryDescription": "App CDK Repo for Test Cosmos.",
-        "RepositoryName": "app-test-cdk-repo",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos:extension",
-            "Value": "Test",
-          },
-        ],
+  "Outputs": Object {
+    "CoreLibVersion": Object {
+      "Export": Object {
+        "Name": "AppLibVersion",
       },
-      "Type": "AWS::CodeCommit::Repository",
+      "Value": Any<String>,
     },
+  },
+  "Resources": Object {
     "RootZoneTest": Object {
       "Properties": Object {
         "HostedZoneId": Object {
@@ -49,19 +44,12 @@ Object {
 exports[`Cosmos Extension should match snapshot 1`] = `
 Object {
   "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
-  "Resources": Object {
-    "CdkRepo": Object {
-      "Properties": Object {
-        "RepositoryDescription": "App CDK Repo for Test Cosmos.",
-        "RepositoryName": "app-test-cdk-repo",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos:extension",
-            "Value": "Test",
-          },
-        ],
+  "Outputs": Object {
+    "CoreLibVersion": Object {
+      "Export": Object {
+        "Name": "AppLibVersion",
       },
-      "Type": "AWS::CodeCommit::Repository",
+      "Value": Any<String>,
     },
   },
 }
@@ -71,17 +59,6 @@ exports[`Cosmos should match snapshot 1`] = `
 Object {
   "Description": "Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole",
   "Outputs": Object {
-    "CdkRepoRepoName": Object {
-      "Export": Object {
-        "Name": "CoreCdkRepoName",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "CdkRepo",
-          "Name",
-        ],
-      },
-    },
     "CoreLibVersion": Object {
       "Export": Object {
         "Name": "CoreLibVersion",
@@ -186,19 +163,6 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Role",
-    },
-    "CdkRepo": Object {
-      "Properties": Object {
-        "RepositoryDescription": "Core CDK Repo for Cos Cosmos.",
-        "RepositoryName": "core-cos-cdk-repo",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-        ],
-      },
-      "Type": "AWS::CodeCommit::Repository",
     },
     "CustomCrossAccountExportsCustomResourceProviderHandler": Object {
       "DependsOn": Array [

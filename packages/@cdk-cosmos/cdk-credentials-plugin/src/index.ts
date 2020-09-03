@@ -1,30 +1,47 @@
 import { Plugin, PluginHost, CredentialProviderSource } from 'aws-cdk';
-import { Credentials, ChainableTemporaryCredentials } from 'aws-sdk';
+import { Credentials, ChainableTemporaryCredentials, HTTPOptions } from 'aws-sdk';
 
-// Init AWS-SDK with common settings like proxy
-// new SDK();
+const {
+  CDK_COSMOS_CREDENTIALS_PLUGIN_DISABLE = 'false',
+  CDK_COSMOS_CREDENTIALS_PLUGIN_ROLE = 'CoreCdkCrossAccountRole',
+} = process.env;
 
-export class CdkCredentialsProvider implements CredentialProviderSource {
-  readonly name = 'cdk-credentials-plugin';
-  readonly cache: { [key: string]: ChainableTemporaryCredentials | undefined } = {};
+export class CdkCosmosCredentialsPlugin implements Plugin {
+  public readonly version = '1';
+
+  public init(host: PluginHost): void {
+    host.registerCredentialProviderSource(new CdkCosmosCredentialsProvider());
+  }
+}
+
+module.exports = new CdkCosmosCredentialsPlugin();
+
+export class CdkCosmosCredentialsProvider implements CredentialProviderSource {
+  readonly name = 'cdk-cosmos-credentials-plugin';
+  private readonly cache: { [key: string]: ChainableTemporaryCredentials } = {};
 
   async isAvailable(): Promise<boolean> {
+    if (CDK_COSMOS_CREDENTIALS_PLUGIN_DISABLE === 'true') return false;
     return true;
   }
 
   async canProvideCredentials(accountId: string): Promise<boolean> {
+    let cred = this.cache[accountId];
+    if (cred && !cred.needsRefresh()) return true;
+
     try {
-      if (!this.cache[accountId]?.expired) {
-        const roleName = 'CoreCdkCrossAccountRole';
-        const cred = new ChainableTemporaryCredentials({
-          params: {
-            RoleArn: `arn:aws:iam::${accountId}:role/${roleName}`,
-            RoleSessionName: 'cdk-credentials-provider',
-          },
-        });
-        await cred.getPromise();
-        this.cache[accountId] = cred;
-      }
+      cred = new ChainableTemporaryCredentials({
+        params: {
+          RoleArn: `arn:aws:iam::${accountId}:role/${CDK_COSMOS_CREDENTIALS_PLUGIN_ROLE}`,
+          RoleSessionName: 'cdk-cosmos-credentials-provider',
+        },
+        stsConfig: {
+          httpOptions: getHttpOptions(),
+        },
+      });
+      await cred.getPromise();
+
+      this.cache[accountId] = cred;
       return true;
     } catch (error) {
       console.error(error.message);
@@ -39,12 +56,17 @@ export class CdkCredentialsProvider implements CredentialProviderSource {
   }
 }
 
-export class CdkCredentialsPlugin implements Plugin {
-  public readonly version = '1';
+const getHttpOptions = (): HTTPOptions => {
+  const options: HTTPOptions = {
+    connectTimeout: 30000,
+  };
 
-  public init(host: PluginHost): void {
-    host.registerCredentialProviderSource(new CdkCredentialsProvider());
+  const httpsProxy = process.env.HTTPS_PROXY || process.env.https_proxy;
+  if (httpsProxy) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const proxy = require('proxy-agent');
+    options.agent = proxy(httpsProxy);
   }
-}
 
-module.exports = new CdkCredentialsPlugin();
+  return options;
+};

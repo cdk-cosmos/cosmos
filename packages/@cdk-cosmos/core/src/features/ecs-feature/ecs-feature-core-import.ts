@@ -4,14 +4,14 @@ import { IApplicationLoadBalancer, IApplicationListener } from '@aws-cdk/aws-ela
 import { ISolarSystemCore } from '../../solar-system/solar-system-core-stack';
 import { SolarSystemCoreImport } from '../../solar-system/solar-system-core-import';
 import { IEcsFeatureCore } from './ecs-feature-core-stack';
-import { BaseConstruct, BaseConstructProps } from '../../components/base';
+import { BaseFeatureConstruct, BaseFeatureConstructProps } from '../../components/base';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../components/remote';
 
-export interface EcsFeatureCoreImportProps extends BaseConstructProps {
+export interface EcsFeatureCoreImportProps extends BaseFeatureConstructProps {
   solarSystem: ISolarSystemCore;
 }
 
-export class EcsFeatureCoreImport extends BaseConstruct implements IEcsFeatureCore {
+export class EcsFeatureCoreImport extends BaseFeatureConstruct implements IEcsFeatureCore {
   readonly solarSystem: ISolarSystemCore;
   readonly cluster: ICluster;
   readonly alb: IApplicationLoadBalancer;

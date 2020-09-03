@@ -14,7 +14,7 @@ describe('Cosmos', () => {
   test('should be a cosmos', () => {
     expect(cosmos.stackName).toEqual('CoreCosCosmos');
     expect(cosmosStack).toHaveOutput({ exportName: 'CoreLibVersion' });
-    toHaveResourceCount(cosmosStack, 4);
+    toHaveResourceCount(cosmosStack, 3);
   });
 
   test('should have a RootZone', () => {
@@ -22,12 +22,6 @@ describe('Cosmos', () => {
     expect(cosmosStack).toHaveOutput({ exportName: 'CoreRootZoneId' });
     expect(cosmosStack).toHaveOutput({ exportName: 'CoreRootZoneName' });
     toHaveResourceId(cosmosStack, 'RootZone');
-  });
-
-  test('should have a CdkRepo', () => {
-    expect(cosmosStack).toHaveResource('AWS::CodeCommit::Repository', { RepositoryName: 'core-cos-cdk-repo' });
-    expect(cosmosStack).toHaveOutput({ exportName: 'CoreCdkRepoName' });
-    toHaveResourceId(cosmosStack, 'CdkRepo');
   });
 
   test('should have a CdkMasterRole', () => {
@@ -54,12 +48,7 @@ describe('Cosmos', () => {
 describe('Cosmos Extension', () => {
   test('should be a cosmos extension', () => {
     expect(cosmosExtension.stackName).toEqual('AppTestCosmos');
-    toHaveResourceCount(cosmosExtensionStack, 1);
-  });
-
-  test('should have a CdkRepo', () => {
-    expect(cosmosExtensionStack).toHaveResource('AWS::CodeCommit::Repository', { RepositoryName: 'app-test-cdk-repo' });
-    toHaveResourceId(cosmosExtensionStack, 'CdkRepo');
+    toHaveResourceCount(cosmosExtensionStack, 0);
   });
 
   test('should allow resourced to be created in portal', () => {
@@ -72,12 +61,24 @@ describe('Cosmos Extension', () => {
       domainName: 'test',
     });
     const [cosmosExtensionStack] = synthesizeStacks(cosmosExtension);
-    expect(cosmosExtensionStack).toMatchSnapshot();
+    expect(cosmosExtensionStack).toMatchSnapshot({
+      Outputs: {
+        CoreLibVersion: {
+          Value: expect.any(String),
+        },
+      },
+    });
   });
 
   //TODO: Check if imports align
 
   test('should match snapshot', () => {
-    expect(cosmosExtensionStack).toMatchSnapshot();
+    expect(cosmosExtensionStack).toMatchSnapshot({
+      Outputs: {
+        CoreLibVersion: {
+          Value: expect.any(String),
+        },
+      },
+    });
   });
 });

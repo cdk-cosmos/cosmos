@@ -2,9 +2,9 @@
   "include": ["packages/*/*/src"],
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "ES2018",
+    "target": "es2018",
     "module": "commonjs",
-    "lib": ["es2018"],
+    "lib": ["es2020"],
     "declaration": true,
     "strict": true,
     "noImplicitAny": true,

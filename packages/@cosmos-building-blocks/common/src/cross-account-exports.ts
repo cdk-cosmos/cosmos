@@ -8,7 +8,7 @@ import {
   Stack,
   CfnResource,
 } from '@aws-cdk/core';
-import { IRole, CfnRole } from '@aws-cdk/aws-iam';
+import { CfnRole, IRole } from '@aws-cdk/aws-iam';
 
 export const RESOURCE_TYPE = 'Custom::CrossAccountExports';
 
@@ -83,8 +83,7 @@ export const createCrossAccountExportProvider = (scope: Construct, role?: IRole)
     providerHandler.addPropertyOverride('Role', role.roleArn);
     providerHandler.addDependsOn(role.node.defaultChild as CfnResource);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const deps = (providerHandler as any).dependsOn as Set<any>;
-    deps.delete(providerRole);
+    ((providerHandler as any).dependsOn as Set<any>).delete(providerRole);
   }
   return serviceToken;
 };

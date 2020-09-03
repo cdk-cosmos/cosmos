@@ -1,13 +1,15 @@
 import { Construct } from '@aws-cdk/core';
 import { Role } from '@aws-cdk/aws-iam';
 import { Project, IProject } from '@aws-cdk/aws-codebuild';
+import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { ISolarSystemExtension, SolarSystemExtensionStack } from '../../solar-system/solar-system-extension-stack';
 import { BaseFeatureConstruct, BaseFeatureConstructProps } from '../../components/base';
-import { CdkPipeline, CdkPipelineProps } from '../../components/cdk-pipeline';
-import { CDK_PIPELINE_STACK_PATTERN, CDK_PIPELINE_PATTERN } from './cicd-solar-system-core-stack';
+import { CdkPipeline, CdkPipelineProps, AddDeployStackStageProps } from '@cosmos-building-blocks/pipeline';
+import { CDK_PIPELINE_PATTERN } from './cicd-feature-core-stack';
 
 export interface ICiCdFeatureExtension extends Construct {
   readonly solarSystem: ISolarSystemExtension;
+  readonly cdkRepo: IRepository;
   readonly deployProject?: IProject;
 }
 
@@ -17,7 +19,8 @@ export interface CiCdFeatureExtensionStackProps extends BaseFeatureConstructProp
 
 export class CiCdFeatureExtensionStack extends BaseFeatureConstruct implements ICiCdFeatureExtension {
   readonly solarSystem: ISolarSystemExtension;
-  readonly deployPipeline: CdkPipeline;
+  readonly cdkRepo: Repository;
+  readonly cdkPipeline: CdkPipeline;
   readonly deployProject: Project;
 
   constructor(solarSystem: ISolarSystemExtension, id: string, props?: CiCdFeatureExtensionStackProps) {
@@ -28,20 +31,26 @@ export class CiCdFeatureExtensionStack extends BaseFeatureConstruct implements I
     this.solarSystem = solarSystem;
 
     const cdkMasterRoleStaticArn = this.solarSystem.galaxy.cosmos.portal.cdkMasterRoleStaticArn;
-    const cdkRepo = this.solarSystem.galaxy.cosmos.cdkRepo;
 
-    this.deployPipeline = new CdkPipeline(this, 'CdkPipeline', {
+    this.cdkRepo = new Repository(this.solarSystem.galaxy.cosmos, 'CdkRepo', {
+      repositoryName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Repo', '-').toLowerCase(),
+      description: `App CDK Repo for ${this.solarSystem.galaxy.cosmos.node.id} Cosmos.`,
+    });
+
+    this.cdkPipeline = new CdkPipeline(this, 'CdkPipeline', {
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', cdkMasterRoleStaticArn, {
         mutable: false,
       }),
-      deployStacks: [this.solarSystem.nodeId('*', '', CDK_PIPELINE_STACK_PATTERN)],
-      deploySubnets: { subnetGroupName: 'App' },
       ...cdkPipelineProps,
       pipelineName: this.solarSystem.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
       deployName: this.solarSystem.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
-      cdkRepo: cdkRepo,
+      cdkRepo: this.cdkRepo,
     });
-    this.deployProject = this.deployPipeline.deploy;
+    this.deployProject = this.cdkPipeline.deploy;
+  }
+
+  addDeployStackStage(props: AddDeployStackStageProps): void {
+    this.cdkPipeline.addDeployStackStage(props);
   }
 }
 
