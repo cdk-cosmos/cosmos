@@ -10,17 +10,6 @@ Object {
       },
       "Value": Any<String>,
     },
-    "ExportsOutputFnGetAttCdkRepoCloneUrlHttp": Object {
-      "Export": Object {
-        "Name": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "CdkRepo",
-          "CloneUrlHttp",
-        ],
-      },
-    },
     "ExportsOutputFnGetAttCdkRepoName": Object {
       "Export": Object {
         "Name": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
@@ -372,7 +361,19 @@ Object {
   }
 }",
           "Location": Object {
-            "Fn::ImportValue": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
+            "Fn::Join": Array [
+              "",
+              Array [
+                "https://git-codecommit.region.",
+                Object {
+                  "Ref": "AWS::URLSuffix",
+                },
+                "/v1/repos/",
+                Object {
+                  "Fn::ImportValue": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
+                },
+              ],
+            ],
           },
           "Type": "CODECOMMIT",
         },
@@ -420,17 +421,6 @@ Object {
         "Fn::GetAtt": Array [
           "CustomCrossAccountExportsCustomResourceProviderHandler",
           "Arn",
-        ],
-      },
-    },
-    "ExportsOutputFnGetAttCdkRepoCloneUrlHttp": Object {
-      "Export": Object {
-        "Name": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "CdkRepo",
-          "CloneUrlHttp",
         ],
       },
     },
@@ -740,16 +730,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268d\\"",
+    "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6\\"",
       "Type": "String",
     },
-    "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268d\\"",
+    "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6\\"",
       "Type": "String",
     },
-    "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268d\\"",
+    "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6\\"",
       "Type": "String",
     },
   },
@@ -780,7 +770,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3Bucket",
+                "Ref": "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6S3Bucket",
               },
               "/",
               Object {
@@ -790,7 +780,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3VersionKey",
+                        "Ref": "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6S3VersionKey",
                       },
                     ],
                   },
@@ -803,7 +793,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3VersionKey",
+                        "Ref": "AssetParameters4b2e88d387cb4ec7980c86b84c1a191bcc9ba9bc74a2c60a309f1f23fa4f4fc6S3VersionKey",
                       },
                     ],
                   },
@@ -1709,7 +1699,19 @@ Object {
   }
 }",
           "Location": Object {
-            "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
+            "Fn::Join": Array [
+              "",
+              Array [
+                "https://git-codecommit.region.",
+                Object {
+                  "Ref": "AWS::URLSuffix",
+                },
+                "/v1/repos/",
+                Object {
+                  "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
+                },
+              ],
+            ],
           },
           "Type": "CODECOMMIT",
         },
