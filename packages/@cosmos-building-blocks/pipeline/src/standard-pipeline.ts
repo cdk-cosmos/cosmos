@@ -1,4 +1,4 @@
-import { Construct, Stack } from '@aws-cdk/core';
+import { Construct, Stack, PhysicalName } from '@aws-cdk/core';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Pipeline, Artifact } from '@aws-cdk/aws-codepipeline';
 import { CodeCommitSourceAction, CodeBuildAction } from '@aws-cdk/aws-codepipeline-actions';
@@ -12,7 +12,7 @@ import {
   ComputeType,
   IBuildImage,
 } from '@aws-cdk/aws-codebuild';
-import { IRole } from '@aws-cdk/aws-iam';
+import { IRole, Role, CompositePrincipal, ServicePrincipal } from '@aws-cdk/aws-iam';
 import { IVpc, SubnetSelection } from '@aws-cdk/aws-ec2';
 import { SecureBucket } from '@cosmos-building-blocks/common';
 import { BuildSpecObject, BuildSpecBuilder } from './build-spec';
@@ -33,6 +33,8 @@ export interface StandardPipelineProps {
 }
 
 export class StandardPipeline extends Construct {
+  readonly codeRepo: IRepository;
+  readonly buildRole: IRole;
   readonly build: Project;
   readonly pipeline: Pipeline;
 
@@ -42,6 +44,7 @@ export class StandardPipeline extends Construct {
     const {
       pipelineName,
       buildName,
+      codeRepo,
       codeBranch = 'master',
       buildRole,
       buildVpc,
@@ -54,20 +57,30 @@ export class StandardPipeline extends Construct {
     } = props;
 
     // Cross Stack Dependency issue since repo stack might differ from this stack
-    const codeRepo =
-      Stack.of(this) !== Stack.of(props.codeRepo)
-        ? Repository.fromRepositoryName(this, props.codeRepo.node.id, props.codeRepo.repositoryName)
-        : props.codeRepo;
+    this.codeRepo =
+      Stack.of(this) !== Stack.of(codeRepo)
+        ? Repository.fromRepositoryName(this, codeRepo.node.id, codeRepo.repositoryName)
+        : codeRepo;
+
+    this.buildRole =
+      buildRole ||
+      new Role(this, 'Role', {
+        roleName: PhysicalName.GENERATE_IF_NEEDED,
+        assumedBy: new CompositePrincipal(
+          new ServicePrincipal('codepipeline.amazonaws.com'),
+          new ServicePrincipal('codebuild.amazonaws.com')
+        ),
+      });
 
     const artifactBucket = new SecureBucket(this, 'CodeArtifactBucket');
 
     this.build = new Project(this, 'Build', {
       projectName: buildName,
-      role: buildRole,
+      role: this.buildRole,
       vpc: buildVpc,
       subnetSelection: buildSubnets,
       source: Source.codeCommit({
-        repository: codeRepo,
+        repository: this.codeRepo,
         branchOrRef: codeBranch,
       }),
       buildSpec: buildSpec instanceof BuildSpec ? buildSpec : buildSpec ? BuildSpec.fromObject(buildSpec) : undefined,
@@ -84,30 +97,33 @@ export class StandardPipeline extends Construct {
     this.pipeline = new Pipeline(this, 'Pipeline', {
       pipelineName: pipelineName,
       artifactBucket: artifactBucket,
-      stages: [
-        {
-          stageName: 'Source',
-          actions: [
-            new CodeCommitSourceAction({
-              actionName: 'CodeCheckout',
-              repository: codeRepo,
-              branch: codeBranch,
-              output: sourceOutput,
-              variablesNamespace: 'CodeCheckout',
-            }),
-          ],
-        },
-        {
-          stageName: 'Build',
-          actions: [
-            new CodeBuildAction({
-              actionName: 'CodeBuild',
-              project: this.build,
-              input: sourceOutput,
-              variablesNamespace: 'CodeBuild',
-            }),
-          ],
-        },
+      role: this.buildRole,
+    });
+
+    this.pipeline.addStage({
+      stageName: 'Source',
+      actions: [
+        new CodeCommitSourceAction({
+          actionName: 'CodeCheckout',
+          role: this.pipeline.role,
+          repository: this.codeRepo,
+          branch: codeBranch,
+          output: sourceOutput,
+          variablesNamespace: 'CodeCheckout',
+        }),
+      ],
+    });
+
+    this.pipeline.addStage({
+      stageName: 'Build',
+      actions: [
+        new CodeBuildAction({
+          actionName: 'CodeBuild',
+          role: this.pipeline.role,
+          project: this.build,
+          input: sourceOutput,
+          variablesNamespace: 'CodeBuild',
+        }),
       ],
     });
   }

@@ -10,17 +10,6 @@ Object {
       },
       "Value": Any<String>,
     },
-    "ExportsOutputFnGetAttCdkRepoCloneUrlHttp": Object {
-      "Export": Object {
-        "Name": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "CdkRepo",
-          "CloneUrlHttp",
-        ],
-      },
-    },
     "ExportsOutputFnGetAttCdkRepoName": Object {
       "Export": Object {
         "Name": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
@@ -145,7 +134,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -183,7 +172,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTestGalSys2SolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e AppTestGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -372,7 +361,19 @@ Object {
   }
 }",
           "Location": Object {
-            "Fn::ImportValue": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
+            "Fn::Join": Array [
+              "",
+              Array [
+                "https://git-codecommit.region.",
+                Object {
+                  "Ref": "AWS::URLSuffix",
+                },
+                "/v1/repos/",
+                Object {
+                  "Fn::ImportValue": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
+                },
+              ],
+            ],
           },
           "Type": "CODECOMMIT",
         },
@@ -420,17 +421,6 @@ Object {
         "Fn::GetAtt": Array [
           "CustomCrossAccountExportsCustomResourceProviderHandler",
           "Arn",
-        ],
-      },
-    },
-    "ExportsOutputFnGetAttCdkRepoCloneUrlHttp": Object {
-      "Export": Object {
-        "Name": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "CdkRepo",
-          "CloneUrlHttp",
         ],
       },
     },
@@ -740,16 +730,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268d\\"",
+    "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4\\"",
       "Type": "String",
     },
-    "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268d\\"",
+    "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4\\"",
       "Type": "String",
     },
-    "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268d\\"",
+    "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4\\"",
       "Type": "String",
     },
   },
@@ -780,7 +770,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3Bucket",
+                "Ref": "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3Bucket",
               },
               "/",
               Object {
@@ -790,7 +780,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3VersionKey",
+                        "Ref": "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3VersionKey",
                       },
                     ],
                   },
@@ -803,7 +793,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters6773301fc16a909f477fe775aae41832a7907a454fae0164ad359f8d5d46268dS3VersionKey",
+                        "Ref": "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3VersionKey",
                       },
                     ],
                   },
@@ -1455,7 +1445,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -1493,7 +1483,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosGalSys2SolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -1520,7 +1510,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosLink\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosLink\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -1709,7 +1699,19 @@ Object {
   }
 }",
           "Location": Object {
-            "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoCloneUrlHttp816DF6FA",
+            "Fn::Join": Array [
+              "",
+              Array [
+                "https://git-codecommit.region.",
+                Object {
+                  "Ref": "AWS::URLSuffix",
+                },
+                "/v1/repos/",
+                Object {
+                  "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
+                },
+              ],
+            ],
           },
           "Type": "CODECOMMIT",
         },
