@@ -4,9 +4,9 @@ exports[`CICD-Solar-System Extension should have a CdkRepo 1`] = `
 Object {
   "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
   "Outputs": Object {
-    "CoreLibVersion": Object {
+    "AppLibVersion": Object {
       "Export": Object {
-        "Name": "AppLibVersion",
+        "Name": "AppTestLibVersion",
       },
       "Value": Any<String>,
     },

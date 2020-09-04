@@ -93,7 +93,7 @@ describe('CICD-Solar-System Extension', () => {
     toHaveResourceId(cosmosExtensionStack, 'CdkRepo');
     expect(cosmosExtensionStack).toMatchSnapshot({
       Outputs: {
-        CoreLibVersion: {
+        AppLibVersion: {
           Value: expect.any(String),
         },
       },
