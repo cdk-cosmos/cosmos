@@ -1,4 +1,14 @@
 
+## v0.6.3 (2020-09-04)
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`
+  * [#192](https://github.com/cdk-cosmos/cosmos/pull/192) Fix Lib Version export name for extensions ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.6.2 (2020-09-02)
 
 #### 🚀 Enhancement:
