@@ -63,7 +63,7 @@ describe('Cosmos Extension', () => {
     const [cosmosExtensionStack] = synthesizeStacks(cosmosExtension);
     expect(cosmosExtensionStack).toMatchSnapshot({
       Outputs: {
-        CoreLibVersion: {
+        AppLibVersion: {
           Value: expect.any(String),
         },
       },
@@ -75,7 +75,7 @@ describe('Cosmos Extension', () => {
   test('should match snapshot', () => {
     expect(cosmosExtensionStack).toMatchSnapshot({
       Outputs: {
-        CoreLibVersion: {
+        AppLibVersion: {
           Value: expect.any(String),
         },
       },

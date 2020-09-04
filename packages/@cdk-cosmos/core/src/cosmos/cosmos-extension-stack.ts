@@ -33,8 +33,8 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
 
     this.libVersion = getPackageVersion();
 
-    new CfnOutput(this, 'CoreLibVersion', {
-      exportName: this.singletonId('LibVersion'),
+    new CfnOutput(this, 'AppLibVersion', {
+      exportName: this.nodeId('LibVersion'),
       value: this.libVersion,
     });
 
