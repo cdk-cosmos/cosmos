@@ -1,3 +1,4 @@
+import { RequestOptions } from 'http';
 import { Plugin, PluginHost, CredentialProviderSource } from 'aws-cdk';
 import { Credentials, ChainableTemporaryCredentials, HTTPOptions } from 'aws-sdk';
 
@@ -57,7 +58,7 @@ export class CdkCosmosCredentialsProvider implements CredentialProviderSource {
 }
 
 const getHttpOptions = (): HTTPOptions => {
-  const options: HTTPOptions = {
+  const options: HTTPOptions & RequestOptions = {
     connectTimeout: 30000,
   };
 
@@ -65,7 +66,8 @@ const getHttpOptions = (): HTTPOptions => {
   if (httpsProxy) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const proxy = require('proxy-agent');
-    options.agent = proxy(httpsProxy);
+    options.protocol = 'https:';
+    options.agent = proxy();
   }
 
   return options;
