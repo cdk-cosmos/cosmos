@@ -1,8 +1,34 @@
-export const getRoutingPriority = (props: { hostHeader?: string; pathPattern?: string }): number => {
-  const path = getStringValue(props.pathPattern);
-  const host = getStringValue(props.hostHeader);
+import { ApplicationListenerRuleProps } from '@aws-cdk/aws-elasticloadbalancingv2';
+
+interface ListenerConditionRender {
+  field: string;
+  hostHeaderConfig?: {
+    values: string[];
+  };
+  pathPatternConfig?: {
+    values: string[];
+  };
+}
+
+export const getRoutingPriorityFromListenerProps = (props: Partial<ApplicationListenerRuleProps>): number => {
+  let host = props.hostHeader;
+  let path = props.pathPattern;
+
+  if (props.conditions) {
+    // Note: This solution only supports one value
+    const render = props.conditions.map(x => x.renderRawCondition() as ListenerConditionRender);
+    host = render.find(x => x.field === 'host-header')?.hostHeaderConfig?.values[0] || host;
+    path = render.find(x => x.field === 'path-pattern')?.pathPatternConfig?.values[0] || path;
+  }
+
+  return getRoutingPriority({ host, path });
+};
+
+export const getRoutingPriority = (props: { host?: string; path?: string }): number => {
+  const pathVal = getStringValue(props.path);
+  const hostVal = getStringValue(props.host);
   const count = 2;
-  const total = path + host;
+  const total = pathVal + hostVal;
   const inMin = 0 * count;
   const inMax = 128 * charMapping.length * count;
   const outMin = 1000; // Offset
