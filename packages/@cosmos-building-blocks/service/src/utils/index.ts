@@ -1,1 +1,1 @@
-export { getRoutingPriority } from './ecs-routing';
+export { getRoutingPriorityFromListenerProps, getRoutingPriority } from './ecs-routing';

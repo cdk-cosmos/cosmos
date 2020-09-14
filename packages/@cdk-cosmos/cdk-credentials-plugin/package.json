@@ -25,6 +25,9 @@
     "format": "prettier --write **/*.ts !**/*.d.ts",
     "clean": "rm -rf lib"
   },
+  "dependencies": {
+    "proxy-agent": "^3.1.1"
+  },
   "peerDependencies": {
     "aws-cdk": "^1.54.0"
   }
