@@ -10,10 +10,11 @@ import {
   ApplicationLoadBalancerProps,
   ContentType,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
-import { ManagedPolicy } from '@aws-cdk/aws-iam';
+import { ManagedPolicy, PolicyStatement, ServicePrincipal } from '@aws-cdk/aws-iam';
 import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 import { AutoScalingGroup } from '@aws-cdk/aws-autoscaling';
+import { IKey, Key } from '@aws-cdk/aws-kms';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
 import { CoreVpc } from '../../components/core-vpc';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../components/remote';
@@ -70,6 +71,9 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
               instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
               minCapacity: 1,
               maxCapacity: 5,
+              topicEncryptionKey:
+                this.solarSystem.galaxy.sharedKey &&
+                Key.fromKeyArn(this, 'SharedKey', this.solarSystem.galaxy.sharedKey.keyArn),
               ...clusterProps.capacity,
             }
           : undefined,

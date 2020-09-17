@@ -48,6 +48,17 @@ Object {
         ],
       },
     },
+    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578CidrBlock": Object {
+      "Export": Object {
+        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578CidrBlockF3542C65",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "SharedVpc",
+          "Outputs.CosGalSharedVpcEA1B9578CidrBlock",
+        ],
+      },
+    },
     "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref": Object {
       "Export": Object {
         "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578Ref35210733",
@@ -61,20 +72,90 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"ccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98eb\\"",
+    "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43\\"",
       "Type": "String",
     },
-    "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"ccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98eb\\"",
+    "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43\\"",
       "Type": "String",
     },
-    "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"ccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98eb\\"",
+    "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43\\"",
       "Type": "String",
     },
   },
   "Resources": Object {
+    "SharedKey": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "Description": "Share key for aws account.",
+        "KeyPolicy": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+                "kms:GenerateDataKey",
+                "kms:TagResource",
+                "kms:UntagResource",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+        ],
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "SharedKeyAlias": Object {
+      "Properties": Object {
+        "AliasName": "alias/SharedKey",
+        "TargetKeyId": Object {
+          "Fn::GetAtt": Array [
+            "SharedKey",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::KMS::Alias",
+    },
     "SharedVpc": Object {
       "Properties": Object {
         "Tags": Array [
@@ -97,7 +178,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebS3Bucket",
+                "Ref": "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43S3Bucket",
               },
               "/",
               Object {
@@ -107,7 +188,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebS3VersionKey",
+                        "Ref": "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43S3VersionKey",
                       },
                     ],
                   },
@@ -120,7 +201,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersccb488fd13037e95a495bd6175bc8c2fa97c443458e9721d554b579b5dbc98ebS3VersionKey",
+                        "Ref": "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43S3VersionKey",
                       },
                     ],
                   },
@@ -157,6 +238,14 @@ Object {
     "CosGalSharedVpcAppSubnet2Subnet0D4DDC84Ref": Object {
       "Value": Object {
         "Ref": "VpcAppSubnet2Subnet",
+      },
+    },
+    "CosGalSharedVpcEA1B9578CidrBlock": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Vpc",
+          "CidrBlock",
+        ],
       },
     },
     "CosGalSharedVpcEA1B9578Ref": Object {
@@ -687,6 +776,76 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
+    "SharedKey": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "Description": "Share key for aws account.",
+        "KeyPolicy": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+                "kms:GenerateDataKey",
+                "kms:TagResource",
+                "kms:UntagResource",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account2:root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal2",
+          },
+        ],
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "SharedKeyAlias": Object {
+      "Properties": Object {
+        "AliasName": "alias/SharedKey",
+        "TargetKeyId": Object {
+          "Fn::GetAtt": Array [
+            "SharedKey",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::KMS::Alias",
+    },
   },
 }
 `;
@@ -714,6 +873,14 @@ Object {
         "Name": "CoreGalSysVpcAZs",
       },
       "Value": "dummy1a,dummy1b",
+    },
+    "VpcCidrBlock": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcCidrBlock",
+      },
+      "Value": Object {
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578CidrBlockF3542C65",
+      },
     },
     "VpcId": Object {
       "Export": Object {
@@ -890,6 +1057,17 @@ Object {
         "Name": "CoreGal2Sys2VpcAZs",
       },
       "Value": "dummy1a,dummy1b",
+    },
+    "VpcCidrBlock": Object {
+      "Export": Object {
+        "Name": "CoreGal2Sys2VpcCidrBlock",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Vpc",
+          "CidrBlock",
+        ],
+      },
     },
     "VpcId": Object {
       "Export": Object {
