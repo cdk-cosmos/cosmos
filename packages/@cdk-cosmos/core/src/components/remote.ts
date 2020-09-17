@@ -56,6 +56,10 @@ export class RemoteVpc {
       exportName: `${exportName}Id`,
       value: vpc.vpcId,
     });
+    new CfnOutput(scope, 'VpcCidrBlock', {
+      exportName: `${exportName}CidrBlock`,
+      value: vpc.vpcCidrBlock,
+    });
     new CfnOutput(scope, 'VpcAZs', {
       exportName: `${exportName}AZs`,
       value: Fn.join(',', vpc.availabilityZones),
@@ -117,6 +121,7 @@ export class RemoteVpc {
     const { aZs, isolatedSubnetNames, privateSubnetNames, publicSubnetNames } = props;
 
     const vpcId = Fn.importValue(`${exportName}Id`);
+    const vpcCidrBlock = Fn.importValue(`${exportName}CidrBlock`);
     const availabilityZones = expandCfnArray(Fn.split(',', Fn.importValue(`${exportName}AZs`)), aZs);
 
     const isolatedSubnetIds = expandSubnetIds(isolatedSubnetNames, `${exportName}IsolatedSubnetIds`, aZs);
@@ -138,6 +143,7 @@ export class RemoteVpc {
 
     return Vpc.fromVpcAttributes(scope, id, {
       vpcId,
+      vpcCidrBlock,
       availabilityZones,
       isolatedSubnetNames,
       isolatedSubnetIds,

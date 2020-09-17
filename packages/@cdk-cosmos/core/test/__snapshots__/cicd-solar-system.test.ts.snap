@@ -648,6 +648,17 @@ Object {
       },
       "Value": "dummy1a,dummy1b",
     },
+    "VpcCidrBlock": Object {
+      "Export": Object {
+        "Name": "CoreGalCiCdVpcCidrBlock",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Vpc",
+          "CidrBlock",
+        ],
+      },
+    },
     "VpcId": Object {
       "Export": Object {
         "Name": "CoreGalCiCdVpcId",

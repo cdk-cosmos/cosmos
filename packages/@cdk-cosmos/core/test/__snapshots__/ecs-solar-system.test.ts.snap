@@ -52,6 +52,14 @@ Object {
         ],
       },
     },
+    "VpcCidrBlock": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcCidrBlock",
+      },
+      "Value": Object {
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578CidrBlockF3542C65",
+      },
+    },
     "VpcId": Object {
       "Export": Object {
         "Name": "CoreGalSysVpcId",
@@ -128,16 +136,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036\\"",
+    "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"d24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778\\"",
       "Type": "String",
     },
-    "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036\\"",
+    "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"d24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778\\"",
       "Type": "String",
     },
-    "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036\\"",
+    "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"d24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778\\"",
       "Type": "String",
     },
   },
@@ -333,7 +341,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036S3Bucket",
+                "Ref": "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778S3Bucket",
               },
               "/",
               Object {
@@ -343,7 +351,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036S3VersionKey",
+                        "Ref": "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778S3VersionKey",
                       },
                     ],
                   },
@@ -356,7 +364,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters3716bf0ca9ba42bf886fe27d1d8d0af2977acf5ed52ddc3e12a63c63ce714036S3VersionKey",
+                        "Ref": "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778S3VersionKey",
                       },
                     ],
                   },
@@ -1149,6 +1157,16 @@ def pick(dct, *keys):
                 "ecs:DescribeContainerInstances",
                 "ecs:DescribeTasks",
               ],
+              "Condition": Object {
+                "ArnEquals": Object {
+                  "ecs:cluster": Object {
+                    "Fn::GetAtt": Array [
+                      "Cluster",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": "*",
             },
@@ -1290,13 +1308,39 @@ def pick(dct, *keys):
           "Statement": Array [
             Object {
               "Action": Array [
-                "ecs:CreateCluster",
                 "ecs:DeregisterContainerInstance",
-                "ecs:DiscoverPollEndpoint",
-                "ecs:Poll",
                 "ecs:RegisterContainerInstance",
-                "ecs:StartTelemetrySession",
                 "ecs:Submit*",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "Cluster",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ecs:Poll",
+                "ecs:StartTelemetrySession",
+              ],
+              "Condition": Object {
+                "ArnEquals": Object {
+                  "ecs:cluster": Object {
+                    "Fn::GetAtt": Array [
+                      "Cluster",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "ecs:DiscoverPollEndpoint",
                 "ecr:GetAuthorizationToken",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
@@ -1464,6 +1508,16 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
+              "Action": Array [
+                "kms:Decrypt",
+                "kms:GenerateDataKey",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
+              },
+            },
+            Object {
               "Action": "sns:Publish",
               "Effect": "Allow",
               "Resource": Object {
@@ -1484,6 +1538,29 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
     },
     "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic": Object {
       "Properties": Object {
+        "KmsMasterKeyId": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::Split": Array [
+                "/",
+                Object {
+                  "Fn::Select": Array [
+                    5,
+                    Object {
+                      "Fn::Split": Array [
+                        ":",
+                        Object {
+                          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
         "Tags": Array [
           Object {
             "Key": "cosmos",
@@ -1557,6 +1634,14 @@ Object {
             },
           ],
         ],
+      },
+    },
+    "VpcCidrBlock": Object {
+      "Export": Object {
+        "Name": "CoreGalSys1VpcCidrBlock",
+      },
+      "Value": Object {
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcEA1B9578CidrBlockF3542C65",
       },
     },
     "VpcId": Object {
@@ -1635,16 +1720,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8\\"",
+    "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42\\"",
       "Type": "String",
     },
-    "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8\\"",
+    "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42\\"",
       "Type": "String",
     },
-    "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8\\"",
+    "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42\\"",
       "Type": "String",
     },
   },
@@ -1684,7 +1769,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8S3Bucket",
+                "Ref": "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42S3Bucket",
               },
               "/",
               Object {
@@ -1694,7 +1779,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8S3VersionKey",
+                        "Ref": "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42S3VersionKey",
                       },
                     ],
                   },
@@ -1707,7 +1792,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters26e46f377ea9ca6e191e6dcfaa180287714f3f9fc0e52461ec3096a76682a2f8S3VersionKey",
+                        "Ref": "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42S3VersionKey",
                       },
                     ],
                   },
@@ -2391,6 +2476,16 @@ def pick(dct, *keys):
                 "ecs:DescribeContainerInstances",
                 "ecs:DescribeTasks",
               ],
+              "Condition": Object {
+                "ArnEquals": Object {
+                  "ecs:cluster": Object {
+                    "Fn::GetAtt": Array [
+                      "Cluster",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
               "Effect": "Allow",
               "Resource": "*",
             },
@@ -2532,13 +2627,39 @@ def pick(dct, *keys):
           "Statement": Array [
             Object {
               "Action": Array [
-                "ecs:CreateCluster",
                 "ecs:DeregisterContainerInstance",
-                "ecs:DiscoverPollEndpoint",
-                "ecs:Poll",
                 "ecs:RegisterContainerInstance",
-                "ecs:StartTelemetrySession",
                 "ecs:Submit*",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "Cluster",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ecs:Poll",
+                "ecs:StartTelemetrySession",
+              ],
+              "Condition": Object {
+                "ArnEquals": Object {
+                  "ecs:cluster": Object {
+                    "Fn::GetAtt": Array [
+                      "Cluster",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "ecs:DiscoverPollEndpoint",
                 "ecr:GetAuthorizationToken",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
@@ -2706,6 +2827,16 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
+              "Action": Array [
+                "kms:Decrypt",
+                "kms:GenerateDataKey",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
+              },
+            },
+            Object {
               "Action": "sns:Publish",
               "Effect": "Allow",
               "Resource": Object {
@@ -2726,6 +2857,29 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
     },
     "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic": Object {
       "Properties": Object {
+        "KmsMasterKeyId": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::Split": Array [
+                "/",
+                Object {
+                  "Fn::Select": Array [
+                    5,
+                    Object {
+                      "Fn::Split": Array [
+                        ":",
+                        Object {
+                          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
         "Tags": Array [
           Object {
             "Key": "cosmos",
