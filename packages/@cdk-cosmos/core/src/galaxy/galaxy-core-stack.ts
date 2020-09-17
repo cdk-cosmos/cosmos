@@ -1,4 +1,4 @@
-import { Construct, Stack, Tag, IConstruct } from '@aws-cdk/core';
+import { Construct, Stack, Tags, IConstruct } from '@aws-cdk/core';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 import { IKey, Key } from '@aws-cdk/aws-kms';
@@ -50,7 +50,7 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
       this.cdkCrossAccountRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${CdkCrossAccountRoleName}`;
     }
 
-    Tag.add(this, 'cosmos:galaxy', this.node.id);
+    Tags.of(this).add('cosmos:galaxy', this.node.id);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

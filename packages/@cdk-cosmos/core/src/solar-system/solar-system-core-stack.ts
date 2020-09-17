@@ -1,4 +1,4 @@
-import { Construct, Duration, Tag, IConstruct } from '@aws-cdk/core';
+import { Construct, Duration, Tags, IConstruct } from '@aws-cdk/core';
 import { Vpc } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Certificate, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
@@ -113,7 +113,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     RemoteZone.export(this.zone, this.singletonId('Zone'));
     RemoteZone.export(this.privateZone, this.singletonId('PrivateZone'));
 
-    Tag.add(this, 'cosmos:solarsystem', this.node.id);
+    Tags.of(this).add('cosmos:solarsystem', this.node.id);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

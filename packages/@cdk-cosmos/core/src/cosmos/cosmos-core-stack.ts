@@ -1,4 +1,4 @@
-import { Construct, Stack, CfnOutput, Tag, IConstruct } from '@aws-cdk/core';
+import { Construct, Stack, CfnOutput, Tags, IConstruct } from '@aws-cdk/core';
 import { HostedZone, IPublicHostedZone } from '@aws-cdk/aws-route53';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
@@ -76,7 +76,7 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
       value: this.crossAccountExportServiceToken,
     });
 
-    Tag.add(this, 'cosmos', this.node.id);
+    Tags.of(this).add('cosmos', this.node.id);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
