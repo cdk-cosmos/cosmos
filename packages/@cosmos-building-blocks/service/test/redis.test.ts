@@ -31,19 +31,24 @@ test('Should match snapshot', () => {
   // Redis cluster only allowing connections from ec2 in 'Redis' subnet
   new Redis(stack, 'Redis', {
     vpc,
-    connectionsAllowedFrom: ec2.connections,
-    subnetIds: [{ subnetGroupName: 'Redis' }],
+    subnets: [{ subnetGroupName: 'Redis' }],
+  });
+  new Redis(stack, 'RedisHa', {
+    vpc,
+    subnets: [{ subnetGroupName: 'Redis' }],
+    highAvailabilityMode: true,
   });
   // Redis cluster allowing all connections in 'Redis' subnet
-  new Redis(stack, 'RedisOpen', {
+  new Redis(stack, 'RedisClosed', {
     vpc,
-    subnetIds: [{ subnetGroupName: 'Redis' }],
+    subnets: [{ subnetGroupName: 'Redis' }],
+    connectionsAllowedFrom: ec2.connections,
   });
 
   // Redis cluster overwriting some of the default props
   new Redis(stack, 'RedisOverwrite', {
     vpc,
-    subnetIds: [{ subnetGroupName: 'App' }],
+    subnets: [{ subnetGroupName: 'App' }],
     replicationGroupDescription: 'Redis cluster not encrypted',
     atRestEncryptionEnabled: false,
     cacheNodeType: 'cache.t3.medium',
@@ -76,7 +81,7 @@ test('Should be able to overwrite props', () => {
   });
   new Redis(stack, 'RedisTest2', {
     vpc,
-    subnetIds: [{ subnetGroupName: 'App' }],
+    subnets: [{ subnetGroupName: 'App' }],
     atRestEncryptionEnabled: true,
     cacheNodeType: 'cache.t3.medium',
     numCacheClusters: 3,
@@ -115,13 +120,13 @@ test('Default Redis should have all default properties', () => {
   // Redis with only required props
   new Redis(stack, 'RedisTest3', {
     vpc,
-    subnetIds: [{ subnetGroupName: 'Redis' }],
+    subnets: [{ subnetGroupName: 'Redis' }],
   });
   // THEN
   // Redis SG should allow connection from anywhere on port 6379
   cdkExpect(stack).to(
     haveResourceLike('AWS::EC2::SecurityGroup', {
-      GroupDescription: 'redis-default/RedisTest3/RedisSecurityGroup',
+      GroupDescription: 'Redis Security Group for redis-default/RedisTest3',
       SecurityGroupIngress: [{ CidrIp: '0.0.0.0/0', ToPort: 6379 }],
     })
   );

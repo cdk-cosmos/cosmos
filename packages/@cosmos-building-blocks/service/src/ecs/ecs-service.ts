@@ -34,6 +34,7 @@ export interface EcsServiceProps {
   vpc: IVpc;
   cluster: ICluster;
   httpListener?: IApplicationListener;
+  httpsListener?: IApplicationListener;
   logProps?: Partial<LogGroupProps>;
   taskProps?: Partial<Ec2TaskDefinitionProps>;
   containerProps: ContainerDefinitionOptions & { port?: PortMapping };
@@ -41,6 +42,7 @@ export interface EcsServiceProps {
   targetGroupProps?: Partial<ApplicationTargetGroupProps>;
   routingProps?: Partial<ApplicationListenerRuleProps>;
   scalingProps?: EnableScalingProps;
+  httpsRedirect?: boolean;
 }
 
 export class EcsService extends Construct {
@@ -49,7 +51,7 @@ export class EcsService extends Construct {
   readonly container: ContainerDefinition;
   readonly service: Ec2Service;
   readonly targetGroup?: ApplicationTargetGroup;
-  readonly listenerRule?: ApplicationListenerRule;
+  readonly listenerRules?: ApplicationListenerRule[];
   readonly scaling?: ScalableTaskCount;
 
   constructor(scope: Construct, id: string, props: EcsServiceProps) {
@@ -59,6 +61,7 @@ export class EcsService extends Construct {
       vpc,
       cluster,
       httpListener,
+      httpsListener,
       logProps,
       taskProps,
       containerProps,
@@ -66,6 +69,7 @@ export class EcsService extends Construct {
       targetGroupProps,
       routingProps,
       scalingProps,
+      httpsRedirect,
     } = props;
 
     this.logGroup = new LogGroup(this, 'Logs', {
@@ -98,7 +102,7 @@ export class EcsService extends Construct {
     });
 
     if (routingProps) {
-      if (!httpListener) throw new Error('To enable routing, Http Listener is required');
+      if (!httpListener && !httpsListener) throw new Error('To enable routing, an Http Listener is required');
 
       this.targetGroup = new ApplicationTargetGroup(this, 'ServiceTargetGroup', {
         protocol: ApplicationProtocol.HTTP,
@@ -115,12 +119,40 @@ export class EcsService extends Construct {
         ],
       });
 
-      this.listenerRule = new ApplicationListenerRule(this, 'ServiceRule', {
-        priority: getRoutingPriorityFromListenerProps(routingProps),
-        ...routingProps,
-        listener: httpListener,
-        action: ListenerAction.forward([this.targetGroup]),
-      });
+      this.listenerRules = [];
+
+      if (httpsListener) {
+        this.listenerRules.push(
+          new ApplicationListenerRule(this, `HttpsServiceRule`, {
+            priority: getRoutingPriorityFromListenerProps(routingProps),
+            ...routingProps,
+            listener: httpsListener,
+            action: ListenerAction.forward([this.targetGroup]),
+          })
+        );
+      }
+
+      if (httpsRedirect && httpListener) {
+        new ApplicationListenerRule(this, 'HttpsRedirect', {
+          ...routingProps,
+          listener: httpListener,
+          priority: getRoutingPriorityFromListenerProps(routingProps),
+          action: ListenerAction.redirect({
+            permanent: true,
+            protocol: 'HTTPS',
+            port: '443',
+          }),
+        });
+      } else if (httpListener) {
+        this.listenerRules.push(
+          new ApplicationListenerRule(this, `HttpServiceRule`, {
+            priority: getRoutingPriorityFromListenerProps(routingProps),
+            ...routingProps,
+            listener: httpListener,
+            action: ListenerAction.forward([this.targetGroup]),
+          })
+        );
+      }
     }
 
     if (scalingProps) {

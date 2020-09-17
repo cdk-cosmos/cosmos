@@ -303,11 +303,6 @@ Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "EnvironmentVariables": Array [
             Object {
-              "Name": "NPM_KEY",
-              "Type": "PLAINTEXT",
-              "Value": "",
-            },
-            Object {
               "Name": "DIFF",
               "Type": "PLAINTEXT",
               "Value": "true",
@@ -341,7 +336,6 @@ Object {
     },
     \\"pre_build\\": {
       \\"commands\\": [
-        \\"echo \\\\\\"//registry.npmjs.org/:_authToken=\${NPM_KEY}\\\\\\" >> ~/.npmrc\\",
         \\"npm ci\\"
       ]
     },
@@ -730,16 +724,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4\\"",
+    "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71\\"",
       "Type": "String",
     },
-    "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4\\"",
+    "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71\\"",
       "Type": "String",
     },
-    "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4\\"",
+    "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71\\"",
       "Type": "String",
     },
   },
@@ -770,7 +764,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3Bucket",
+                "Ref": "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71S3Bucket",
               },
               "/",
               Object {
@@ -780,7 +774,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3VersionKey",
+                        "Ref": "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71S3VersionKey",
                       },
                     ],
                   },
@@ -793,7 +787,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters75c41f8eae89371a99487fc0bc3547728c61fdee5c5c0dc12bd8f03ec5f3dbc4S3VersionKey",
+                        "Ref": "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71S3VersionKey",
                       },
                     ],
                   },
@@ -1641,11 +1635,6 @@ Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "EnvironmentVariables": Array [
             Object {
-              "Name": "NPM_KEY",
-              "Type": "PLAINTEXT",
-              "Value": "",
-            },
-            Object {
               "Name": "DIFF",
               "Type": "PLAINTEXT",
               "Value": "true",
@@ -1679,7 +1668,6 @@ Object {
     },
     \\"pre_build\\": {
       \\"commands\\": [
-        \\"echo \\\\\\"//registry.npmjs.org/:_authToken=\${NPM_KEY}\\\\\\" >> ~/.npmrc\\",
         \\"npm ci\\"
       ]
     },
