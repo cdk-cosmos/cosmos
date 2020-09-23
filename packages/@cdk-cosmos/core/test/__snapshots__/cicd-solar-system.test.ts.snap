@@ -735,16 +735,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71\\"",
+    "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4b\\"",
       "Type": "String",
     },
-    "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71\\"",
+    "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4b\\"",
       "Type": "String",
     },
-    "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71\\"",
+    "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4b\\"",
       "Type": "String",
     },
   },
@@ -775,7 +775,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71S3Bucket",
+                "Ref": "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3Bucket",
               },
               "/",
               Object {
@@ -785,7 +785,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71S3VersionKey",
+                        "Ref": "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3VersionKey",
                       },
                     ],
                   },
@@ -798,7 +798,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters27680a1a0b04509c93619202514524eddcdf962cd233e574b295f344620c7f71S3VersionKey",
+                        "Ref": "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3VersionKey",
                       },
                     ],
                   },
@@ -1359,6 +1359,7 @@ Object {
 
 exports[`CICD-Solar-System should match snapshot 2`] = `
 Object {
+  "Description": "Add CiCd Features to the SolarSystem",
   "Resources": Object {
     "CdkPipeline": Object {
       "Properties": Object {
