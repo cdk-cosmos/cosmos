@@ -22,8 +22,7 @@ import { IVpc, SubnetSelection, Peer, Port } from '@aws-cdk/aws-ec2';
 import { SecureBucket } from '@cosmos-building-blocks/common';
 import { NPM_LOGIN, NPM_INSTALL } from './commands';
 import { BuildSpecBuilder } from './build-spec';
-
-export type BuildEnvironmentVariables = { [key: string]: BuildEnvironmentVariable | undefined };
+import { BuildEnvironmentVariables, parseEnvs } from './utils';
 
 export interface CdkPipelineProps {
   pipelineName?: string;
@@ -154,7 +153,7 @@ export class CdkPipeline extends Construct {
       buildSpec: buildSpec,
       environment: {
         buildImage: LinuxBuildImage.STANDARD_3_0,
-        environmentVariables: filterEnvs(envs),
+        environmentVariables: parseEnvs(envs),
         privileged: true,
       },
       artifacts: Artifacts.s3({
@@ -267,7 +266,7 @@ export class CdkPipeline extends Construct {
         runOrder: 2,
         project: this.deploy,
         input: cdkOutputArtifact,
-        environmentVariables: filterEnvs(envs),
+        environmentVariables: parseEnvs(envs),
         stacks: stackNames(stacks),
         hasDiffStage: pipeline === this.pipeline && this.hasDiffStage,
         exclusive: exclusive,
@@ -356,7 +355,7 @@ export class CdkDeployAction extends CodeBuildAction {
 
     super({
       ...props,
-      environmentVariables: filterEnvs(envs),
+      environmentVariables: parseEnvs(envs),
     });
 
     this.stacks = stacks;
@@ -417,16 +416,4 @@ const findStackDependencies = (stack: Stack): Stack[] => {
     }, []);
 
   return deps;
-};
-
-const filterEnvs = (
-  envs: BuildEnvironmentVariables | undefined
-): { [key: string]: BuildEnvironmentVariable } | undefined => {
-  if (envs) {
-    Object.keys(envs).forEach(k => {
-      if (envs[k] === undefined) delete envs[k];
-    });
-    return envs as { [key: string]: BuildEnvironmentVariable };
-  }
-  return undefined;
 };
