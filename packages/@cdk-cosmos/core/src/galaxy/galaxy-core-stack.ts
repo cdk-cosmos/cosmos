@@ -38,6 +38,7 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
     this.sharedKey = new Key(this, 'SharedKey', {
       description: 'Share key for aws account.',
       alias: 'SharedKey',
+      trustAccountIdentities: true,
     });
 
     if (isCrossAccount(this, this.cosmos)) {
