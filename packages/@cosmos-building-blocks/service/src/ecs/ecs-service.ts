@@ -132,7 +132,9 @@ export class EcsService extends Construct {
         );
       }
 
-      if (httpsRedirect && httpListener) {
+      if (httpsRedirect) {
+        if (!httpListener) throw new Error('To enable https redirect you must provide an httpListener');
+
         new ApplicationListenerRule(this, 'HttpsRedirect', {
           ...routingProps,
           listener: httpListener,

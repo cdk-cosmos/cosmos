@@ -26,7 +26,10 @@ export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatu
   readonly deployProject: Project;
 
   constructor(solarSystem: ISolarSystemCore, id: string, props?: CiCdFeatureCoreStackProps) {
-    super(solarSystem, id, props);
+    super(solarSystem, id, {
+      description: 'Add CiCd Features to the SolarSystem',
+      ...props,
+    });
 
     const { cdkRepoProps, cdkPipelineProps } = props || {};
 

@@ -136,16 +136,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"d24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778\\"",
+    "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0\\"",
       "Type": "String",
     },
-    "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"d24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778\\"",
+    "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0\\"",
       "Type": "String",
     },
-    "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"d24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778\\"",
+    "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0\\"",
       "Type": "String",
     },
   },
@@ -341,7 +341,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778S3Bucket",
+                "Ref": "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0S3Bucket",
               },
               "/",
               Object {
@@ -351,7 +351,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778S3VersionKey",
+                        "Ref": "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0S3VersionKey",
                       },
                     ],
                   },
@@ -364,7 +364,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersd24cb97cfaf74a9bb0f63dae5e943e3af82c718fee0945a0ffd4a7324a465778S3VersionKey",
+                        "Ref": "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0S3VersionKey",
                       },
                     ],
                   },
@@ -456,6 +456,7 @@ Object {
 
 exports[`ECS-Solar-System should match snapshot 2`] = `
 Object {
+  "Description": "Adds Ecs Features to the SolarSystem",
   "Outputs": Object {
     "AlbArn": Object {
       "Export": Object {
@@ -1720,16 +1721,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42\\"",
+    "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"b78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acd\\"",
       "Type": "String",
     },
-    "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42\\"",
+    "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"b78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acd\\"",
       "Type": "String",
     },
-    "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42\\"",
+    "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"b78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acd\\"",
       "Type": "String",
     },
   },
@@ -1769,7 +1770,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42S3Bucket",
+                "Ref": "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdS3Bucket",
               },
               "/",
               Object {
@@ -1779,7 +1780,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42S3VersionKey",
+                        "Ref": "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdS3VersionKey",
                       },
                     ],
                   },
@@ -1792,7 +1793,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters4a9b2ad55641c426276bc0d3e3bd01dd85037e70d44fa24c03854fd621601f42S3VersionKey",
+                        "Ref": "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdS3VersionKey",
                       },
                     ],
                   },
@@ -1884,6 +1885,7 @@ Object {
 
 exports[`ECS-Solar-System should match snapshot 4`] = `
 Object {
+  "Description": "Adds Ecs Features to the SolarSystem",
   "Outputs": Object {
     "AlbArn": Object {
       "Export": Object {

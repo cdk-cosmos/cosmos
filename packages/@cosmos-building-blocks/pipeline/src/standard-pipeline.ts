@@ -6,7 +6,6 @@ import {
   Project,
   BuildSpec,
   LinuxBuildImage,
-  BuildEnvironmentVariable,
   Source,
   BuildEnvironmentVariableType,
   ComputeType,
@@ -16,6 +15,7 @@ import { IRole, Role, CompositePrincipal, ServicePrincipal } from '@aws-cdk/aws-
 import { IVpc, SubnetSelection } from '@aws-cdk/aws-ec2';
 import { SecureBucket } from '@cosmos-building-blocks/common';
 import { BuildSpecObject, BuildSpecBuilder } from './build-spec';
+import { BuildEnvironmentVariables, parseEnvs } from './utils';
 
 export interface StandardPipelineProps {
   pipelineName?: string;
@@ -87,7 +87,7 @@ export class StandardPipeline extends Construct {
       environment: {
         computeType: buildComputeType,
         buildImage: buildImage,
-        environmentVariables: buildEnvs,
+        environmentVariables: parseEnvs(buildEnvs),
         privileged: buildPrivileged,
       },
     });
@@ -141,7 +141,3 @@ export class StandardPipeline extends Construct {
     };
   }
 }
-
-export type BuildEnvironmentVariables = {
-  [key: string]: BuildEnvironmentVariable;
-};

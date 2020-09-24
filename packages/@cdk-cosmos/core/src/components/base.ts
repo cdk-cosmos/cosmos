@@ -88,6 +88,7 @@ export class BaseStack extends Stack {
 
 export interface BaseNestedStackProps extends NestedStackProps {
   type?: string;
+  description?: string;
 }
 
 export class BaseNestedStack extends NestedStack {
@@ -101,9 +102,10 @@ export class BaseNestedStack extends NestedStack {
 
   constructor(scope: Construct, id: string, props?: BaseNestedStackProps) {
     super(scope, id, props);
-    const { type } = props || {};
+    const { type, description } = props || {};
 
     this.node.type = type;
+    this.templateOptions.description = description;
     this.hidden = new Construct(this, 'Default');
 
     // Change Nested Stack Naming
