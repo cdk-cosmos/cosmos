@@ -1,4 +1,21 @@
 
+## v0.6.4 (2020-09-24)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/cdk-credentials-plugin`, `@cdk-cosmos/core`, `@cosmos-building-blocks/app-ec2`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/network`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#202](https://github.com/cdk-cosmos/cosmos/pull/202) Add Kms Key for ECS topic encryption ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#200](https://github.com/cdk-cosmos/cosmos/pull/200) Add highAvailabilityMode to Redis + Add Change Dir to CDK Pipeline + Add Support for http and https listeners + https redirect for Ecs Service ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`
+  * [#205](https://github.com/cdk-cosmos/cosmos/pull/205) Fix kms key for cross stack use ([@timpur](https://github.com/timpur))
+  * [#203](https://github.com/cdk-cosmos/cosmos/pull/203) Fix Deprecated Tag interface 6a704be ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.6.3 (2020-09-04)
 
 #### 🐛 Bug Fix
