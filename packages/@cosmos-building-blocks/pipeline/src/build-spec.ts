@@ -10,7 +10,9 @@ export type Phase = 'install' | 'pre_build' | 'build' | 'post_build';
 export type Runtime = 'android' | 'dotnet' | 'golang' | 'nodejs' | 'java' | 'php' | 'python' | 'ruby';
 export type Version = 'latest' | string;
 
-export interface Command {
+export type NullableString = string | null | undefined;
+
+export interface Commands {
   'run-as'?: string;
   commands: string[];
   finally?: string[];
@@ -41,7 +43,7 @@ export type BuildSpecObject = {
     'exported-variables'?: string[];
     'git-credential-helper'?: boolean;
   };
-  phases: Partial<Record<Phase, Command>> & {
+  phases: Partial<Record<Phase, Commands>> & {
     install?: {
       'runtime-versions'?: Partial<Record<Runtime, Version>>;
     };
@@ -84,19 +86,19 @@ export class BuildSpecBuilder extends BuildSpec {
     return this;
   }
 
-  addCommands(phase: Phase, ...commands: string[]): BuildSpecBuilder {
+  addCommands(phase: Phase, ...commands: NullableString[]): BuildSpecBuilder {
     if (!this.spec.phases[phase]) this.spec.phases[phase] = { commands: [] };
-    const _phase = this.spec.phases[phase] as Command;
-    _phase.commands.push(...commands);
+    const _phase = this.spec.phases[phase] as Commands;
+    _phase.commands.push(...filterNullableStrings(commands));
 
     return this;
   }
 
-  addFinallyCommands(phase: Phase, ...commands: string[]): BuildSpecBuilder {
+  addFinallyCommands(phase: Phase, ...commands: NullableString[]): BuildSpecBuilder {
     if (!this.spec.phases[phase]) this.spec.phases[phase] = { commands: [] };
-    const _phase = this.spec.phases[phase] as Command;
+    const _phase = this.spec.phases[phase] as Commands;
     if (!_phase.finally) _phase.finally = [];
-    _phase.finally.push(...commands);
+    _phase.finally.push(...filterNullableStrings(commands));
 
     return this;
   }
@@ -108,9 +110,9 @@ export class BuildSpecBuilder extends BuildSpec {
     return this;
   }
 
-  addExportedVariables(...name: string[]): BuildSpecBuilder {
+  addExportedVariables(...name: NullableString[]): BuildSpecBuilder {
     if (!this.spec.env['exported-variables']) this.spec.env['exported-variables'] = [];
-    this.spec.env['exported-variables'].push(...name);
+    this.spec.env['exported-variables'].push(...filterNullableStrings(name));
 
     return this;
   }
@@ -149,3 +151,5 @@ export class BuildSpecBuilder extends BuildSpec {
     return this;
   }
 }
+
+const filterNullableStrings = (commands: NullableString[]): string[] => commands.filter(x => x) as string[];

@@ -23,33 +23,36 @@ import {
   IApplicationListener,
   ApplicationListenerRuleProps,
   ApplicationTargetGroupProps,
+  ListenerAction,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { IVpc } from '@aws-cdk/aws-ec2';
-import { LogGroup, LogGroupProps } from '@aws-cdk/aws-logs';
+import { LogGroup, LogGroupProps, RetentionDays } from '@aws-cdk/aws-logs';
 import { EnableScalingProps } from '@aws-cdk/aws-applicationautoscaling';
-import { getRoutingPriority } from '../utils';
+import { getRoutingPriorityFromListenerProps } from '../utils';
 
 export interface EcsServiceProps {
   vpc: IVpc;
   cluster: ICluster;
-  containerProps: ContainerDefinitionOptions & { port?: PortMapping };
   httpListener?: IApplicationListener;
+  httpsListener?: IApplicationListener;
+  logProps?: Partial<LogGroupProps>;
   taskProps?: Partial<Ec2TaskDefinitionProps>;
+  containerProps: ContainerDefinitionOptions & { port?: PortMapping };
   serviceProps?: Partial<Ec2ServiceProps>;
   targetGroupProps?: Partial<ApplicationTargetGroupProps>;
   routingProps?: Partial<ApplicationListenerRuleProps>;
   scalingProps?: EnableScalingProps;
-  logProps?: Partial<LogGroupProps>;
+  httpsRedirect?: boolean;
 }
 
 export class EcsService extends Construct {
-  readonly LogGroup: LogGroup;
-  readonly TaskDefinition: Ec2TaskDefinition;
-  readonly Container: ContainerDefinition;
-  readonly Service: Ec2Service;
-  readonly TargetGroup?: ApplicationTargetGroup;
-  readonly ListenerRule?: ApplicationListenerRule;
-  readonly Scaling?: ScalableTaskCount;
+  readonly logGroup: LogGroup;
+  readonly taskDefinition: Ec2TaskDefinition;
+  readonly container: ContainerDefinition;
+  readonly service: Ec2Service;
+  readonly targetGroup?: ApplicationTargetGroup;
+  readonly listenerRules?: ApplicationListenerRule[];
+  readonly scaling?: ScalableTaskCount;
 
   constructor(scope: Construct, id: string, props: EcsServiceProps) {
     super(scope, id);
@@ -58,92 +61,130 @@ export class EcsService extends Construct {
       vpc,
       cluster,
       httpListener,
-      containerProps,
+      httpsListener,
+      logProps,
       taskProps,
+      containerProps,
       serviceProps,
       targetGroupProps,
       routingProps,
       scalingProps,
-      logProps,
+      httpsRedirect,
     } = props;
 
-    this.LogGroup = new LogGroup(this, 'Logs', logProps);
+    this.logGroup = new LogGroup(this, 'Logs', {
+      retention: RetentionDays.ONE_MONTH,
+      ...logProps,
+    });
 
-    this.TaskDefinition = new Ec2TaskDefinition(this, 'Task', {
+    this.taskDefinition = new Ec2TaskDefinition(this, 'Task', {
       ...taskProps,
     });
 
-    this.Container = this.TaskDefinition.addContainer('Container', {
-      memoryLimitMiB: 256,
-      logging: LogDrivers.awsLogs({ logGroup: this.LogGroup, streamPrefix: `Container` }),
+    this.container = this.taskDefinition.addContainer('Container', {
+      memoryReservationMiB: 256,
+      logging: LogDrivers.awsLogs({ logGroup: this.logGroup, streamPrefix: `Container` }),
       ...containerProps,
     });
 
-    this.Container.addPortMappings({
+    this.container.addPortMappings({
       containerPort: 80,
       protocol: Protocol.TCP,
       ...containerProps.port,
     });
 
-    this.Service = new Ec2Service(this, 'Service', {
+    this.service = new Ec2Service(this, 'Service', {
       desiredCount: 1,
       placementStrategies: [PlacementStrategy.spreadAcross(BuiltInAttributes.AVAILABILITY_ZONE)],
       ...serviceProps,
-      taskDefinition: this.TaskDefinition,
+      taskDefinition: this.taskDefinition,
       cluster: cluster,
     });
 
     if (routingProps) {
-      if (!httpListener) throw new Error('To enable routing, Http Listener is required');
+      if (!httpListener && !httpsListener) throw new Error('To enable routing, an Http Listener is required');
 
-      this.TargetGroup = new ApplicationTargetGroup(this, 'ServiceTargetGroup', {
+      this.targetGroup = new ApplicationTargetGroup(this, 'ServiceTargetGroup', {
         protocol: ApplicationProtocol.HTTP,
         deregistrationDelay: Duration.seconds(0),
+        healthCheck: {
+          path: '/health',
+        },
         ...targetGroupProps,
         vpc: vpc,
         targets: [
-          this.Service.loadBalancerTarget({
+          this.service.loadBalancerTarget({
             containerName: 'Container',
           }),
         ],
       });
 
-      this.ListenerRule = new ApplicationListenerRule(this, 'ServiceRule', {
-        priority: getRoutingPriority(routingProps),
-        ...routingProps,
-        listener: httpListener,
-        targetGroups: [this.TargetGroup],
-      });
+      this.listenerRules = [];
+
+      if (httpsListener) {
+        this.listenerRules.push(
+          new ApplicationListenerRule(this, `HttpsServiceRule`, {
+            priority: getRoutingPriorityFromListenerProps(routingProps),
+            ...routingProps,
+            listener: httpsListener,
+            action: ListenerAction.forward([this.targetGroup]),
+          })
+        );
+      }
+
+      if (httpsRedirect) {
+        if (!httpListener) throw new Error('To enable https redirect you must provide an httpListener');
+
+        new ApplicationListenerRule(this, 'HttpsRedirect', {
+          ...routingProps,
+          listener: httpListener,
+          priority: getRoutingPriorityFromListenerProps(routingProps),
+          action: ListenerAction.redirect({
+            permanent: true,
+            protocol: 'HTTPS',
+            port: '443',
+          }),
+        });
+      } else if (httpListener) {
+        this.listenerRules.push(
+          new ApplicationListenerRule(this, `HttpServiceRule`, {
+            priority: getRoutingPriorityFromListenerProps(routingProps),
+            ...routingProps,
+            listener: httpListener,
+            action: ListenerAction.forward([this.targetGroup]),
+          })
+        );
+      }
     }
 
     if (scalingProps) {
-      this.Scaling = this.Service.autoScaleTaskCount(scalingProps);
+      this.scaling = this.service.autoScaleTaskCount(scalingProps);
     }
   }
 
   addCpuAutoScaling(props: Partial<CpuUtilizationScalingProps>): void {
-    if (!this.Scaling) throw new Error('Scaling needs to be enabled');
-    this.Scaling.scaleOnCpuUtilization('CpuScaling', {
+    if (!this.scaling) throw new Error('Scaling needs to be enabled');
+    this.scaling.scaleOnCpuUtilization('CpuScaling', {
       ...props,
       targetUtilizationPercent: 50,
     });
   }
 
   addMemoryAutoScaling(props: Partial<RequestCountScalingProps>): void {
-    if (!this.Scaling) throw new Error('Scaling needs to be enabled');
-    this.Scaling.scaleOnMemoryUtilization('MemoryScaling', {
+    if (!this.scaling) throw new Error('Scaling needs to be enabled');
+    this.scaling.scaleOnMemoryUtilization('MemoryScaling', {
       ...props,
       targetUtilizationPercent: 50,
     });
   }
 
   addRequestAutoScaling(props: Partial<RequestCountScalingProps>): void {
-    if (!this.Scaling) throw new Error('Scaling needs to be enabled');
-    if (!this.TargetGroup) throw new Error('Routing needs to be enabled');
-    this.Scaling.scaleOnRequestCount('RequestScaling', {
+    if (!this.scaling) throw new Error('Scaling needs to be enabled');
+    if (!this.targetGroup) throw new Error('Routing needs to be enabled');
+    this.scaling.scaleOnRequestCount('RequestScaling', {
       ...props,
       requestsPerTarget: 500,
-      targetGroup: this.TargetGroup,
+      targetGroup: this.targetGroup,
     });
   }
 }

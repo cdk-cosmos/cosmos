@@ -4,7 +4,7 @@ import { App, Stack } from '@aws-cdk/core';
 import { EcsService } from '../src';
 import { Cluster, ContainerImage } from '@aws-cdk/aws-ecs';
 import { Vpc, SecurityGroup } from '@aws-cdk/aws-ec2';
-import { ApplicationListener } from '@aws-cdk/aws-elasticloadbalancingv2';
+import { ApplicationListener, ListenerCondition } from '@aws-cdk/aws-elasticloadbalancingv2';
 
 const app = new App();
 const stack = new Stack(app, 'Stack');
@@ -22,14 +22,22 @@ const listener = ApplicationListener.fromApplicationListenerAttributes(stack, 'L
   listenerArn: 'Listener',
   securityGroup: cluster.connections.securityGroups[0],
 });
+const listener2 = ApplicationListener.fromApplicationListenerAttributes(stack, 'Listener2', {
+  listenerArn: 'Listener2',
+  securityGroup: cluster.connections.securityGroups[0],
+});
 new EcsService(stack, 'EcsService', {
   cluster,
   vpc,
   httpListener: listener,
+  httpsListener: listener2,
+  httpsRedirect: true,
   containerProps: {
     image: ContainerImage.fromRegistry('Image'),
   },
-  routingProps: { pathPattern: '/path' },
+  routingProps: {
+    conditions: [ListenerCondition.pathPatterns(['/path'])],
+  },
 });
 
 const synth = SynthUtils.toCloudFormation(stack);

@@ -5,7 +5,7 @@ Object {
   "Resources": Object {
     "EcsService0A92EB77": Object {
       "DependsOn": Array [
-        "EcsServiceServiceRuleA3A6B98E",
+        "EcsServiceHttpsServiceRuleB6179F15",
       ],
       "Properties": Object {
         "Cluster": "Cluster",
@@ -39,15 +39,34 @@ Object {
       },
       "Type": "AWS::ECS::Service",
     },
-    "EcsServiceLogs91D515DC": Object {
-      "DeletionPolicy": "Retain",
+    "EcsServiceHttpsRedirect681F3F00": Object {
       "Properties": Object {
-        "RetentionInDays": 731,
+        "Actions": Array [
+          Object {
+            "RedirectConfig": Object {
+              "Port": "443",
+              "Protocol": "HTTPS",
+              "StatusCode": "HTTP_301",
+            },
+            "Type": "redirect",
+          },
+        ],
+        "Conditions": Array [
+          Object {
+            "Field": "path-pattern",
+            "PathPatternConfig": Object {
+              "Values": Array [
+                "/path",
+              ],
+            },
+          },
+        ],
+        "ListenerArn": "Listener",
+        "Priority": 20283,
       },
-      "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },
-    "EcsServiceServiceRuleA3A6B98E": Object {
+    "EcsServiceHttpsServiceRuleB6179F15": Object {
       "Properties": Object {
         "Actions": Array [
           Object {
@@ -60,18 +79,29 @@ Object {
         "Conditions": Array [
           Object {
             "Field": "path-pattern",
-            "Values": Array [
-              "/path",
-            ],
+            "PathPatternConfig": Object {
+              "Values": Array [
+                "/path",
+              ],
+            },
           },
         ],
-        "ListenerArn": "Listener",
+        "ListenerArn": "Listener2",
         "Priority": 20283,
       },
       "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },
+    "EcsServiceLogs91D515DC": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
     "EcsServiceServiceTargetGroup6E35E6BD": Object {
       "Properties": Object {
+        "HealthCheckPath": "/health",
         "Port": 80,
         "Protocol": "HTTP",
         "TargetGroupAttributes": Array [
@@ -103,7 +133,7 @@ Object {
                 "awslogs-stream-prefix": "Container",
               },
             },
-            "Memory": 256,
+            "MemoryReservation": 256,
             "Name": "Container",
             "PortMappings": Array [
               Object {

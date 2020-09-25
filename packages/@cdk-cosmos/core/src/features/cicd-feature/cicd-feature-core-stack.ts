@@ -1,7 +1,7 @@
 import { Construct } from '@aws-cdk/core';
 import { Role } from '@aws-cdk/aws-iam';
 import { Project, IProject } from '@aws-cdk/aws-codebuild';
-import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
+import { IRepository, Repository, RepositoryProps } from '@aws-cdk/aws-codecommit';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
 import { BaseFeatureStack, BaseFeatureStackProps } from '../../components/base';
 import { CdkPipeline, CdkPipelineProps, AddDeployStackStageProps } from '@cosmos-building-blocks/pipeline';
@@ -15,6 +15,7 @@ export interface ICiCdFeatureCore extends Construct {
 }
 
 export interface CiCdFeatureCoreStackProps extends BaseFeatureStackProps {
+  cdkRepoProps: Partial<RepositoryProps>;
   cdkPipelineProps?: Partial<CdkPipelineProps>;
 }
 
@@ -25,17 +26,21 @@ export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatu
   readonly deployProject: Project;
 
   constructor(solarSystem: ISolarSystemCore, id: string, props?: CiCdFeatureCoreStackProps) {
-    super(solarSystem, id, props);
+    super(solarSystem, id, {
+      description: 'Add CiCd Features to the SolarSystem',
+      ...props,
+    });
 
-    const { cdkPipelineProps } = props || {};
+    const { cdkRepoProps, cdkPipelineProps } = props || {};
 
     this.solarSystem = solarSystem;
 
     const cdkMasterRoleStaticArn = this.solarSystem.galaxy.cosmos.cdkMasterRoleStaticArn;
 
     this.cdkRepo = new Repository(this.solarSystem.galaxy.cosmos, 'CdkRepo', {
-      repositoryName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Repo', '-').toLowerCase(),
       description: `Core CDK Repo for ${this.solarSystem.galaxy.cosmos.node.id} Cosmos.`,
+      ...cdkRepoProps,
+      repositoryName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Repo', '-').toLowerCase(),
     });
 
     this.cdkPipeline = new CdkPipeline(this, 'CdkPipeline', {

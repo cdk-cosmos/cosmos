@@ -14,6 +14,7 @@ import { ManagedPolicy } from '@aws-cdk/aws-iam';
 import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 import { AutoScalingGroup } from '@aws-cdk/aws-autoscaling';
+import { Key } from '@aws-cdk/aws-kms';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
 import { CoreVpc } from '../../components/core-vpc';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../components/remote';
@@ -50,7 +51,10 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
   readonly httpsInternalListener?: ApplicationListener;
 
   constructor(solarSystem: ISolarSystemCore, id: string, props?: EcsSolarSystemCoreStackProps) {
-    super(solarSystem, id, props);
+    super(solarSystem, id, {
+      description: 'Adds Ecs Features to the SolarSystem',
+      ...props,
+    });
 
     const { albListenerCidr = '0.0.0.0/0', clusterProps = {}, albProps = {} } = props || {};
 
@@ -70,6 +74,9 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
               instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
               minCapacity: 1,
               maxCapacity: 5,
+              topicEncryptionKey:
+                this.solarSystem.galaxy.sharedKey &&
+                Key.fromKeyArn(this, 'SharedKey', this.solarSystem.galaxy.sharedKey.keyArn),
               ...clusterProps.capacity,
             }
           : undefined,

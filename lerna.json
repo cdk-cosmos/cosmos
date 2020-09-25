@@ -5,7 +5,7 @@
     "packages/@cdk-cosmos/*",
     "packages/@cosmos-building-blocks/*"
   ],
-  "version": "0.6.3",
+  "version": "0.6.4",
   "command": {
     "publish": {
       "ignoreChanges": [

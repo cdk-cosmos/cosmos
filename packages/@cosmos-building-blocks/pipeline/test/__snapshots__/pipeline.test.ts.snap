@@ -269,7 +269,7 @@ Object {
             Object {
               "Name": "NPM_KEY",
               "Type": "PLAINTEXT",
-              "Value": "",
+              "Value": "test",
             },
             Object {
               "Name": "DIFF",
@@ -309,12 +309,14 @@ Object {
     },
     \\"pre_build\\": {
       \\"commands\\": [
+        \\"cd test\\",
         \\"echo \\\\\\"//registry.npmjs.org/:_authToken=\${NPM_KEY}\\\\\\" >> ~/.npmrc\\",
         \\"npm ci\\"
       ]
     },
     \\"build\\": {
       \\"commands\\": [
+        \\"cd test\\",
         \\"if [ $DIFF = true ]; then npx cdk diff \${STACKS}; fi;\\",
         \\"if [ $DEPLOY = true ]; then npx cdk deploy --require-approval=never \${STACKS}; fi;\\"
       ]
@@ -888,11 +890,6 @@ Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "EnvironmentVariables": Array [
             Object {
-              "Name": "NPM_KEY",
-              "Type": "PLAINTEXT",
-              "Value": "",
-            },
-            Object {
               "Name": "DIFF",
               "Type": "PLAINTEXT",
               "Value": "true",
@@ -930,7 +927,6 @@ Object {
     },
     \\"pre_build\\": {
       \\"commands\\": [
-        \\"echo \\\\\\"//registry.npmjs.org/:_authToken=\${NPM_KEY}\\\\\\" >> ~/.npmrc\\",
         \\"npm ci\\"
       ]
     },
@@ -1429,11 +1425,6 @@ Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "EnvironmentVariables": Array [
             Object {
-              "Name": "NPM_KEY",
-              "Type": "PLAINTEXT",
-              "Value": "",
-            },
-            Object {
               "Name": "DIFF",
               "Type": "PLAINTEXT",
               "Value": "true",
@@ -1471,7 +1462,6 @@ Object {
     },
     \\"pre_build\\": {
       \\"commands\\": [
-        \\"echo \\\\\\"//registry.npmjs.org/:_authToken=\${NPM_KEY}\\\\\\" >> ~/.npmrc\\",
         \\"npm ci\\"
       ]
     },

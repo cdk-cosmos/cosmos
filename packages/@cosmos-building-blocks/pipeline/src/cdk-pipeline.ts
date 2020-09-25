@@ -22,20 +22,21 @@ import { IVpc, SubnetSelection, Peer, Port } from '@aws-cdk/aws-ec2';
 import { SecureBucket } from '@cosmos-building-blocks/common';
 import { NPM_LOGIN, NPM_INSTALL } from './commands';
 import { BuildSpecBuilder } from './build-spec';
-
-export type BuildEnvironmentVariables = { [key: string]: BuildEnvironmentVariable };
+import { BuildEnvironmentVariables, parseEnvs } from './utils';
 
 export interface CdkPipelineProps {
   pipelineName?: string;
   deployName?: string;
   cdkRepo: IRepository;
   cdkBranch?: string;
+  cdkWorkingDir?: string;
   deployRole?: IRole;
   deployVpc?: IVpc;
   deploySubnets?: SubnetSelection;
   deployEnvs?: BuildEnvironmentVariables;
   deployStacks?: Array<Stack | string>;
   deployDiffStage?: boolean;
+  npmKey?: string | BuildEnvironmentVariable;
 }
 
 export interface AddDeployStackStageProps {
@@ -63,12 +64,14 @@ export class CdkPipeline extends Construct {
       deployName,
       cdkRepo,
       cdkBranch = 'master',
+      cdkWorkingDir,
       deployRole,
       deployVpc,
       deploySubnets,
       deployEnvs,
       deployStacks,
       deployDiffStage = true,
+      npmKey,
     } = props;
 
     if (deployStacks && deployStacks.length === 0) {
@@ -97,11 +100,14 @@ export class CdkPipeline extends Construct {
 
     const artifactBucket = new SecureBucket(this, 'CdkArtifactBucket');
 
+    const changeDir = cdkWorkingDir ? `cd ${cdkWorkingDir}` : null;
+
     const buildSpec = new BuildSpecBuilder()
       .addRuntime('nodejs', '12')
-      .addCommands('pre_build', NPM_LOGIN, NPM_INSTALL)
+      .addCommands('pre_build', changeDir, npmKey ? NPM_LOGIN : null, NPM_INSTALL)
       .addCommands(
         'build',
+        changeDir,
         'if [ $DIFF = true ]; then npx cdk diff ${STACKS}; fi;',
         'if [ $DEPLOY = true ]; then npx cdk deploy --require-approval=never ${STACKS}; fi;'
       )
@@ -109,6 +115,31 @@ export class CdkPipeline extends Construct {
         'base-directory': 'cdk.out',
         files: ['*.template.json'],
       });
+
+    const envs: BuildEnvironmentVariables = {
+      NPM_KEY:
+        typeof npmKey === 'string'
+          ? {
+              type: BuildEnvironmentVariableType.PLAINTEXT,
+              value: npmKey,
+            }
+          : npmKey,
+      DIFF: {
+        type: BuildEnvironmentVariableType.PLAINTEXT,
+        value: 'true',
+      },
+      DEPLOY: {
+        type: BuildEnvironmentVariableType.PLAINTEXT,
+        value: 'true',
+      },
+      STACKS: {
+        type: BuildEnvironmentVariableType.PLAINTEXT,
+        value: Lazy.stringValue({
+          produce: context => this.stacks.resolve(context).join(' '),
+        }),
+      },
+      ...deployEnvs,
+    };
 
     this.deploy = new Project(this, 'Deploy', {
       projectName: deployName,
@@ -122,27 +153,7 @@ export class CdkPipeline extends Construct {
       buildSpec: buildSpec,
       environment: {
         buildImage: LinuxBuildImage.STANDARD_3_0,
-        environmentVariables: {
-          NPM_KEY: {
-            type: BuildEnvironmentVariableType.PLAINTEXT,
-            value: '',
-          },
-          DIFF: {
-            type: BuildEnvironmentVariableType.PLAINTEXT,
-            value: 'true',
-          },
-          DEPLOY: {
-            type: BuildEnvironmentVariableType.PLAINTEXT,
-            value: 'true',
-          },
-          STACKS: {
-            type: BuildEnvironmentVariableType.PLAINTEXT,
-            value: Lazy.stringValue({
-              produce: context => this.stacks.resolve(context).join(' '),
-            }),
-          },
-          ...deployEnvs,
-        },
+        environmentVariables: parseEnvs(envs),
         privileged: true,
       },
       artifacts: Artifacts.s3({
@@ -255,7 +266,7 @@ export class CdkPipeline extends Construct {
         runOrder: 2,
         project: this.deploy,
         input: cdkOutputArtifact,
-        environmentVariables: envs,
+        environmentVariables: parseEnvs(envs),
         stacks: stackNames(stacks),
         hasDiffStage: pipeline === this.pipeline && this.hasDiffStage,
         exclusive: exclusive,
@@ -322,7 +333,9 @@ export class CdkDeployAction extends CodeBuildAction {
   stacks: string[];
   constructor(props: CodeBuildActionProps & { stacks?: string[]; hasDiffStage?: boolean; exclusive?: boolean }) {
     const { stacks = [], hasDiffStage, environmentVariables, exclusive } = props;
+
     const envs: BuildEnvironmentVariables = {
+      ...environmentVariables,
       DIFF: {
         type: BuildEnvironmentVariableType.PLAINTEXT,
         value: hasDiffStage ? 'false' : 'true',
@@ -342,10 +355,7 @@ export class CdkDeployAction extends CodeBuildAction {
 
     super({
       ...props,
-      environmentVariables: {
-        ...environmentVariables,
-        ...envs,
-      },
+      environmentVariables: parseEnvs(envs),
     });
 
     this.stacks = stacks;

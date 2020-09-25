@@ -69,6 +69,8 @@ describe('Cdk Pipeline', () => {
 
     const cdk = new CdkPipeline(stack, 'Pipeline', {
       cdkRepo: repo,
+      cdkWorkingDir: 'test',
+      npmKey: 'test',
     });
 
     cdk.addDeployStackStage({ name: 'TestStage', stacks: [stack2] });

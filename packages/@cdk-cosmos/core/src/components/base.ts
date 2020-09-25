@@ -1,4 +1,4 @@
-import { CfnElement, NestedStack, NestedStackProps, Tag } from '@aws-cdk/core';
+import { CfnElement, NestedStack, NestedStackProps, Tags } from '@aws-cdk/core';
 import { Construct } from '@aws-cdk/core/lib/construct-compat';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Stack, StackProps } from '@aws-cdk/core/lib/stack';
@@ -88,6 +88,7 @@ export class BaseStack extends Stack {
 
 export interface BaseNestedStackProps extends NestedStackProps {
   type?: string;
+  description?: string;
 }
 
 export class BaseNestedStack extends NestedStack {
@@ -101,9 +102,10 @@ export class BaseNestedStack extends NestedStack {
 
   constructor(scope: Construct, id: string, props?: BaseNestedStackProps) {
     super(scope, id, props);
-    const { type } = props || {};
+    const { type, description } = props || {};
 
     this.node.type = type;
+    this.templateOptions.description = description;
     this.hidden = new Construct(this, 'Default');
 
     // Change Nested Stack Naming
@@ -128,7 +130,7 @@ export class BaseFeatureStack extends BaseNestedStack {
       type: 'Feature',
     });
 
-    Tag.add(this, 'cosmos:feature', this.node.id);
+    Tags.of(this).add('cosmos:feature', this.node.id);
   }
 }
 
@@ -141,7 +143,7 @@ export class BaseFeatureConstruct extends BaseConstruct {
       type: 'Feature',
     });
 
-    Tag.add(this, 'cosmos:feature', this.node.id);
+    Tags.of(this).add('cosmos:feature', this.node.id);
   }
 }
 

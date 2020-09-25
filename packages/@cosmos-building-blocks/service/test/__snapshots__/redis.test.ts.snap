@@ -126,8 +126,10 @@ Object {
           "Ref": "RedisRedisSubnetGroupE7D796E2",
         },
         "Engine": "redis",
+        "MultiAZEnabled": false,
         "NumCacheClusters": 1,
-        "ReplicationGroupDescription": "Redis cluster",
+        "NumNodeGroups": 1,
+        "ReplicationGroupDescription": "Redis cluster for aws-redis/Redis",
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
@@ -140,21 +142,23 @@ Object {
       },
       "Type": "AWS::ElastiCache::ReplicationGroup",
     },
-    "RedisOpenRedisE10E4372": Object {
+    "RedisClosedRedis1D8745B1": Object {
       "Properties": Object {
         "AtRestEncryptionEnabled": true,
         "AutomaticFailoverEnabled": false,
         "CacheNodeType": "cache.t3.micro",
         "CacheSubnetGroupName": Object {
-          "Ref": "RedisOpenRedisSubnetGroupA40EB59D",
+          "Ref": "RedisClosedRedisSubnetGroupD85ADBD5",
         },
         "Engine": "redis",
+        "MultiAZEnabled": false,
         "NumCacheClusters": 1,
-        "ReplicationGroupDescription": "Redis cluster",
+        "NumNodeGroups": 1,
+        "ReplicationGroupDescription": "Redis cluster for aws-redis/RedisClosed",
         "SecurityGroupIds": Array [
           Object {
             "Fn::GetAtt": Array [
-              "RedisOpenRedisSecurityGroupD3941EDF",
+              "RedisClosedRedisSecurityGroup49D34B18",
               "GroupId",
             ],
           },
@@ -163,9 +167,87 @@ Object {
       },
       "Type": "AWS::ElastiCache::ReplicationGroup",
     },
-    "RedisOpenRedisSecurityGroupD3941EDF": Object {
+    "RedisClosedRedisSecurityGroup49D34B18": Object {
       "Properties": Object {
-        "GroupDescription": "aws-redis/RedisOpen/RedisSecurityGroup",
+        "GroupDescription": "Redis Security Group for aws-redis/RedisClosed",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "vpcA2121C38",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "RedisClosedRedisSecurityGroupfromawsredisEc2InstanceSecurityGroup964FF110637921FDFAF6": Object {
+      "Properties": Object {
+        "Description": "from awsredisEc2InstanceSecurityGroup964FF110:6379",
+        "FromPort": 6379,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "RedisClosedRedisSecurityGroup49D34B18",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "Ec2InstanceSecurityGroup1638B7F2",
+            "GroupId",
+          ],
+        },
+        "ToPort": 6379,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "RedisClosedRedisSubnetGroupD85ADBD5": Object {
+      "Properties": Object {
+        "Description": "Redis Subnet group for aws-redis/RedisClosed",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "vpcRedisSubnet1Subnet3EE087E6",
+          },
+          Object {
+            "Ref": "vpcRedisSubnet2SubnetFF7CC220",
+          },
+        ],
+      },
+      "Type": "AWS::ElastiCache::SubnetGroup",
+    },
+    "RedisHaRedisE071ED75": Object {
+      "Properties": Object {
+        "AtRestEncryptionEnabled": true,
+        "AutomaticFailoverEnabled": true,
+        "CacheNodeType": "cache.t3.micro",
+        "CacheSubnetGroupName": Object {
+          "Ref": "RedisHaRedisSubnetGroupBB091AA5",
+        },
+        "Engine": "redis",
+        "MultiAZEnabled": true,
+        "NumCacheClusters": 2,
+        "NumNodeGroups": 1,
+        "ReplicationGroupDescription": "Redis cluster for aws-redis/RedisHa",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "RedisHaRedisSecurityGroup8540882A",
+              "GroupId",
+            ],
+          },
+        ],
+        "TransitEncryptionEnabled": true,
+      },
+      "Type": "AWS::ElastiCache::ReplicationGroup",
+    },
+    "RedisHaRedisSecurityGroup8540882A": Object {
+      "Properties": Object {
+        "GroupDescription": "Redis Security Group for aws-redis/RedisHa",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "255.255.255.255/32",
@@ -190,9 +272,9 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "RedisOpenRedisSubnetGroupA40EB59D": Object {
+    "RedisHaRedisSubnetGroupBB091AA5": Object {
       "Properties": Object {
-        "Description": "Subnet group for Redis",
+        "Description": "Redis Subnet group for aws-redis/RedisHa",
         "SubnetIds": Array [
           Object {
             "Ref": "vpcRedisSubnet1Subnet3EE087E6",
@@ -213,7 +295,9 @@ Object {
           "Ref": "RedisOverwriteRedisSubnetGroupB4851474",
         },
         "Engine": "redis",
+        "MultiAZEnabled": false,
         "NumCacheClusters": 3,
+        "NumNodeGroups": 1,
         "ReplicationGroupDescription": "Redis cluster not encrypted",
         "SecurityGroupIds": Array [
           Object {
@@ -229,7 +313,7 @@ Object {
     },
     "RedisOverwriteRedisSecurityGroupDBCF27F8": Object {
       "Properties": Object {
-        "GroupDescription": "aws-redis/RedisOverwrite/RedisSecurityGroup",
+        "GroupDescription": "Redis Security Group for aws-redis/RedisOverwrite",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "255.255.255.255/32",
@@ -256,7 +340,7 @@ Object {
     },
     "RedisOverwriteRedisSubnetGroupB4851474": Object {
       "Properties": Object {
-        "Description": "Subnet group for Redis",
+        "Description": "Redis Subnet group for aws-redis/RedisOverwrite",
         "SubnetIds": Array [
           Object {
             "Ref": "vpcAppSubnet1Subnet0009B9D9",
@@ -270,7 +354,7 @@ Object {
     },
     "RedisRedisSecurityGroup23991694": Object {
       "Properties": Object {
-        "GroupDescription": "aws-redis/Redis/RedisSecurityGroup",
+        "GroupDescription": "Redis Security Group for aws-redis/Redis",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "255.255.255.255/32",
@@ -280,36 +364,24 @@ Object {
             "ToPort": 86,
           },
         ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:6379",
+            "FromPort": 6379,
+            "IpProtocol": "tcp",
+            "ToPort": 6379,
+          },
+        ],
         "VpcId": Object {
           "Ref": "vpcA2121C38",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "RedisRedisSecurityGroupfromawsredisEc2InstanceSecurityGroup964FF1106379FE5EA424": Object {
-      "Properties": Object {
-        "Description": "from awsredisEc2InstanceSecurityGroup964FF110:6379",
-        "FromPort": 6379,
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
-            "RedisRedisSecurityGroup23991694",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
-            "Ec2InstanceSecurityGroup1638B7F2",
-            "GroupId",
-          ],
-        },
-        "ToPort": 6379,
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
     "RedisRedisSubnetGroupE7D796E2": Object {
       "Properties": Object {
-        "Description": "Subnet group for Redis",
+        "Description": "Redis Subnet group for aws-redis/Redis",
         "SubnetIds": Array [
           Object {
             "Ref": "vpcRedisSubnet1Subnet3EE087E6",

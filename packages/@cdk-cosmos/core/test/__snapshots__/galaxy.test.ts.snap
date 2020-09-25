@@ -9,6 +9,62 @@ Object {
 exports[`Galaxy should match snapshot 1`] = `
 Object {
   "Description": "Cosmos Galaxy: Resources dependant on each Aws Account, like ShareVpc and CrossAccountRoles.",
+  "Resources": Object {
+    "SharedKey": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "Description": "Share key for aws account.",
+        "KeyPolicy": Object {
+          "Statement": Array [
+            Object {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account:root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+        ],
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "SharedKeyAlias": Object {
+      "Properties": Object {
+        "AliasName": "alias/SharedKey",
+        "TargetKeyId": Object {
+          "Fn::GetAtt": Array [
+            "SharedKey",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::KMS::Alias",
+    },
+  },
 }
 `;
 
@@ -57,6 +113,60 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Role",
+    },
+    "SharedKey": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "Description": "Share key for aws account.",
+        "KeyPolicy": Object {
+          "Statement": Array [
+            Object {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account2:root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal2",
+          },
+        ],
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "SharedKeyAlias": Object {
+      "Properties": Object {
+        "AliasName": "alias/SharedKey",
+        "TargetKeyId": Object {
+          "Fn::GetAtt": Array [
+            "SharedKey",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::KMS::Alias",
     },
   },
 }
