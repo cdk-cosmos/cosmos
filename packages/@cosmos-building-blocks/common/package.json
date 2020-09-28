@@ -18,7 +18,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp src/cdk-toolkit/template.yaml lib/cdk-toolkit/template.yaml",
     "watch": "tsc -w",
     "test": "jest",
     "format": "prettier --write **/*.ts !**/*.d.ts",
@@ -28,6 +28,7 @@
   "peerDependencies": {
     "@aws-cdk/aws-iam": "^1.58.0",
     "@aws-cdk/aws-s3": "^1.58.0",
-    "@aws-cdk/core": "^1.58.0"
+    "@aws-cdk/core": "^1.58.0",
+    "@aws-cdk/custom-resources": "^1.58.0"
   }
 }
