@@ -90,8 +90,8 @@ What is included in the above is just enough for the extension (App) to host its
 
 For more extensive understanding and usage, please look at the docs, aka the [law of the cosmos](https://github.com/cdk-cosmos/law)
 
-Deploy CDKToolKit to Master Account: `npx cdk bootstrap --template "node_modules/@cosmos-building-blocks/common/lib/cdk-toolkit/template.yaml" --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess aws://${AWS_ACCOUNT}/ap-southeast-2"`
+Deploy CDKToolKit to Master Account: `npx cdk bootstrap --template "node_modules/@cosmos-building-blocks/common/lib/cdk-toolkit/template.yaml" --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess aws://${AWS_MASTER_ACCOUNT}/ap-southeast-2`
 
-Deploy CDKToolKit to Cross Account `npx cdk bootstrap --template "node_modules/@cosmos-building-blocks/common/lib/cdk-toolkit/template.yaml" --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess --trust ${AWS_MASTER_ACCOUNT} aws://${AWS_ACCOUNT}/ap-southeast-2"`
+Deploy CDKToolKit to Cross Account `npx cdk bootstrap --template "node_modules/@cosmos-building-blocks/common/lib/cdk-toolkit/template.yaml" --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess --trust ${AWS_MASTER_ACCOUNT} aws://${AWS_ACCOUNT}/ap-southeast-2`
 
 Deploy CDK App `npx cdk --app "@cosmos-building-blocks/common/lib/cdk-toolkit/bootstrap-app.js" deploy`

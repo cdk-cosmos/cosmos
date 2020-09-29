@@ -8,7 +8,7 @@ Parameters:
   CloudFormationExecutionPolicies:
     Description: List of the ManagedPolicy ARN(s) to attach to the CloudFormation
       deployment role
-    Default: ''
+    Default: 'arn:aws:iam::aws:policy/AdministratorAccess'
     Type: CommaDelimitedList
   FileAssetsBucketName:
     Description: The name of the S3 bucket used for file assets
@@ -26,7 +26,7 @@ Parameters:
     AllowedValues: ['true', 'false']
   Qualifier:
     Description: An identifier to distinguish multiple bootstrap stacks in the same environment
-    Default: cosmos
+    Default: toolkit
     Type: String
     # "cdk-(qualifier)-image-publishing-role-(account)-(region)" needs to be <= 64 chars
     # account = 12, region <= 14, 10 chars for qualifier and 28 for rest of role name
@@ -179,7 +179,7 @@ Resources:
         Fn::If:
           - HasCloudFormationExecutionPolicies
           - Ref: CloudFormationExecutionPolicies
-          - - arn:aws:iam::aws:policy/AdministratorAccess
+          - Ref: AWS::NoValue
 
   TriggerDeployRole:
     Type: AWS::IAM::Role
