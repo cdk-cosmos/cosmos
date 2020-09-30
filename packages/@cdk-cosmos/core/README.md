@@ -90,4 +90,21 @@ What is included in the above is just enough for the extension (App) to host its
 
 For more extensive understanding and usage, please look at the docs, aka the [law of the cosmos](https://github.com/cdk-cosmos/law)
 
-Deploy CDKToolKit `npx cdk deploy --app="node_modules/@cosmos-building-blocks/common/lib/cdk-tool-kit-app.js"`
+## Bootstrap Accounts
+
+Define your master account `export AWS_MASTER_ACCOUNT=1111` and define the account you want to bootstrap (may be master account) `export AWS_ACCOUNT=2222`
+
+Deploy CDKToolKit to Accounts: `npx cdk bootstrap --template "node_modules/@cosmos-building-blocks/common/lib/cdk-toolkit/template.yaml" --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess --trust ${AWS_MASTER_ACCOUNT} aws://${AWS_ACCOUNT}/ap-southeast-2`
+
+### Bootstrap CDK App (Core|Extension)
+
+This will send the current working directory to the bootstrap build job which will run cdk deploy on the cdk app.
+Since this bootstrap job runs in aws, you don't have to worry about roles etc for bootstrapping your cdk app as long as the CDKToolkit has been deployed.
+
+This is done by zipping the cwd to s3 then sending that url to trigger a code build in aws.
+You can manually do this your self if you like.
+
+`npx cdk --app "@cosmos-building-blocks/common/lib/cdk-toolkit/bootstrap-app.js" deploy`
+
+- Set `CORE=true` to deploy core stack, default to extension stacks.
+- Set `STACKS="Stack1 Stack2"` to have direct control over the deployed stacks.

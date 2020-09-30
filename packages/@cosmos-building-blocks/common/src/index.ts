@@ -1,4 +1,3 @@
-export { CDKToolKit } from './cdk-tool-kit';
 export {
   CrossAccountExports,
   CrossAccountExportsProps,

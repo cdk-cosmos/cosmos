@@ -1,0 +1,290 @@
+Description: This stack includes resources needed to deploy AWS CDK apps and AWS CDK Cosmos apps into this environment
+Parameters:
+  TrustedAccounts:
+    Description: List of AWS accounts that are trusted to publish assets and deploy
+      stacks to this environment
+    Default: ''
+    Type: CommaDelimitedList
+  CloudFormationExecutionPolicies:
+    Description: List of the ManagedPolicy ARN(s) to attach to the CloudFormation
+      deployment role
+    Default: 'arn:aws:iam::aws:policy/AdministratorAccess'
+    Type: CommaDelimitedList
+  FileAssetsBucketName:
+    Description: The name of the S3 bucket used for file assets
+    Default: ''
+    Type: String
+  FileAssetsBucketKmsKeyId:
+    Description: Empty to create a new key (default), 'AWS_MANAGED_KEY' to use a managed
+      S3 key, or the ID/ARN of an existing key.
+    Default: ''
+    Type: String
+  PublicAccessBlockConfiguration:
+    Description: Whether or not to enable S3 Staging Bucket Public Access Block Configuration
+    Default: 'true'
+    Type: 'String'
+    AllowedValues: ['true', 'false']
+  Qualifier:
+    Description: An identifier to distinguish multiple bootstrap stacks in the same environment
+    Default: toolkit
+    Type: String
+    # "cdk-(qualifier)-image-publishing-role-(account)-(region)" needs to be <= 64 chars
+    # account = 12, region <= 14, 10 chars for qualifier and 28 for rest of role name
+    AllowedPattern: '[A-Za-z0-9_-]{1,10}'
+    ConstraintDescription: Qualifier must be an alphanumeric identifier of at most 10 characters
+
+Conditions:
+  IsMasterAccount:
+    Fn::Or:
+      - Fn::Equals:
+          - ''
+          - Fn::Join:
+              - ''
+              - Ref: TrustedAccounts
+      - Fn::Equals:
+          - Ref: AWS::AccountId
+          - Fn::Select:
+              - 0
+              - Ref: TrustedAccounts
+  HasCloudFormationExecutionPolicies:
+    Fn::Not:
+      - Fn::Equals:
+          - ''
+          - Fn::Join:
+              - ''
+              - Ref: CloudFormationExecutionPolicies
+  HasCustomFileAssetsBucketName:
+    Fn::Not:
+      - Fn::Equals:
+          - ''
+          - Ref: FileAssetsBucketName
+  CreateNewKey:
+    Fn::Equals:
+      - ''
+      - Ref: FileAssetsBucketKmsKeyId
+  UseAwsManagedKey:
+    Fn::Equals:
+      - 'AWS_MANAGED_KEY'
+      - Ref: FileAssetsBucketKmsKeyId
+
+Resources:
+  FileAssetsBucketEncryptionKey:
+    Type: AWS::KMS::Key
+    Properties:
+      KeyPolicy:
+        Statement:
+          - Action:
+              - kms:Create*
+              - kms:Describe*
+              - kms:Enable*
+              - kms:List*
+              - kms:Put*
+              - kms:Update*
+              - kms:Revoke*
+              - kms:Disable*
+              - kms:Get*
+              - kms:Delete*
+              - kms:ScheduleKeyDeletion
+              - kms:CancelKeyDeletion
+              - kms:GenerateDataKey
+            Effect: Allow
+            Principal:
+              AWS:
+                Ref: AWS::AccountId
+            Resource: '*'
+          - Action:
+              - kms:Decrypt
+              - kms:DescribeKey
+              - kms:Encrypt
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey*
+            Effect: Allow
+            Principal:
+              # Not actually everyone -- see below for Conditions
+              AWS: '*'
+            Resource: '*'
+            Condition:
+              StringEquals:
+                # See https://docs.aws.amazon.com/kms/latest/developerguide/policy-conditions.html#conditions-kms-caller-account
+                kms:CallerAccount:
+                  Ref: AWS::AccountId
+                kms:ViaService:
+                  - Fn::Sub: s3.${AWS::Region}.amazonaws.com
+    Condition: CreateNewKey
+  StagingBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName:
+        Fn::If:
+          - HasCustomFileAssetsBucketName
+          - Fn::Sub: '${FileAssetsBucketName}'
+          - Fn::Sub: 'cdk-${Qualifier}-assets-${AWS::AccountId}-${AWS::Region}'
+      AccessControl: LogDeliveryWrite
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+              KMSMasterKeyID:
+                Fn::If:
+                  - CreateNewKey
+                  - Fn::Sub: '${FileAssetsBucketEncryptionKey.Arn}'
+                  - Fn::If:
+                      - UseAwsManagedKey
+                      - Ref: AWS::NoValue
+                      - Fn::Sub: '${FileAssetsBucketKmsKeyId}'
+      LoggingConfiguration:
+        LogFilePrefix: BucketAccessLogs/
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+  StagingBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: { Ref: StagingBucket }
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: ForceSSLOnly
+            Action: s3:*
+            Condition:
+              Bool: { aws:SecureTransport: false }
+            Effect: Deny
+            Principal: '*'
+            Resource: [{ Fn::Sub: '${StagingBucket.Arn}' }]
+
+  DeploymentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName:
+        Fn::If:
+          - IsMasterAccount
+          - Fn::Sub: 'cdk-${Qualifier}-master-role'
+          - Fn::Sub: 'cdk-${Qualifier}-cross-account-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Fn::If:
+                - IsMasterAccount
+                - Service: codebuild.amazonaws.com
+                - AWS:
+                    Fn::Sub:
+                      - 'arn:aws:iam::${MasterAccount}:role/cdk-${Qualifier}-master-role'
+                      - MasterAccount: { Fn::Select: [0, Ref: TrustedAccounts] }
+                        Qualifier: { Ref: Qualifier }
+      ManagedPolicyArns:
+        Fn::If:
+          - HasCloudFormationExecutionPolicies
+          - Ref: CloudFormationExecutionPolicies
+          - Ref: AWS::NoValue
+
+  TriggerDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: { Fn::Sub: 'cdk-${Qualifier}-trigger-deploy-role' }
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: trigger
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action: codebuild:StartBuild
+                Effect: Allow
+                Resource: '*'
+    Condition: IsMasterAccount
+
+  BootstrapProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: { Fn::Sub: 'cdk-${Qualifier}-bootstrap-project' }
+      ServiceRole: { Fn::Sub: '${DeploymentRole.Arn}' }
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:3.0
+        PrivilegedMode: true
+        Type: LINUX_CONTAINER
+        EnvironmentVariables:
+          - Name: S3_ARTIFACT_URL
+            Type: PLAINTEXT
+            Value: ''
+          - Name: ARTIFACT_URL
+            Type: PLAINTEXT
+            Value: ''
+          - Name: DIR
+            Type: PLAINTEXT
+            Value: ''
+          - Name: STACKS
+            Type: PLAINTEXT
+            Value: ''
+      Source:
+        Type: NO_SOURCE
+        BuildSpec:
+          Fn::Sub: |-
+            version: 0.2
+            env:
+              variables:
+                CDK_COSMOS_CREDENTIALS_PLUGIN_ROLE: "cdk-${Qualifier}-cross-account-role"
+            phases:
+              install:
+                runtime-versions:
+                  nodejs: 12
+                commands: []
+              pre_build:
+                commands:
+                  - mkdir tmp && cd tmp
+                  - if [ -z ${!S3_ARTIFACT_URL} ]; then wget --no-check-certificate -O artifact.zip ${!ARTIFACT_URL}; else aws s3 cp ${!S3_ARTIFACT_URL} artifact.zip; fi;
+                  - unzip -q -d artifact artifact.zip
+                  - mv -f artifact/${!DIR} ../artifact
+                  - cd .. && rm -rf tmp
+                  - cd artifact
+                  - ls -la
+                  - npm ci || npm i
+              build:
+                commands:
+                  - npx cdk deploy --require-approval=never ${!STACKS}
+      Artifacts:
+        Type: NO_ARTIFACTS
+    Condition: IsMasterAccount
+
+Outputs:
+  BucketName:
+    Description: The name of the S3 bucket owned by the CDK toolkit stack
+    Export:
+      Name: { Fn::Sub: '${AWS::StackName}-BucketName' }
+    Value: { Fn::Sub: '${StagingBucket}' }
+  BucketDomainName:
+    Description: The domain name of the S3 bucket owned by the CDK toolkit stack
+    Export:
+      Name: { Fn::Sub: '${AWS::StackName}-BucketDomainName' }
+    Value: { Fn::Sub: '${StagingBucket.RegionalDomainName}' }
+  DeploymentRole:
+    Description: The name of the deployment role owned by the CDK toolkit stack
+    Export:
+      Name: { Fn::Sub: '${AWS::StackName}-DeploymentRole' }
+    Value: { Fn::Sub: '${DeploymentRole}' }
+  TriggerDeployRole:
+    Description: The name of the trigger deploy role owned by the CDK toolkit stack
+    Export:
+      Name: { Fn::Sub: '${AWS::StackName}-TriggerDeployRole' }
+    Value: { Fn::Sub: '${TriggerDeployRole}' }
+    Condition: IsMasterAccount
+  ProjectName:
+    Description: The name of the bootstrap project owned by the CDK toolkit stack
+    Export:
+      Name: { Fn::Sub: '${AWS::StackName}-ProjectName' }
+    Value: { Fn::Sub: '${BootstrapProject}' }
+    Condition: IsMasterAccount
+  BootstrapVersion:
+    Description: The version of the bootstrap resources that are currently mastered in this stack
+    Export:
+      Name: { Fn::Sub: '${AWS::StackName}-BootstrapVersion' }
+    Value: '1'
