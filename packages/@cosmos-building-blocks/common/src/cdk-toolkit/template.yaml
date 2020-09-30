@@ -34,18 +34,17 @@ Parameters:
     ConstraintDescription: Qualifier must be an alphanumeric identifier of at most 10 characters
 
 Conditions:
-  HasNoTrustedAccounts:
-    Fn::Equals:
-      - ''
-      - Fn::Join:
-          - ''
-          - Ref: TrustedAccounts
-  HasTrustedAccounts:
-    Fn::Not:
+  IsMasterAccount:
+    Fn::Or:
       - Fn::Equals:
           - ''
           - Fn::Join:
               - ''
+              - Ref: TrustedAccounts
+      - Fn::Equals:
+          - Ref: AWS::AccountId
+          - Fn::Select:
+              - 0
               - Ref: TrustedAccounts
   HasCloudFormationExecutionPolicies:
     Fn::Not:
@@ -157,9 +156,9 @@ Resources:
     Properties:
       RoleName:
         Fn::If:
-          - HasTrustedAccounts
-          - Fn::Sub: 'cdk-${Qualifier}-cross-account-role'
+          - IsMasterAccount
           - Fn::Sub: 'cdk-${Qualifier}-master-role'
+          - Fn::Sub: 'cdk-${Qualifier}-cross-account-role'
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -167,14 +166,13 @@ Resources:
             Effect: Allow
             Principal:
               Fn::If:
-                - HasTrustedAccounts
-                - AWS:
-                    Fn::Join:
-                      - ''
-                      - - 'arn:aws:iam::'
-                        - Fn::Select: [0, Ref: TrustedAccounts]
-                        - Fn::Sub: ':role/cdk-${Qualifier}-master-role'
+                - IsMasterAccount
                 - Service: codebuild.amazonaws.com
+                - AWS:
+                    Fn::Sub:
+                      - 'arn:aws:iam::${MasterAccount}:role/cdk-${Qualifier}-master-role'
+                      - MasterAccount: { Fn::Select: [0, Ref: TrustedAccounts] }
+                        Qualifier: { Ref: Qualifier }
       ManagedPolicyArns:
         Fn::If:
           - HasCloudFormationExecutionPolicies
@@ -202,7 +200,7 @@ Resources:
               - Action: codebuild:StartBuild
                 Effect: Allow
                 Resource: '*'
-    Condition: HasNoTrustedAccounts
+    Condition: IsMasterAccount
 
   BootstrapProject:
     Type: AWS::CodeBuild::Project
@@ -255,7 +253,7 @@ Resources:
                   - npx cdk deploy --require-approval=never ${!STACKS}
       Artifacts:
         Type: NO_ARTIFACTS
-    Condition: HasNoTrustedAccounts
+    Condition: IsMasterAccount
 
 Outputs:
   BucketName:
@@ -278,13 +276,13 @@ Outputs:
     Export:
       Name: { Fn::Sub: '${AWS::StackName}-TriggerDeployRole' }
     Value: { Fn::Sub: '${TriggerDeployRole}' }
-    Condition: HasNoTrustedAccounts
+    Condition: IsMasterAccount
   ProjectName:
     Description: The name of the bootstrap project owned by the CDK toolkit stack
     Export:
       Name: { Fn::Sub: '${AWS::StackName}-ProjectName' }
     Value: { Fn::Sub: '${BootstrapProject}' }
-    Condition: HasNoTrustedAccounts
+    Condition: IsMasterAccount
   BootstrapVersion:
     Description: The version of the bootstrap resources that are currently mastered in this stack
     Export:
