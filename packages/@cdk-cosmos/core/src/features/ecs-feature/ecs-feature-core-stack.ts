@@ -1,5 +1,5 @@
 import { Construct } from '@aws-cdk/core';
-import { InstanceType, SecurityGroup, Peer, InstanceClass, InstanceSize, Vpc } from '@aws-cdk/aws-ec2';
+import { InstanceType, SecurityGroup, Peer, InstanceClass, InstanceSize } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster, ClusterProps as EcsClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
