@@ -136,16 +136,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0\\"",
+    "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0\\"",
       "Type": "String",
     },
-    "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0\\"",
+    "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0\\"",
       "Type": "String",
     },
-    "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0\\"",
+    "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0\\"",
       "Type": "String",
     },
   },
@@ -341,7 +341,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0S3Bucket",
+                "Ref": "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0S3Bucket",
               },
               "/",
               Object {
@@ -351,7 +351,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0S3VersionKey",
+                        "Ref": "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0S3VersionKey",
                       },
                     ],
                   },
@@ -364,7 +364,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters02b596d24e26a109f149d6bc7f6a34a05ccf4e18a460759b3b3e8e3cb86f24a0S3VersionKey",
+                        "Ref": "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0S3VersionKey",
                       },
                     ],
                   },
@@ -875,7 +875,7 @@ Object {
         "LaunchConfigurationName": Object {
           "Ref": "ClusterDefaultAutoScalingGroupLaunchConfig",
         },
-        "MaxSize": "5",
+        "MaxSize": "4",
         "MinSize": "1",
         "Tags": Array [
           Object {
@@ -915,8 +915,16 @@ Object {
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "UpdatePolicy": Object {
-        "AutoScalingReplacingUpdate": Object {
-          "WillReplace": true,
+        "AutoScalingRollingUpdate": Object {
+          "PauseTime": "PT0S",
+          "SuspendProcesses": Array [
+            "HealthCheck",
+            "ReplaceUnhealthy",
+            "AZRebalance",
+            "AlarmNotification",
+            "ScheduledActions",
+          ],
+          "WaitOnResourceSignals": false,
         },
         "AutoScalingScheduledAction": Object {
           "IgnoreUnmodifiedGroupSizeProperties": true,
@@ -1721,16 +1729,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"b78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acd\\"",
+    "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3\\"",
       "Type": "String",
     },
-    "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"b78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acd\\"",
+    "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3\\"",
       "Type": "String",
     },
-    "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"b78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acd\\"",
+    "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3\\"",
       "Type": "String",
     },
   },
@@ -1770,7 +1778,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdS3Bucket",
+                "Ref": "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3S3Bucket",
               },
               "/",
               Object {
@@ -1780,7 +1788,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdS3VersionKey",
+                        "Ref": "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3S3VersionKey",
                       },
                     ],
                   },
@@ -1793,7 +1801,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersb78cce4ab39af06709c34e887aaedc76156c73ae36208fface59baabdcd07acdS3VersionKey",
+                        "Ref": "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3S3VersionKey",
                       },
                     ],
                   },
@@ -2195,7 +2203,7 @@ Object {
         "LaunchConfigurationName": Object {
           "Ref": "ClusterDefaultAutoScalingGroupLaunchConfig",
         },
-        "MaxSize": "5",
+        "MaxSize": "4",
         "MinSize": "1",
         "Tags": Array [
           Object {
@@ -2235,8 +2243,16 @@ Object {
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "UpdatePolicy": Object {
-        "AutoScalingReplacingUpdate": Object {
-          "WillReplace": true,
+        "AutoScalingRollingUpdate": Object {
+          "PauseTime": "PT0S",
+          "SuspendProcesses": Array [
+            "HealthCheck",
+            "ReplaceUnhealthy",
+            "AZRebalance",
+            "AlarmNotification",
+            "ScheduledActions",
+          ],
+          "WaitOnResourceSignals": false,
         },
         "AutoScalingScheduledAction": Object {
           "IgnoreUnmodifiedGroupSizeProperties": true,
