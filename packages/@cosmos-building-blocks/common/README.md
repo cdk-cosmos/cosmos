@@ -39,13 +39,13 @@ Once the The Cosmos CDK Toolkit is deployed, it can be used to bootstrap your Co
 
 Run the below command in the base directory of your project and it will archive your project and pass it as an asset to the CDK Toolkit s3 bucket in your master account, and trigger the CodeBuild job to bootstrap your Cosmos core or extension. 
 
-`npx cdk --app "@cosmos-building-blocks/common/lib/cdk-toolkit/bootstrap-app.js" deploy`
+`npx cdk --app “node_modules/@cosmos-building-blocks/common/lib/cdk-toolkit/bootstrap-app.js” deploy`
 
 The command will default to deploying a Cosmos extension. To deploy a Cosmos core set environment variable `CORE` to `true`:
 
-`CORE=true npx cdk --app "@cosmos-building-blocks/common/lib/cdk-toolkit/bootstrap-app.js" deploy`
+`CORE=true npx cdk --app “node_modules/@cosmos-building-blocks/common/lib/cdk-toolkit/bootstrap-app.js” deploy`
 
 To deploy only specific stacks, set environment variable `STACKS` to the required stacks. 
 
-`STACKS="Stack1 Stack2" npx cdk --app "@cosmos-building-blocks/common/lib/cdk-toolkit/bootstrap-app.js" deploy`
+`STACKS="Stack1 Stack2" npx cdk --app “node_modules/@cosmos-building-blocks/common/lib/cdk-toolkit/bootstrap-app.js” deploy`
 
