@@ -29,4 +29,4 @@ echo -e "$(yarn -s lerna-changelog --from=$prevous_version --to $curent_version)
 git add . && git commit --no-verify --amend --no-edit && git tag --force $curent_version
 
 # Example Prerelease
-# yarn lerna publish 0.6.0-alpha.0 --dist-tag next --no-git-tag-version --no-push
+# yarn lerna publish --dist-tag next --no-git-tag-version --no-push 0.7.0-alpha.0

@@ -1,6 +1,6 @@
 {
   "name": "@cosmos-building-blocks/pipeline",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,7 +26,7 @@
     "clean": "rm -rf lib"
   },
   "dependencies": {
-    "@cosmos-building-blocks/common": "^0.6.4"
+    "@cosmos-building-blocks/common": "^0.7.0"
   },
   "peerDependencies": {
     "@aws-cdk/aws-codebuild": "^1.58.0",

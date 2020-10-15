@@ -89,5 +89,3 @@ What is included in the above is just enough for the extension (App) to host its
 ## Further Use
 
 For more extensive understanding and usage, please look at the docs, aka the [law of the cosmos](https://github.com/cdk-cosmos/law)
-
-Deploy CDKToolKit `npx cdk deploy --app="node_modules/@cosmos-building-blocks/common/lib/cdk-tool-kit-app.js"`

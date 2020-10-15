@@ -1,4 +1,17 @@
 
+## v0.7.0 (2020-10-15)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`
+  * [#209](https://github.com/cdk-cosmos/cosmos/pull/209) ECS ROLLING_UPDATE ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/common`
+  * [#208](https://github.com/cdk-cosmos/cosmos/pull/208) New CDKBootstrap + CDKToolkit  ([@timpur](https://github.com/timpur))
+
+#### Committers: 2
+- Tim P ([@timpur](https://github.com/timpur))
+- Tom Guerney ([@thomasguerneyiag](https://github.com/thomasguerneyiag))
+
+
 ## v0.6.4 (2020-09-24)
 
 #### 🚀 Enhancement:

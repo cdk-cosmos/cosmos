@@ -13,7 +13,7 @@ import {
 import { ManagedPolicy } from '@aws-cdk/aws-iam';
 import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
-import { AutoScalingGroup } from '@aws-cdk/aws-autoscaling';
+import { AutoScalingGroup, UpdateType } from '@aws-cdk/aws-autoscaling';
 import { Key } from '@aws-cdk/aws-kms';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
 import { CoreVpc } from '../../components/core-vpc';
@@ -73,7 +73,8 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
               vpcSubnets: { subnetGroupName: 'App' },
               instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
               minCapacity: 1,
-              maxCapacity: 5,
+              maxCapacity: this.solarSystem.vpc.availabilityZones.length * 2,
+              updateType: UpdateType.ROLLING_UPDATE,
               topicEncryptionKey:
                 this.solarSystem.galaxy.sharedKey &&
                 Key.fromKeyArn(this, 'SharedKey', this.solarSystem.galaxy.sharedKey.keyArn),
