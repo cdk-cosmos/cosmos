@@ -26,7 +26,7 @@ export class CdkBootstrap extends Stack {
         .split('\n'),
     });
 
-    new AwsCustomResource(this, 'TriggerDeploy', {
+    const trigger = new AwsCustomResource(this, 'TriggerDeploy', {
       onUpdate: {
         service: 'CodeBuild',
         action: 'startBuild',
@@ -53,5 +53,10 @@ export class CdkBootstrap extends Stack {
         { mutable: false }
       ),
     });
+
+    const policy = trigger.node.findChild('CustomResourcePolicy');
+    trigger.node.tryRemoveChild(policy.node.id);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (trigger as any).customResource.node._actualNode._dependencies.delete(policy);
   }
 }
