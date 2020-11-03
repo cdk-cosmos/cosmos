@@ -1,5 +1,5 @@
 import { Construct } from '@aws-cdk/core';
-import { InstanceType, SecurityGroup, Peer, InstanceClass, InstanceSize } from '@aws-cdk/aws-ec2';
+import { InstanceType, SecurityGroup, Peer, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster, ClusterProps as EcsClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
@@ -9,6 +9,7 @@ import {
   IApplicationListener,
   ApplicationLoadBalancerProps,
   ContentType,
+  ListenerAction,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { ManagedPolicy } from '@aws-cdk/aws-iam';
 import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
@@ -78,6 +79,7 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
               topicEncryptionKey:
                 this.solarSystem.galaxy.sharedKey &&
                 Key.fromKeyArn(this, 'SharedKey', this.solarSystem.galaxy.sharedKey.keyArn),
+              userData: defaultUserData(),
               ...clusterProps.capacity,
             }
           : undefined,
@@ -151,13 +153,25 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
     RemoteApplicationListener.export(this.httpListener, this.singletonId('HttpListener'));
     RemoteApplicationListener.export(this.httpInternalListener, this.singletonId('HttpInternalListener'));
   }
+
+  addEcsAgentConfig(config: Record<string, string>): void {
+    if (!this.clusterAutoScalingGroup)
+      throw new Error('Can not add ecs agent config without an clusterAutoScalingGroup');
+
+    this.clusterAutoScalingGroup.userData.addCommands(
+      'cat <<EOF >> /etc/ecs/ecs.config',
+      ...Object.entries(config).map(([k, v]) => `${k}=${v}`),
+      'EOF'
+    );
+  }
 }
 
 const configureListener = (listener: ApplicationListener, listenerInboundCidr?: string | null): void => {
-  listener.addFixedResponse('Default', {
-    statusCode: '404',
-    contentType: ContentType.TEXT_PLAIN,
-    messageBody: 'Route Not Found.',
+  listener.addAction('Default', {
+    action: ListenerAction.fixedResponse(404, {
+      contentType: ContentType.TEXT_PLAIN,
+      messageBody: 'Route Not Found.',
+    }),
   });
   if (listenerInboundCidr) {
     listener.connections.allowDefaultPortFrom(Peer.ipv4(listenerInboundCidr));
@@ -170,7 +184,7 @@ declare module '../../solar-system/solar-system-core-stack' {
   export interface ISolarSystemCore {
     readonly ecs?: IEcsFeatureCore;
   }
-  interface SolarSystemCoreStack {
+  export interface SolarSystemCoreStack {
     ecs?: EcsFeatureCoreStack;
     addEcs(props?: EcsSolarSystemCoreStackProps): EcsFeatureCoreStack;
   }
@@ -179,4 +193,16 @@ declare module '../../solar-system/solar-system-core-stack' {
 SolarSystemCoreStack.prototype.addEcs = function(props?: EcsSolarSystemCoreStackProps): EcsFeatureCoreStack {
   this.ecs = new EcsFeatureCoreStack(this, 'Ecs', props);
   return this.ecs;
+};
+
+declare module '@aws-cdk/aws-ecs/lib/cluster' {
+  export interface AddCapacityOptions {
+    userData: UserData;
+  }
+}
+
+const defaultUserData = (): UserData => {
+  const userData = UserData.forLinux();
+  userData.addCommands('exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1');
+  return userData;
 };

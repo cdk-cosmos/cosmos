@@ -26,6 +26,7 @@ const solarSystem2 = new SolarSystemCoreStack(galaxy, 'Sys1', {
 solarSystem2.addEcs({
   albListenerCidr: '10.0.0.0/8',
 });
+solarSystem2.ecs?.addEcsAgentConfig({ TEST: 'test' });
 
 const cosmosExtension = new CosmosExtensionStack(app, 'Test');
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal');
