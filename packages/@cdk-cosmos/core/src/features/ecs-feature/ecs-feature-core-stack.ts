@@ -50,6 +50,7 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
   readonly httpInternalListener: ApplicationListener;
   readonly httpsListener?: ApplicationListener;
   readonly httpsInternalListener?: ApplicationListener;
+  private dockerDaemonRestart = false;
 
   constructor(solarSystem: ISolarSystemCore, id: string, props?: EcsSolarSystemCoreStackProps) {
     super(solarSystem, id, {
@@ -152,6 +153,23 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
     RemoteAlb.export(this.alb, this.singletonId('Alb'));
     RemoteApplicationListener.export(this.httpListener, this.singletonId('HttpListener'));
     RemoteApplicationListener.export(this.httpInternalListener, this.singletonId('HttpInternalListener'));
+  }
+
+  addDockerConfig(config: Record<string, string>): void {
+    if (!this.clusterAutoScalingGroup)
+      throw new Error('Can not add ecs agent config without an clusterAutoScalingGroup');
+
+    this.clusterAutoScalingGroup.userData.addCommands(
+      'cat <<EOF >> /etc/sysconfig/docker',
+      ...Object.entries(config).map(([k, v]) => `${k}=${v}`),
+      'EOF'
+    );
+
+    if (!this.dockerDaemonRestart) {
+      // only add this once
+      this.clusterAutoScalingGroup.userData.addOnExitCommands('service docker restart');
+      this.dockerDaemonRestart = true;
+    }
   }
 
   addEcsAgentConfig(config: Record<string, string>): void {
