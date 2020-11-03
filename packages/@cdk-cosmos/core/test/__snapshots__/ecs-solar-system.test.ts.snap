@@ -136,16 +136,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0\\"",
+    "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"ac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751a\\"",
       "Type": "String",
     },
-    "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0\\"",
+    "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"ac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751a\\"",
       "Type": "String",
     },
-    "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0\\"",
+    "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"ac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751a\\"",
       "Type": "String",
     },
   },
@@ -341,7 +341,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0S3Bucket",
+                "Ref": "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aS3Bucket",
               },
               "/",
               Object {
@@ -351,7 +351,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0S3VersionKey",
+                        "Ref": "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aS3VersionKey",
                       },
                     ],
                   },
@@ -364,7 +364,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters7c3c8ddbdaf82e02c31903672aed568cae11afcc067f1f65c077cac74bd0e1d0S3VersionKey",
+                        "Ref": "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aS3VersionKey",
                       },
                     ],
                   },
@@ -1434,6 +1434,7 @@ def pick(dct, *keys):
               "",
               Array [
                 "#!/bin/bash
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 echo ECS_CLUSTER=",
                 Object {
                   "Ref": "Cluster",
@@ -1729,16 +1730,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3\\"",
+    "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888\\"",
       "Type": "String",
     },
-    "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3\\"",
+    "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888\\"",
       "Type": "String",
     },
-    "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3\\"",
+    "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888\\"",
       "Type": "String",
     },
   },
@@ -1778,7 +1779,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3S3Bucket",
+                "Ref": "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888S3Bucket",
               },
               "/",
               Object {
@@ -1788,7 +1789,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3S3VersionKey",
+                        "Ref": "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888S3VersionKey",
                       },
                     ],
                   },
@@ -1801,7 +1802,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters1915882d767a864363c7b79e6c93b2206b75ed64d027598a1556d58970c2b3c3S3VersionKey",
+                        "Ref": "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888S3VersionKey",
                       },
                     ],
                   },
@@ -2762,6 +2763,12 @@ def pick(dct, *keys):
               "",
               Array [
                 "#!/bin/bash
+function exitTrap(){
+exitCode=$?
+service docker restart
+}
+trap exitTrap EXIT
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 echo ECS_CLUSTER=",
                 Object {
                   "Ref": "Cluster",
@@ -2769,7 +2776,19 @@ echo ECS_CLUSTER=",
                 " >> /etc/ecs/ecs.config
 sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
 sudo service iptables save
-echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
+echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config
+cat <<EOF >> /etc/sysconfig/docker
+TEST=test
+EOF
+cat <<EOF >> /etc/sysconfig/docker
+TEST2=test2
+EOF
+cat <<EOF >> /etc/ecs/ecs.config
+TEST=test
+EOF
+cat <<EOF >> /etc/ecs/ecs.config
+TEST2=test2
+EOF",
               ],
             ],
           },

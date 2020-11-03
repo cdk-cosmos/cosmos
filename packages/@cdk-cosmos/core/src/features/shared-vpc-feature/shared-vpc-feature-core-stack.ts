@@ -37,7 +37,7 @@ declare module '../../galaxy/galaxy-core-stack' {
   export interface IGalaxyCore {
     readonly sharedVpc?: ISharedVpcFeature;
   }
-  interface GalaxyCoreStack {
+  export interface GalaxyCoreStack {
     sharedVpc?: SharedVpcFeatureCoreStack;
     addSharedVpc(props?: SharedVpcFeatureCoreStackProps): SharedVpcFeatureCoreStack;
   }
