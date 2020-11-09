@@ -15,8 +15,8 @@ export const RESOURCE_TYPE = 'Custom::CrossAccountExports';
 export interface CrossAccountExportsProps {
   exports: string[];
   serviceToken?: string;
-  shouldErrorIfNotFound?: boolean;
   assumeRoleArn?: string;
+  shouldErrorIfNotFound?: boolean;
   alwaysUpdate?: boolean;
 }
 
@@ -28,7 +28,7 @@ export class CrossAccountExports extends Construct {
   constructor(scope: Construct, id: string, props: CrossAccountExportsProps) {
     super(scope, id);
 
-    const { shouldErrorIfNotFound, assumeRoleArn, alwaysUpdate = false, serviceToken } = props;
+    const { serviceToken, assumeRoleArn, shouldErrorIfNotFound = true, alwaysUpdate = false } = props;
 
     this.exports = props.exports;
 
