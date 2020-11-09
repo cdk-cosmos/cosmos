@@ -23,15 +23,14 @@ export const handler = async (
   if (event.RequestType === 'Delete') return;
 
   const credential = assumeRoleArn
-    ? await GetCredential({ RoleArn: assumeRoleArn, RoleSessionName: 'cross-account-stack-ref-handler' })
+    ? await getCredential({ RoleArn: assumeRoleArn, RoleSessionName: 'cross-account-stack-ref-handler' })
     : undefined;
   const cloudformation = new CloudFormation({ credentials: credential });
 
-  const req = await cloudformation.listExports().promise();
-  if (req.$response.error) throw req.$response.error;
+  const cfnExports = await getExports(cloudformation);
 
   for (const exp of exports) {
-    const ref = req.Exports?.find(x => x.Name === exp);
+    const ref = cfnExports.find(x => x.Name === exp);
     if (!ref && shouldErrorIfNotFound) throw new Error(`Export ${exp} not found.`);
     attributes[exp] = ref?.Value || '';
   }
@@ -43,7 +42,7 @@ export const handler = async (
   return result;
 };
 
-const GetCredential = (props: AssumeRoleRequest): Promise<ChainableTemporaryCredentials> =>
+const getCredential = (props: AssumeRoleRequest): Promise<ChainableTemporaryCredentials> =>
   new Promise<ChainableTemporaryCredentials>((res, rej) => {
     const credential = new ChainableTemporaryCredentials({
       params: props,
@@ -53,3 +52,12 @@ const GetCredential = (props: AssumeRoleRequest): Promise<ChainableTemporaryCred
       res(credential);
     });
   });
+
+const getExports = async (cloudformation: CloudFormation, next?: string): Promise<CloudFormation.Exports> => {
+  const res = await cloudformation.listExports({ NextToken: next }).promise();
+  if (res.$response.error) throw res.$response.error;
+  const exports: CloudFormation.Exports = [];
+  if (res.Exports) exports.push(...res.Exports);
+  if (res.NextToken) exports.push(...(await getExports(cloudformation, res.NextToken)));
+  return exports;
+};

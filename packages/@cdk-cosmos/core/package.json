@@ -1,6 +1,6 @@
 {
   "name": "@cdk-cosmos/core",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,8 +26,8 @@
     "clean": "rm -rf lib"
   },
   "dependencies": {
-    "@cosmos-building-blocks/common": "^0.7.0",
-    "@cosmos-building-blocks/pipeline": "^0.7.0"
+    "@cosmos-building-blocks/common": "^0.7.1",
+    "@cosmos-building-blocks/pipeline": "^0.7.1"
   },
   "peerDependencies": {
     "@aws-cdk/aws-certificatemanager": "^1.58.0",
@@ -41,7 +41,7 @@
     "@aws-cdk/aws-elasticloadbalancingv2": "^1.58.0",
     "@aws-cdk/aws-elasticloadbalancingv2-targets": "^1.58.0",
     "@aws-cdk/aws-iam": "^1.58.0",
-    "@aws-cdk/aws-kmn": "^1.58.0",
+    "@aws-cdk/aws-kms": "^1.58.0",
     "@aws-cdk/aws-lambda": "^1.58.0",
     "@aws-cdk/aws-route53": "^1.58.0",
     "@aws-cdk/core": "^1.58.0"
