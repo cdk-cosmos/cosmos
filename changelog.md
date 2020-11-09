@@ -7,6 +7,7 @@
 
 #### 🐛 Bug Fix
 * `@cdk-cosmos/core`
+  * [#218](https://github.com/cdk-cosmos/cosmos/pull/218) Cross-Account export not handling pagination ([@timpur](https://github.com/timpur))
   * [#213](https://github.com/cdk-cosmos/cosmos/pull/213) Fix @aws-cdk/aws-kms peer dependency ([@jpeyper](https://github.com/jpeyper))
 
 #### Committers: 2
