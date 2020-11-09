@@ -1,4 +1,19 @@
 
+## v0.7.1 (2020-11-09)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`
+  * [#216](https://github.com/cdk-cosmos/cosmos/pull/216) Add Default user data (logging) + configure ecs agent ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`
+  * [#213](https://github.com/cdk-cosmos/cosmos/pull/213) Fix @aws-cdk/aws-kms peer dependency ([@jpeyper](https://github.com/jpeyper))
+
+#### Committers: 2
+- Jonathan Peyper ([@jpeyper](https://github.com/jpeyper))
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.7.0 (2020-10-15)
 
 #### 🚀 Enhancement:
