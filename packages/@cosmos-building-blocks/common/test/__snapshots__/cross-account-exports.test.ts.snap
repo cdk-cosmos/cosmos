@@ -83,6 +83,7 @@ Object {
           ],
         },
         "exports": Array [],
+        "shouldErrorIfNotFound": true,
       },
       "Type": "Custom::CrossAccountExports",
       "UpdateReplacePolicy": "Delete",
@@ -98,6 +99,7 @@ Object {
         },
         "exports": Array [],
         "runAt": "2020-01-01T00:00:00.000Z",
+        "shouldErrorIfNotFound": true,
       },
       "Type": "Custom::CrossAccountExports",
       "UpdateReplacePolicy": "Delete",
@@ -114,6 +116,7 @@ Object {
         "exports": Array [
           "Test-Export",
         ],
+        "shouldErrorIfNotFound": true,
       },
       "Type": "Custom::CrossAccountExports",
       "UpdateReplacePolicy": "Delete",

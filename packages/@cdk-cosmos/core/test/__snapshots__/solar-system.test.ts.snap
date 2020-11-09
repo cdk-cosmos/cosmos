@@ -1693,6 +1693,7 @@ Object {
           "CoreGal2Sys2ZoneName",
           "CoreGal2Sys2ZoneNameServers",
         ],
+        "shouldErrorIfNotFound": true,
       },
       "Type": "Custom::CrossAccountExports",
       "UpdateReplacePolicy": "Delete",
