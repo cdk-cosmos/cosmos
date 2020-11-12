@@ -1,8 +1,10 @@
-import { Construct, Tags, CfnOutput } from '@aws-cdk/core';
+import { Construct, Tags, CfnOutput, IConstruct } from '@aws-cdk/core';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { ICosmosCore } from './cosmos-core-stack';
 import { CosmosCoreImportProps, CosmosCoreImport } from './cosmos-core-import';
 import { getPackageVersion } from '../helpers/utils';
+
+const COSMOS_EXTENSION_SYMBOL = Symbol.for('@cdk-cosmos/core.CosmosExtensionStack');
 
 export interface ICosmosExtension extends Construct {
   portal: ICosmosCore;
@@ -25,6 +27,8 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
       ...props,
     });
 
+    Object.defineProperty(this, COSMOS_EXTENSION_SYMBOL, { value: true });
+
     const { portalProps } = props || {};
 
     this.portal = new CosmosCoreImport(this.hidden, this.node.id, {
@@ -39,5 +43,19 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
     });
 
     Tags.of(this).add('cosmos:extension', this.node.id);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static isCosmosExtension(x: any): x is CosmosExtensionStack {
+    return typeof x === 'object' && x !== null && COSMOS_EXTENSION_SYMBOL in x;
+  }
+
+  static of(construct: IConstruct): CosmosExtensionStack {
+    const scopes = [construct, ...construct.node.scopes];
+    for (const scope of scopes) {
+      if (CosmosExtensionStack.isCosmosExtension(scope)) return scope;
+    }
+
+    throw new Error(`No Cosmos Extension Stack could be identified for the construct at path ${construct.node.path}`);
   }
 }

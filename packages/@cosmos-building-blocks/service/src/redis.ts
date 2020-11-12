@@ -116,13 +116,13 @@ export class Redis extends Construct implements ITaggable {
     const modeProps: Partial<CfnReplicationGroupProps> = highAvailabilityMode
       ? {
           numNodeGroups: 1,
-          numCacheClusters: Math.max(2, vpc.availabilityZones.length),
+          replicasPerNodeGroup: Math.max(1, vpc.availabilityZones.length - 1),
           multiAzEnabled: true,
           automaticFailoverEnabled: true,
         }
       : {
           numNodeGroups: 1,
-          numCacheClusters: 1,
+          replicasPerNodeGroup: 0,
           multiAzEnabled: false,
           automaticFailoverEnabled: false,
         };
