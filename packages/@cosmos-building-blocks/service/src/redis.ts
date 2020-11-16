@@ -73,10 +73,13 @@ export class Redis extends Construct implements ITaggable {
   readonly redisReplicationGroup: CfnReplicationGroup;
 
   /**
-   * Redis URI `redis://${endpoint}:${port}
+   * Redis URI `redis[s]://{endpoint}:{port}
    */
   get uri(): string {
-    return `redis://${this.redisReplicationGroup.attrPrimaryEndPointAddress}:${this.redisReplicationGroup.attrPrimaryEndPointPort}`;
+    const secure = this.redisReplicationGroup.transitEncryptionEnabled ? 's' : '';
+    const host = this.redisReplicationGroup.attrPrimaryEndPointAddress;
+    const port = this.redisReplicationGroup.attrPrimaryEndPointPort;
+    return `redis${secure}://${host}:${port}`;
   }
 
   constructor(scope: Construct, id: string, props: RedisProps) {
