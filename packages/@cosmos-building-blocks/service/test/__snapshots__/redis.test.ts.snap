@@ -127,8 +127,8 @@ Object {
         },
         "Engine": "redis",
         "MultiAZEnabled": false,
-        "NumCacheClusters": 1,
         "NumNodeGroups": 1,
+        "ReplicasPerNodeGroup": 0,
         "ReplicationGroupDescription": "Redis cluster for aws-redis/Redis",
         "SecurityGroupIds": Array [
           Object {
@@ -152,8 +152,8 @@ Object {
         },
         "Engine": "redis",
         "MultiAZEnabled": false,
-        "NumCacheClusters": 1,
         "NumNodeGroups": 1,
+        "ReplicasPerNodeGroup": 0,
         "ReplicationGroupDescription": "Redis cluster for aws-redis/RedisClosed",
         "SecurityGroupIds": Array [
           Object {
@@ -230,8 +230,8 @@ Object {
         },
         "Engine": "redis",
         "MultiAZEnabled": true,
-        "NumCacheClusters": 2,
         "NumNodeGroups": 1,
+        "ReplicasPerNodeGroup": 1,
         "ReplicationGroupDescription": "Redis cluster for aws-redis/RedisHa",
         "SecurityGroupIds": Array [
           Object {
@@ -298,6 +298,7 @@ Object {
         "MultiAZEnabled": false,
         "NumCacheClusters": 3,
         "NumNodeGroups": 1,
+        "ReplicasPerNodeGroup": 0,
         "ReplicationGroupDescription": "Redis cluster not encrypted",
         "SecurityGroupIds": Array [
           Object {
