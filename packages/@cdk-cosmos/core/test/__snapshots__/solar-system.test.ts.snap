@@ -1644,7 +1644,7 @@ Object {
 
 exports[`Solar-System should match snapshot 6`] = `
 Object {
-  "Description": "Cosmos Link: Resources to link the Cosmos, like Route53 zone delegation",
+  "Description": "Link Feature: Resources to link the Cosmos, like Route53 zone delegation",
   "Resources": Object {
     "Sys2ZoneDelegation": Object {
       "Properties": Object {
@@ -1692,6 +1692,58 @@ Object {
         "exports": Array [
           "CoreGal2Sys2ZoneName",
           "CoreGal2Sys2ZoneNameServers",
+        ],
+        "shouldErrorIfNotFound": true,
+      },
+      "Type": "Custom::CrossAccountExports",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "Sys3ZoneDelegation": Object {
+      "Properties": Object {
+        "Comment": "Core Zone Delegation for Sys3 SolarSystem.",
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputRefRootZone2F3E9CEF",
+        },
+        "Name": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "Sys3ZoneDelegationExports",
+                  "CoreGal2Sys3ZoneName",
+                ],
+              },
+              ".",
+            ],
+          ],
+        },
+        "ResourceRecords": Object {
+          "Fn::Split": Array [
+            ",",
+            Object {
+              "Fn::GetAtt": Array [
+                "Sys3ZoneDelegationExports",
+                "CoreGal2Sys3ZoneNameServers",
+              ],
+            },
+          ],
+        },
+        "TTL": "1800",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "Sys3ZoneDelegationExports": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "ServiceToken": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCustomCrossAccountExportsCustomResourceProviderHandlerArn8CE3D38E",
+        },
+        "assumeRoleArn": "arn:aws:iam::account2:role/CoreCdkCrossAccountRole",
+        "exports": Array [
+          "CoreGal2Sys3ZoneName",
+          "CoreGal2Sys3ZoneNameServers",
         ],
         "shouldErrorIfNotFound": true,
       },

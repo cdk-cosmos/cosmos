@@ -134,7 +134,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem CoreCosLink AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -315,7 +315,7 @@ Object {
             Object {
               "Name": "STACKS",
               "Type": "PLAINTEXT",
-              "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
+              "Value": "CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem CoreCosLink AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
             },
           ],
           "Image": "aws/codebuild/standard:3.0",
@@ -735,16 +735,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4b\\"",
+    "AssetParameters82da36271be07b4b799c163c79d55549a15103dd11087f0ce97ad3def041c356ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"82da36271be07b4b799c163c79d55549a15103dd11087f0ce97ad3def041c356\\"",
       "Type": "String",
     },
-    "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4b\\"",
+    "AssetParameters82da36271be07b4b799c163c79d55549a15103dd11087f0ce97ad3def041c356S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"82da36271be07b4b799c163c79d55549a15103dd11087f0ce97ad3def041c356\\"",
       "Type": "String",
     },
-    "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4b\\"",
+    "AssetParameters82da36271be07b4b799c163c79d55549a15103dd11087f0ce97ad3def041c356S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"82da36271be07b4b799c163c79d55549a15103dd11087f0ce97ad3def041c356\\"",
       "Type": "String",
     },
   },
@@ -775,7 +775,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3Bucket",
+                "Ref": "AssetParameters82da36271be07b4b799c163c79d55549a15103dd11087f0ce97ad3def041c356S3Bucket",
               },
               "/",
               Object {
@@ -785,7 +785,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3VersionKey",
+                        "Ref": "AssetParameters82da36271be07b4b799c163c79d55549a15103dd11087f0ce97ad3def041c356S3VersionKey",
                       },
                     ],
                   },
@@ -798,7 +798,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3VersionKey",
+                        "Ref": "AssetParameters82da36271be07b4b799c163c79d55549a15103dd11087f0ce97ad3def041c356S3VersionKey",
                       },
                     ],
                   },
@@ -1659,7 +1659,7 @@ Object {
             Object {
               "Name": "STACKS",
               "Type": "PLAINTEXT",
-              "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
+              "Value": "CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem CoreCosLink AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
             },
           ],
           "Image": "aws/codebuild/standard:3.0",

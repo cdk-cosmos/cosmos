@@ -1,3 +1,5 @@
+export { ILinkFeature, LinkFeatureStack } from './link-feature/link-feature-stack';
+
 export {
   ISharedVpcFeature,
   SharedVpcFeatureCoreStack,

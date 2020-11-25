@@ -23,6 +23,7 @@ galaxy.addSharedVpc();
 const solarSystem = new SolarSystemCoreStack(galaxy, 'Sys', { env, vpc: galaxy.sharedVpc?.vpc });
 const galaxy2 = new GalaxyCoreStack(cosmos, 'Gal2', { env: env2 });
 const solarSystem2 = new SolarSystemCoreStack(galaxy2, 'Sys2', { env: env2 });
+new SolarSystemCoreStack(galaxy2, 'Sys3', { env: env2 });
 
 const cosmosExtension = new CosmosExtensionStack(app, 'Test', { env });
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal', { env });
