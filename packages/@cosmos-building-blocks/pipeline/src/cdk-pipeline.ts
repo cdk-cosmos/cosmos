@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Construct, Stack, IConstruct, Lazy, IResolvable, PhysicalName } from '@aws-cdk/core';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
-import { Pipeline, Artifact, IAction, IStage } from '@aws-cdk/aws-codepipeline';
+import { Pipeline, Artifact, IAction, IStage, IPipeline } from '@aws-cdk/aws-codepipeline';
 import {
   CodeCommitSourceAction,
   CodeBuildAction,
@@ -16,6 +16,7 @@ import {
   Source,
   Artifacts,
   BuildEnvironmentVariableType,
+  ComputeType,
 } from '@aws-cdk/aws-codebuild';
 import { IRole, Role, CompositePrincipal, ServicePrincipal } from '@aws-cdk/aws-iam';
 import { IVpc, SubnetSelection, Peer, Port } from '@aws-cdk/aws-ec2';
@@ -29,6 +30,7 @@ export interface CdkPipelineProps {
   deployName?: string;
   cdkRepo: IRepository;
   cdkBranch?: string;
+  cdkTrigger?: boolean;
   cdkWorkingDir?: string;
   deployRole?: IRole;
   deployVpc?: IVpc;
@@ -64,6 +66,7 @@ export class CdkPipeline extends Construct {
       deployName,
       cdkRepo,
       cdkBranch = 'master',
+      cdkTrigger = false,
       cdkWorkingDir,
       deployRole,
       deployVpc,
@@ -152,7 +155,8 @@ export class CdkPipeline extends Construct {
       }),
       buildSpec: buildSpec,
       environment: {
-        buildImage: LinuxBuildImage.STANDARD_3_0,
+        computeType: ComputeType.SMALL,
+        buildImage: LinuxBuildImage.STANDARD_4_0,
         environmentVariables: parseEnvs(envs),
         privileged: true,
       },
@@ -185,7 +189,7 @@ export class CdkPipeline extends Construct {
           repository: this.cdkRepo,
           branch: cdkBranch,
           output: sourceOutput,
-          trigger: CodeCommitTrigger.NONE,
+          trigger: cdkTrigger ? CodeCommitTrigger.EVENTS : CodeCommitTrigger.NONE,
         }),
       ],
     });
@@ -226,7 +230,7 @@ export class CdkPipeline extends Construct {
   }
 
   addDeployStackStage(props: AddDeployStackStageProps): void {
-    const { name, stacks, pipeline = this.pipeline, envs = {}, isManualApprovalRequired = true, exclusive = true } =
+    const { name, stacks, pipeline = this.pipeline, envs = {}, isManualApprovalRequired = true, exclusive = false } =
       props || {};
 
     if (stacks && stacks.length === 0) {
@@ -275,21 +279,12 @@ export class CdkPipeline extends Construct {
   }
 
   preparePipeline(): void {
-    const allStacks = findAllStacksFromCdkApp(this);
     const stacks = Stack.of(this).resolve(this.stacks) as string[];
-    const stackStages = findStacksFromCdkDeployActions(this.pipeline.stages);
+    const stackStages = findStacksFromCdkDeployActions(this.pipeline);
     const remainingStacks = stacks.filter(x => !stackStages.includes(x));
-    const depStacks = stacks
-      .map(x => allStacks.find(y => x === y.stackName) as Stack)
-      .filter(x => x)
-      .filter(x => stackNames(findStackDependencies(x)).some(x => stackStages.includes(x)))
-      .map(x => x.stackName);
-    const beforeStacks = remainingStacks.filter(x => !depStacks.includes(x));
-    const afterStacks = remainingStacks.filter(x => depStacks.includes(x));
-
     const cdkOutputArtifact = findOutputFromCdkCheckout(this.pipeline.stages) as Artifact;
 
-    if (beforeStacks.length) {
+    if (remainingStacks.length) {
       this.pipeline.addStage({
         stageName: 'Deploy',
         placement: {
@@ -301,24 +296,7 @@ export class CdkPipeline extends Construct {
             role: this.pipeline.role,
             project: this.deploy,
             input: cdkOutputArtifact,
-            stacks: beforeStacks,
-            hasDiffStage: this.hasDiffStage,
-            exclusive: true,
-          }),
-        ],
-      });
-    }
-
-    if (afterStacks.length) {
-      this.pipeline.addStage({
-        stageName: 'DeployDependantStacks',
-        actions: [
-          new CdkDeployAction({
-            actionName: 'DependantStackDeploy',
-            role: this.pipeline.role,
-            project: this.deploy,
-            input: cdkOutputArtifact,
-            stacks: afterStacks,
+            stacks: remainingStacks,
             hasDiffStage: this.hasDiffStage,
             exclusive: true,
           }),
@@ -328,10 +306,15 @@ export class CdkPipeline extends Construct {
   }
 }
 
+export interface CdkDeployActionProps extends CodeBuildActionProps {
+  stacks?: string[];
+  hasDiffStage?: boolean;
+  exclusive?: boolean;
+}
 export class CdkDeployAction extends CodeBuildAction {
-  // readonly actionProperties: ActionProperties & { environmentVariables?: BuildEnvironmentVariables };
-  stacks: string[];
-  constructor(props: CodeBuildActionProps & { stacks?: string[]; hasDiffStage?: boolean; exclusive?: boolean }) {
+  _props: CdkDeployActionProps;
+
+  constructor(props: CdkDeployActionProps) {
     const { stacks = [], hasDiffStage, environmentVariables, exclusive } = props;
 
     const envs: BuildEnvironmentVariables = {
@@ -358,21 +341,13 @@ export class CdkDeployAction extends CodeBuildAction {
       environmentVariables: parseEnvs(envs),
     });
 
-    this.stacks = stacks;
+    this._props = props;
   }
 
   static isCdkDeployAction(x: any): x is CdkDeployAction {
     return x instanceof CdkDeployAction;
   }
 }
-
-const findAllStacksFromCdkApp = (scope: IConstruct): Stack[] => {
-  const stacks = scope.node.scopes[0].node
-    .findAll()
-    .filter<Stack>(Stack.isStack)
-    .filter(x => !x.nested);
-  return stacks;
-};
 
 const findOutputFromCdkCheckout = (stages: IStage[]): Artifact | undefined => {
   const action = stages
@@ -386,20 +361,39 @@ const findOutputFromCdkCheckout = (stages: IStage[]): Artifact | undefined => {
   return action.actionProperties.outputs[0];
 };
 
-const findStacksFromCdkDeployActions = (stages: IStage[]): string[] =>
-  stages
+const findStacksFromCdkDeployActions = (pipeline: Pipeline): string[] =>
+  pipeline.stages
     .reduce<IAction[]>((res, item) => {
       res.push(...item.actions);
       return res;
     }, [])
     .filter(CdkDeployAction.isCdkDeployAction)
     .reduce<string[]>((res, item) => {
-      if (item.stacks) res.push(...item.stacks);
+      const stacks = item._props.stacks;
+      if (stacks) {
+        res.push(...stacks);
+        if (!item._props.exclusive) {
+          const allStacks = findAllStacksFromCdkApp(pipeline);
+          const deps = stacks
+            .map(x => allStacks.find(y => x === y.stackName) as Stack)
+            .filter(x => x)
+            .map(x => findStackDependencies(x))
+            .flat()
+            .map(x => x.stackName);
+          for (const stack of deps) {
+            if (!res.includes(stack)) res.push(stack);
+          }
+        }
+      }
       return res;
     }, []);
 
-const stackNames = (stacks: Array<Stack | string>): string[] => {
-  return stacks.map(x => (typeof x === 'string' ? x : x.stackName));
+const findAllStacksFromCdkApp = (scope: IConstruct): Stack[] => {
+  const stacks = scope.node.scopes[0].node
+    .findAll()
+    .filter<Stack>(Stack.isStack)
+    .filter(x => !x.nested);
+  return stacks;
 };
 
 const findStackDependencies = (stack: Stack): Stack[] => {
@@ -416,4 +410,8 @@ const findStackDependencies = (stack: Stack): Stack[] => {
     }, []);
 
   return deps;
+};
+
+const stackNames = (stacks: Array<Stack | string>): string[] => {
+  return stacks.map(x => (typeof x === 'string' ? x : x.stackName));
 };

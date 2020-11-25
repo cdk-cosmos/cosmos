@@ -48,9 +48,10 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
         assumedBy: new ArnPrincipal(this.cosmos.cdkMasterRoleStaticArn),
       });
       this.cdkCrossAccountRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'));
-      this.cdkCrossAccountRoleStaticArn = `arn:aws:iam::${Stack.of(this).account}:role/${CdkCrossAccountRoleName}`;
+      this.cdkCrossAccountRoleStaticArn = `arn:aws:iam::${this.account}:role/${CdkCrossAccountRoleName}`;
     }
 
+    this.addDependency(Stack.of(this.cosmos));
     Tags.of(this).add('cosmos:galaxy', this.node.id);
   }
 
