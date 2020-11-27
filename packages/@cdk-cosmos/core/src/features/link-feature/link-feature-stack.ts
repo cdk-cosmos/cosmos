@@ -1,6 +1,7 @@
 import { Construct } from '@aws-cdk/core';
 import { BaseStack, BaseStackProps } from '../../components/base';
-import { CosmosCoreStack, CosmosExtensionStack } from '../../cosmos';
+import { CosmosCoreStack } from '../../cosmos/cosmos-core-stack';
+import { CosmosExtensionStack } from '../../cosmos/cosmos-extension-stack';
 
 export interface ILinkFeature<T extends Construct = Construct> extends Construct {
   cosmos: T;

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CICD-Solar-System Extension should have a CdkRepo 1`] = `
+exports[`CICD Feature Extension should have a CdkRepo 1`] = `
 Object {
   "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
   "Outputs": Object {
@@ -40,7 +40,7 @@ Object {
 }
 `;
 
-exports[`CICD-Solar-System Extension should match snapshot 1`] = `
+exports[`CICD Feature Extension should match snapshot 1`] = `
 Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
   "Resources": Object {
@@ -397,7 +397,7 @@ Object {
 }
 `;
 
-exports[`CICD-Solar-System should have a CdkRepo 1`] = `
+exports[`CICD Feature should have a CdkRepo 1`] = `
 Object {
   "Description": "Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole",
   "Outputs": Object {
@@ -624,7 +624,7 @@ Object {
 }
 `;
 
-exports[`CICD-Solar-System should match snapshot 1`] = `
+exports[`CICD Feature should match snapshot 1`] = `
 Object {
   "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
@@ -1357,7 +1357,7 @@ Object {
 }
 `;
 
-exports[`CICD-Solar-System should match snapshot 2`] = `
+exports[`CICD Feature should match snapshot 2`] = `
 Object {
   "Description": "Add CiCd Features to the SolarSystem",
   "Resources": Object {

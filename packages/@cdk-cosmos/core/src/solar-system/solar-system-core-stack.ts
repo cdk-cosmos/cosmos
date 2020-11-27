@@ -109,9 +109,9 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
       }
     }
 
-    RemoteVpc.export(this.vpc, this.singletonId('Vpc'), this);
-    RemoteZone.export(this.zone, this.singletonId('Zone'));
-    RemoteZone.export(this.privateZone, this.singletonId('PrivateZone'));
+    new RemoteVpc(this.vpc, this.singletonId('Vpc'), this);
+    new RemoteZone(this.zone, this.singletonId('Zone'));
+    new RemoteZone(this.privateZone, this.singletonId('PrivateZone'));
 
     Tags.of(this).add('cosmos:solarsystem', this.node.id);
   }

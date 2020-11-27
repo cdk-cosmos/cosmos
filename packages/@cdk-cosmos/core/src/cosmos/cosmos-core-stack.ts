@@ -66,7 +66,7 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
       exportName: this.singletonId('LibVersion'),
       value: this.libVersion,
     });
-    RemoteZone.export(this.rootZone, this.singletonId('RootZone'));
+    new RemoteZone(this.rootZone, this.singletonId('RootZone'));
     new CfnOutput(this, 'CrossAccountExportServiceToken', {
       exportName: this.singletonId('CrossAccountExportServiceToken'),
       value: this.crossAccountExportServiceToken,

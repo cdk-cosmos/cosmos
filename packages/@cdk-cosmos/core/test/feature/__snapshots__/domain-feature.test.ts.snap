@@ -1,0 +1,2063 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Domain Feature for Core sould have a domain at cosmos level 1`] = `
+Object {
+  "Description": "Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole",
+  "Outputs": Object {
+    "CoreDomainZoneId": Object {
+      "Export": Object {
+        "Name": "CoreCoreDomainId",
+      },
+      "Value": Object {
+        "Ref": "CoreDomain",
+      },
+    },
+    "CoreDomainZoneName": Object {
+      "Export": Object {
+        "Name": "CoreCoreDomainName",
+      },
+      "Value": "core.domain.com",
+    },
+    "CoreDomainZoneNameServers": Object {
+      "Export": Object {
+        "Name": "CoreCoreDomainNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "CoreDomain",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+    "CoreLibVersion": Object {
+      "Export": Object {
+        "Name": "CoreLibVersion",
+      },
+      "Value": "0.7.1",
+    },
+    "CrossAccountExportServiceToken": Object {
+      "Export": Object {
+        "Name": "CoreCrossAccountExportServiceToken",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CustomCrossAccountExportsCustomResourceProviderHandler",
+          "Arn",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttCustomCrossAccountExportsCustomResourceProviderHandlerArn": Object {
+      "Export": Object {
+        "Name": "CoreCosCosmos:ExportsOutputFnGetAttCustomCrossAccountExportsCustomResourceProviderHandlerArn8CE3D38E",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CustomCrossAccountExportsCustomResourceProviderHandler",
+          "Arn",
+        ],
+      },
+    },
+    "ExportsOutputRefCoreDomain": Object {
+      "Export": Object {
+        "Name": "CoreCosCosmos:ExportsOutputRefCoreDomain99EE3BBF",
+      },
+      "Value": Object {
+        "Ref": "CoreDomain",
+      },
+    },
+    "ExportsOutputRefRootZone": Object {
+      "Export": Object {
+        "Name": "CoreCosCosmos:ExportsOutputRefRootZone2F3E9CEF",
+      },
+      "Value": Object {
+        "Ref": "RootZone",
+      },
+    },
+    "RootZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreRootZoneId",
+      },
+      "Value": Object {
+        "Ref": "RootZone",
+      },
+    },
+    "RootZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreRootZoneName",
+      },
+      "Value": "cos.com",
+    },
+    "RootZoneZoneNameServers": Object {
+      "Export": Object {
+        "Name": "CoreRootZoneNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "RootZone",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "AssetParameterssourceHashArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"sourceHash\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "CdkMasterRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Array [
+                  "codebuild.amazonaws.com",
+                  "codepipeline.amazonaws.com",
+                  "lambda.amazonaws.com",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AdministratorAccess",
+              ],
+            ],
+          },
+        ],
+        "RoleName": "CoreCdkMasterRole",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CoreDomain": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Root Domain form core.domain.com",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+        ],
+        "Name": "core.domain.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "CustomCrossAccountExportsCustomResourceProviderHandler": Object {
+      "DependsOn": Array [
+        "CdkMasterRole",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameterssourceHashS3Bucket",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CdkMasterRole",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "RootZone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core TLD Root Zone for Cos Cosmos.",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+        ],
+        "Name": "cos.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+  },
+}
+`;
+
+exports[`Domain Feature for Core sould have a domain at cosmos level 2`] = `
+Object {
+  "Description": "Link Feature: Resources to link the Cosmos, like Route53 zone delegation",
+  "Resources": Object {
+    "CosGalSys2TstCoreSubdomainExports": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "ServiceToken": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCustomCrossAccountExportsCustomResourceProviderHandlerArn8CE3D38E",
+        },
+        "assumeRoleArn": "arn:aws:iam::account1:role/CoreCdkMasterRole",
+        "exports": Array [
+          "CoreGalSys2TstCoreSubdomainName",
+          "CoreGalSys2TstCoreSubdomainNameServers",
+        ],
+        "shouldErrorIfNotFound": true,
+      },
+      "Type": "Custom::CrossAccountExports",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "CosGalSys2TstCoreSubdomainZoneDelegation": Object {
+      "Properties": Object {
+        "Comment": "Subdomain Delegation for tst.core.domain.com.",
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputRefCoreDomain99EE3BBF",
+        },
+        "Name": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "CosGalSys2TstCoreSubdomainExports",
+                  "CoreGalSys2TstCoreSubdomainName",
+                ],
+              },
+              ".core.domain.com.",
+            ],
+          ],
+        },
+        "ResourceRecords": Object {
+          "Fn::Split": Array [
+            ",",
+            Object {
+              "Fn::GetAtt": Array [
+                "CosGalSys2TstCoreSubdomainExports",
+                "CoreGalSys2TstCoreSubdomainNameServers",
+              ],
+            },
+          ],
+        },
+        "TTL": "300",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "Sys2ZoneDelegation": Object {
+      "Properties": Object {
+        "Comment": "Core Zone Delegation for Sys2 SolarSystem.",
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputRefRootZone2F3E9CEF",
+        },
+        "Name": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "Sys2ZoneDelegationExports",
+                  "CoreGalSys2ZoneName",
+                ],
+              },
+              ".",
+            ],
+          ],
+        },
+        "ResourceRecords": Object {
+          "Fn::Split": Array [
+            ",",
+            Object {
+              "Fn::GetAtt": Array [
+                "Sys2ZoneDelegationExports",
+                "CoreGalSys2ZoneNameServers",
+              ],
+            },
+          ],
+        },
+        "TTL": "1800",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "Sys2ZoneDelegationExports": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "ServiceToken": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCustomCrossAccountExportsCustomResourceProviderHandlerArn8CE3D38E",
+        },
+        "exports": Array [
+          "CoreGalSys2ZoneName",
+          "CoreGalSys2ZoneNameServers",
+        ],
+        "shouldErrorIfNotFound": true,
+      },
+      "Type": "Custom::CrossAccountExports",
+      "UpdateReplacePolicy": "Delete",
+    },
+  },
+}
+`;
+
+exports[`Domain Feature for Core sould have a domain at cosmos level 3`] = `
+Object {
+  "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
+  "Outputs": Object {
+    "DevCoreSubdomainZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysDevCoreSubdomainId",
+      },
+      "Value": Object {
+        "Ref": "DevCoreSubdomain",
+      },
+    },
+    "DevCoreSubdomainZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysDevCoreSubdomainName",
+      },
+      "Value": "dev.core.domain.com",
+    },
+    "DevCoreSubdomainZoneNameServers": Object {
+      "Export": Object {
+        "Name": "CoreGalSysDevCoreSubdomainNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "DevCoreSubdomain",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+    "PrivateZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysPrivateZoneId",
+      },
+      "Value": Object {
+        "Ref": "PrivateZone",
+      },
+    },
+    "PrivateZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysPrivateZoneName",
+      },
+      "Value": "sys.internal",
+    },
+    "VpcAZs": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcAZs",
+      },
+      "Value": "dummy1a,dummy1b",
+    },
+    "VpcCidrBlock": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcCidrBlock",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Vpc",
+          "CidrBlock",
+        ],
+      },
+    },
+    "VpcId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcId",
+      },
+      "Value": Object {
+        "Ref": "Vpc",
+      },
+    },
+    "VpcIsolatedSubnetRouteTables": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcIsolatedSubnetRouteTableIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Ref": "VpcAppSubnet1RouteTable",
+            },
+            Object {
+              "Ref": "VpcAppSubnet2RouteTable",
+            },
+          ],
+        ],
+      },
+    },
+    "VpcIsolatedSubnets": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcIsolatedSubnetIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Ref": "VpcAppSubnet1Subnet",
+            },
+            Object {
+              "Ref": "VpcAppSubnet2Subnet",
+            },
+          ],
+        ],
+      },
+    },
+    "ZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneId",
+      },
+      "Value": Object {
+        "Ref": "Zone",
+      },
+    },
+    "ZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneName",
+      },
+      "Value": "sys.cos.com",
+    },
+    "ZoneNameServers": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "Zone",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "Resources": Object {
+    "DevCoreSubdomain": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "dev Subdomain for core.domain.com",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "Name": "dev.core.domain.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "DevCoreSubdomainZoneDelegation": Object {
+      "Properties": Object {
+        "Comment": "Subdomain Delegation for dev.core.domain.com.",
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputRefCoreDomain99EE3BBF",
+        },
+        "Name": "dev.core.domain.com.",
+        "ResourceRecords": Object {
+          "Fn::GetAtt": Array [
+            "DevCoreSubdomain",
+            "NameServers",
+          ],
+        },
+        "TTL": "300",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "PrivateZone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Private Zone for Sys SolarSystem",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "Name": "sys.internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Ref": "Vpc",
+            },
+            "VPCRegion": "region",
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "Vpc": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/24",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VpcAppSubnet1RouteTable": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet1RouteTableAssociation": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet1RouteTable",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet1Subnet",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet1Subnet": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.0.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcAppSubnet2RouteTable": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet2RouteTableAssociation": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet2RouteTable",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet2Subnet",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet2Subnet": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.0.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcCloudWatchLogsEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcCloudWatchLogsEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region.logs",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcCloudWatchLogsEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcS3Gateway": Object {
+      "Properties": Object {
+        "RouteTableIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1RouteTable",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2RouteTable",
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".s3",
+            ],
+          ],
+        },
+        "VpcEndpointType": "Gateway",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region.ssm",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys/Vpc/SsmEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcSsmMessageEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmMessageEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region.ssmmessages",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmMessageEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys/Vpc/SsmMessageEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "Zone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Zone for Sys SolarSystem",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "Name": "sys.cos.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "ZoneDelegation": Object {
+      "Properties": Object {
+        "Comment": "Core Zone Delegation for Sys SolarSystem.",
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputRefRootZone2F3E9CEF",
+        },
+        "Name": "sys.cos.com.",
+        "ResourceRecords": Object {
+          "Fn::GetAtt": Array [
+            "Zone",
+            "NameServers",
+          ],
+        },
+        "TTL": "1800",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;
+
+exports[`Domain Feature for Core sould have a domain at cosmos level 4`] = `
+Object {
+  "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
+  "Outputs": Object {
+    "PrivateZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2PrivateZoneId",
+      },
+      "Value": Object {
+        "Ref": "PrivateZone",
+      },
+    },
+    "PrivateZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2PrivateZoneName",
+      },
+      "Value": "sys2.internal",
+    },
+    "TstCoreSubdomainZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2TstCoreSubdomainId",
+      },
+      "Value": Object {
+        "Ref": "TstCoreSubdomain",
+      },
+    },
+    "TstCoreSubdomainZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2TstCoreSubdomainName",
+      },
+      "Value": "tst.core.domain.com",
+    },
+    "TstCoreSubdomainZoneNameServers": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2TstCoreSubdomainNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "TstCoreSubdomain",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+    "VpcAZs": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2VpcAZs",
+      },
+      "Value": "dummy1a,dummy1b",
+    },
+    "VpcCidrBlock": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2VpcCidrBlock",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Vpc",
+          "CidrBlock",
+        ],
+      },
+    },
+    "VpcId": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2VpcId",
+      },
+      "Value": Object {
+        "Ref": "Vpc",
+      },
+    },
+    "VpcIsolatedSubnetRouteTables": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2VpcIsolatedSubnetRouteTableIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Ref": "VpcAppSubnet1RouteTable",
+            },
+            Object {
+              "Ref": "VpcAppSubnet2RouteTable",
+            },
+          ],
+        ],
+      },
+    },
+    "VpcIsolatedSubnets": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2VpcIsolatedSubnetIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Ref": "VpcAppSubnet1Subnet",
+            },
+            Object {
+              "Ref": "VpcAppSubnet2Subnet",
+            },
+          ],
+        ],
+      },
+    },
+    "ZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2ZoneId",
+      },
+      "Value": Object {
+        "Ref": "Zone",
+      },
+    },
+    "ZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2ZoneName",
+      },
+      "Value": "sys2.cos.com",
+    },
+    "ZoneNameServers": Object {
+      "Export": Object {
+        "Name": "CoreGalSys2ZoneNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "Zone",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "Resources": Object {
+    "PrivateZone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Private Zone for Sys2 SolarSystem",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+        ],
+        "Name": "sys2.internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Ref": "Vpc",
+            },
+            "VPCRegion": "region",
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "TstCoreSubdomain": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "tst Subdomain for core.domain.com",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+        ],
+        "Name": "tst.core.domain.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "Vpc": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/24",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys2/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VpcAppSubnet1RouteTable": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys2/Vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet1RouteTableAssociation": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet1RouteTable",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet1Subnet",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet1Subnet": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.0.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys2/Vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcAppSubnet2RouteTable": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys2/Vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet2RouteTableAssociation": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet2RouteTable",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet2Subnet",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet2Subnet": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.0.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys2/Vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcCloudWatchLogsEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcCloudWatchLogsEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region.logs",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcCloudWatchLogsEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys2/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys2/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcS3Gateway": Object {
+      "Properties": Object {
+        "RouteTableIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1RouteTable",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2RouteTable",
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".s3",
+            ],
+          ],
+        },
+        "VpcEndpointType": "Gateway",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region.ssm",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys2/Vpc/SsmEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys2/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcSsmMessageEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmMessageEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region.ssmmessages",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmMessageEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys2/Vpc/SsmMessageEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys2/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "Zone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Zone for Sys2 SolarSystem",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+        ],
+        "Name": "sys2.cos.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+  },
+}
+`;
+
+exports[`Domain Feature for Extension sould have a domain at cosmos level 1`] = `
+Object {
+  "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
+  "Outputs": Object {
+    "AppDomainZoneId": Object {
+      "Export": Object {
+        "Name": "AppCosExtAppDomainId",
+      },
+      "Value": Object {
+        "Ref": "AppDomain",
+      },
+    },
+    "AppDomainZoneName": Object {
+      "Export": Object {
+        "Name": "AppCosExtAppDomainName",
+      },
+      "Value": "app.domain.com",
+    },
+    "AppDomainZoneNameServers": Object {
+      "Export": Object {
+        "Name": "AppCosExtAppDomainNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "AppDomain",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+    "AppLibVersion": Object {
+      "Export": Object {
+        "Name": "AppCosExtLibVersion",
+      },
+      "Value": "0.7.1",
+    },
+    "ExportsOutputRefAppDomain": Object {
+      "Export": Object {
+        "Name": "AppCosExtCosmos:ExportsOutputRefAppDomainBB39EA9C",
+      },
+      "Value": Object {
+        "Ref": "AppDomain",
+      },
+    },
+  },
+  "Resources": Object {
+    "AppDomain": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Root Domain form app.domain.com",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+        ],
+        "Name": "app.domain.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+  },
+}
+`;
+
+exports[`Domain Feature for Extension sould have a domain at cosmos level 2`] = `
+Object {
+  "Description": "Link Feature: Resources to link the Cosmos, like Route53 zone delegation",
+  "Resources": Object {
+    "CosExtGalSys2TstAppSubdomainExports": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "ServiceToken": Object {
+          "Fn::ImportValue": "CoreCrossAccountExportServiceToken",
+        },
+        "assumeRoleArn": "arn:aws:iam::account1:role/CoreCdkMasterRole",
+        "exports": Array [
+          "AppCosExtGalSys2TstAppSubdomainName",
+          "AppCosExtGalSys2TstAppSubdomainNameServers",
+        ],
+        "shouldErrorIfNotFound": true,
+      },
+      "Type": "Custom::CrossAccountExports",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "CosExtGalSys2TstAppSubdomainZoneDelegation": Object {
+      "Properties": Object {
+        "Comment": "Subdomain Delegation for tst.app.domain.com.",
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "AppCosExtCosmos:ExportsOutputRefAppDomainBB39EA9C",
+        },
+        "Name": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              Object {
+                "Fn::GetAtt": Array [
+                  "CosExtGalSys2TstAppSubdomainExports",
+                  "AppCosExtGalSys2TstAppSubdomainName",
+                ],
+              },
+              ".app.domain.com.",
+            ],
+          ],
+        },
+        "ResourceRecords": Object {
+          "Fn::Split": Array [
+            ",",
+            Object {
+              "Fn::GetAtt": Array [
+                "CosExtGalSys2TstAppSubdomainExports",
+                "AppCosExtGalSys2TstAppSubdomainNameServers",
+              ],
+            },
+          ],
+        },
+        "TTL": "300",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;
+
+exports[`Domain Feature for Extension sould have a domain at cosmos level 3`] = `
+Object {
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Outputs": Object {
+    "DevAppSubdomainZoneId": Object {
+      "Export": Object {
+        "Name": "AppCosExtGalSysDevAppSubdomainId",
+      },
+      "Value": Object {
+        "Ref": "DevAppSubdomain",
+      },
+    },
+    "DevAppSubdomainZoneName": Object {
+      "Export": Object {
+        "Name": "AppCosExtGalSysDevAppSubdomainName",
+      },
+      "Value": "dev.app.domain.com",
+    },
+    "DevAppSubdomainZoneNameServers": Object {
+      "Export": Object {
+        "Name": "AppCosExtGalSysDevAppSubdomainNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "DevAppSubdomain",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "Resources": Object {
+    "DevAppSubdomain": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "dev Subdomain for app.domain.com",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "Sys",
+          },
+        ],
+        "Name": "dev.app.domain.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "DevAppSubdomainZoneDelegation": Object {
+      "Properties": Object {
+        "Comment": "Subdomain Delegation for dev.app.domain.com.",
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "AppCosExtCosmos:ExportsOutputRefAppDomainBB39EA9C",
+        },
+        "Name": "dev.app.domain.com.",
+        "ResourceRecords": Object {
+          "Fn::GetAtt": Array [
+            "DevAppSubdomain",
+            "NameServers",
+          ],
+        },
+        "TTL": "300",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;
+
+exports[`Domain Feature for Extension sould have a domain at cosmos level 4`] = `
+Object {
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Outputs": Object {
+    "TstAppSubdomainZoneId": Object {
+      "Export": Object {
+        "Name": "AppCosExtGalSys2TstAppSubdomainId",
+      },
+      "Value": Object {
+        "Ref": "TstAppSubdomain",
+      },
+    },
+    "TstAppSubdomainZoneName": Object {
+      "Export": Object {
+        "Name": "AppCosExtGalSys2TstAppSubdomainName",
+      },
+      "Value": "tst.app.domain.com",
+    },
+    "TstAppSubdomainZoneNameServers": Object {
+      "Export": Object {
+        "Name": "AppCosExtGalSys2TstAppSubdomainNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "TstAppSubdomain",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "Resources": Object {
+    "TstAppSubdomain": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "tst Subdomain for app.domain.com",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "Sys2",
+          },
+        ],
+        "Name": "tst.app.domain.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+  },
+}
+`;
