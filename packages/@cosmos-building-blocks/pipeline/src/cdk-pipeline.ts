@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Construct, Stack, IConstruct, Lazy, IResolvable, PhysicalName } from '@aws-cdk/core';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
-import { Pipeline, Artifact, IAction, IStage, IPipeline } from '@aws-cdk/aws-codepipeline';
+import { Pipeline, Artifact, IAction, IStage } from '@aws-cdk/aws-codepipeline';
 import {
   CodeCommitSourceAction,
   CodeBuildAction,
