@@ -287,9 +287,6 @@ export class CdkPipeline extends Construct {
     if (remainingStacks.length) {
       this.pipeline.addStage({
         stageName: 'Deploy',
-        placement: {
-          justAfter: this.pipeline.stages[this.hasDiffStage ? 1 : 0],
-        },
         actions: [
           new CdkDeployAction({
             actionName: 'CdkDeploy',

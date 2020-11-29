@@ -113,38 +113,6 @@ Object {
             "Actions": Array [
               Object {
                 "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e Test Test3\\"}]",
-                  "ProjectName": Object {
-                    "Ref": "PipelineDeployAD96A9BD",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "CdkCodeOutput",
-                  },
-                ],
-                "Name": "CdkDeploy",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineRoleD68726F7",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-            ],
-            "Name": "Deploy",
-          },
-          Object {
-            "Actions": Array [
-              Object {
-                "ActionTypeId": Object {
                   "Category": "Approval",
                   "Owner": "AWS",
                   "Provider": "Manual",
@@ -188,6 +156,38 @@ Object {
               },
             ],
             "Name": "TestStage",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e Test Test3\\"}]",
+                  "ProjectName": Object {
+                    "Ref": "PipelineDeployAD96A9BD",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "Name": "CdkDeploy",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineRoleD68726F7",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Deploy",
           },
         ],
       },
