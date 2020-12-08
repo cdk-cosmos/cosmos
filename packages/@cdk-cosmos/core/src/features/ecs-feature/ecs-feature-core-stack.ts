@@ -136,8 +136,6 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
         certificates: [this.solarSystem.certificate],
         open: false,
       });
-      RemoteApplicationListener.export(this.httpsListener, this.singletonId('HttpsListener'));
-      RemoteApplicationListener.export(this.httpsInternalListener, this.singletonId('HttpsInternalListener'));
     }
 
     for (const listener of [
@@ -149,10 +147,13 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
       if (listener) configureListener(listener, albListenerCidr);
     }
 
-    RemoteCluster.export(this.cluster, this.singletonId('Cluster'));
-    RemoteAlb.export(this.alb, this.singletonId('Alb'));
-    RemoteApplicationListener.export(this.httpListener, this.singletonId('HttpListener'));
-    RemoteApplicationListener.export(this.httpInternalListener, this.singletonId('HttpInternalListener'));
+    new RemoteCluster(this.cluster, this.singletonId('Cluster'));
+    new RemoteAlb(this.alb, this.singletonId('Alb'));
+    new RemoteApplicationListener(this.httpListener, this.singletonId('HttpListener'));
+    new RemoteApplicationListener(this.httpInternalListener, this.singletonId('HttpInternalListener'));
+    if (this.httpsListener) new RemoteApplicationListener(this.httpsListener, this.singletonId('HttpsListener'));
+    if (this.httpsInternalListener)
+      new RemoteApplicationListener(this.httpsInternalListener, this.singletonId('HttpsInternalListener'));
   }
 
   addDockerConfig(config: Record<string, string>): void {

@@ -7,8 +7,8 @@ import { getPackageVersion } from '../helpers/utils';
 const COSMOS_EXTENSION_SYMBOL = Symbol.for('@cdk-cosmos/core.CosmosExtensionStack');
 
 export interface ICosmosExtension extends Construct {
-  portal: ICosmosCore;
   libVersion: string;
+  portal: ICosmosCore;
 }
 
 export interface CosmosExtensionStackProps extends BaseStackProps {
