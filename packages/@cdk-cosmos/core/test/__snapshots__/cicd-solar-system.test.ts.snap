@@ -128,33 +128,6 @@ Object {
             "Actions": Array [
               Object {
                 "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem\\"}]",
-                  "ProjectName": Object {
-                    "Ref": "CdkPipelineDeploy",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "CdkCodeOutput",
-                  },
-                ],
-                "Name": "CdkDeploy",
-                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
-                "RunOrder": 1,
-              },
-            ],
-            "Name": "Deploy",
-          },
-          Object {
-            "Actions": Array [
-              Object {
-                "ActionTypeId": Object {
                   "Category": "Approval",
                   "Owner": "AWS",
                   "Provider": "Manual",
@@ -172,7 +145,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e AppTestGalSys2SolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTestGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -188,6 +161,33 @@ Object {
               },
             ],
             "Name": "DeployTest",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestGalCiCdSolarSystem\\"}]",
+                  "ProjectName": Object {
+                    "Ref": "CdkPipelineDeploy",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "Name": "CdkDeploy",
+                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Deploy",
           },
         ],
         "Tags": Array [
@@ -299,6 +299,7 @@ Object {
           "Path": "CodeBuild",
           "Type": "S3",
         },
+        "EncryptionKey": "alias/aws/s3",
         "Environment": Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "EnvironmentVariables": Array [
@@ -318,7 +319,7 @@ Object {
               "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
             },
           ],
-          "Image": "aws/codebuild/standard:3.0",
+          "Image": "aws/codebuild/standard:4.0",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
@@ -735,16 +736,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4b\\"",
+    "AssetParametersdb5c8b4eef3e1264f5fe22788b45c0b5596c10e56d04d7f688eb63beceece811ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"db5c8b4eef3e1264f5fe22788b45c0b5596c10e56d04d7f688eb63beceece811\\"",
       "Type": "String",
     },
-    "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4b\\"",
+    "AssetParametersdb5c8b4eef3e1264f5fe22788b45c0b5596c10e56d04d7f688eb63beceece811S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"db5c8b4eef3e1264f5fe22788b45c0b5596c10e56d04d7f688eb63beceece811\\"",
       "Type": "String",
     },
-    "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4b\\"",
+    "AssetParametersdb5c8b4eef3e1264f5fe22788b45c0b5596c10e56d04d7f688eb63beceece811S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"db5c8b4eef3e1264f5fe22788b45c0b5596c10e56d04d7f688eb63beceece811\\"",
       "Type": "String",
     },
   },
@@ -775,7 +776,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3Bucket",
+                "Ref": "AssetParametersdb5c8b4eef3e1264f5fe22788b45c0b5596c10e56d04d7f688eb63beceece811S3Bucket",
               },
               "/",
               Object {
@@ -785,7 +786,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3VersionKey",
+                        "Ref": "AssetParametersdb5c8b4eef3e1264f5fe22788b45c0b5596c10e56d04d7f688eb63beceece811S3VersionKey",
                       },
                     ],
                   },
@@ -798,7 +799,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters06e0c0eb8c8dafc08151643893c1448ca1ca7678dabfbc4eff51518918196a4bS3VersionKey",
+                        "Ref": "AssetParametersdb5c8b4eef3e1264f5fe22788b45c0b5596c10e56d04d7f688eb63beceece811S3VersionKey",
                       },
                     ],
                   },
@@ -1445,33 +1446,6 @@ Object {
             "Actions": Array [
               Object {
                 "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem\\"}]",
-                  "ProjectName": Object {
-                    "Ref": "CdkPipelineDeploy",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "CdkCodeOutput",
-                  },
-                ],
-                "Name": "CdkDeploy",
-                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
-                "RunOrder": 1,
-              },
-            ],
-            "Name": "Deploy",
-          },
-          Object {
-            "Actions": Array [
-              Object {
-                "ActionTypeId": Object {
                   "Category": "Approval",
                   "Owner": "AWS",
                   "Provider": "Manual",
@@ -1489,7 +1463,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosGalSys2SolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"CoreCosGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -1516,7 +1490,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosLink\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosLink CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -1526,12 +1500,12 @@ Object {
                     "Name": "CdkCodeOutput",
                   },
                 ],
-                "Name": "DependantStackDeploy",
+                "Name": "CdkDeploy",
                 "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
                 "RunOrder": 1,
               },
             ],
-            "Name": "DeployDependantStacks",
+            "Name": "Deploy",
           },
         ],
         "Tags": Array [
@@ -1643,6 +1617,7 @@ Object {
           "Path": "CodeBuild",
           "Type": "S3",
         },
+        "EncryptionKey": "alias/aws/s3",
         "Environment": Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "EnvironmentVariables": Array [
@@ -1662,7 +1637,7 @@ Object {
               "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
             },
           ],
-          "Image": "aws/codebuild/standard:3.0",
+          "Image": "aws/codebuild/standard:4.0",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },

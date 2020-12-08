@@ -113,6 +113,54 @@ Object {
             "Actions": Array [
               Object {
                 "ActionTypeId": Object {
+                  "Category": "Approval",
+                  "Owner": "AWS",
+                  "Provider": "Manual",
+                  "Version": "1",
+                },
+                "Name": "StackApproval",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineRoleD68726F7",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"Test2\\"}]",
+                  "ProjectName": Object {
+                    "Ref": "PipelineDeployAD96A9BD",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CdkCodeOutput",
+                  },
+                ],
+                "Name": "StackDeploy",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "PipelineRoleD68726F7",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 2,
+              },
+            ],
+            "Name": "TestStage",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
                   "Category": "Build",
                   "Owner": "AWS",
                   "Provider": "CodeBuild",
@@ -140,54 +188,6 @@ Object {
               },
             ],
             "Name": "Deploy",
-          },
-          Object {
-            "Actions": Array [
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Approval",
-                  "Owner": "AWS",
-                  "Provider": "Manual",
-                  "Version": "1",
-                },
-                "Name": "StackApproval",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineRoleD68726F7",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e Test2\\"}]",
-                  "ProjectName": Object {
-                    "Ref": "PipelineDeployAD96A9BD",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "CdkCodeOutput",
-                  },
-                ],
-                "Name": "StackDeploy",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineRoleD68726F7",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 2,
-              },
-            ],
-            "Name": "TestStage",
           },
         ],
       },
@@ -263,6 +263,7 @@ Object {
           "Path": "CodeBuild",
           "Type": "S3",
         },
+        "EncryptionKey": "alias/aws/s3",
         "Environment": Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "EnvironmentVariables": Array [
@@ -287,7 +288,7 @@ Object {
               "Value": "Test Test2 Test3",
             },
           ],
-          "Image": "aws/codebuild/standard:3.0",
+          "Image": "aws/codebuild/standard:4.0",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
@@ -472,621 +473,7 @@ Object {
                 "codebuild:CreateReport",
                 "codebuild:UpdateReport",
                 "codebuild:BatchPutTestCases",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":codebuild:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":report-group/",
-                    Object {
-                      "Ref": "PipelineDeployAD96A9BD",
-                    },
-                    "-*",
-                  ],
-                ],
-              },
-            },
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "PipelineRoleD68726F7",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "codecommit:GetBranch",
-                "codecommit:GetCommit",
-                "codecommit:UploadArchive",
-                "codecommit:GetUploadArchiveStatus",
-                "codecommit:CancelUploadArchive",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "Repo02AC86CF",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "PipelineDeployAD96A9BD",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "s3:GetObject*",
-                "s3:GetBucket*",
-                "s3:List*",
-              ],
-              "Effect": "Allow",
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineCdkArtifactBucket2F2F2A98",
-                    "Arn",
-                  ],
-                },
-                Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
-                          "PipelineCdkArtifactBucket2F2F2A98",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "PipelineRoleDefaultPolicyC7A05455",
-        "Roles": Array [
-          Object {
-            "Ref": "PipelineRoleD68726F7",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "Repo02AC86CF": Object {
-      "Properties": Object {
-        "RepositoryName": "repo",
-      },
-      "Type": "AWS::CodeCommit::Repository",
-    },
-  },
-}
-`;
-
-exports[`Cdk Pipeline cdk pipeline should support stack dependent deployments 1`] = `
-Object {
-  "Resources": Object {
-    "Pipeline9850B417": Object {
-      "DependsOn": Array [
-        "PipelineRoleDefaultPolicyC7A05455",
-        "PipelineRoleD68726F7",
-      ],
-      "Properties": Object {
-        "ArtifactStore": Object {
-          "Location": Object {
-            "Ref": "PipelineCdkArtifactBucket2F2F2A98",
-          },
-          "Type": "S3",
-        },
-        "RoleArn": Object {
-          "Fn::GetAtt": Array [
-            "PipelineRoleD68726F7",
-            "Arn",
-          ],
-        },
-        "Stages": Array [
-          Object {
-            "Actions": Array [
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Source",
-                  "Owner": "AWS",
-                  "Provider": "CodeCommit",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "BranchName": "master",
-                  "PollForSourceChanges": false,
-                  "RepositoryName": Object {
-                    "Fn::GetAtt": Array [
-                      "Repo02AC86CF",
-                      "Name",
-                    ],
-                  },
-                },
-                "Name": "CdkCheckout",
-                "OutputArtifacts": Array [
-                  Object {
-                    "Name": "CdkCodeOutput",
-                  },
-                ],
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineRoleD68726F7",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-            ],
-            "Name": "Source",
-          },
-          Object {
-            "Actions": Array [
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"}]",
-                  "ProjectName": Object {
-                    "Ref": "PipelineDeployAD96A9BD",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "CdkCodeOutput",
-                  },
-                ],
-                "Name": "CdkDiff",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineRoleD68726F7",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Approval",
-                  "Owner": "AWS",
-                  "Provider": "Manual",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "CustomData": "Please review the CdkDiff build.",
-                },
-                "Name": "CdkDiffApproval",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineRoleD68726F7",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 2,
-              },
-            ],
-            "Name": "Diff",
-          },
-          Object {
-            "Actions": Array [
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e Test\\"}]",
-                  "ProjectName": Object {
-                    "Ref": "PipelineDeployAD96A9BD",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "CdkCodeOutput",
-                  },
-                ],
-                "Name": "CdkDeploy",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineRoleD68726F7",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-            ],
-            "Name": "Deploy",
-          },
-          Object {
-            "Actions": Array [
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Approval",
-                  "Owner": "AWS",
-                  "Provider": "Manual",
-                  "Version": "1",
-                },
-                "Name": "StackApproval",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineRoleD68726F7",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e Test2\\"}]",
-                  "ProjectName": Object {
-                    "Ref": "PipelineDeployAD96A9BD",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "CdkCodeOutput",
-                  },
-                ],
-                "Name": "StackDeploy",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineRoleD68726F7",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 2,
-              },
-            ],
-            "Name": "TestStage",
-          },
-          Object {
-            "Actions": Array [
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e Test3 Test4\\"}]",
-                  "ProjectName": Object {
-                    "Ref": "PipelineDeployAD96A9BD",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "CdkCodeOutput",
-                  },
-                ],
-                "Name": "DependantStackDeploy",
-                "RoleArn": Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineRoleD68726F7",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-            ],
-            "Name": "DeployDependantStacks",
-          },
-        ],
-      },
-      "Type": "AWS::CodePipeline::Pipeline",
-    },
-    "PipelineCdkArtifactBucket2F2F2A98": Object {
-      "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "AccessControl": "LogDeliveryWrite",
-        "BucketEncryption": Object {
-          "ServerSideEncryptionConfiguration": Array [
-            Object {
-              "ServerSideEncryptionByDefault": Object {
-                "SSEAlgorithm": "AES256",
-              },
-            },
-          ],
-        },
-        "LoggingConfiguration": Object {
-          "LogFilePrefix": "BucketAccessLogs/",
-        },
-      },
-      "Type": "AWS::S3::Bucket",
-      "UpdateReplacePolicy": "Retain",
-    },
-    "PipelineCdkArtifactBucketPolicyAE23904C": Object {
-      "Properties": Object {
-        "Bucket": Object {
-          "Ref": "PipelineCdkArtifactBucket2F2F2A98",
-        },
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "s3:*",
-              "Condition": Object {
-                "Bool": Object {
-                  "aws:SecureTransport": false,
-                },
-              },
-              "Effect": "Deny",
-              "Principal": "*",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    Object {
-                      "Fn::GetAtt": Array [
-                        "PipelineCdkArtifactBucket2F2F2A98",
-                        "Arn",
-                      ],
-                    },
-                    "/*",
-                  ],
-                ],
-              },
-              "Sid": "ForceSSLOnly",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::S3::BucketPolicy",
-    },
-    "PipelineDeployAD96A9BD": Object {
-      "Properties": Object {
-        "Artifacts": Object {
-          "Location": Object {
-            "Ref": "PipelineCdkArtifactBucket2F2F2A98",
-          },
-          "Name": "cdk.templates",
-          "NamespaceType": "BUILD_ID",
-          "Packaging": "ZIP",
-          "Path": "CodeBuild",
-          "Type": "S3",
-        },
-        "Environment": Object {
-          "ComputeType": "BUILD_GENERAL1_SMALL",
-          "EnvironmentVariables": Array [
-            Object {
-              "Name": "DIFF",
-              "Type": "PLAINTEXT",
-              "Value": "true",
-            },
-            Object {
-              "Name": "DEPLOY",
-              "Type": "PLAINTEXT",
-              "Value": "true",
-            },
-            Object {
-              "Name": "STACKS",
-              "Type": "PLAINTEXT",
-              "Value": "Test Test2 Test3 Test4",
-            },
-          ],
-          "Image": "aws/codebuild/standard:3.0",
-          "PrivilegedMode": true,
-          "Type": "LINUX_CONTAINER",
-        },
-        "ServiceRole": Object {
-          "Fn::GetAtt": Array [
-            "PipelineRoleD68726F7",
-            "Arn",
-          ],
-        },
-        "Source": Object {
-          "BuildSpec": "{
-  \\"version\\": \\"0.2\\",
-  \\"phases\\": {
-    \\"install\\": {
-      \\"commands\\": [],
-      \\"runtime-versions\\": {
-        \\"nodejs\\": \\"12\\"
-      }
-    },
-    \\"pre_build\\": {
-      \\"commands\\": [
-        \\"npm ci\\"
-      ]
-    },
-    \\"build\\": {
-      \\"commands\\": [
-        \\"if [ $DIFF = true ]; then npx cdk diff \${STACKS}; fi;\\",
-        \\"if [ $DEPLOY = true ]; then npx cdk deploy --require-approval=never \${STACKS}; fi;\\"
-      ]
-    }
-  },
-  \\"env\\": {},
-  \\"artifacts\\": {
-    \\"base-directory\\": \\"cdk.out\\",
-    \\"files\\": [
-      \\"*.template.json\\"
-    ]
-  }
-}",
-          "Location": Object {
-            "Fn::GetAtt": Array [
-              "Repo02AC86CF",
-              "CloneUrlHttp",
-            ],
-          },
-          "Type": "CODECOMMIT",
-        },
-        "SourceVersion": "master",
-      },
-      "Type": "AWS::CodeBuild::Project",
-    },
-    "PipelineRoleD68726F7": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": Array [
-                  "codepipeline.amazonaws.com",
-                  "codebuild.amazonaws.com",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "PipelineRoleDefaultPolicyC7A05455": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "codecommit:GitPull",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "Repo02AC86CF",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "s3:GetObject*",
-                "s3:GetBucket*",
-                "s3:List*",
-                "s3:DeleteObject*",
-                "s3:PutObject*",
-                "s3:Abort*",
-              ],
-              "Effect": "Allow",
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "PipelineCdkArtifactBucket2F2F2A98",
-                    "Arn",
-                  ],
-                },
-                Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
-                          "PipelineCdkArtifactBucket2F2F2A98",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-            Object {
-              "Action": Array [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-              ],
-              "Effect": "Allow",
-              "Resource": Array [
-                Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":logs:",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":log-group:/aws/codebuild/",
-                      Object {
-                        "Ref": "PipelineDeployAD96A9BD",
-                      },
-                    ],
-                  ],
-                },
-                Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":logs:",
-                      Object {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":log-group:/aws/codebuild/",
-                      Object {
-                        "Ref": "PipelineDeployAD96A9BD",
-                      },
-                      ":*",
-                    ],
-                  ],
-                },
-              ],
-            },
-            Object {
-              "Action": Array [
-                "codebuild:CreateReportGroup",
-                "codebuild:CreateReport",
-                "codebuild:UpdateReport",
-                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages",
               ],
               "Effect": "Allow",
               "Resource": Object {
@@ -1421,6 +808,7 @@ Object {
           "Path": "CodeBuild",
           "Type": "S3",
         },
+        "EncryptionKey": "alias/aws/s3",
         "Environment": Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "EnvironmentVariables": Array [
@@ -1440,7 +828,7 @@ Object {
               "Value": "Test",
             },
           ],
-          "Image": "aws/codebuild/standard:3.0",
+          "Image": "aws/codebuild/standard:4.0",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
@@ -1622,6 +1010,7 @@ Object {
                 "codebuild:CreateReport",
                 "codebuild:UpdateReport",
                 "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages",
               ],
               "Effect": "Allow",
               "Resource": Object {
@@ -1841,9 +1230,10 @@ Object {
         "Artifacts": Object {
           "Type": "NO_ARTIFACTS",
         },
+        "EncryptionKey": "alias/aws/s3",
         "Environment": Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
-          "Image": "aws/codebuild/standard:3.0",
+          "Image": "aws/codebuild/standard:4.0",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
@@ -2107,6 +1497,7 @@ Object {
                 "codebuild:CreateReport",
                 "codebuild:UpdateReport",
                 "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages",
               ],
               "Effect": "Allow",
               "Resource": Object {
@@ -2424,6 +1815,7 @@ Object {
         "Artifacts": Object {
           "Type": "NO_ARTIFACTS",
         },
+        "EncryptionKey": "alias/aws/s3",
         "Environment": Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "EnvironmentVariables": Array [
@@ -2433,7 +1825,7 @@ Object {
               "Value": "",
             },
           ],
-          "Image": "aws/codebuild/standard:3.0",
+          "Image": "aws/codebuild/standard:4.0",
           "PrivilegedMode": false,
           "Type": "LINUX_CONTAINER",
         },
@@ -2699,6 +2091,7 @@ Object {
                 "codebuild:CreateReport",
                 "codebuild:UpdateReport",
                 "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages",
               ],
               "Effect": "Allow",
               "Resource": Object {

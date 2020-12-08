@@ -1,4 +1,4 @@
-import { Construct, IConstruct, Tags } from '@aws-cdk/core';
+import { Construct, Stack, IConstruct, Tags } from '@aws-cdk/core';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { ICosmosExtension } from '../cosmos/cosmos-extension-stack';
 import { IGalaxyCore } from './galaxy-core-stack';
@@ -36,6 +36,7 @@ export class GalaxyExtensionStack extends BaseStack implements IGalaxyExtension 
       cosmos: this.cosmos.portal,
     });
 
+    this.addDependency(Stack.of(this.cosmos));
     Tags.of(this).add('cosmos:galaxy:extension', this.node.id);
   }
 
