@@ -1,20 +1,18 @@
 import { Construct, Stack, CfnOutput, Tags, IConstruct } from '@aws-cdk/core';
-import { HostedZone, IPublicHostedZone } from '@aws-cdk/aws-route53';
+import { IHostedZone, HostedZone } from '@aws-cdk/aws-route53';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { createCrossAccountExportProvider } from '@cosmos-building-blocks/common';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { RemoteZone } from '../components/remote';
 import { getPackageVersion } from '../helpers/utils';
-import { ICosmosCoreLink, CosmosCoreLinkStack } from './cosmoc-core-link-stack';
 
 const COSMOS_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.CosmosCore');
 
 export interface ICosmosCore extends Construct {
-  networkBuilder?: NetworkBuilder;
-  link?: ICosmosCoreLink;
   libVersion: string;
-  rootZone: IPublicHostedZone;
+  networkBuilder?: NetworkBuilder;
+  rootZone: IHostedZone;
   cdkMasterRoleStaticArn: string;
   crossAccountExportServiceToken: string;
 }
@@ -25,7 +23,6 @@ export interface CosmosCoreStackProps extends BaseStackProps {
 
 export class CosmosCoreStack extends BaseStack implements ICosmosCore {
   readonly libVersion: string;
-  readonly link: ICosmosCoreLink;
   readonly rootZone: HostedZone;
   readonly cdkMasterRole: Role;
   readonly cdkMasterRoleStaticArn: string;
@@ -44,7 +41,6 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     const { tld } = props;
 
     this.libVersion = getPackageVersion();
-    this.link = new CosmosCoreLinkStack(this);
 
     this.rootZone = new HostedZone(this, 'RootZone', {
       zoneName: `${tld}`.toLowerCase(),
@@ -70,7 +66,7 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
       exportName: this.singletonId('LibVersion'),
       value: this.libVersion,
     });
-    RemoteZone.export(this.rootZone, this.singletonId('RootZone'));
+    new RemoteZone(this.rootZone, this.singletonId('RootZone'));
     new CfnOutput(this, 'CrossAccountExportServiceToken', {
       exportName: this.singletonId('CrossAccountExportServiceToken'),
       value: this.crossAccountExportServiceToken,

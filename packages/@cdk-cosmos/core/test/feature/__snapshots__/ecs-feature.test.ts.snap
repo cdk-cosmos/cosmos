@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ECS-Solar-System Extension should match snapshot 1`] = `
+exports[`ECS Feature Extension should match snapshot 1`] = `
 Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
 }
 `;
 
-exports[`ECS-Solar-System should match snapshot 1`] = `
+exports[`ECS Feature should match snapshot 1`] = `
 Object {
   "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
@@ -454,7 +454,7 @@ Object {
 }
 `;
 
-exports[`ECS-Solar-System should match snapshot 2`] = `
+exports[`ECS Feature should match snapshot 2`] = `
 Object {
   "Description": "Adds Ecs Features to the SolarSystem",
   "Outputs": Object {
@@ -1586,7 +1586,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
 }
 `;
 
-exports[`ECS-Solar-System should match snapshot 3`] = `
+exports[`ECS Feature should match snapshot 3`] = `
 Object {
   "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
@@ -1878,7 +1878,7 @@ Object {
 }
 `;
 
-exports[`ECS-Solar-System should match snapshot 4`] = `
+exports[`ECS Feature should match snapshot 4`] = `
 Object {
   "Description": "Adds Ecs Features to the SolarSystem",
   "Outputs": Object {

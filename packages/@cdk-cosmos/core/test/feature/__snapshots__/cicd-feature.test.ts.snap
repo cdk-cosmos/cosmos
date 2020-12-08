@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CICD-Solar-System Extension should have a CdkRepo 1`] = `
+exports[`CICD Feature Extension should have a CdkRepo 1`] = `
 Object {
   "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
   "Outputs": Object {
@@ -40,7 +40,7 @@ Object {
 }
 `;
 
-exports[`CICD-Solar-System Extension should match snapshot 1`] = `
+exports[`CICD Feature Extension should match snapshot 1`] = `
 Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
   "Resources": Object {
@@ -173,7 +173,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestGalCiCdSolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem CoreCosLink AppTestGalCiCdSolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -317,7 +317,7 @@ Object {
             Object {
               "Name": "STACKS",
               "Type": "PLAINTEXT",
-              "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
+              "Value": "CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem CoreCosLink AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
             },
           ],
           "Image": "aws/codebuild/standard:4.0",
@@ -399,7 +399,7 @@ Object {
 }
 `;
 
-exports[`CICD-Solar-System should have a CdkRepo 1`] = `
+exports[`CICD Feature should have a CdkRepo 1`] = `
 Object {
   "Description": "Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole",
   "Outputs": Object {
@@ -626,7 +626,7 @@ Object {
 }
 `;
 
-exports[`CICD-Solar-System should match snapshot 1`] = `
+exports[`CICD Feature should match snapshot 1`] = `
 Object {
   "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
@@ -737,16 +737,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters5c0009b6460c10635c3d28099863257c438c768b20963929128841b4d4f129f1ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"5c0009b6460c10635c3d28099863257c438c768b20963929128841b4d4f129f1\\"",
+    "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cf\\"",
       "Type": "String",
     },
-    "AssetParameters5c0009b6460c10635c3d28099863257c438c768b20963929128841b4d4f129f1S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"5c0009b6460c10635c3d28099863257c438c768b20963929128841b4d4f129f1\\"",
+    "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cf\\"",
       "Type": "String",
     },
-    "AssetParameters5c0009b6460c10635c3d28099863257c438c768b20963929128841b4d4f129f1S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"5c0009b6460c10635c3d28099863257c438c768b20963929128841b4d4f129f1\\"",
+    "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cf\\"",
       "Type": "String",
     },
   },
@@ -777,7 +777,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters5c0009b6460c10635c3d28099863257c438c768b20963929128841b4d4f129f1S3Bucket",
+                "Ref": "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3Bucket",
               },
               "/",
               Object {
@@ -787,7 +787,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters5c0009b6460c10635c3d28099863257c438c768b20963929128841b4d4f129f1S3VersionKey",
+                        "Ref": "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3VersionKey",
                       },
                     ],
                   },
@@ -800,7 +800,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters5c0009b6460c10635c3d28099863257c438c768b20963929128841b4d4f129f1S3VersionKey",
+                        "Ref": "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3VersionKey",
                       },
                     ],
                   },
@@ -1359,7 +1359,7 @@ Object {
 }
 `;
 
-exports[`CICD-Solar-System should match snapshot 2`] = `
+exports[`CICD Feature should match snapshot 2`] = `
 Object {
   "Description": "Add CiCd Features to the SolarSystem",
   "Resources": Object {
@@ -1492,7 +1492,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosLink CoreCosGalCiCdSolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosGalCiCdSolarSystem CoreCosLink AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -1636,7 +1636,7 @@ Object {
             Object {
               "Name": "STACKS",
               "Type": "PLAINTEXT",
-              "Value": "CoreCosCosmos CoreCosLink CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
+              "Value": "CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem CoreCosLink AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
             },
           ],
           "Image": "aws/codebuild/standard:4.0",
