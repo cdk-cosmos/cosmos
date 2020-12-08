@@ -1,7 +1,7 @@
 import { Construct, Stack, PhysicalName } from '@aws-cdk/core';
 import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { Pipeline, Artifact } from '@aws-cdk/aws-codepipeline';
-import { CodeCommitSourceAction, CodeBuildAction } from '@aws-cdk/aws-codepipeline-actions';
+import { CodeCommitSourceAction, CodeBuildAction, CodeCommitTrigger } from '@aws-cdk/aws-codepipeline-actions';
 import {
   Project,
   BuildSpec,
@@ -22,6 +22,7 @@ export interface StandardPipelineProps {
   buildName?: string;
   codeRepo: IRepository;
   codeBranch?: string;
+  codeTrigger?: boolean;
   buildRole?: IRole;
   buildVpc?: IVpc;
   buildSubnets?: SubnetSelection;
@@ -46,12 +47,13 @@ export class StandardPipeline extends Construct {
       buildName,
       codeRepo,
       codeBranch = 'master',
+      codeTrigger = true,
       buildRole,
       buildVpc,
       buildSubnets,
       buildEnvs,
       buildSpec,
-      buildImage = LinuxBuildImage.STANDARD_3_0,
+      buildImage = LinuxBuildImage.STANDARD_4_0,
       buildComputeType = ComputeType.SMALL,
       buildPrivileged = false,
     } = props;
@@ -110,6 +112,7 @@ export class StandardPipeline extends Construct {
           branch: codeBranch,
           output: sourceOutput,
           variablesNamespace: 'CodeCheckout',
+          trigger: codeTrigger ? CodeCommitTrigger.EVENTS : CodeCommitTrigger.NONE,
         }),
       ],
     });

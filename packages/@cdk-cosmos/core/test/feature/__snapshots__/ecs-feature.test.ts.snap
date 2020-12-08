@@ -136,16 +136,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"ac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751a\\"",
+    "AssetParameters95ba2ed22f4fbd1c84cafbf5eb719bf15e75b2363da42976da1d54ea3bc5cf43ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"95ba2ed22f4fbd1c84cafbf5eb719bf15e75b2363da42976da1d54ea3bc5cf43\\"",
       "Type": "String",
     },
-    "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"ac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751a\\"",
+    "AssetParameters95ba2ed22f4fbd1c84cafbf5eb719bf15e75b2363da42976da1d54ea3bc5cf43S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"95ba2ed22f4fbd1c84cafbf5eb719bf15e75b2363da42976da1d54ea3bc5cf43\\"",
       "Type": "String",
     },
-    "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"ac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751a\\"",
+    "AssetParameters95ba2ed22f4fbd1c84cafbf5eb719bf15e75b2363da42976da1d54ea3bc5cf43S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"95ba2ed22f4fbd1c84cafbf5eb719bf15e75b2363da42976da1d54ea3bc5cf43\\"",
       "Type": "String",
     },
   },
@@ -341,7 +341,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aS3Bucket",
+                "Ref": "AssetParameters95ba2ed22f4fbd1c84cafbf5eb719bf15e75b2363da42976da1d54ea3bc5cf43S3Bucket",
               },
               "/",
               Object {
@@ -351,7 +351,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aS3VersionKey",
+                        "Ref": "AssetParameters95ba2ed22f4fbd1c84cafbf5eb719bf15e75b2363da42976da1d54ea3bc5cf43S3VersionKey",
                       },
                     ],
                   },
@@ -364,7 +364,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersac73ced76146690d763f12044fa6eab8c806e1c3fb8e2e6527f163eb342d751aS3VersionKey",
+                        "Ref": "AssetParameters95ba2ed22f4fbd1c84cafbf5eb719bf15e75b2363da42976da1d54ea3bc5cf43S3VersionKey",
                       },
                     ],
                   },
@@ -610,6 +610,12 @@ Object {
   "Resources": Object {
     "Alb": Object {
       "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
         "Name": "CoreGalSysAlb",
         "Scheme": "internal",
         "SecurityGroups": Array [
@@ -1549,27 +1555,7 @@ echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config",
     "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic": Object {
       "Properties": Object {
         "KmsMasterKeyId": Object {
-          "Fn::Select": Array [
-            1,
-            Object {
-              "Fn::Split": Array [
-                "/",
-                Object {
-                  "Fn::Select": Array [
-                    5,
-                    Object {
-                      "Fn::Split": Array [
-                        ":",
-                        Object {
-                          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
         },
         "Tags": Array [
           Object {
@@ -1730,16 +1716,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888\\"",
+    "AssetParameters8e7f760c3e520d6011ba39e3ffdf91291319d8c9173bdaa966b0f26af29fc437ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"8e7f760c3e520d6011ba39e3ffdf91291319d8c9173bdaa966b0f26af29fc437\\"",
       "Type": "String",
     },
-    "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888\\"",
+    "AssetParameters8e7f760c3e520d6011ba39e3ffdf91291319d8c9173bdaa966b0f26af29fc437S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"8e7f760c3e520d6011ba39e3ffdf91291319d8c9173bdaa966b0f26af29fc437\\"",
       "Type": "String",
     },
-    "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888\\"",
+    "AssetParameters8e7f760c3e520d6011ba39e3ffdf91291319d8c9173bdaa966b0f26af29fc437S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"8e7f760c3e520d6011ba39e3ffdf91291319d8c9173bdaa966b0f26af29fc437\\"",
       "Type": "String",
     },
   },
@@ -1779,7 +1765,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888S3Bucket",
+                "Ref": "AssetParameters8e7f760c3e520d6011ba39e3ffdf91291319d8c9173bdaa966b0f26af29fc437S3Bucket",
               },
               "/",
               Object {
@@ -1789,7 +1775,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888S3VersionKey",
+                        "Ref": "AssetParameters8e7f760c3e520d6011ba39e3ffdf91291319d8c9173bdaa966b0f26af29fc437S3VersionKey",
                       },
                     ],
                   },
@@ -1802,7 +1788,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters35f515f7c57326d7f55a8ebc7f741a8932f25779793f6401ac3c93ca83c71888S3VersionKey",
+                        "Ref": "AssetParameters8e7f760c3e520d6011ba39e3ffdf91291319d8c9173bdaa966b0f26af29fc437S3VersionKey",
                       },
                     ],
                   },
@@ -2007,6 +1993,12 @@ Object {
   "Resources": Object {
     "Alb": Object {
       "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
         "Name": "CoreGalSys1Alb",
         "Scheme": "internal",
         "SecurityGroups": Array [
@@ -2895,27 +2887,7 @@ EOF",
     "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic": Object {
       "Properties": Object {
         "KmsMasterKeyId": Object {
-          "Fn::Select": Array [
-            1,
-            Object {
-              "Fn::Split": Array [
-                "/",
-                Object {
-                  "Fn::Select": Array [
-                    5,
-                    Object {
-                      "Fn::Split": Array [
-                        ":",
-                        Object {
-                          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
         },
         "Tags": Array [
           Object {
