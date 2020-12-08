@@ -1,13 +1,14 @@
 import { Construct } from '@aws-cdk/core';
 import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
-import { NPM_BUILD, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION, NPM_LOGIN } from './commands';
+import { IRepository } from '@aws-cdk/aws-codecommit';
 import { StandardPipeline, StandardPipelineProps } from './standard-pipeline';
-import { BuildSpecBuilder } from './build-spec';
+import { NPM_BUILD, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION, NPM_LOGIN } from '../commands';
+import { BuildSpecBuilder } from '../build-spec';
 
-export interface NodePipelineProps extends StandardPipelineProps {}
+export interface NodePipelineProps<Repo> extends StandardPipelineProps<Repo> {}
 
-export class NodePipeline extends StandardPipeline {
-  constructor(scope: Construct, id: string, props: NodePipelineProps) {
+export class NodePipeline<Repo = IRepository> extends StandardPipeline<Repo> {
+  constructor(scope: Construct, id: string, props: NodePipelineProps<Repo>) {
     super(scope, id, {
       buildSpec: NodePipeline.DefaultBuildSpec(),
       buildEnvs: {

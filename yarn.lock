@@ -244,6 +244,13 @@
     "@aws-cdk/core" "1.70.0"
     constructs "^3.0.4"
 
+"@aws-cdk/aws-codestarconnections@1.70.0":
+  version "1.70.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-codestarconnections/-/aws-codestarconnections-1.70.0.tgz#db19ff9860e24affa0b3dc43359346e868a7dedf"
+  integrity sha512-Tt1zY/fwdU6Lz8qLIo8fGNPNg7rxi29XeMbCetfNh+oA9w9No1SB/WD7y0GkSze7O8k+5UbivkdW/ujDyUuUNA==
+  dependencies:
+    "@aws-cdk/core" "1.70.0"
+
 "@aws-cdk/aws-cognito@1.70.0":
   version "1.70.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-cognito/-/aws-cognito-1.70.0.tgz#477765cbd4b2c956ba93b2f9f536f8b69276aae6"

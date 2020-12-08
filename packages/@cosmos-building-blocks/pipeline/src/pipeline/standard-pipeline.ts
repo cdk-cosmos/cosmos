@@ -1,12 +1,12 @@
-import { Construct, Stack, PhysicalName } from '@aws-cdk/core';
-import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Construct, PhysicalName } from '@aws-cdk/core';
+import { IRepository } from '@aws-cdk/aws-codecommit';
 import { Pipeline, Artifact } from '@aws-cdk/aws-codepipeline';
-import { CodeCommitSourceAction, CodeBuildAction, CodeCommitTrigger } from '@aws-cdk/aws-codepipeline-actions';
+import { CodeBuildAction } from '@aws-cdk/aws-codepipeline-actions';
 import {
   Project,
   BuildSpec,
   LinuxBuildImage,
-  Source,
   BuildEnvironmentVariableType,
   ComputeType,
   IBuildImage,
@@ -14,37 +14,40 @@ import {
 import { IRole, Role, CompositePrincipal, ServicePrincipal } from '@aws-cdk/aws-iam';
 import { IVpc, SubnetSelection } from '@aws-cdk/aws-ec2';
 import { SecureBucket } from '@cosmos-building-blocks/common';
-import { BuildSpecObject, BuildSpecBuilder } from './build-spec';
-import { BuildEnvironmentVariables, parseEnvs } from './utils';
+import { BuildSpecObject, BuildSpecBuilder } from '../build-spec';
+import { BuildEnvironmentVariables, parseEnvs } from '../utils';
+import { SourceProvider, CodeCommitSourceProvider } from '../source';
 
-export interface StandardPipelineProps {
-  pipelineName?: string;
-  buildName?: string;
-  codeRepo: IRepository;
-  codeBranch?: string;
-  codeTrigger?: boolean;
-  buildRole?: IRole;
-  buildVpc?: IVpc;
-  buildSubnets?: SubnetSelection;
-  buildEnvs?: BuildEnvironmentVariables;
-  buildSpec?: BuildSpec | BuildSpecObject;
-  buildImage?: IBuildImage;
-  buildComputeType?: ComputeType;
-  buildPrivileged?: boolean;
+export interface StandardPipelineProps<Repo> {
+  readonly pipelineName?: string;
+  readonly buildName?: string;
+  readonly codeSource?: SourceProvider<Repo>;
+  readonly codeRepo: IRepository;
+  readonly codeBranch?: string;
+  readonly codeTrigger?: boolean;
+  readonly buildRole?: IRole;
+  readonly buildVpc?: IVpc;
+  readonly buildSubnets?: SubnetSelection;
+  readonly buildEnvs?: BuildEnvironmentVariables;
+  readonly buildSpec?: BuildSpec | BuildSpecObject;
+  readonly buildImage?: IBuildImage;
+  readonly buildComputeType?: ComputeType;
+  readonly buildPrivileged?: boolean;
 }
 
-export class StandardPipeline extends Construct {
-  readonly codeRepo: IRepository;
+export class StandardPipeline<Repo = IRepository> extends Construct {
+  readonly codeSource: SourceProvider<Repo>;
   readonly buildRole: IRole;
   readonly build: Project;
   readonly pipeline: Pipeline;
 
-  constructor(scope: Construct, id: string, props: StandardPipelineProps) {
+  constructor(scope: Construct, id: string, props: StandardPipelineProps<Repo>) {
     super(scope, id);
 
     const {
       pipelineName,
       buildName,
+      codeSource,
       codeRepo,
       codeBranch = 'master',
       codeTrigger = true,
@@ -58,11 +61,16 @@ export class StandardPipeline extends Construct {
       buildPrivileged = false,
     } = props;
 
-    // Cross Stack Dependency issue since repo stack might differ from this stack
-    this.codeRepo =
-      Stack.of(this) !== Stack.of(codeRepo)
-        ? Repository.fromRepositoryName(this, codeRepo.node.id, codeRepo.repositoryName)
-        : codeRepo;
+    const source = codeRepo
+      ? ((new CodeCommitSourceProvider({
+          repo: codeRepo,
+          branch: codeBranch || 'master',
+          trigger: codeTrigger || false,
+        }) as any) as SourceProvider<Repo>)
+      : codeSource;
+    if (!source) throw new Error('A source repository could not be found.');
+    this.codeSource = source;
+    this.codeSource.setup(this);
 
     this.buildRole =
       buildRole ||
@@ -81,10 +89,7 @@ export class StandardPipeline extends Construct {
       role: this.buildRole,
       vpc: buildVpc,
       subnetSelection: buildSubnets,
-      source: Source.codeCommit({
-        repository: this.codeRepo,
-        branchOrRef: codeBranch,
-      }),
+      source: this.codeSource.source(),
       buildSpec: buildSpec instanceof BuildSpec ? buildSpec : buildSpec ? BuildSpec.fromObject(buildSpec) : undefined,
       environment: {
         computeType: buildComputeType,
@@ -104,17 +109,7 @@ export class StandardPipeline extends Construct {
 
     this.pipeline.addStage({
       stageName: 'Source',
-      actions: [
-        new CodeCommitSourceAction({
-          actionName: 'CodeCheckout',
-          role: this.pipeline.role,
-          repository: this.codeRepo,
-          branch: codeBranch,
-          output: sourceOutput,
-          variablesNamespace: 'CodeCheckout',
-          trigger: codeTrigger ? CodeCommitTrigger.EVENTS : CodeCommitTrigger.NONE,
-        }),
-      ],
+      actions: [this.codeSource.sourceAction('CodeCheckout', this.pipeline.role, sourceOutput)],
     });
 
     this.pipeline.addStage({
