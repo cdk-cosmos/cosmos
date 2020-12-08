@@ -19,10 +19,10 @@ import { BuildSpecBuilder } from '../build-spec';
 import { BuildEnvironmentVariables, parseEnvs } from '../utils';
 import { SourceProvider, CodeCommitSourceProvider } from '../source';
 
-export interface CdkPipelineProps<Repo> {
+export interface CdkPipelineProps {
   readonly pipelineName?: string;
   readonly deployName?: string;
-  readonly cdkSource?: SourceProvider<Repo>;
+  readonly cdkSource?: SourceProvider;
   readonly cdkRepo?: IRepository;
   readonly cdkBranch?: string;
   readonly cdkTrigger?: boolean;
@@ -45,15 +45,15 @@ export interface AddDeployStackStageProps {
   isManualApprovalRequired?: boolean;
 }
 
-export class CdkPipeline<Repo = IRepository> extends Construct {
+export class CdkPipeline extends Construct {
   readonly stacks: IResolvable;
-  readonly cdkSource: SourceProvider<Repo>;
+  readonly cdkSource: SourceProvider;
   readonly deployRole: IRole;
   readonly deploy: Project;
   readonly pipeline: Pipeline;
   readonly hasDiffStage: boolean;
 
-  constructor(scope: Construct, id: string, props: CdkPipelineProps<Repo>) {
+  constructor(scope: Construct, id: string, props: CdkPipelineProps) {
     super(scope, id);
 
     const {
@@ -86,7 +86,7 @@ export class CdkPipeline<Repo = IRepository> extends Construct {
           repo: cdkRepo,
           branch: cdkBranch || 'master',
           trigger: cdkTrigger || false,
-        }) as any) as SourceProvider<Repo>)
+        }) as any) as SourceProvider)
       : cdkSource;
     if (!source) throw new Error('A source repository could not be found.');
     this.cdkSource = source;

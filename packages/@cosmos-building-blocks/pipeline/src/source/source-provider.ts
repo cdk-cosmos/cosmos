@@ -3,6 +3,7 @@ import { ISource } from '@aws-cdk/aws-codebuild';
 import { Artifact } from '@aws-cdk/aws-codepipeline';
 import { Action } from '@aws-cdk/aws-codepipeline-actions';
 import { IRole } from '@aws-cdk/aws-iam';
+import { IRepository } from '@aws-cdk/aws-ecr';
 
 export interface SourceProviderProps<Repo> {
   readonly repo: Repo;
@@ -10,7 +11,7 @@ export interface SourceProviderProps<Repo> {
   readonly trigger: boolean;
 }
 
-export abstract class SourceProvider<Repo> {
+export abstract class SourceProvider<Repo = IRepository | string> {
   repo: Repo;
   branch: string;
   trigger: boolean;

@@ -18,10 +18,10 @@ import { BuildSpecObject, BuildSpecBuilder } from '../build-spec';
 import { BuildEnvironmentVariables, parseEnvs } from '../utils';
 import { SourceProvider, CodeCommitSourceProvider } from '../source';
 
-export interface StandardPipelineProps<Repo> {
+export interface StandardPipelineProps {
   readonly pipelineName?: string;
   readonly buildName?: string;
-  readonly codeSource?: SourceProvider<Repo>;
+  readonly codeSource?: SourceProvider;
   readonly codeRepo: IRepository;
   readonly codeBranch?: string;
   readonly codeTrigger?: boolean;
@@ -35,13 +35,13 @@ export interface StandardPipelineProps<Repo> {
   readonly buildPrivileged?: boolean;
 }
 
-export class StandardPipeline<Repo = IRepository> extends Construct {
-  readonly codeSource: SourceProvider<Repo>;
+export class StandardPipeline extends Construct {
+  readonly codeSource: SourceProvider;
   readonly buildRole: IRole;
   readonly build: Project;
   readonly pipeline: Pipeline;
 
-  constructor(scope: Construct, id: string, props: StandardPipelineProps<Repo>) {
+  constructor(scope: Construct, id: string, props: StandardPipelineProps) {
     super(scope, id);
 
     const {
@@ -66,7 +66,7 @@ export class StandardPipeline<Repo = IRepository> extends Construct {
           repo: codeRepo,
           branch: codeBranch || 'master',
           trigger: codeTrigger || false,
-        }) as any) as SourceProvider<Repo>)
+        }) as any) as SourceProvider)
       : codeSource;
     if (!source) throw new Error('A source repository could not be found.');
     this.codeSource = source;
