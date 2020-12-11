@@ -2,6 +2,9 @@ import { SynthUtils } from '@aws-cdk/assert';
 import { App, Stack } from '@aws-cdk/core';
 import { Repository } from '@aws-cdk/aws-codecommit';
 import { NodePipeline, DockerPipeline, CdkPipeline } from '../src';
+import { GithubEnterpriseConnection, GithubEnterpriseSourceProvider } from '../src/source';
+import { GithubEnterpriseHost } from '../src/source/github-enterprise-connection';
+import { Vpc } from '@aws-cdk/aws-ec2';
 
 describe('Node Pipeline', () => {
   const app = new App();
@@ -83,4 +86,35 @@ describe('Cdk Pipeline', () => {
     expect(cdk.pipeline.stages).toHaveLength(4);
     expect(synth.template).toMatchSnapshot();
   });
+});
+
+describe('Github Enterprise', () => {
+  const app = new App();
+  const stack = new Stack(app, 'Test');
+
+  const repo = 'https://ghe.com/timpur/test.git';
+  const host = new GithubEnterpriseHost(stack, 'GHEHost', {
+    hostName: 'GHEHost',
+    vpc: Vpc.fromVpcAttributes(stack, 'Vpc', {
+      vpcId: '123',
+      availabilityZones: ['a'],
+      isolatedSubnetNames: ['App'],
+      isolatedSubnetIds: ['123'],
+      isolatedSubnetRouteTableIds: ['123'],
+    }),
+    subnets: [{ subnetGroupName: 'App' }],
+    endpoint: 'https://ghe.com/',
+  });
+  const connection = new GithubEnterpriseConnection(stack, 'GHE', {
+    connectionName: 'GHE',
+    host: host,
+  });
+
+  const cdk = new CdkPipeline(stack, 'Pipeline', {
+    cdkSource: new GithubEnterpriseSourceProvider({ connection, repo, branch: 'master' }),
+  });
+
+  const synth = SynthUtils.synthesize(stack);
+
+  expect(synth.template).toMatchSnapshot();
 });

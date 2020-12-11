@@ -1,19 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Construct, Stack, IConstruct, Lazy, IResolvable, PhysicalName } from '@aws-cdk/core';
-import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
+import { IRepository } from '@aws-cdk/aws-codecommit';
 import { Pipeline, Artifact, IAction, IStage } from '@aws-cdk/aws-codepipeline';
-import {
-  CodeCommitSourceAction,
-  CodeBuildAction,
-  CodeCommitTrigger,
-  ManualApprovalAction,
-  CodeBuildActionProps,
-} from '@aws-cdk/aws-codepipeline-actions';
+import { CodeBuildAction, ManualApprovalAction, CodeBuildActionProps } from '@aws-cdk/aws-codepipeline-actions';
 import {
   Project,
   LinuxBuildImage,
   BuildEnvironmentVariable,
-  Source,
   Artifacts,
   BuildEnvironmentVariableType,
   ComputeType,
@@ -21,24 +14,26 @@ import {
 import { IRole, Role, CompositePrincipal, ServicePrincipal } from '@aws-cdk/aws-iam';
 import { IVpc, SubnetSelection, Peer, Port } from '@aws-cdk/aws-ec2';
 import { SecureBucket } from '@cosmos-building-blocks/common';
-import { NPM_LOGIN, NPM_INSTALL } from './commands';
-import { BuildSpecBuilder } from './build-spec';
-import { BuildEnvironmentVariables, parseEnvs } from './utils';
+import { NPM_LOGIN, NPM_INSTALL } from '../commands';
+import { BuildSpecBuilder } from '../build-spec';
+import { BuildEnvironmentVariables, parseEnvs } from '../utils';
+import { SourceProvider, CodeCommitSourceProvider } from '../source';
 
 export interface CdkPipelineProps {
-  pipelineName?: string;
-  deployName?: string;
-  cdkRepo: IRepository;
-  cdkBranch?: string;
-  cdkTrigger?: boolean;
-  cdkWorkingDir?: string;
-  deployRole?: IRole;
-  deployVpc?: IVpc;
-  deploySubnets?: SubnetSelection;
-  deployEnvs?: BuildEnvironmentVariables;
-  deployStacks?: Array<Stack | string>;
-  deployDiffStage?: boolean;
-  npmKey?: string | BuildEnvironmentVariable;
+  readonly pipelineName?: string;
+  readonly deployName?: string;
+  readonly cdkSource?: SourceProvider;
+  readonly cdkRepo?: IRepository;
+  readonly cdkBranch?: string;
+  readonly cdkTrigger?: boolean;
+  readonly cdkWorkingDir?: string;
+  readonly deployRole?: IRole;
+  readonly deployVpc?: IVpc;
+  readonly deploySubnets?: SubnetSelection;
+  readonly deployEnvs?: BuildEnvironmentVariables;
+  readonly deployStacks?: Array<Stack | string>;
+  readonly deployDiffStage?: boolean;
+  readonly npmKey?: string | BuildEnvironmentVariable;
 }
 
 export interface AddDeployStackStageProps {
@@ -52,7 +47,7 @@ export interface AddDeployStackStageProps {
 
 export class CdkPipeline extends Construct {
   readonly stacks: IResolvable;
-  readonly cdkRepo: IRepository;
+  readonly cdkSource: SourceProvider;
   readonly deployRole: IRole;
   readonly deploy: Project;
   readonly pipeline: Pipeline;
@@ -64,9 +59,10 @@ export class CdkPipeline extends Construct {
     const {
       pipelineName,
       deployName,
+      cdkSource,
       cdkRepo,
-      cdkBranch = 'master',
-      cdkTrigger = false,
+      cdkBranch,
+      cdkTrigger,
       cdkWorkingDir,
       deployRole,
       deployVpc,
@@ -85,11 +81,16 @@ export class CdkPipeline extends Construct {
       produce: () => stackNames(deployStacks || findAllStacksFromCdkApp(scope)),
     });
 
-    // Cross Stack Dependency issue since repo stack might differ from this stack
-    this.cdkRepo =
-      Stack.of(this) !== Stack.of(cdkRepo)
-        ? Repository.fromRepositoryName(this, cdkRepo.node.id, cdkRepo.repositoryName)
-        : cdkRepo;
+    const source = cdkRepo
+      ? ((new CodeCommitSourceProvider({
+          repo: cdkRepo,
+          branch: cdkBranch || 'master',
+          trigger: cdkTrigger || false,
+        }) as any) as SourceProvider)
+      : cdkSource;
+    if (!source) throw new Error('A source repository could not be found.');
+    this.cdkSource = source;
+    this.cdkSource.setup(this);
 
     this.deployRole =
       deployRole ||
@@ -149,10 +150,7 @@ export class CdkPipeline extends Construct {
       role: this.deployRole,
       vpc: deployVpc,
       subnetSelection: deploySubnets,
-      source: Source.codeCommit({
-        repository: this.cdkRepo,
-        branchOrRef: cdkBranch,
-      }),
+      source: this.cdkSource.source(),
       buildSpec: buildSpec,
       environment: {
         computeType: ComputeType.SMALL,
@@ -182,16 +180,7 @@ export class CdkPipeline extends Construct {
 
     this.pipeline.addStage({
       stageName: 'Source',
-      actions: [
-        new CodeCommitSourceAction({
-          actionName: 'CdkCheckout',
-          role: this.pipeline.role,
-          repository: this.cdkRepo,
-          branch: cdkBranch,
-          output: sourceOutput,
-          trigger: cdkTrigger ? CodeCommitTrigger.EVENTS : CodeCommitTrigger.NONE,
-        }),
-      ],
+      actions: [this.cdkSource.sourceAction('CdkCheckout', this.pipeline.role, sourceOutput)],
     });
 
     if (deployDiffStage) {
@@ -241,13 +230,7 @@ export class CdkPipeline extends Construct {
     if (!cdkOutputArtifact) {
       cdkOutputArtifact = new Artifact('CdkOutput');
       pipeline.stages[0].addAction(
-        new CodeCommitSourceAction({
-          actionName: 'CdkCheckout',
-          role: pipeline.role,
-          repository: this.cdkRepo,
-          output: cdkOutputArtifact,
-          trigger: CodeCommitTrigger.NONE,
-        })
+        this.cdkSource.sourceAction('CdkCheckout', this.pipeline.role, cdkOutputArtifact, undefined, false)
       );
     }
 

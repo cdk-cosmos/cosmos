@@ -72,6 +72,7 @@ Object {
                   },
                 },
                 "Name": "CdkCheckout",
+                "Namespace": "CdkCheckout",
                 "OutputArtifacts": Array [
                   Object {
                     "Name": "CdkCodeOutput",
@@ -736,16 +737,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters38572c4cc2dfdfe4591206d7ecc33a0cfb86c35c5d3a7aa7a03243a10d2693f0ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"38572c4cc2dfdfe4591206d7ecc33a0cfb86c35c5d3a7aa7a03243a10d2693f0\\"",
+    "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cf\\"",
       "Type": "String",
     },
-    "AssetParameters38572c4cc2dfdfe4591206d7ecc33a0cfb86c35c5d3a7aa7a03243a10d2693f0S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"38572c4cc2dfdfe4591206d7ecc33a0cfb86c35c5d3a7aa7a03243a10d2693f0\\"",
+    "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cf\\"",
       "Type": "String",
     },
-    "AssetParameters38572c4cc2dfdfe4591206d7ecc33a0cfb86c35c5d3a7aa7a03243a10d2693f0S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"38572c4cc2dfdfe4591206d7ecc33a0cfb86c35c5d3a7aa7a03243a10d2693f0\\"",
+    "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cf\\"",
       "Type": "String",
     },
   },
@@ -776,7 +777,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters38572c4cc2dfdfe4591206d7ecc33a0cfb86c35c5d3a7aa7a03243a10d2693f0S3Bucket",
+                "Ref": "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3Bucket",
               },
               "/",
               Object {
@@ -786,7 +787,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters38572c4cc2dfdfe4591206d7ecc33a0cfb86c35c5d3a7aa7a03243a10d2693f0S3VersionKey",
+                        "Ref": "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3VersionKey",
                       },
                     ],
                   },
@@ -799,7 +800,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters38572c4cc2dfdfe4591206d7ecc33a0cfb86c35c5d3a7aa7a03243a10d2693f0S3VersionKey",
+                        "Ref": "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3VersionKey",
                       },
                     ],
                   },
@@ -1390,6 +1391,7 @@ Object {
                   },
                 },
                 "Name": "CdkCheckout",
+                "Namespace": "CdkCheckout",
                 "OutputArtifacts": Array [
                   Object {
                     "Name": "CdkCodeOutput",

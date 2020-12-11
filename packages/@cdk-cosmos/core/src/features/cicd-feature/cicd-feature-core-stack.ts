@@ -10,7 +10,7 @@ export const CDK_PIPELINE_PATTERN = '{Partition}{Cosmos}{Resource}';
 
 export interface ICiCdFeatureCore extends Construct {
   readonly solarSystem: ISolarSystemCore;
-  readonly cdkRepo: IRepository;
+  readonly cdkRepo?: IRepository;
   readonly deployProject?: IProject;
 }
 
@@ -21,7 +21,7 @@ export interface CiCdFeatureCoreStackProps extends BaseFeatureStackProps {
 
 export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatureCore {
   readonly solarSystem: ISolarSystemCore;
-  readonly cdkRepo: Repository;
+  readonly cdkRepo?: Repository;
   readonly cdkPipeline: CdkPipeline;
   readonly deployProject: Project;
 
@@ -37,20 +37,22 @@ export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatu
 
     const cdkMasterRoleStaticArn = this.solarSystem.galaxy.cosmos.cdkMasterRoleStaticArn;
 
-    this.cdkRepo = new Repository(this.solarSystem.galaxy.cosmos, 'CdkRepo', {
-      description: `Core CDK Repo for ${this.solarSystem.galaxy.cosmos.node.id} Cosmos.`,
-      ...cdkRepoProps,
-      repositoryName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Repo', '-').toLowerCase(),
-    });
+    if (!cdkPipelineProps?.cdkRepo && !cdkPipelineProps?.cdkSource) {
+      this.cdkRepo = new Repository(this.solarSystem.galaxy.cosmos, 'CdkRepo', {
+        description: `Core CDK Repo for ${this.solarSystem.galaxy.cosmos.node.id} Cosmos.`,
+        ...cdkRepoProps,
+        repositoryName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Repo', '-').toLowerCase(),
+      });
+    }
 
     this.cdkPipeline = new CdkPipeline(this, 'CdkPipeline', {
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', cdkMasterRoleStaticArn, {
         mutable: false,
       }),
+      cdkRepo: this.cdkRepo,
       ...cdkPipelineProps,
       pipelineName: this.solarSystem.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
       deployName: this.solarSystem.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
-      cdkRepo: this.cdkRepo,
     });
     this.deployProject = this.cdkPipeline.deploy;
   }
