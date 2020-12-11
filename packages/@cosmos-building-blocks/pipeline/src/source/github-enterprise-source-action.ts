@@ -85,13 +85,10 @@ export class GithubEnterpriseSourceAction extends Action {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected bound(scope: Construct, stage: IStage, options: ActionBindOptions): ActionConfig {
-    let repo = this.props.repo;
-    repo = repo.replace(this.props.connection.host.endpoint, '');
-    repo = repo.replace('.git', '');
     return {
       configuration: {
         ConnectionArn: this.props.connection.connectionArn,
-        FullRepositoryId: repo,
+        FullRepositoryId: this.props.repo,
         BranchName: this.props.branch || 'master',
         OutputArtifactFormat: this.props.outputFormat || 'CODE_ZIP',
       },

@@ -35,11 +35,16 @@ export class GithubEnterpriseSourceProvider extends SourceProvider<string> {
     });
   }
 
-  sourceAction(name: string, role: IRole, sourceOutput: Artifact, branch?: string, trigger?: boolean): Action {
+  sourceAction(name: string, role: IRole, sourceOutput: Artifact, branch?: string): Action {
+    // Convert git url into `user/repo` format
+    let repo = this.repo;
+    repo = repo.replace(this.connection.host.endpoint, '');
+    repo = repo.replace('.git', '');
+
     return new GithubEnterpriseSourceAction({
       actionName: name,
       connection: this.connection,
-      repo: this.repo,
+      repo: repo,
       branch: branch || this.branch,
       output: sourceOutput,
       variablesNamespace: name,
