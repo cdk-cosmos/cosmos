@@ -74,7 +74,13 @@ describe('Domain Feature for Core', () => {
     expect(cosmosLinkStack).toHaveResource('Custom::CrossAccountExports');
     expect(cosmosLinkStack).toHaveResource('AWS::Route53::RecordSet');
 
-    expect(cosmosStack).toMatchSnapshot();
+    expect(cosmosStack).toMatchSnapshot({
+      Outputs: {
+        CoreLibVersion: {
+          Value: expect.any(String),
+        },
+      },
+    });
     expect(cosmosLinkStack).toMatchSnapshot();
     expect(solarSystemStack).toMatchSnapshot();
     expect(solarSystem2Stack).toMatchSnapshot();
@@ -104,7 +110,13 @@ describe('Domain Feature for Extension', () => {
     expect(cosmosExtensionLinkStack).toHaveResource('Custom::CrossAccountExports');
     expect(cosmosExtensionLinkStack).toHaveResource('AWS::Route53::RecordSet');
 
-    expect(cosmosExtensionStack).toMatchSnapshot();
+    expect(cosmosExtensionStack).toMatchSnapshot({
+      Outputs: {
+        AppLibVersion: {
+          Value: expect.any(String),
+        },
+      },
+    });
     expect(cosmosExtensionLinkStack).toMatchSnapshot();
     expect(solarSystemExtensionStack).toMatchSnapshot();
     expect(solarSystemExtension2Stack).toMatchSnapshot();
