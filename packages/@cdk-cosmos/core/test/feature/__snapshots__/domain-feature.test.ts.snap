@@ -38,7 +38,7 @@ Object {
       "Export": Object {
         "Name": "CoreLibVersion",
       },
-      "Value": "0.7.1",
+      "Value": Any<String>,
     },
     "CrossAccountExportServiceToken": Object {
       "Export": Object {
@@ -1827,7 +1827,7 @@ Object {
       "Export": Object {
         "Name": "AppCosExtLibVersion",
       },
-      "Value": "0.7.1",
+      "Value": Any<String>,
     },
     "ExportsOutputRefAppDomain": Object {
       "Export": Object {
