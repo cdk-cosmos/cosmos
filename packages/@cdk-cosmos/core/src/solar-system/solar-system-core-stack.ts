@@ -1,4 +1,4 @@
-import { Construct, Duration, Tags, IConstruct } from '@aws-cdk/core';
+import { Construct, Stack, Duration, Tags, IConstruct } from '@aws-cdk/core';
 import { Vpc } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Certificate, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
@@ -109,10 +109,11 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
       }
     }
 
-    RemoteVpc.export(this.vpc, this.singletonId('Vpc'), this);
-    RemoteZone.export(this.zone, this.singletonId('Zone'));
-    RemoteZone.export(this.privateZone, this.singletonId('PrivateZone'));
+    new RemoteVpc(this.vpc, this.singletonId('Vpc'), this);
+    new RemoteZone(this.zone, this.singletonId('Zone'));
+    new RemoteZone(this.privateZone, this.singletonId('PrivateZone'));
 
+    this.addDependency(Stack.of(this.galaxy));
     Tags.of(this).add('cosmos:solarsystem', this.node.id);
   }
 

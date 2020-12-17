@@ -9,7 +9,7 @@ import { CDK_PIPELINE_PATTERN } from './cicd-feature-core-stack';
 
 export interface ICiCdFeatureExtension extends Construct {
   readonly solarSystem: ISolarSystemExtension;
-  readonly cdkRepo: IRepository;
+  readonly cdkRepo?: IRepository;
   readonly deployProject?: IProject;
 }
 
@@ -19,7 +19,7 @@ export interface CiCdFeatureExtensionStackProps extends BaseFeatureConstructProp
 
 export class CiCdFeatureExtensionStack extends BaseFeatureConstruct implements ICiCdFeatureExtension {
   readonly solarSystem: ISolarSystemExtension;
-  readonly cdkRepo: Repository;
+  readonly cdkRepo?: Repository;
   readonly cdkPipeline: CdkPipeline;
   readonly deployProject: Project;
 
@@ -32,19 +32,21 @@ export class CiCdFeatureExtensionStack extends BaseFeatureConstruct implements I
 
     const cdkMasterRoleStaticArn = this.solarSystem.galaxy.cosmos.portal.cdkMasterRoleStaticArn;
 
-    this.cdkRepo = new Repository(this.solarSystem.galaxy.cosmos, 'CdkRepo', {
-      repositoryName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Repo', '-').toLowerCase(),
-      description: `App CDK Repo for ${this.solarSystem.galaxy.cosmos.node.id} Cosmos.`,
-    });
+    if (!cdkPipelineProps?.cdkRepo && !cdkPipelineProps?.cdkSource) {
+      this.cdkRepo = new Repository(this.solarSystem.galaxy.cosmos, 'CdkRepo', {
+        repositoryName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Repo', '-').toLowerCase(),
+        description: `App CDK Repo for ${this.solarSystem.galaxy.cosmos.node.id} Cosmos.`,
+      });
+    }
 
     this.cdkPipeline = new CdkPipeline(this, 'CdkPipeline', {
       deployRole: Role.fromRoleArn(this, 'CdkMasterRole', cdkMasterRoleStaticArn, {
         mutable: false,
       }),
+      cdkRepo: this.cdkRepo,
       ...cdkPipelineProps,
       pipelineName: this.solarSystem.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
       deployName: this.solarSystem.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
-      cdkRepo: this.cdkRepo,
     });
     this.deployProject = this.cdkPipeline.deploy;
   }

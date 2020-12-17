@@ -1,4 +1,22 @@
 
+## v0.7.2 (2020-12-16)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`
+  * [#227](https://github.com/cdk-cosmos/cosmos/pull/227) Add Github Enterprise Support ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`
+  * [#226](https://github.com/cdk-cosmos/cosmos/pull/226) Add Domain Feature + Link Feature + Rework Remote Exports ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/cdk-credentials-plugin`, `@cdk-cosmos/core`, `@cosmos-building-blocks/app-ec2`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/network`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#223](https://github.com/cdk-cosmos/cosmos/pull/223) Add Stack Dependencies and Fix cdk pipeline to accommodate change + CDK version bump ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/service`
+  * [#220](https://github.com/cdk-cosmos/cosmos/pull/220) Fix Redis prop issue + Add is functions to extension classes ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.7.1 (2020-11-09)
 
 #### 🚀 Enhancement:

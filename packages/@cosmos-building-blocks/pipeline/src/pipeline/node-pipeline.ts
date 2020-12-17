@@ -1,8 +1,8 @@
 import { Construct } from '@aws-cdk/core';
 import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
-import { NPM_BUILD, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION, NPM_LOGIN } from './commands';
 import { StandardPipeline, StandardPipelineProps } from './standard-pipeline';
-import { BuildSpecBuilder } from './build-spec';
+import { NPM_BUILD, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION, NPM_LOGIN } from '../commands';
+import { BuildSpecBuilder } from '../build-spec';
 
 export interface NodePipelineProps extends StandardPipelineProps {}
 

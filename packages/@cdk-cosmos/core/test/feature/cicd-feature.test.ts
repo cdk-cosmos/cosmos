@@ -1,6 +1,6 @@
 import '@aws-cdk/assert/jest';
 import { App } from '@aws-cdk/core';
-import { synthesizeStacks, toHaveResourceId } from '../../../../src/test';
+import { synthesizeStacks, toHaveResourceId } from '../../../../../src/test';
 import {
   CosmosCoreStack,
   CosmosExtensionStack,
@@ -8,7 +8,7 @@ import {
   GalaxyExtensionStack,
   SolarSystemCoreStack,
   SolarSystemExtensionStack,
-} from '../src';
+} from '../../src';
 
 const app = new App();
 const env = { account: 'account', region: 'region' };
@@ -42,8 +42,8 @@ const [
   cicdSolarSystemExtensionStack,
 ] = synthesizeStacks(cosmos, solarSystem, solarSystem.ciCd, cosmosExtension, solarSystemExtension);
 
-describe('CICD-Solar-System', () => {
-  test('should be a cicd-solar-system', () => {
+describe('CICD Feature', () => {
+  test('should be a CICD Feature', () => {
     expect(solarSystem.stackName).toEqual('CoreCosGalCiCdSolarSystem');
     expect(solarSystemStack).toHaveResource('AWS::EC2::VPC');
     expect(solarSystemStack).toHaveOutput({ exportName: 'CoreGalCiCdZoneName', outputValue: 'cicd.cos.com' });
@@ -83,7 +83,7 @@ describe('CICD-Solar-System', () => {
   });
 });
 
-describe('CICD-Solar-System Extension', () => {
+describe('CICD Feature Extension', () => {
   test('should be a solar-system extension', () => {
     expect(solarSystemExtension.stackName).toEqual('AppTestGalCiCdSolarSystem');
   });

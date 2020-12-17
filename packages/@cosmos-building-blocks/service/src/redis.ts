@@ -73,10 +73,13 @@ export class Redis extends Construct implements ITaggable {
   readonly redisReplicationGroup: CfnReplicationGroup;
 
   /**
-   * Redis URI `redis://${endpoint}:${port}
+   * Redis URI `redis[s]://{endpoint}:{port}
    */
   get uri(): string {
-    return `redis://${this.redisReplicationGroup.attrPrimaryEndPointAddress}:${this.redisReplicationGroup.attrPrimaryEndPointPort}`;
+    const secure = this.redisReplicationGroup.transitEncryptionEnabled ? 's' : '';
+    const host = this.redisReplicationGroup.attrPrimaryEndPointAddress;
+    const port = this.redisReplicationGroup.attrPrimaryEndPointPort;
+    return `redis${secure}://${host}:${port}`;
   }
 
   constructor(scope: Construct, id: string, props: RedisProps) {
@@ -116,13 +119,13 @@ export class Redis extends Construct implements ITaggable {
     const modeProps: Partial<CfnReplicationGroupProps> = highAvailabilityMode
       ? {
           numNodeGroups: 1,
-          numCacheClusters: Math.max(2, vpc.availabilityZones.length),
+          replicasPerNodeGroup: Math.max(1, vpc.availabilityZones.length - 1),
           multiAzEnabled: true,
           automaticFailoverEnabled: true,
         }
       : {
           numNodeGroups: 1,
-          numCacheClusters: 1,
+          replicasPerNodeGroup: 0,
           multiAzEnabled: false,
           automaticFailoverEnabled: false,
         };

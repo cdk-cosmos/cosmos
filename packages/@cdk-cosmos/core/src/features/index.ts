@@ -1,3 +1,5 @@
+export { ILinkFeature, LinkFeatureStack } from './link-feature/link-feature-stack';
+
 export {
   ISharedVpcFeature,
   SharedVpcFeatureCoreStack,
@@ -23,3 +25,7 @@ export {
   CiCdFeatureExtensionStack,
   CiCdFeatureExtensionStackProps,
 } from './cicd-feature/cicd-feature-extension-stack';
+
+export { Domain, DomainProps } from './domain-feature/domain-feature-stack';
+
+export { Subdomain, SubdomainProps } from './domain-feature/subdomain-feature-stack';
