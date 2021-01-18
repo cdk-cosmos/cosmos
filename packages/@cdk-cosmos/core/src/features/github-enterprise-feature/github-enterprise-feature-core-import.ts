@@ -31,12 +31,14 @@ export class GithubEnterpriseFeatureCoreImport extends BaseFeatureConstruct impl
 
 declare module '../../solar-system/solar-system-core-import' {
   interface SolarSystemCoreImport {
+    githubEnterprise: GithubEnterpriseFeatureCoreImport;
     addGithubEnterprise(): GithubEnterpriseFeatureCoreImport;
   }
 }
 
 SolarSystemCoreImport.prototype.addGithubEnterprise = function(): GithubEnterpriseFeatureCoreImport {
-  return new GithubEnterpriseFeatureCoreImport(this, 'GithubEnterprise', {
+  this.githubEnterprise = new GithubEnterpriseFeatureCoreImport(this, 'GithubEnterprise', {
     solarSystem: this,
   });
+  return this.githubEnterprise;
 };

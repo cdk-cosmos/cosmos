@@ -1,11 +1,7 @@
 import '@aws-cdk/assert/jest';
-import { Artifact, Pipeline } from '@aws-cdk/aws-codepipeline';
 import { App } from '@aws-cdk/core';
 import { StandardPipeline } from '@cosmos-building-blocks/pipeline';
-import {
-  GithubEnterpriseSourceAction,
-  GithubEnterpriseSourceProvider,
-} from '@cosmos-building-blocks/pipeline/lib/source';
+import { GithubEnterpriseSourceProvider } from '@cosmos-building-blocks/pipeline/lib/source';
 import { synthesizeStacks } from '../../../../../src/test';
 import {
   CosmosCoreStack,

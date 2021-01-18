@@ -1,4 +1,4 @@
-import { Construct, Fn } from '@aws-cdk/core';
+import { Construct } from '@aws-cdk/core';
 import { ISource, Source } from '@aws-cdk/aws-codebuild';
 import { Artifact } from '@aws-cdk/aws-codepipeline';
 import { Action } from '@aws-cdk/aws-codepipeline-actions';
