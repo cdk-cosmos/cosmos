@@ -29,3 +29,13 @@ export { Subdomain, SubdomainProps } from './domain-feature/subdomain-feature-st
 
 export { IRedisFeature, RedisFeatureStack, RedisFeatureStackProps } from './redis-feature/redis-feature-stack';
 export { RedisFeatureImport, RedisFeatureImportProps } from './redis-feature/redis-feature-import';
+
+export {
+  IGithubEnterpriseFeatureCore,
+  GithubEnterpriseFeatureCoreStack,
+  GithubEnterpriseFeatureCoreStackProps,
+} from './github-enterprise-feature/github-enterprise-feature-core-stack';
+export {
+  GithubEnterpriseFeatureCoreImport,
+  GithubEnterpriseFeatureCoreImportProps,
+} from './github-enterprise-feature/github-enterprise-feature-core-import';

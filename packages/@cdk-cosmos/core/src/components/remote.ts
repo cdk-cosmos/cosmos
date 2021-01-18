@@ -12,6 +12,10 @@ import { IRepository as ICodeRepository, Repository as CodeRepository } from '@a
 import { IProject, Project } from '@aws-cdk/aws-codebuild';
 import { IFunction, Function } from '@aws-cdk/aws-lambda';
 import { IRedis, Redis } from '@cosmos-building-blocks/service';
+import {
+  GithubEnterpriseConnection,
+  IGithubEnterpriseConnection,
+} from '@cosmos-building-blocks/pipeline/lib/source/github-enterprise-connection';
 
 export class RemoteZone {
   readonly hostedZoneId: string;
@@ -377,6 +381,22 @@ export class RemoteRedis {
   }
 }
 
+export class RemoteGithubEnterpriseConnection {
+  readonly githubEnterpriseConnectionArn: string;
+
+  constructor(connection: IGithubEnterpriseConnection & Construct, exportName: string, scope: Construct = connection) {
+    this.githubEnterpriseConnectionArn = new CfnOutput(scope, 'GithubEnterpriseConnectionArn', {
+      exportName: `${exportName}Arn`,
+      value: connection.connectionArn,
+    }).exportName as string;
+  }
+
+  static import(scope: Construct, id: string, exportName: string): IGithubEnterpriseConnection {
+    const connectionArn = Fn.importValue(`${exportName}Arn`);
+
+    return GithubEnterpriseConnection.fromConnectionArn(scope, id, connectionArn);
+  }
+}
 const expandSubnetIds = (names: string[] | undefined, value: string, aZs: number): string[] => {
   if (names && names.length) {
     return expandCfnArray(Fn.split(',', Fn.importValue(value)), names.length * aZs);

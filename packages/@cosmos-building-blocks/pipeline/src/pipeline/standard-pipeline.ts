@@ -22,7 +22,7 @@ export interface StandardPipelineProps {
   readonly pipelineName?: string;
   readonly buildName?: string;
   readonly codeSource?: SourceProvider;
-  readonly codeRepo: IRepository;
+  readonly codeRepo?: IRepository;
   readonly codeBranch?: string;
   readonly codeTrigger?: boolean;
   readonly buildRole?: IRole;

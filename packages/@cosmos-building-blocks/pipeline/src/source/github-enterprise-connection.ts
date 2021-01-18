@@ -16,6 +16,7 @@ export interface GithubEnterpriseHostProps {
   subnets: SubnetSelection[];
   tlsCertificate?: string;
 }
+
 export class GithubEnterpriseHost extends Resource {
   public readonly hostArn: string;
   public readonly hostName: string;
@@ -154,15 +155,17 @@ export class GithubEnterpriseConnection extends Resource implements IGithubEnter
     this.ownerAccountId = this.resource.attrOwnerAccountId;
   }
 
-  static fromArn(scope: Construct, id: string, arn: string): IGithubEnterpriseConnection {
-    class Import extends Construct implements IGithubEnterpriseConnection {
-      connectionArn: string;
+  static fromConnectionArn(scope: Construct, id: string, connectionArn: string): IGithubEnterpriseConnection {
+    return new GithubEnterpriseConnectionImport(scope, id, connectionArn);
+  }
+}
 
-      constructor(scope: Construct, id: string, arn: string) {
-        super(scope, id);
-        this.connectionArn = arn;
-      }
-    }
-    return new Import(scope, id, arn);
+class GithubEnterpriseConnectionImport extends Construct implements IGithubEnterpriseConnection {
+  readonly connectionArn: string;
+
+  constructor(scope: Construct, id: string, connectionArn: string) {
+    super(scope, id);
+
+    this.connectionArn = connectionArn;
   }
 }
