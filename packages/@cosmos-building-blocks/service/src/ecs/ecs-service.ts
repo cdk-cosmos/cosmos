@@ -136,9 +136,9 @@ export class EcsService extends Construct {
         if (!httpListener) throw new Error('To enable https redirect you must provide an httpListener');
 
         new ApplicationListenerRule(this, 'HttpsRedirect', {
+          priority: getRoutingPriorityFromListenerProps(routingProps),
           ...routingProps,
           listener: httpListener,
-          priority: getRoutingPriorityFromListenerProps(routingProps),
           action: ListenerAction.redirect({
             permanent: true,
             protocol: 'HTTPS',

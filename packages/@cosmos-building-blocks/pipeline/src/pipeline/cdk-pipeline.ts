@@ -49,6 +49,7 @@ export class CdkPipeline extends Construct {
   readonly stacks: IResolvable;
   readonly cdkSource: SourceProvider;
   readonly deployRole: IRole;
+  readonly deploySpec: BuildSpecBuilder;
   readonly deploy: Project;
   readonly pipeline: Pipeline;
   readonly hasDiffStage: boolean;
@@ -106,7 +107,7 @@ export class CdkPipeline extends Construct {
 
     const changeDir = cdkWorkingDir ? `cd ${cdkWorkingDir}` : null;
 
-    const buildSpec = new BuildSpecBuilder()
+    this.deploySpec = new BuildSpecBuilder()
       .addRuntime('nodejs', '12')
       .addCommands('pre_build', changeDir, npmKey ? NPM_LOGIN : null, NPM_INSTALL)
       .addCommands(
@@ -151,7 +152,7 @@ export class CdkPipeline extends Construct {
       vpc: deployVpc,
       subnetSelection: deploySubnets,
       source: this.cdkSource.source(),
-      buildSpec: buildSpec,
+      buildSpec: this.deploySpec,
       environment: {
         computeType: ComputeType.SMALL,
         buildImage: LinuxBuildImage.STANDARD_4_0,
@@ -230,7 +231,7 @@ export class CdkPipeline extends Construct {
     if (!cdkOutputArtifact) {
       cdkOutputArtifact = new Artifact('CdkOutput');
       pipeline.stages[0].addAction(
-        this.cdkSource.sourceAction('CdkCheckout', this.pipeline.role, cdkOutputArtifact, undefined, false)
+        this.cdkSource.sourceAction('CdkCheckout', pipeline.role, cdkOutputArtifact, undefined, false)
       );
     }
 

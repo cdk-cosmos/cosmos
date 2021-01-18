@@ -11,6 +11,7 @@ import {
 import { IRepository as ICodeRepository, Repository as CodeRepository } from '@aws-cdk/aws-codecommit';
 import { IProject, Project } from '@aws-cdk/aws-codebuild';
 import { IFunction, Function } from '@aws-cdk/aws-lambda';
+import { IRedis, Redis } from '@cosmos-building-blocks/service';
 
 export class RemoteZone {
   readonly hostedZoneId: string;
@@ -326,6 +327,53 @@ export class RemoteFunction {
     const fnArn = Fn.importValue(`${exportName}Arn`);
 
     return Function.fromFunctionArn(scope, id, fnArn);
+  }
+}
+
+export class RemoteRedis {
+  readonly redisSecurityGroupId: string;
+  readonly redisProtocol: string;
+  readonly redisEndpoint: string;
+  readonly redisPort: string;
+
+  constructor(redis: IRedis & Construct, exportName: string, scope: Construct = redis) {
+    this.redisSecurityGroupId = new CfnOutput(scope, 'RedisSecurityGroupId', {
+      exportName: `${exportName}SecurityGroupId`,
+      value: redis.redisSecurityGroups ? redis.redisSecurityGroups[0].securityGroupId : '',
+    }).exportName as string;
+
+    this.redisProtocol = new CfnOutput(scope, 'RedisProtocol', {
+      exportName: `${exportName}Protocol`,
+      value: String(redis.redisProtocol),
+    }).exportName as string;
+
+    this.redisEndpoint = new CfnOutput(scope, 'RedisEndpoint', {
+      exportName: `${exportName}Endpoint`,
+      value: redis.redisEndpoint,
+    }).exportName as string;
+
+    this.redisPort = new CfnOutput(scope, 'RedisPort', {
+      exportName: `${exportName}Port`,
+      value: redis.redisPort,
+    }).exportName as string;
+  }
+
+  static import(scope: Construct, id: string, exportName: string): IRedis {
+    const redisSecurityGroup = SecurityGroup.fromSecurityGroupId(
+      scope,
+      `${id}SecurityGroup`,
+      Fn.importValue(`${exportName}SecurityGroupId`)
+    );
+    const redisProtocol = Fn.importValue(`${exportName}Protocol`);
+    const redisEndpoint = Fn.importValue(`${exportName}Endpoint`);
+    const redisPort = Fn.importValue(`${exportName}Port`);
+
+    return Redis.fromRedisAttributes(scope, id, {
+      redisSecurityGroups: [redisSecurityGroup],
+      redisProtocol,
+      redisEndpoint,
+      redisPort,
+    });
   }
 }
 

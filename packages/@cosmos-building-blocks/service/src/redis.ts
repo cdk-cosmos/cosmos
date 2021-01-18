@@ -1,20 +1,38 @@
-import { Construct, IConstruct, ITaggable, TagManager } from '@aws-cdk/core';
+import { Construct, IConstruct, Stack } from '@aws-cdk/core';
 import { CfnSubnetGroup, CfnReplicationGroup, CfnReplicationGroupProps } from '@aws-cdk/aws-elasticache';
-import { IVpc, ISubnet, IConnectable, SecurityGroup, Port, SubnetSelection } from '@aws-cdk/aws-ec2';
+import {
+  IVpc,
+  ISubnet,
+  IConnectable,
+  ISecurityGroup,
+  SecurityGroup,
+  Port,
+  SubnetSelection,
+  Connections,
+  Peer,
+} from '@aws-cdk/aws-ec2';
 
 export interface IRedis extends IConstruct {
   /**
-   * Subnet Group created by construct using provided Subnets
-   */
-  readonly cacheSubnetGroup: CfnSubnetGroup;
-  /**
    * Security Group assigned to Redis Cluster
    */
-  readonly redisSecurityGroup: SecurityGroup;
+  readonly redisSecurityGroups?: ISecurityGroup[];
   /**
-   * Actual Redis Cluster
+   * Redis Protocol of the Primary Address connection (redis[s])
    */
-  readonly redisReplicationGroup: CfnReplicationGroup;
+  readonly redisProtocol: string;
+  /**
+   * Redis endpoint of the Primary Address
+   */
+  readonly redisEndpoint: string;
+  /**
+   * Redis port of the Primary Address
+   */
+  readonly redisPort: string;
+  /**
+   * Redis URI `{protocol}://{endpoint}:{port} of the Primary Address
+   */
+  readonly redisUri: string;
 }
 
 /**
@@ -30,35 +48,40 @@ export interface IRedis extends IConstruct {
  *  transitEncryptionEnabled: true, // Enable transit encryption
  *  automaticFailoverEnabled: false, // Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.
  */
-export interface RedisProps extends Partial<CfnReplicationGroupProps> {
+export interface RedisProps extends Omit<Partial<CfnReplicationGroupProps>, 'securityGroupIds'> {
   /**
    * VPC to launch Redis cluster in
    */
-  vpc: IVpc;
+  readonly vpc: IVpc;
   /**
    * List of Subnets to launch Redis cluster in
    */
-  subnets: SubnetSelection[];
+  readonly subnets: SubnetSelection[];
+  /**
+   * `AWS::ElastiCache::ReplicationGroup.SecurityGroupIds`.
+   *
+   * @default - Create a new Security Group for redis.
+   */
+  readonly securityGroups?: ISecurityGroup[];
   /**
    * Allowed ingress connections to Redis SecurityGroup
    *
    * @default - Allowed from anywhere.
    */
-  connectionsAllowedFrom?: IConnectable;
-
+  readonly connectionsAllowedFrom?: string | IConnectable;
   /**
    * Enable sensible defaults for basic high availability
    *
    * @default - false.
    */
-  highAvailabilityMode?: boolean;
+  readonly highAvailabilityMode?: boolean;
 }
 
-export class Redis extends Construct implements ITaggable {
+export class Redis extends Construct implements IRedis {
   /**
-   * Taggable Resource
+   * Actual Redis Cluster
    */
-  readonly tags: TagManager;
+  readonly redisReplicationGroup: CfnReplicationGroup;
   /**
    * Subnet Group created by construct using Subnets provided in props
    */
@@ -66,26 +89,28 @@ export class Redis extends Construct implements ITaggable {
   /**
    * Security Group assigned to Redis Cluster
    */
-  readonly redisSecurityGroup?: SecurityGroup;
+  readonly redisSecurityGroups: ISecurityGroup[];
   /**
-   * Actual Redis Cluster
+   * Redis Protocol of the Primary Address connection (redis[s])
    */
-  readonly redisReplicationGroup: CfnReplicationGroup;
-
+  readonly redisProtocol: string;
   /**
-   * Redis URI `redis[s]://{endpoint}:{port}
+   * Redis endpoint of the Primary Address
    */
-  get uri(): string {
-    const secure = this.redisReplicationGroup.transitEncryptionEnabled ? 's' : '';
-    const host = this.redisReplicationGroup.attrPrimaryEndPointAddress;
-    const port = this.redisReplicationGroup.attrPrimaryEndPointPort;
-    return `redis${secure}://${host}:${port}`;
-  }
+  readonly redisEndpoint: string;
+  /**
+   * Redis port of the Primary Address
+   */
+  readonly redisPort: string;
+  /**
+   * Redis URI `{protocol}://{endpoint}:{port} of the Primary Address
+   */
+  readonly redisUri: string;
 
   constructor(scope: Construct, id: string, props: RedisProps) {
     super(scope, id);
 
-    const { vpc, subnets, connectionsAllowedFrom, port = 6379, securityGroupIds, highAvailabilityMode = false } = props;
+    const { vpc, subnets, connectionsAllowedFrom, port = 6379, securityGroups, highAvailabilityMode = false } = props;
 
     const subnetSelections = subnets
       .map(selection => vpc.selectSubnets(selection))
@@ -100,19 +125,30 @@ export class Redis extends Construct implements ITaggable {
       subnetIds: subnetSelections.map(x => x.subnetId),
     });
 
-    // Create SecurityGroup
-    if (!securityGroupIds) {
-      this.redisSecurityGroup = new SecurityGroup(this, 'RedisSecurityGroup', {
-        vpc: vpc,
-        description: `Redis Security Group for ${this.node.path}`,
-        allowAllOutbound: false,
-      });
+    if (securityGroups && securityGroups.length) {
+      this.redisSecurityGroups = securityGroups;
+    } else {
+      // Create SecurityGroup
+      this.redisSecurityGroups = [
+        new SecurityGroup(this, 'RedisSecurityGroup', {
+          vpc: vpc,
+          description: `Redis Security Group for ${this.node.path}`,
+          allowAllOutbound: false,
+        }),
+      ];
 
       // Check if Security Ingress is required to be locked down
       if (connectionsAllowedFrom == undefined) {
-        this.redisSecurityGroup.connections.allowFromAnyIpv4(Port.tcp(port));
+        this.redisSecurityGroups[0].connections.allowFromAnyIpv4(Port.tcp(port));
       } else {
-        this.redisSecurityGroup.connections.allowFrom(connectionsAllowedFrom, Port.tcp(port));
+        this.redisSecurityGroups[0].connections.allowFrom(
+          typeof connectionsAllowedFrom === 'string'
+            ? new Connections({
+                peer: Peer.ipv4(connectionsAllowedFrom),
+              })
+            : connectionsAllowedFrom,
+          Port.tcp(port)
+        );
       }
     }
 
@@ -139,10 +175,72 @@ export class Redis extends Construct implements ITaggable {
       ...modeProps,
       ...props,
       cacheSubnetGroupName: this.cacheSubnetGroup.ref,
-      securityGroupIds: this.redisSecurityGroup ? [this.redisSecurityGroup.securityGroupId] : securityGroupIds,
+      securityGroupIds: this.redisSecurityGroups.map(x => x.securityGroupId),
       engine: 'redis',
     });
 
-    this.tags = this.redisReplicationGroup.tags;
+    this.redisProtocol = Stack.of(this).resolve(this.redisReplicationGroup.transitEncryptionEnabled)
+      ? 'rediss'
+      : 'redis';
+    this.redisEndpoint = this.redisReplicationGroup.attrPrimaryEndPointAddress;
+    this.redisPort = this.redisReplicationGroup.attrPrimaryEndPointPort;
+    this.redisUri = `${this.redisProtocol}://${this.redisEndpoint}:${this.redisPort}`;
+  }
+
+  static fromRedisAttributes(scope: Construct, id: string, attrs: RedisAttributes): IRedis {
+    return new ImportedRedis(scope, id, attrs);
+  }
+}
+
+export interface RedisAttributes {
+  /**
+   * Security Group assigned to Redis Cluster
+   */
+  readonly redisSecurityGroups?: ISecurityGroup[];
+  /**
+   * Redis Protocol of the Primary Address connection (redis[s])
+   */
+  readonly redisProtocol: string;
+  /**
+   * Redis endpoint of the Primary Address
+   */
+  readonly redisEndpoint: string;
+  /**
+   * Redis port of the Primary Address
+   */
+  readonly redisPort: string;
+}
+
+class ImportedRedis extends Construct implements IRedis {
+  /**
+   * Security Group assigned to Redis Cluster
+   */
+  readonly redisSecurityGroups?: ISecurityGroup[];
+  /**
+   * Redis Protocol of the Primary Address connection (redis[s])
+   */
+  readonly redisProtocol: string;
+  /**
+   * Redis endpoint of the Primary Address
+   */
+  readonly redisEndpoint: string;
+  /**
+   * Redis port of the Primary Address
+   */
+  readonly redisPort: string;
+  /**
+   * Redis URI `{protocol}://{endpoint}:{port} of the Primary Address
+   */
+  readonly redisUri: string;
+
+  constructor(scope: Construct, id: string, props: RedisAttributes) {
+    super(scope, id);
+    const { redisSecurityGroups, redisEndpoint, redisPort, redisProtocol } = props;
+
+    this.redisSecurityGroups = redisSecurityGroups;
+    this.redisProtocol = redisProtocol;
+    this.redisEndpoint = redisEndpoint;
+    this.redisPort = redisPort;
+    this.redisUri = `${this.redisProtocol}://${this.redisEndpoint}:${this.redisPort}`;
   }
 }

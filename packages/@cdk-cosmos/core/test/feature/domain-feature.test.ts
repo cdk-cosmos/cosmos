@@ -20,7 +20,8 @@ const coreDomain = cosmos.addDomain('CoreDomain', 'core.domain.com');
 const galaxy = new GalaxyCoreStack(cosmos, 'Gal');
 const solarSystem = new SolarSystemCoreStack(galaxy, 'Sys', { cidr: '10.0.0.0/24' });
 solarSystem.addSubdomain('DevCoreSubdomain', coreDomain, 'dev');
-const solarSystem2 = new SolarSystemCoreStack(galaxy, 'Sys2', { env: env2, cidr: '10.0.0.0/24' });
+const galaxy2 = new GalaxyCoreStack(cosmos, 'Gal2', { env: env2 });
+const solarSystem2 = new SolarSystemCoreStack(galaxy2, 'Sys2', { cidr: '10.0.0.0/24' });
 solarSystem2.addSubdomain('TstCoreSubdomain', coreDomain, 'tst');
 
 const cosmosExtension = new CosmosExtensionStack(app, 'CosExt', { env: env1 });
@@ -28,7 +29,8 @@ const appDomain = cosmosExtension.addDomain('AppDomain', 'app.domain.com');
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal');
 const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys');
 solarSystemExtension.addSubdomain('DevAppSubdomain', appDomain, 'dev');
-const solarSystemExtension2 = new SolarSystemExtensionStack(galaxyExtension, 'Sys2', { env: env2 });
+const galaxyExtension2 = new GalaxyExtensionStack(cosmosExtension, 'Gal2', { env: env2 });
+const solarSystemExtension2 = new SolarSystemExtensionStack(galaxyExtension2, 'Sys2');
 solarSystemExtension2.addSubdomain('TstAppSubdomain', appDomain, 'tst');
 
 const [
@@ -52,7 +54,7 @@ const [
 );
 
 describe('Domain Feature for Core', () => {
-  test('sould have a domain at cosmos level', () => {
+  test('should have a domain at cosmos level', () => {
     expect(cosmosStack).toHaveOutput({ exportName: 'CoreCoreDomainId' });
     expect(cosmosStack).toHaveOutput({ exportName: 'CoreCoreDomainName', outputValue: 'core.domain.com' });
     expect(cosmosStack).toHaveOutput({ exportName: 'CoreCoreDomainNameServers' });
@@ -64,12 +66,12 @@ describe('Domain Feature for Core', () => {
     });
     expect(solarSystemStack).toHaveOutput({ exportName: 'CoreGalSysDevCoreSubdomainNameServers' });
 
-    expect(solarSystem2Stack).toHaveOutput({ exportName: 'CoreGalSys2TstCoreSubdomainId' });
+    expect(solarSystem2Stack).toHaveOutput({ exportName: 'CoreGal2Sys2TstCoreSubdomainId' });
     expect(solarSystem2Stack).toHaveOutput({
-      exportName: 'CoreGalSys2TstCoreSubdomainName',
+      exportName: 'CoreGal2Sys2TstCoreSubdomainName',
       outputValue: 'tst.core.domain.com',
     });
-    expect(solarSystem2Stack).toHaveOutput({ exportName: 'CoreGalSys2TstCoreSubdomainNameServers' });
+    expect(solarSystem2Stack).toHaveOutput({ exportName: 'CoreGal2Sys2TstCoreSubdomainNameServers' });
 
     expect(cosmosLinkStack).toHaveResource('Custom::CrossAccountExports');
     expect(cosmosLinkStack).toHaveResource('AWS::Route53::RecordSet');
@@ -87,8 +89,8 @@ describe('Domain Feature for Core', () => {
   });
 });
 
-describe('Domain Feature for Extension', () => {
-  test('sould have a domain at cosmos level', () => {
+describe('Domain Feature for CosmosExtension', () => {
+  test('should have a domain at cosmos level', () => {
     expect(cosmosExtensionStack).toHaveOutput({ exportName: 'AppCosExtAppDomainId' });
     expect(cosmosExtensionStack).toHaveOutput({ exportName: 'AppCosExtAppDomainName', outputValue: 'app.domain.com' });
     expect(cosmosExtensionStack).toHaveOutput({ exportName: 'AppCosExtAppDomainNameServers' });
@@ -100,12 +102,12 @@ describe('Domain Feature for Extension', () => {
     });
     expect(solarSystemExtensionStack).toHaveOutput({ exportName: 'AppCosExtGalSysDevAppSubdomainNameServers' });
 
-    expect(solarSystemExtension2Stack).toHaveOutput({ exportName: 'AppCosExtGalSys2TstAppSubdomainId' });
+    expect(solarSystemExtension2Stack).toHaveOutput({ exportName: 'AppCosExtGal2Sys2TstAppSubdomainId' });
     expect(solarSystemExtension2Stack).toHaveOutput({
-      exportName: 'AppCosExtGalSys2TstAppSubdomainName',
+      exportName: 'AppCosExtGal2Sys2TstAppSubdomainName',
       outputValue: 'tst.app.domain.com',
     });
-    expect(solarSystemExtension2Stack).toHaveOutput({ exportName: 'AppCosExtGalSys2TstAppSubdomainNameServers' });
+    expect(solarSystemExtension2Stack).toHaveOutput({ exportName: 'AppCosExtGal2Sys2TstAppSubdomainNameServers' });
 
     expect(cosmosExtensionLinkStack).toHaveResource('Custom::CrossAccountExports');
     expect(cosmosExtensionLinkStack).toHaveResource('AWS::Route53::RecordSet');
