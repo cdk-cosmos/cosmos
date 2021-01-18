@@ -9,6 +9,7 @@ import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar
 import { ISolarSystemExtension, SolarSystemExtensionStack } from '../../solar-system/solar-system-extension-stack';
 import { isCrossAccount } from '../../helpers/utils';
 import { Domain } from './domain-feature-stack';
+import { GalaxyCoreStack, IGalaxyExtension } from '../../galaxy';
 
 export interface SubdomainProps {
   /**
@@ -83,13 +84,17 @@ export class Subdomain extends HostedZone {
           ? this.domain.scope
           : (this.domain.scope as ICosmosExtension).portal;
 
+        const galaxyCore = GalaxyCoreStack.isGalaxyCore(this.scope.galaxy)
+          ? this.scope.galaxy
+          : (this.scope.galaxy as IGalaxyExtension).portal;
+
         if (!this.export.hostedZoneNameServers)
           throw new Error('hostedZoneNameServers export is required for cross account linking');
 
         const crossAccountExports = new CrossAccountExports(zoneScope, `Exports`, {
           serviceToken: cosmosCore.crossAccountExportServiceToken,
           exports: [this.export.zoneName, this.export.hostedZoneNameServers],
-          assumeRoleArn: cosmosCore.cdkMasterRoleStaticArn,
+          assumeRoleArn: galaxyCore.cdkCrossAccountRoleStaticArn,
         });
 
         zoneName = crossAccountExports.get(this.export.zoneName);

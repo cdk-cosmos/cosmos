@@ -11,6 +11,11 @@ import {
 import { IRepository as ICodeRepository, Repository as CodeRepository } from '@aws-cdk/aws-codecommit';
 import { IProject, Project } from '@aws-cdk/aws-codebuild';
 import { IFunction, Function } from '@aws-cdk/aws-lambda';
+import { IRedis, Redis } from '@cosmos-building-blocks/service';
+import {
+  GithubEnterpriseConnection,
+  IGithubEnterpriseConnection,
+} from '@cosmos-building-blocks/pipeline/lib/source/github-enterprise-connection';
 
 export class RemoteZone {
   readonly hostedZoneId: string;
@@ -329,6 +334,69 @@ export class RemoteFunction {
   }
 }
 
+export class RemoteRedis {
+  readonly redisSecurityGroupId: string;
+  readonly redisProtocol: string;
+  readonly redisEndpoint: string;
+  readonly redisPort: string;
+
+  constructor(redis: IRedis & Construct, exportName: string, scope: Construct = redis) {
+    this.redisSecurityGroupId = new CfnOutput(scope, 'RedisSecurityGroupId', {
+      exportName: `${exportName}SecurityGroupId`,
+      value: redis.redisSecurityGroups ? redis.redisSecurityGroups[0].securityGroupId : '',
+    }).exportName as string;
+
+    this.redisProtocol = new CfnOutput(scope, 'RedisProtocol', {
+      exportName: `${exportName}Protocol`,
+      value: String(redis.redisProtocol),
+    }).exportName as string;
+
+    this.redisEndpoint = new CfnOutput(scope, 'RedisEndpoint', {
+      exportName: `${exportName}Endpoint`,
+      value: redis.redisEndpoint,
+    }).exportName as string;
+
+    this.redisPort = new CfnOutput(scope, 'RedisPort', {
+      exportName: `${exportName}Port`,
+      value: redis.redisPort,
+    }).exportName as string;
+  }
+
+  static import(scope: Construct, id: string, exportName: string): IRedis {
+    const redisSecurityGroup = SecurityGroup.fromSecurityGroupId(
+      scope,
+      `${id}SecurityGroup`,
+      Fn.importValue(`${exportName}SecurityGroupId`)
+    );
+    const redisProtocol = Fn.importValue(`${exportName}Protocol`);
+    const redisEndpoint = Fn.importValue(`${exportName}Endpoint`);
+    const redisPort = Fn.importValue(`${exportName}Port`);
+
+    return Redis.fromRedisAttributes(scope, id, {
+      redisSecurityGroups: [redisSecurityGroup],
+      redisProtocol,
+      redisEndpoint,
+      redisPort,
+    });
+  }
+}
+
+export class RemoteGithubEnterpriseConnection {
+  readonly githubEnterpriseConnectionArn: string;
+
+  constructor(connection: IGithubEnterpriseConnection & Construct, exportName: string, scope: Construct = connection) {
+    this.githubEnterpriseConnectionArn = new CfnOutput(scope, 'GithubEnterpriseConnectionArn', {
+      exportName: `${exportName}Arn`,
+      value: connection.connectionArn,
+    }).exportName as string;
+  }
+
+  static import(scope: Construct, id: string, exportName: string): IGithubEnterpriseConnection {
+    const connectionArn = Fn.importValue(`${exportName}Arn`);
+
+    return GithubEnterpriseConnection.fromConnectionArn(scope, id, connectionArn);
+  }
+}
 const expandSubnetIds = (names: string[] | undefined, value: string, aZs: number): string[] => {
   if (names && names.length) {
     return expandCfnArray(Fn.split(',', Fn.importValue(value)), names.length * aZs);

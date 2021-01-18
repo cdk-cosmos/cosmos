@@ -9,7 +9,7 @@ import {
 } from '@aws-cdk/aws-codepipeline';
 import { Action } from '@aws-cdk/aws-codepipeline-actions';
 import { sourceArtifactBounds } from '@aws-cdk/aws-codepipeline-actions/lib/common';
-import { GithubEnterpriseConnection } from './github-enterprise-connection';
+import { IGithubEnterpriseConnection } from './github-enterprise-connection';
 
 export interface GitHubEnterpriseSourceVariables {
   /** The date when the commit was authored, in timestamp format. */
@@ -34,7 +34,7 @@ export interface GithubEnterpriseSourceActionProps extends CommonActionProps {
   /**
    * The Github Enterprise Connection to use
    */
-  readonly connection: GithubEnterpriseConnection;
+  readonly connection: IGithubEnterpriseConnection;
   /**
    * The name of the repo, with the username. e.g. `some-user/my-repo`
    */

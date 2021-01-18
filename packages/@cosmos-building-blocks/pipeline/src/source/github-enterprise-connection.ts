@@ -1,4 +1,4 @@
-import { Construct, ITaggable, Resource, TagManager, TagType } from '@aws-cdk/core';
+import { IConstruct, Construct, Resource } from '@aws-cdk/core';
 import { CfnConnection } from '@aws-cdk/aws-codestarconnections';
 import {
   AwsCustomResource,
@@ -6,7 +6,8 @@ import {
   PhysicalResourceId,
   PhysicalResourceIdReference,
 } from '@aws-cdk/custom-resources';
-import { ISubnet, IVpc, SecurityGroup, SubnetSelection } from '@aws-cdk/aws-ec2';
+import { ISubnet, IVpc, SecurityGroup, SubnetSelection, Peer, Port } from '@aws-cdk/aws-ec2';
+import { PolicyStatement } from '@aws-cdk/aws-iam';
 
 export interface GithubEnterpriseHostProps {
   hostName: string;
@@ -15,10 +16,9 @@ export interface GithubEnterpriseHostProps {
   subnets: SubnetSelection[];
   tlsCertificate?: string;
 }
-export class GithubEnterpriseHost extends Resource implements ITaggable {
-  public readonly tags: TagManager;
+
+export class GithubEnterpriseHost extends Resource {
   public readonly hostArn: string;
-  //   public readonly hostStatus: string;
   public readonly hostName: string;
   public readonly endpoint: string;
   public readonly vpc: IVpc;
@@ -34,8 +34,6 @@ export class GithubEnterpriseHost extends Resource implements ITaggable {
 
     const { endpoint, vpc, subnets, tlsCertificate } = props;
 
-    this.tags = new TagManager(TagType.STANDARD, 'GithubEnterpriseConnection');
-
     this.hostName = this.physicalName;
     this.endpoint = endpoint;
     this.vpc = vpc;
@@ -47,14 +45,18 @@ export class GithubEnterpriseHost extends Resource implements ITaggable {
       }, []);
     this.securityGroup = new SecurityGroup(this, 'HostSecurityGroup', {
       vpc: vpc,
-      allowAllOutbound: true,
+      allowAllOutbound: false,
       description: 'Security Group for Github Enterprise Host',
     });
+    this.securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(443));
+    this.securityGroup.addEgressRule(Peer.anyIpv4(), Port.tcp(443));
+    this.securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(80));
+    this.securityGroup.addEgressRule(Peer.anyIpv4(), Port.tcp(80));
     this.tlsCertificate = tlsCertificate;
 
     const defaultAwsCall = {
-      service: 'CodeStaronnections',
-      physicalResourceId: PhysicalResourceId.of(this.physicalName),
+      service: 'CodeStarconnections',
+      physicalResourceId: PhysicalResourceId.fromResponse('HostArn'),
       parameters: {
         Name: this.physicalName,
         ProviderEndpoint: endpoint,
@@ -62,16 +64,38 @@ export class GithubEnterpriseHost extends Resource implements ITaggable {
         VpcConfiguration: {
           VpcId: vpc.vpcId,
           SubnetIds: this.subnets.map(x => x.subnetId),
-          SecurityGroupIds: this.securityGroup.securityGroupId,
+          SecurityGroupIds: [this.securityGroup.securityGroupId],
           TlsCertificate: tlsCertificate,
         },
       },
     };
 
     this.resource = new AwsCustomResource(this, 'Resource', {
-      policy: AwsCustomResourcePolicy.fromSdkCalls({
-        resources: AwsCustomResourcePolicy.ANY_RESOURCE,
-      }),
+      policy: AwsCustomResourcePolicy.fromStatements([
+        new PolicyStatement({
+          actions: [
+            'codestar-connections:CreateHost',
+            'codestar-connections:UpdateHost',
+            'codestar-connections:DeleteHost',
+          ],
+          resources: ['*'],
+        }),
+        new PolicyStatement({
+          actions: [
+            'ec2:CreateNetworkInterface',
+            'ec2:CreateTags',
+            'ec2:DescribeDhcpOptions',
+            'ec2:DescribeNetworkInterfaces',
+            'ec2:DescribeSubnets',
+            'ec2:DeleteNetworkInterface',
+            'ec2:DescribeVpcs',
+            'ec2:CreateVpcEndpoint',
+            'ec2:DeleteVpcEndpoints',
+            'ec2:DescribeVpcEndpoints',
+          ],
+          resources: ['*'],
+        }),
+      ]),
       onCreate: {
         ...defaultAwsCall,
         action: 'createHost',
@@ -83,6 +107,7 @@ export class GithubEnterpriseHost extends Resource implements ITaggable {
       onDelete: {
         ...defaultAwsCall,
         action: 'deleteHost',
+        physicalResourceId: undefined,
         parameters: {
           HostArn: new PhysicalResourceIdReference(),
         },
@@ -93,12 +118,15 @@ export class GithubEnterpriseHost extends Resource implements ITaggable {
   }
 }
 
+export interface IGithubEnterpriseConnection extends IConstruct {
+  readonly connectionArn: string;
+}
+
 export interface GithubEnterpriseConnectionProps {
   connectionName: string;
   host: GithubEnterpriseHost;
 }
-export class GithubEnterpriseConnection extends Resource implements ITaggable {
-  public readonly tags: TagManager;
+export class GithubEnterpriseConnection extends Resource implements IGithubEnterpriseConnection {
   public readonly connectionArn: string;
   public readonly connectionStatus: string;
   public readonly ownerAccountId: string;
@@ -115,19 +143,29 @@ export class GithubEnterpriseConnection extends Resource implements ITaggable {
 
     this.host = host;
 
-    this.tags = new TagManager(TagType.STANDARD, 'GithubEnterpriseConnection');
-
     this.connectionName = this.physicalName;
 
     this.resource = new CfnConnection(this, 'Resource', {
       connectionName: this.physicalName,
       hostArn: this.host.hostArn,
-      providerType: 'GitHubEnterpriseServer',
-      tags: this.tags.renderTags(),
     });
 
     this.connectionArn = this.resource.attrConnectionArn;
     this.connectionStatus = this.resource.attrConnectionStatus;
     this.ownerAccountId = this.resource.attrOwnerAccountId;
+  }
+
+  static fromConnectionArn(scope: Construct, id: string, connectionArn: string): IGithubEnterpriseConnection {
+    return new GithubEnterpriseConnectionImport(scope, id, connectionArn);
+  }
+}
+
+class GithubEnterpriseConnectionImport extends Construct implements IGithubEnterpriseConnection {
+  readonly connectionArn: string;
+
+  constructor(scope: Construct, id: string, connectionArn: string) {
+    super(scope, id);
+
+    this.connectionArn = connectionArn;
   }
 }

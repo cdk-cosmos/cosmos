@@ -1,0 +1,1567 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Github Enterprise Feature for SolarSystem should have a github nested stack 1`] = `
+Object {
+  "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
+  "Outputs": Object {
+    "PrivateZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysPrivateZoneId",
+      },
+      "Value": Object {
+        "Ref": "PrivateZone",
+      },
+    },
+    "PrivateZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysPrivateZoneName",
+      },
+      "Value": "sys.internal",
+    },
+    "VpcAZs": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcAZs",
+      },
+      "Value": "dummy1a,dummy1b",
+    },
+    "VpcCidrBlock": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcCidrBlock",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Vpc",
+          "CidrBlock",
+        ],
+      },
+    },
+    "VpcId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcId",
+      },
+      "Value": Object {
+        "Ref": "Vpc",
+      },
+    },
+    "VpcIsolatedSubnetRouteTables": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcIsolatedSubnetRouteTableIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Ref": "VpcAppSubnet1RouteTable",
+            },
+            Object {
+              "Ref": "VpcAppSubnet2RouteTable",
+            },
+          ],
+        ],
+      },
+    },
+    "VpcIsolatedSubnets": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcIsolatedSubnetIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Ref": "VpcAppSubnet1Subnet",
+            },
+            Object {
+              "Ref": "VpcAppSubnet2Subnet",
+            },
+          ],
+        ],
+      },
+    },
+    "ZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneId",
+      },
+      "Value": Object {
+        "Ref": "Zone",
+      },
+    },
+    "ZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneName",
+      },
+      "Value": "sys.cos.com",
+    },
+    "ZoneNameServers": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "Zone",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"e0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06\\"",
+      "Type": "String",
+    },
+    "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"e0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06\\"",
+      "Type": "String",
+    },
+    "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"e0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "GithubEnterprise": Object {
+      "Properties": Object {
+        "Parameters": Object {
+          "referencetoCosGalSysVpc054F5599Ref": Object {
+            "Ref": "Vpc",
+          },
+          "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef": Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef": Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "TemplateURL": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://s3.region1.",
+              Object {
+                "Ref": "AWS::URLSuffix",
+              },
+              "/",
+              Object {
+                "Ref": "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06S3Bucket",
+              },
+              "/",
+              Object {
+                "Fn::Select": Array [
+                  0,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06S3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
+              Object {
+                "Fn::Select": Array [
+                  1,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06S3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::Stack",
+    },
+    "PrivateZone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Private Zone for Sys SolarSystem",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "Name": "sys.internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Ref": "Vpc",
+            },
+            "VPCRegion": "region1",
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "Vpc": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/24",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VpcAppSubnet1RouteTable": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet1RouteTableAssociation": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet1RouteTable",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet1Subnet",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet1Subnet": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.0.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcAppSubnet2RouteTable": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet2RouteTableAssociation": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet2RouteTable",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet2Subnet",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet2Subnet": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.0.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcCloudWatchLogsEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcCloudWatchLogsEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region1.logs",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcCloudWatchLogsEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcS3Gateway": Object {
+      "Properties": Object {
+        "RouteTableIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1RouteTable",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2RouteTable",
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".s3",
+            ],
+          ],
+        },
+        "VpcEndpointType": "Gateway",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region1.ssm",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys/Vpc/SsmEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcSsmMessageEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmMessageEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region1.ssmmessages",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmMessageEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys/Vpc/SsmMessageEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "Zone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Zone for Sys SolarSystem",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "Name": "sys.cos.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "ZoneDelegation": Object {
+      "Properties": Object {
+        "Comment": "Core Zone Delegation for Sys SolarSystem.",
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputRefRootZone2F3E9CEF",
+        },
+        "Name": "sys.cos.com.",
+        "ResourceRecords": Object {
+          "Fn::GetAtt": Array [
+            "Zone",
+            "NameServers",
+          ],
+        },
+        "TTL": "1800",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;
+
+exports[`Github Enterprise Feature for SolarSystem should have a github nested stack 2`] = `
+Object {
+  "Description": "Add Github Enterprise Features to the SolarSystem",
+  "Outputs": Object {
+    "ConnectionGithubEnterpriseConnectionArn": Object {
+      "Export": Object {
+        "Name": "CoreGalSysGithubEnterpriseConnectionArn",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Connection",
+          "ConnectionArn",
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "referencetoCosGalSysVpc054F5599Ref": Object {
+      "Type": "String",
+    },
+    "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef": Object {
+      "Type": "String",
+    },
+    "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef": Object {
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "AWS679f53fac002430cb0da5b7982bd2287": Object {
+      "DependsOn": Array [
+        "AWS679f53fac002430cb0da5b7982bd2287ServiceRole",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "s3BucketName",
+          "S3Key": "s3ObjectKey",
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "AWS679f53fac002430cb0da5b7982bd2287ServiceRole",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "GithubEnterprise",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "Timeout": 120,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "GithubEnterprise",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "Connection": Object {
+      "Properties": Object {
+        "ConnectionName": "GithubEnterpriseConnection",
+        "HostArn": Object {
+          "Fn::GetAtt": Array [
+            "Host",
+            "HostArn",
+          ],
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "GithubEnterprise",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+      },
+      "Type": "AWS::CodeStarConnections::Connection",
+    },
+    "Host": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "HostCustomResourcePolicy",
+      ],
+      "Properties": Object {
+        "Create": Object {
+          "action": "createHost",
+          "parameters": Object {
+            "Name": "GithubEnterpriseHost",
+            "ProviderEndpoint": "https://test.com",
+            "ProviderType": "GitHubEnterpriseServer",
+            "VpcConfiguration": Object {
+              "SecurityGroupIds": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "HostSecurityGroup",
+                    "GroupId",
+                  ],
+                },
+              ],
+              "SubnetIds": Array [
+                Object {
+                  "Ref": "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef",
+                },
+                Object {
+                  "Ref": "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef",
+                },
+              ],
+              "VpcId": Object {
+                "Ref": "referencetoCosGalSysVpc054F5599Ref",
+              },
+            },
+          },
+          "physicalResourceId": Object {
+            "responsePath": "HostArn",
+          },
+          "service": "CodeStarconnections",
+        },
+        "Delete": Object {
+          "action": "deleteHost",
+          "parameters": Object {
+            "HostArn": "PHYSICAL:RESOURCEID:",
+          },
+          "service": "CodeStarconnections",
+        },
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "AWS679f53fac002430cb0da5b7982bd2287",
+            "Arn",
+          ],
+        },
+        "Update": Object {
+          "action": "updateHost",
+          "parameters": Object {
+            "Name": "GithubEnterpriseHost",
+            "ProviderEndpoint": "https://test.com",
+            "ProviderType": "GitHubEnterpriseServer",
+            "VpcConfiguration": Object {
+              "SecurityGroupIds": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "HostSecurityGroup",
+                    "GroupId",
+                  ],
+                },
+              ],
+              "SubnetIds": Array [
+                Object {
+                  "Ref": "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef",
+                },
+                Object {
+                  "Ref": "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef",
+                },
+              ],
+              "VpcId": Object {
+                "Ref": "referencetoCosGalSysVpc054F5599Ref",
+              },
+            },
+          },
+          "physicalResourceId": Object {
+            "responsePath": "HostArn",
+          },
+          "service": "CodeStarconnections",
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "HostCustomResourcePolicy": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "codestar-connections:CreateHost",
+                "codestar-connections:UpdateHost",
+                "codestar-connections:DeleteHost",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "ec2:CreateNetworkInterface",
+                "ec2:CreateTags",
+                "ec2:DescribeDhcpOptions",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeVpcs",
+                "ec2:CreateVpcEndpoint",
+                "ec2:DeleteVpcEndpoints",
+                "ec2:DescribeVpcEndpoints",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "HostCustomResourcePolicy",
+        "Roles": Array [
+          Object {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "HostSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Security Group for Github Enterprise Host",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:443",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:443",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "GithubEnterprise",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "referencetoCosGalSysVpc054F5599Ref",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+  },
+}
+`;
+
+exports[`Github Enterprise for SolarSystemExtension should have a github nested stack 1`] = `
+Object {
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Resources": Object {
+    "TestBuild": Object {
+      "Properties": Object {
+        "Artifacts": Object {
+          "Type": "NO_ARTIFACTS",
+        },
+        "EncryptionKey": "alias/aws/s3",
+        "Environment": Object {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "Image": "aws/codebuild/standard:4.0",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER",
+        },
+        "ServiceRole": Object {
+          "Fn::GetAtt": Array [
+            "TestRole",
+            "Arn",
+          ],
+        },
+        "Source": Object {
+          "InsecureSsl": true,
+          "Location": "https://test.com/test/test.git",
+          "ReportBuildStatus": true,
+          "Type": "GITHUB_ENTERPRISE",
+        },
+        "SourceVersion": "master",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "Sys",
+          },
+        ],
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "TestCodeArtifactBucket": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "AccessControl": "LogDeliveryWrite",
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "LoggingConfiguration": Object {
+          "LogFilePrefix": "BucketAccessLogs/",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "Sys",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "TestCodeArtifactBucketPolicy": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "TestCodeArtifactBucket",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": false,
+                },
+              },
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "TestCodeArtifactBucket",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+              "Sid": "ForceSSLOnly",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "TestPipeline": Object {
+      "DependsOn": Array [
+        "TestRoleDefaultPolicy",
+        "TestRole",
+      ],
+      "Properties": Object {
+        "ArtifactStore": Object {
+          "Location": Object {
+            "Ref": "TestCodeArtifactBucket",
+          },
+          "Type": "S3",
+        },
+        "RoleArn": Object {
+          "Fn::GetAtt": Array [
+            "TestRole",
+            "Arn",
+          ],
+        },
+        "Stages": Array [
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "CodeStarSourceConnection",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "BranchName": "master",
+                  "ConnectionArn": Object {
+                    "Fn::ImportValue": "CoreGalSysGithubEnterpriseConnectionArn",
+                  },
+                  "FullRepositoryId": "test/test",
+                  "OutputArtifactFormat": "CODE_ZIP",
+                },
+                "Name": "CodeCheckout",
+                "Namespace": "CodeCheckout",
+                "OutputArtifacts": Array [
+                  Object {
+                    "Name": "CodeOutput",
+                  },
+                ],
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "TestPipelineSourceCodeCheckoutCodePipelineActionRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Source",
+          },
+          Object {
+            "Actions": Array [
+              Object {
+                "ActionTypeId": Object {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": Object {
+                  "ProjectName": Object {
+                    "Ref": "TestBuild",
+                  },
+                },
+                "InputArtifacts": Array [
+                  Object {
+                    "Name": "CodeOutput",
+                  },
+                ],
+                "Name": "CodeBuild",
+                "Namespace": "CodeBuild",
+                "RoleArn": Object {
+                  "Fn::GetAtt": Array [
+                    "TestRole",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Build",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "Sys",
+          },
+        ],
+      },
+      "Type": "AWS::CodePipeline::Pipeline",
+    },
+    "TestPipelineSourceCodeCheckoutCodePipelineActionRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account1:root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "Sys",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TestRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Array [
+                  "codepipeline.amazonaws.com",
+                  "codebuild.amazonaws.com",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "Sys",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TestRoleDefaultPolicy": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:region1:account1:log-group:/aws/codebuild/",
+                      Object {
+                        "Ref": "TestBuild",
+                      },
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:region1:account1:log-group:/aws/codebuild/",
+                      Object {
+                        "Ref": "TestBuild",
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:",
+                    Object {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codebuild:region1:account1:report-group/",
+                    Object {
+                      "Ref": "TestBuild",
+                    },
+                    "-*",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "TestCodeArtifactBucket",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "TestCodeArtifactBucket",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "TestPipelineSourceCodeCheckoutCodePipelineActionRole",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "TestRole",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "TestBuild",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "TestCodeArtifactBucket",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "TestCodeArtifactBucket",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TestRoleDefaultPolicy",
+        "Roles": Array [
+          Object {
+            "Ref": "TestRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;
