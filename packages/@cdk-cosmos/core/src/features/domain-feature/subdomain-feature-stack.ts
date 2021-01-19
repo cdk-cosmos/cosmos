@@ -105,7 +105,7 @@ export class Subdomain extends HostedZone {
 
       new ZoneDelegationRecord(zoneScope, 'ZoneDelegation', {
         zone: this.domain,
-        recordName: zoneName,
+        recordName: zoneName + '.',
         nameServers: hostedZoneNameServers,
         ttl: Duration.minutes(5),
         comment: `Subdomain Delegation for ${this.zoneName}.`,
