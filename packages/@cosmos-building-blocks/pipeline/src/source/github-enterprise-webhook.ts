@@ -1,6 +1,15 @@
-import { CfnOutput, Construct, Lazy } from '@aws-cdk/core';
+import {
+  CfnOutput,
+  Construct,
+  Lazy,
+  CustomResource,
+  CustomResourceProvider,
+  CustomResourceProviderRuntime,
+} from '@aws-cdk/core';
 import { IProject, Source, SourceConfig, FilterGroup } from '@aws-cdk/aws-codebuild';
-import { AwsCustomResource, AwsCustomResourcePolicy, PhysicalResourceId } from '@aws-cdk/custom-resources';
+import '@cosmos-building-blocks/common/lib/custom-resource-provider';
+import { GithubEnterpriseWebhookProps } from './github-enterprise-webhook-handler/types';
+import { PolicyStatement, Role, ServicePrincipal } from '@aws-cdk/aws-iam';
 
 export interface WebhookCustomResourceProps {
   readonly project: IProject;
@@ -13,51 +22,52 @@ export class WebhookCustomResource extends Construct {
 
     const { project, webhookFilters } = props;
 
-    const projectName = Lazy.stringValue({
+    const role = project.role as Role;
+
+    const projectName = Lazy.string({
       produce: () => project.projectName,
     });
-    const projectArn = Lazy.stringValue({
+    const projectArn = Lazy.string({
       produce: () => project.projectArn,
     });
 
-    const defaultAwsCall = {
-      service: 'CodeBuild',
-      physicalResourceId: PhysicalResourceId.of(`${projectName}Webhook`),
-      parameters: {
-        projectName: projectName,
-        buildType: 'BUILD',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        filterGroups: webhookFilters.map((x: any) => x._toJson()),
-      },
+    const serviceProvider = CustomResourceProvider.getOrCreateProvider(this, 'Custom::WebhookCustomResource', {
+      codeDirectory: `${__dirname}/github-enterprise-webhook-handler`,
+      runtime: CustomResourceProviderRuntime.NODEJS_12,
+      role: role,
+    });
+
+    const principal = new ServicePrincipal('lambda.amazonaws.com');
+    const statement = new PolicyStatement({
+      principals: [principal],
+      actions: [principal.assumeRoleAction],
+    });
+    role.assumeRolePolicy?.addStatements(statement);
+
+    role.addToPrincipalPolicy(
+      new PolicyStatement({
+        actions: ['codebuild:CreateWebhook', 'codebuild:UpdateWebhook', 'codebuild:DeleteWebhook'],
+        resources: [projectArn],
+      })
+    );
+
+    const properties: GithubEnterpriseWebhookProps = {
+      projectName,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      filterGroups: webhookFilters.map((x) => x._toJson()) as any,
     };
 
-    const webhook = new AwsCustomResource(this, 'Webhook', {
-      role: project.role,
-      policy: AwsCustomResourcePolicy.fromSdkCalls({
-        resources: [projectArn],
-      }),
-      onCreate: {
-        ...defaultAwsCall,
-        action: 'createWebhook',
-      },
-      onUpdate: {
-        ...defaultAwsCall,
-        action: 'updateWebhook',
-      },
-      onDelete: {
-        ...defaultAwsCall,
-        action: 'deleteWebhook',
-        parameters: {
-          projectName: defaultAwsCall.parameters.projectName,
-        },
-      },
+    const webhook = new CustomResource(this, 'Webhook', {
+      serviceToken: serviceProvider.serviceToken,
+      properties: properties,
+      resourceType: 'Custom::WebhookCustomResource',
     });
 
     new CfnOutput(this, 'Url', {
-      value: webhook.getResponseField('webhook.payloadUrl'),
+      value: webhook.getAttString('Url'),
     });
     new CfnOutput(this, 'Secret', {
-      value: webhook.getResponseField('webhook.secret'),
+      value: webhook.getAttString('Secret'),
     });
   }
 }
@@ -68,10 +78,10 @@ interface GitHubEnterpriseSource extends Source {
 }
 
 const gitHubEnterprise = Source.gitHubEnterprise;
-Source.gitHubEnterprise = function(props): Source {
+Source.gitHubEnterprise = function (props): Source {
   const source = gitHubEnterprise(props) as GitHubEnterpriseSource;
   const bind = source.bind.bind(source);
-  source.bind = function(scope, project): SourceConfig {
+  source.bind = function (scope, project): SourceConfig {
     const config = bind(scope, project);
     if (this.webhook) {
       new WebhookCustomResource(scope, 'Webhook', {

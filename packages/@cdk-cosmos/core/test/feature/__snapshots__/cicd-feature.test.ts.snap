@@ -321,6 +321,7 @@ Object {
             },
           ],
           "Image": "aws/codebuild/standard:4.0",
+          "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
@@ -737,16 +738,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cf\\"",
+    "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6\\"",
       "Type": "String",
     },
-    "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cf\\"",
+    "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6\\"",
       "Type": "String",
     },
-    "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cf\\"",
+    "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6\\"",
       "Type": "String",
     },
   },
@@ -777,7 +778,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3Bucket",
+                "Ref": "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6S3Bucket",
               },
               "/",
               Object {
@@ -787,7 +788,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3VersionKey",
+                        "Ref": "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6S3VersionKey",
                       },
                     ],
                   },
@@ -800,7 +801,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters87578b6f373ff0bb2b93167fa52ebf7f3d2cbc93698ef4e7df4399fc483d03cfS3VersionKey",
+                        "Ref": "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6S3VersionKey",
                       },
                     ],
                   },
@@ -1640,6 +1641,7 @@ Object {
             },
           ],
           "Image": "aws/codebuild/standard:4.0",
+          "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },

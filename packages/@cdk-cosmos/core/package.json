@@ -30,20 +30,20 @@
     "@cosmos-building-blocks/pipeline": "^0.7.2"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-certificatemanager": "^1.70.0",
-    "@aws-cdk/aws-codebuild": "^1.70.0",
-    "@aws-cdk/aws-codecommit": "^1.70.0",
-    "@aws-cdk/aws-codepipeline": "^1.70.0",
-    "@aws-cdk/aws-codepipeline-actions": "^1.70.0",
-    "@aws-cdk/aws-ec2": "^1.70.0",
-    "@aws-cdk/aws-ecr": "^1.70.0",
-    "@aws-cdk/aws-ecs": "^1.70.0",
-    "@aws-cdk/aws-elasticloadbalancingv2": "^1.70.0",
-    "@aws-cdk/aws-elasticloadbalancingv2-targets": "^1.70.0",
-    "@aws-cdk/aws-iam": "^1.70.0",
-    "@aws-cdk/aws-kms": "^1.70.0",
-    "@aws-cdk/aws-lambda": "^1.70.0",
-    "@aws-cdk/aws-route53": "^1.70.0",
-    "@aws-cdk/core": "^1.70.0"
+    "@aws-cdk/aws-certificatemanager": "^1.86.0",
+    "@aws-cdk/aws-codebuild": "^1.86.0",
+    "@aws-cdk/aws-codecommit": "^1.86.0",
+    "@aws-cdk/aws-codepipeline": "^1.86.0",
+    "@aws-cdk/aws-codepipeline-actions": "^1.86.0",
+    "@aws-cdk/aws-ec2": "^1.86.0",
+    "@aws-cdk/aws-ecr": "^1.86.0",
+    "@aws-cdk/aws-ecs": "^1.86.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.86.0",
+    "@aws-cdk/aws-elasticloadbalancingv2-targets": "^1.86.0",
+    "@aws-cdk/aws-iam": "^1.86.0",
+    "@aws-cdk/aws-kms": "^1.86.0",
+    "@aws-cdk/aws-lambda": "^1.86.0",
+    "@aws-cdk/aws-route53": "^1.86.0",
+    "@aws-cdk/core": "^1.86.0"
   }
 }

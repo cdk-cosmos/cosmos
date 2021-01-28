@@ -9,7 +9,7 @@ module.exports = {
   setupFiles: [`${__dirname}/src/test/jest.setup.ts`],
   globals: {
     'ts-jest': {
-      tsConfig: `${__dirname}/tsconfig.base.json`,
+      tsconfig: `${__dirname}/tsconfig.base.json`,
     },
   },
   // moduleNameMapper: {
