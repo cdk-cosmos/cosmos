@@ -44,7 +44,7 @@ export class WebhookCustomResource extends Construct {
     });
     role.assumeRolePolicy?.addStatements(statement);
 
-    role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSLambdaBasicExecutionRole'));
+    role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'));
 
     role.addToPrincipalPolicy(
       new PolicyStatement({
