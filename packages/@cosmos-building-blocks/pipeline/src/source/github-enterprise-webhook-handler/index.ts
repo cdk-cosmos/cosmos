@@ -22,7 +22,7 @@ type Response =
 
 const codebuild = new CodeBuild();
 
-export async function onEvent(event: Event): Promise<Response> {
+export async function handler(event: Event): Promise<Response> {
   const props: GithubEnterpriseWebhookProps = { ...(event.ResourceProperties as any), buildType: 'BUILD' };
   switch (event.RequestType) {
     case 'Create':
