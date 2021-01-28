@@ -9,7 +9,7 @@ import {
 import { IProject, Source, SourceConfig, FilterGroup } from '@aws-cdk/aws-codebuild';
 import '@cosmos-building-blocks/common/lib/custom-resource-provider';
 import { GithubEnterpriseWebhookProps } from './github-enterprise-webhook-handler/types';
-import { PolicyStatement, Role, ServicePrincipal } from '@aws-cdk/aws-iam';
+import { ManagedPolicy, PolicyStatement, Role, ServicePrincipal } from '@aws-cdk/aws-iam';
 
 export interface WebhookCustomResourceProps {
   readonly project: IProject;
@@ -43,6 +43,8 @@ export class WebhookCustomResource extends Construct {
       actions: [principal.assumeRoleAction],
     });
     role.assumeRolePolicy?.addStatements(statement);
+
+    role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSLambdaBasicExecutionRole'));
 
     role.addToPrincipalPolicy(
       new PolicyStatement({
