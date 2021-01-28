@@ -36,7 +36,9 @@ export async function handler(event: Event): Promise<Response> {
 }
 
 const createWebSocket = async (props: GithubEnterpriseWebhookProps): Promise<Response> => {
-  const response = await codebuild.createWebhook(props).promise();
+  const { projectName, buildType, filterGroups } = props;
+
+  const response = await codebuild.createWebhook({ projectName, buildType, filterGroups }).promise();
 
   return {
     PhysicalResourceId: `${props.projectName}Webhook`,
@@ -48,7 +50,9 @@ const createWebSocket = async (props: GithubEnterpriseWebhookProps): Promise<Res
 };
 
 const updateWebSocket = async (props: GithubEnterpriseWebhookProps): Promise<Response> => {
-  const response = await codebuild.updateWebhook(props).promise();
+  const { projectName, buildType, filterGroups } = props;
+
+  const response = await codebuild.updateWebhook({ projectName, buildType, filterGroups }).promise();
 
   return {
     Data: {
