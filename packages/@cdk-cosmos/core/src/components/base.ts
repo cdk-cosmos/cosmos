@@ -110,7 +110,6 @@ export class BaseNestedStack extends NestedStack {
 
     // Change Nested Stack Naming
     this.nestedStackResource?.overrideLogicalId(id);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (this as any).templateFile = `${this.nestedStackParent?.stackName}${id}.nested.template.json`;
   }
 
@@ -160,18 +159,18 @@ declare module '@aws-cdk/core/lib/construct-compat' {
   }
 }
 
-Construct.prototype.evalId = function(pattern): string {
+Construct.prototype.evalId = function (pattern): string {
   return generateScopeId({
     scope: this,
     pattern: pattern,
   });
 };
 
-Construct.prototype.nodeId = function(id, delimiter, pattern, type): string {
+Construct.prototype.nodeId = function (id, delimiter, pattern, type): string {
   return generateNodeId({ scope: this, pattern, id, type, delimiter });
 };
 
-Construct.prototype.singletonId = function(id, delimiter, type): string {
+Construct.prototype.singletonId = function (id, delimiter, type): string {
   return generateSingletonId({ scope: this, id, type, delimiter });
 };
 

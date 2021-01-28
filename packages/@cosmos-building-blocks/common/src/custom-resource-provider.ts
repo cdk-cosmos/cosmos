@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CfnResource } from '@aws-cdk/core';
 import { CfnRole, IRole } from '@aws-cdk/aws-iam';
 import { CustomResourceProvider } from '@aws-cdk/core/lib/custom-resource-provider/custom-resource-provider';
@@ -14,7 +13,7 @@ declare module '@aws-cdk/core/lib/custom-resource-provider/custom-resource-provi
 
 const getOrCreateProvider = CustomResourceProvider.getOrCreateProvider;
 
-CustomResourceProvider.getOrCreateProvider = function(scope, uniqueid, props): CustomResourceProvider {
+CustomResourceProvider.getOrCreateProvider = function (scope, uniqueid, props): CustomResourceProvider {
   const provider = getOrCreateProvider(scope, uniqueid, props);
 
   if (props.role) {

@@ -53,7 +53,6 @@ export class WebhookCustomResource extends Construct {
 
     const properties: GithubEnterpriseWebhookProps = {
       projectName,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       filterGroups: webhookFilters.map((x) => x._toJson()) as any,
     };
 

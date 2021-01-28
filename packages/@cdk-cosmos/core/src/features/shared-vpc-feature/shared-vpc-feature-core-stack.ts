@@ -43,7 +43,7 @@ declare module '../../galaxy/galaxy-core-stack' {
   }
 }
 
-GalaxyCoreStack.prototype.addSharedVpc = function(props?: SharedVpcFeatureCoreStackProps): SharedVpcFeatureCoreStack {
+GalaxyCoreStack.prototype.addSharedVpc = function (props?: SharedVpcFeatureCoreStackProps): SharedVpcFeatureCoreStack {
   this.sharedVpc = new SharedVpcFeatureCoreStack(this, 'SharedVpc', props);
   return this.sharedVpc;
 };

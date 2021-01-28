@@ -209,7 +209,7 @@ declare module '../../solar-system/solar-system-core-stack' {
   }
 }
 
-SolarSystemCoreStack.prototype.addEcs = function(props?: EcsSolarSystemCoreStackProps): EcsFeatureCoreStack {
+SolarSystemCoreStack.prototype.addEcs = function (props?: EcsSolarSystemCoreStackProps): EcsFeatureCoreStack {
   this.ecs = new EcsFeatureCoreStack(this, 'Ecs', props);
   return this.ecs;
 };

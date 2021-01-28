@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import 'source-map-support/register';
 import { CONTEXT_ENV, ENABLE_DIFF_NO_FAIL_CONTEXT } from '@aws-cdk/cx-api';

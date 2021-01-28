@@ -54,7 +54,6 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
     Tags.of(this).add('cosmos:galaxy', this.node.id);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static isGalaxyCore(x: any): x is GalaxyCoreStack {
     return typeof x === 'object' && x !== null && GALAXY_CORE_SYMBOL in x;
   }

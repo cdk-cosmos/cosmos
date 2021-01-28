@@ -15,7 +15,7 @@ interface Attributes {
 export const handler = async (
   event: CloudFormationCustomResourceEvent
 ): Promise<Partial<CloudFormationCustomResourceResponse> | undefined> => {
-  const { exports, shouldErrorIfNotFound, assumeRoleArn } = (event.ResourceProperties as object) as Props;
+  const { exports, shouldErrorIfNotFound, assumeRoleArn } = (event.ResourceProperties as any) as Props;
   const attributes: Attributes = {};
 
   console.log('Event:', JSON.stringify(event, null, 2));
@@ -30,7 +30,7 @@ export const handler = async (
   const cfnExports = await getExports(cloudformation);
 
   for (const exp of exports) {
-    const ref = cfnExports.find(x => x.Name === exp);
+    const ref = cfnExports.find((x) => x.Name === exp);
     if (!ref && shouldErrorIfNotFound) throw new Error(`Export ${exp} not found.`);
     attributes[exp] = ref?.Value || '';
   }
@@ -47,7 +47,7 @@ const getCredential = (props: AssumeRoleRequest): Promise<ChainableTemporaryCred
     const credential = new ChainableTemporaryCredentials({
       params: props,
     });
-    credential.get(error => {
+    credential.get((error) => {
       if (error) rej(error);
       res(credential);
     });

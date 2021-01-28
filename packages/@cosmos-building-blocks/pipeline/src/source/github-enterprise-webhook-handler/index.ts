@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CodeBuild } from 'aws-sdk';
 import {
   CloudFormationCustomResourceCreateEvent,

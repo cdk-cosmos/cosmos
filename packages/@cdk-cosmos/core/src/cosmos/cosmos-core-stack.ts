@@ -75,7 +75,6 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
     Tags.of(this).add('cosmos', this.node.id);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static isCosmosCore(x: any): x is CosmosCoreStack {
     return typeof x === 'object' && x !== null && COSMOS_CORE_SYMBOL in x;
   }

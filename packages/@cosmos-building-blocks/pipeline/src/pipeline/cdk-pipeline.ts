@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Construct, Stack, IConstruct, Lazy, IResolvable, PhysicalName } from '@aws-cdk/core';
 import { IRepository } from '@aws-cdk/aws-codecommit';
 import { Pipeline, Artifact, IAction, IStage } from '@aws-cdk/aws-codepipeline';
@@ -140,7 +139,7 @@ export class CdkPipeline extends Construct {
       STACKS: {
         type: BuildEnvironmentVariableType.PLAINTEXT,
         value: Lazy.stringValue({
-          produce: context => this.stacks.resolve(context).join(' '),
+          produce: (context) => this.stacks.resolve(context).join(' '),
         }),
       },
       ...deployEnvs,
@@ -265,7 +264,7 @@ export class CdkPipeline extends Construct {
   preparePipeline(): void {
     const stacks = Stack.of(this).resolve(this.stacks) as string[];
     const stackStages = findStacksFromCdkDeployActions(this.pipeline);
-    const remainingStacks = stacks.filter(x => !stackStages.includes(x));
+    const remainingStacks = stacks.filter((x) => !stackStages.includes(x));
     const cdkOutputArtifact = findOutputFromCdkCheckout(this.pipeline.stages) as Artifact;
 
     if (remainingStacks.length) {
@@ -336,7 +335,7 @@ const findOutputFromCdkCheckout = (stages: IStage[]): Artifact | undefined => {
       res.push(...item.actions);
       return res;
     }, [])
-    .find(x => x.actionProperties.actionName === 'CdkCheckout');
+    .find((x) => x.actionProperties.actionName === 'CdkCheckout');
   if (!action) return undefined;
   if (!action.actionProperties.outputs || !action.actionProperties.outputs.length) return undefined;
   return action.actionProperties.outputs[0];
@@ -356,11 +355,11 @@ const findStacksFromCdkDeployActions = (pipeline: Pipeline): string[] =>
         if (!item._props.exclusive) {
           const allStacks = findAllStacksFromCdkApp(pipeline);
           const deps = stacks
-            .map(x => allStacks.find(y => x === y.stackName) as Stack)
-            .filter(x => x)
-            .map(x => findStackDependencies(x))
+            .map((x) => allStacks.find((y) => x === y.stackName) as Stack)
+            .filter((x) => x)
+            .map((x) => findStackDependencies(x))
             .flat()
-            .map(x => x.stackName);
+            .map((x) => x.stackName);
           for (const stack of deps) {
             if (!res.includes(stack)) res.push(stack);
           }
@@ -373,16 +372,16 @@ const findAllStacksFromCdkApp = (scope: IConstruct): Stack[] => {
   const stacks = scope.node.scopes[0].node
     .findAll()
     .filter<Stack>(Stack.isStack)
-    .filter(x => !x.nested);
+    .filter((x) => !x.nested);
   return stacks;
 };
 
 const findStackDependencies = (stack: Stack): Stack[] => {
   const deps = [
     ...stack.dependencies,
-    ...stack.node.dependencies.filter(x => Stack.of(x.source) === stack).map(x => Stack.of(x.target)),
+    ...stack.node.dependencies.filter((x) => Stack.of(x.source) === stack).map((x) => Stack.of(x.target)),
   ]
-    .filter(x => x !== stack)
+    .filter((x) => x !== stack)
     .reduce<Stack[]>((res, item) => {
       if (!res.includes(item)) {
         res.push(item, ...findStackDependencies(item));
@@ -394,5 +393,5 @@ const findStackDependencies = (stack: Stack): Stack[] => {
 };
 
 const stackNames = (stacks: Array<Stack | string>): string[] => {
-  return stacks.map(x => (typeof x === 'string' ? x : x.stackName));
+  return stacks.map((x) => (typeof x === 'string' ? x : x.stackName));
 };

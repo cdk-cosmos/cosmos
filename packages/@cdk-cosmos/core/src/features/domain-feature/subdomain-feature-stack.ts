@@ -126,7 +126,7 @@ declare module '../../solar-system/solar-system-extension-stack' {
   }
 }
 
-SolarSystemCoreStack.prototype.addSubdomain = function(id, domain, subdomain): Subdomain {
+SolarSystemCoreStack.prototype.addSubdomain = function (id, domain, subdomain): Subdomain {
   const resource = new Subdomain(this, id, {
     domain: domain,
     subdomain: subdomain,
@@ -135,7 +135,7 @@ SolarSystemCoreStack.prototype.addSubdomain = function(id, domain, subdomain): S
   return resource;
 };
 
-SolarSystemExtensionStack.prototype.addSubdomain = function(id, domain, subdomain): Subdomain {
+SolarSystemExtensionStack.prototype.addSubdomain = function (id, domain, subdomain): Subdomain {
   const resource = new Subdomain(this, id, {
     domain: domain,
     subdomain: subdomain,

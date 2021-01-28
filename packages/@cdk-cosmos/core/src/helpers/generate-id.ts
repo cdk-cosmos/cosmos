@@ -9,8 +9,8 @@ export function nodeId(props: { context: IKeyValue[]; pattern: string; delimiter
   context
     .filter(isNotHidden)
     .reduce(isUnique, [])
-    .forEach(x => selectors.visit(x));
-  const selectedIds = selectors.render().map(x => x.value);
+    .forEach((x) => selectors.visit(x));
+  const selectedIds = selectors.render().map((x) => x.value);
   return selectedIds.join(delimiter).slice(0, 240);
 }
 
@@ -33,12 +33,12 @@ class Selectors {
   }
 
   public visit(item: IKeyValue): void {
-    this.selectors.forEach(x => x.visit(item));
+    this.selectors.forEach((x) => x.visit(item));
   }
 
   public render(): IKeyValue[] {
     return this.selectors
-      .map(x => x.render())
+      .map((x) => x.render())
       .reduce((result, item) => {
         result.push(...item);
         return result;

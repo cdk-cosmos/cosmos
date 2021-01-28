@@ -36,7 +36,7 @@ declare module '../../solar-system/solar-system-core-import' {
   }
 }
 
-SolarSystemCoreImport.prototype.addGithubEnterprise = function(): GithubEnterpriseFeatureCoreImport {
+SolarSystemCoreImport.prototype.addGithubEnterprise = function (): GithubEnterpriseFeatureCoreImport {
   this.githubEnterprise = new GithubEnterpriseFeatureCoreImport(this, 'GithubEnterprise', {
     solarSystem: this,
   });

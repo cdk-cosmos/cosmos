@@ -57,7 +57,7 @@ declare module '../../solar-system/solar-system-extension-stack' {
   }
 }
 
-SolarSystemCoreStack.prototype.addRedis = function(id, props): RedisFeatureStack {
+SolarSystemCoreStack.prototype.addRedis = function (id, props): RedisFeatureStack {
   return new RedisFeatureStack(this, id, {
     ...props,
     vpc: this.vpc,
@@ -65,7 +65,7 @@ SolarSystemCoreStack.prototype.addRedis = function(id, props): RedisFeatureStack
   });
 };
 
-SolarSystemExtensionStack.prototype.addRedis = function(id, props): RedisFeatureStack {
+SolarSystemExtensionStack.prototype.addRedis = function (id, props): RedisFeatureStack {
   return new RedisFeatureStack(this, id, {
     ...props,
     vpc: this.portal.vpc,

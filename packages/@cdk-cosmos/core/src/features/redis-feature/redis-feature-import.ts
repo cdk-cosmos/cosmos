@@ -27,7 +27,7 @@ declare module '../../solar-system/solar-system-core-import' {
   }
 }
 
-SolarSystemCoreImport.prototype.addRedis = function(id): RedisFeatureImport {
+SolarSystemCoreImport.prototype.addRedis = function (id): RedisFeatureImport {
   return new RedisFeatureImport(this, id, {
     exportName: this.singletonId(id),
   });

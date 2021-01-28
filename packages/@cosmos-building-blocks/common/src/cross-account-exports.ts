@@ -51,7 +51,7 @@ export class CrossAccountExports extends Construct {
     if (typeof name === 'string') {
       return this.getRef(name).toString();
     }
-    return this.getRef(name).map(x => x.toString());
+    return this.getRef(name).map((x) => x.toString());
   }
 
   getRef(name: string): Reference;
@@ -61,9 +61,9 @@ export class CrossAccountExports extends Construct {
       return this.resource.getAtt(name);
     }
     if (name) {
-      return name.map(x => this.resource.getAtt(x));
+      return name.map((x) => this.resource.getAtt(x));
     }
-    return this.exports.map(x => this.resource.getAtt(x));
+    return this.exports.map((x) => this.resource.getAtt(x));
   }
 }
 
