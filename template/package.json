@@ -26,6 +26,6 @@
     "clean": "rm -rf lib"
   },
   "peerDependencies": {
-    "@aws-cdk/core": "^1.86.0"
+    "@aws-cdk/core": "^1.80.0"
   }
 }
