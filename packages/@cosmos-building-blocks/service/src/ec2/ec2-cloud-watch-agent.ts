@@ -118,10 +118,7 @@ export class CloudWatchAgent extends Construct {
 
   addCpuMetric(): this {
     this.addMetric(
-      new CloudWatchMetricBuilder('cpu')
-        .addMeasurement('usage_nice')
-        .addProperty('totalcpu', true)
-        .toMetric()
+      new CloudWatchMetricBuilder('cpu').addMeasurement('usage_nice').addProperty('totalcpu', true).toMetric()
     );
     return this;
   }
@@ -130,12 +127,7 @@ export class CloudWatchAgent extends Construct {
     return this;
   }
   addDiskMetric(): this {
-    this.addMetric(
-      new CloudWatchMetricBuilder('disk')
-        .addMeasurement('used_percent')
-        .addResource('*')
-        .toMetric()
-    );
+    this.addMetric(new CloudWatchMetricBuilder('disk').addMeasurement('used_percent').addResource('*').toMetric());
     return this;
   }
   addNetworkMetric(): this {
@@ -146,17 +138,12 @@ export class CloudWatchAgent extends Construct {
   private renderConfig(): object {
     return {
       agent: {
-        // eslint-disable-next-line @typescript-eslint/camelcase
         metrics_collection_interval: this.interval,
-        // eslint-disable-next-line @typescript-eslint/camelcase
         omit_hostname: this.omitHostname,
-        // eslint-disable-next-line @typescript-eslint/camelcase
         run_as_user: this.runAsUser,
       },
       metrics: {
-        // eslint-disable-next-line @typescript-eslint/camelcase
         append_dimensions: this.dimensions,
-        // eslint-disable-next-line @typescript-eslint/camelcase
         metrics_collected: this.metrics.reduce<Record<string, object>>((result, { name, ...props }) => {
           result[name] = props;
           return result;
@@ -166,7 +153,6 @@ export class CloudWatchAgent extends Construct {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface CloudWatchMetric extends Record<string, any> {
   name: string;
   namespace: string;
@@ -184,7 +170,6 @@ export class CloudWatchMetricBuilder {
   private interval: number;
   private measurement: string[];
   private resources: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private properties: Record<string, any>;
 
   constructor(name: string) {
@@ -216,7 +201,6 @@ export class CloudWatchMetricBuilder {
     return this;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   addProperty(key: string, value: any): this {
     this.properties[key] = value;
     return this;

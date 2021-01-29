@@ -113,16 +113,16 @@ export class Redis extends Construct implements IRedis {
     const { vpc, subnets, connectionsAllowedFrom, port = 6379, securityGroups, highAvailabilityMode = false } = props;
 
     const subnetSelections = subnets
-      .map(selection => vpc.selectSubnets(selection))
+      .map((selection) => vpc.selectSubnets(selection))
       .reduce<ISubnet[]>((subnets, selection) => {
-        subnets.push(...selection.subnets.filter(x => !subnets.includes(x)));
+        subnets.push(...selection.subnets.filter((x) => !subnets.includes(x)));
         return subnets;
       }, []);
 
     // Create CacheSubnet group
     this.cacheSubnetGroup = new CfnSubnetGroup(this, 'RedisSubnetGroup', {
       description: `Redis Subnet group for ${this.node.path}`,
-      subnetIds: subnetSelections.map(x => x.subnetId),
+      subnetIds: subnetSelections.map((x) => x.subnetId),
     });
 
     if (securityGroups && securityGroups.length) {
@@ -175,7 +175,7 @@ export class Redis extends Construct implements IRedis {
       ...modeProps,
       ...props,
       cacheSubnetGroupName: this.cacheSubnetGroup.ref,
-      securityGroupIds: this.redisSecurityGroups.map(x => x.securityGroupId),
+      securityGroupIds: this.redisSecurityGroups.map((x) => x.securityGroupId),
       engine: 'redis',
     });
 

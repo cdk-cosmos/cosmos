@@ -58,7 +58,7 @@ declare module '../../solar-system/solar-system-core-stack' {
   }
 }
 
-SolarSystemCoreStack.prototype.addGithubEnterprise = function(props): GithubEnterpriseFeatureCoreStack {
+SolarSystemCoreStack.prototype.addGithubEnterprise = function (props): GithubEnterpriseFeatureCoreStack {
   this.githubEnterprise = new GithubEnterpriseFeatureCoreStack(this, 'GithubEnterprise', props);
   return this.githubEnterprise;
 };

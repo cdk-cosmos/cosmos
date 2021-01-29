@@ -5,10 +5,9 @@ import {
   CustomResource,
   CustomResourceProvider,
   CustomResourceProviderRuntime,
-  Stack,
-  CfnResource,
 } from '@aws-cdk/core';
-import { CfnRole, IRole } from '@aws-cdk/aws-iam';
+import { IRole } from '@aws-cdk/aws-iam';
+import './custom-resource-provider';
 
 export const RESOURCE_TYPE = 'Custom::CrossAccountExports';
 
@@ -52,7 +51,7 @@ export class CrossAccountExports extends Construct {
     if (typeof name === 'string') {
       return this.getRef(name).toString();
     }
-    return this.getRef(name).map(x => x.toString());
+    return this.getRef(name).map((x) => x.toString());
   }
 
   getRef(name: string): Reference;
@@ -62,9 +61,9 @@ export class CrossAccountExports extends Construct {
       return this.resource.getAtt(name);
     }
     if (name) {
-      return name.map(x => this.resource.getAtt(x));
+      return name.map((x) => this.resource.getAtt(x));
     }
-    return this.exports.map(x => this.resource.getAtt(x));
+    return this.exports.map((x) => this.resource.getAtt(x));
   }
 }
 
@@ -73,17 +72,7 @@ export const createCrossAccountExportProvider = (scope: Construct, role?: IRole)
     codeDirectory: `${__dirname}/cross-account-export-handler`,
     runtime: CustomResourceProviderRuntime.NODEJS_12,
     timeout: Duration.minutes(5),
+    role,
   });
-
-  if (role) {
-    const provider = Stack.of(scope).node.findChild(`${RESOURCE_TYPE}CustomResourceProvider`) as CustomResourceProvider;
-    const providerRole = provider.node.findChild('Role') as CfnRole;
-    const providerHandler = provider.node.findChild('Handler') as CfnResource;
-    provider.node.tryRemoveChild(providerRole.node.id);
-    providerHandler.addPropertyOverride('Role', role.roleArn);
-    providerHandler.addDependsOn(role.node.defaultChild as CfnResource);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((providerHandler as any).dependsOn as Set<any>).delete(providerRole);
-  }
   return serviceToken;
 };

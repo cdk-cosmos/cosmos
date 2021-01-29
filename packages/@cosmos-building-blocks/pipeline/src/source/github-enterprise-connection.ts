@@ -38,9 +38,9 @@ export class GithubEnterpriseHost extends Resource {
     this.endpoint = endpoint;
     this.vpc = vpc;
     this.subnets = subnets
-      .map(selection => this.vpc.selectSubnets(selection))
+      .map((selection) => this.vpc.selectSubnets(selection))
       .reduce<ISubnet[]>((subnets, selection) => {
-        subnets.push(...selection.subnets.filter(x => !subnets.includes(x)));
+        subnets.push(...selection.subnets.filter((x) => !subnets.includes(x)));
         return subnets;
       }, []);
     this.securityGroup = new SecurityGroup(this, 'HostSecurityGroup', {
@@ -63,7 +63,7 @@ export class GithubEnterpriseHost extends Resource {
         ProviderType: 'GitHubEnterpriseServer',
         VpcConfiguration: {
           VpcId: vpc.vpcId,
-          SubnetIds: this.subnets.map(x => x.subnetId),
+          SubnetIds: this.subnets.map((x) => x.subnetId),
           SecurityGroupIds: [this.securityGroup.securityGroupId],
           TlsCertificate: tlsCertificate,
         },

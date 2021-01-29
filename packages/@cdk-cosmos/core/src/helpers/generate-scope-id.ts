@@ -67,7 +67,7 @@ export const generateScopeId = (props: {
 };
 
 const getScopes = (scope: IConstruct): IScope[] =>
-  scope.node.scopes.map(x => x.node).map(x => ({ id: x.id, type: x.type || 'Resource', pattern: x.pattern }));
+  scope.node.scopes.map((x) => x.node).map((x) => ({ id: x.id, type: x.type || 'Resource', pattern: x.pattern }));
 
 const getContext = (scopes: IScope[]): IKeyValue[] => {
   return scopes.reduce<IKeyValue[]>((context, scope) => {
@@ -81,7 +81,7 @@ const getContext = (scopes: IScope[]): IKeyValue[] => {
 
 const getPattern = (scopes: IScope[]): string | undefined => {
   return scopes
-    .filter(x => x.pattern)
-    .map(x => x.pattern)
+    .filter((x) => x.pattern)
+    .map((x) => x.pattern)
     .pop();
 };

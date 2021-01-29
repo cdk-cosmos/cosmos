@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { Lazy, Stack } from '@aws-cdk/core';
 import { BuildSpec } from '@aws-cdk/aws-codebuild';
 
@@ -74,7 +73,7 @@ export class BuildSpecBuilder extends BuildSpec {
   }
 
   toBuildSpec(): string {
-    return Lazy.stringValue({ produce: ctx => Stack.of(ctx.scope).toJsonString(this.spec, 2) });
+    return Lazy.stringValue({ produce: (ctx) => Stack.of(ctx.scope).toJsonString(this.spec, 2) });
   }
 
   addRuntime(runtime: Runtime, version: Version): BuildSpecBuilder {
@@ -152,4 +151,4 @@ export class BuildSpecBuilder extends BuildSpec {
   }
 }
 
-const filterNullableStrings = (commands: NullableString[]): string[] => commands.filter(x => x) as string[];
+const filterNullableStrings = (commands: NullableString[]): string[] => commands.filter((x) => x) as string[];

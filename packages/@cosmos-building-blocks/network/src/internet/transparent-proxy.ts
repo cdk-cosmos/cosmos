@@ -60,7 +60,7 @@ export class TransparentProxy extends Construct {
     this.configureSquidUserData(
       host,
       port,
-      !perAZ ? vpc.selectSubnets(vpcSubnets).subnets.map(x => x.routeTable.routeTableId) : undefined
+      !perAZ ? vpc.selectSubnets(vpcSubnets).subnets.map((x) => x.routeTable.routeTableId) : undefined
     );
 
     // Let CFN own the route so its cleaned up when stack deleted. (hack)

@@ -51,7 +51,7 @@ declare module '../../solar-system/solar-system-core-import' {
   }
 }
 
-SolarSystemCoreImport.prototype.addEcs = function(props?: Partial<EcsFeatureCoreImportProps>): EcsFeatureCoreImport {
+SolarSystemCoreImport.prototype.addEcs = function (props?: Partial<EcsFeatureCoreImportProps>): EcsFeatureCoreImport {
   this.ecs = new EcsFeatureCoreImport(this, 'Ecs', {
     solarSystem: this,
     ...props,

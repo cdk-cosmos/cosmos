@@ -44,7 +44,6 @@ declare module '../../cosmos/cosmos-extension-stack' {
 }
 
 const linkGetter = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get(this: any): LinkFeatureStack {
     if (!this._link) {
       this._link = new LinkFeatureStack(this, {});

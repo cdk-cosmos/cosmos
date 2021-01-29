@@ -52,7 +52,6 @@ export class RemoteZone {
       zoneName,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (zone as any).hostedZoneNameServers = hostedZoneNameServers;
     return zone;
   }
@@ -95,14 +94,14 @@ export class RemoteVpc {
         exportName: `${exportName}IsolatedSubnetIds`,
         value: Fn.join(
           ',',
-          vpc.isolatedSubnets.map(s => s.subnetId)
+          vpc.isolatedSubnets.map((s) => s.subnetId)
         ),
       }).exportName as string;
       this.isolatedSubnetRouteTableIds = new CfnOutput(scope, 'VpcIsolatedSubnetRouteTables', {
         exportName: `${exportName}IsolatedSubnetRouteTableIds`,
         value: Fn.join(
           ',',
-          vpc.isolatedSubnets.map(s => s.routeTable.routeTableId)
+          vpc.isolatedSubnets.map((s) => s.routeTable.routeTableId)
         ),
       }).exportName as string;
     }
@@ -112,14 +111,14 @@ export class RemoteVpc {
         exportName: `${exportName}PrivateSubnetIds`,
         value: Fn.join(
           ',',
-          vpc.privateSubnets.map(s => s.subnetId)
+          vpc.privateSubnets.map((s) => s.subnetId)
         ),
       }).exportName as string;
       this.privateSubnetRouteTableIds = new CfnOutput(scope, 'VpcPrivateSubnetRouteTables', {
         exportName: `${exportName}PrivateSubnetRouteTableIds`,
         value: Fn.join(
           ',',
-          vpc.privateSubnets.map(s => s.routeTable.routeTableId)
+          vpc.privateSubnets.map((s) => s.routeTable.routeTableId)
         ),
       }).exportName as string;
     }
@@ -129,14 +128,14 @@ export class RemoteVpc {
         exportName: `${exportName}PublicSubnetIds`,
         value: Fn.join(
           ',',
-          vpc.publicSubnets.map(s => s.subnetId)
+          vpc.publicSubnets.map((s) => s.subnetId)
         ),
       }).exportName as string;
       this.publicSubnetRouteTableIds = new CfnOutput(scope, 'VpcPublicSubnetRouteTables', {
         exportName: `${exportName}PublicSubnetRouteTableIds`,
         value: Fn.join(
           ',',
-          vpc.publicSubnets.map(s => s.routeTable.routeTableId)
+          vpc.publicSubnets.map((s) => s.routeTable.routeTableId)
         ),
       }).exportName as string;
     }

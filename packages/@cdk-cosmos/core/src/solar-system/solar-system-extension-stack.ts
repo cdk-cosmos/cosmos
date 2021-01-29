@@ -44,7 +44,6 @@ export class SolarSystemExtensionStack extends BaseStack implements ISolarSystem
     Tags.of(this).add('cosmos:solarsystem:extension', id);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static isSolarSystemExtension(x: any): x is SolarSystemExtensionStack {
     return typeof x === 'object' && x !== null && SOLAR_SYSTEM_EXTENSION_SYMBOL in x;
   }

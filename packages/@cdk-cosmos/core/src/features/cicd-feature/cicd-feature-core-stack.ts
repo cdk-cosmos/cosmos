@@ -73,7 +73,7 @@ declare module '../../solar-system/solar-system-core-stack' {
   }
 }
 
-SolarSystemCoreStack.prototype.addCiCd = function(props?: CiCdFeatureCoreStackProps): CiCdFeatureCoreStack {
+SolarSystemCoreStack.prototype.addCiCd = function (props?: CiCdFeatureCoreStackProps): CiCdFeatureCoreStack {
   this.ciCd = new CiCdFeatureCoreStack(this, 'CiCd', props);
   return this.ciCd;
 };

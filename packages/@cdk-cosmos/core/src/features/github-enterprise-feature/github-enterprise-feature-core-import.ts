@@ -3,7 +3,7 @@ import { SolarSystemCoreImport } from '../../solar-system/solar-system-core-impo
 import { BaseFeatureConstruct, BaseFeatureConstructProps } from '../../components/base';
 import { IGithubEnterpriseFeatureCore } from './github-enterprise-feature-core-stack';
 import { ISolarSystemCore } from '../../solar-system/solar-system-core-stack';
-import { IGithubEnterpriseConnection } from 'packages/@cosmos-building-blocks/pipeline/lib/source/github-enterprise-connection';
+import { IGithubEnterpriseConnection } from '@cosmos-building-blocks/pipeline/lib/source/github-enterprise-connection';
 import { RemoteGithubEnterpriseConnection } from '../../components/remote';
 
 export interface GithubEnterpriseFeatureCoreImportProps extends BaseFeatureConstructProps {
@@ -36,7 +36,7 @@ declare module '../../solar-system/solar-system-core-import' {
   }
 }
 
-SolarSystemCoreImport.prototype.addGithubEnterprise = function(): GithubEnterpriseFeatureCoreImport {
+SolarSystemCoreImport.prototype.addGithubEnterprise = function (): GithubEnterpriseFeatureCoreImport {
   this.githubEnterprise = new GithubEnterpriseFeatureCoreImport(this, 'GithubEnterprise', {
     solarSystem: this,
   });

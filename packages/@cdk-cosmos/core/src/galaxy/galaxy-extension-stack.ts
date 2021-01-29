@@ -40,7 +40,6 @@ export class GalaxyExtensionStack extends BaseStack implements IGalaxyExtension 
     Tags.of(this).add('cosmos:galaxy:extension', this.node.id);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static isGalaxyExtension(x: any): x is GalaxyExtensionStack {
     return typeof x === 'object' && x !== null && GALAXY_EXTENSION_SYMBOL in x;
   }
