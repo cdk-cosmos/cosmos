@@ -7,9 +7,8 @@ import {
   CustomResourceProviderRuntime,
 } from '@aws-cdk/core';
 import { IProject, Source, SourceConfig, FilterGroup } from '@aws-cdk/aws-codebuild';
-import '@cosmos-building-blocks/common/lib/custom-resource-provider';
 import { GithubEnterpriseWebhookProps } from './github-enterprise-webhook-handler/types';
-import { ManagedPolicy, PolicyStatement, Role, ServicePrincipal } from '@aws-cdk/aws-iam';
+import { PolicyStatement } from '@aws-cdk/aws-iam';
 
 export interface WebhookCustomResourceProps {
   readonly project: IProject;
@@ -22,36 +21,20 @@ export class WebhookCustomResource extends Construct {
 
     const { project, webhookFilters } = props;
 
-    const role = project.role as Role;
-
     const projectName = Lazy.string({
       produce: () => project.projectName,
-    });
-    const projectArn = Lazy.string({
-      produce: () => project.projectArn,
     });
 
     const serviceProvider = CustomResourceProvider.getOrCreateProvider(this, 'Custom::WebhookCustomResource', {
       codeDirectory: `${__dirname}/github-enterprise-webhook-handler`,
       runtime: CustomResourceProviderRuntime.NODEJS_12,
-      role: role,
+      policyStatements: [
+        new PolicyStatement({
+          actions: ['codebuild:CreateWebhook', 'codebuild:UpdateWebhook', 'codebuild:DeleteWebhook'],
+          resources: ['*'],
+        }).toStatementJson(),
+      ],
     });
-
-    const principal = new ServicePrincipal('lambda.amazonaws.com');
-    const statement = new PolicyStatement({
-      principals: [principal],
-      actions: [principal.assumeRoleAction],
-    });
-    role.assumeRolePolicy?.addStatements(statement);
-
-    role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'));
-
-    role.addToPrincipalPolicy(
-      new PolicyStatement({
-        actions: ['codebuild:CreateWebhook', 'codebuild:UpdateWebhook', 'codebuild:DeleteWebhook'],
-        resources: [projectArn],
-      })
-    );
 
     const properties: GithubEnterpriseWebhookProps = {
       projectName,
