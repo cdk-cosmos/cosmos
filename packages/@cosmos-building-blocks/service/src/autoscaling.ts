@@ -85,7 +85,7 @@ export class AutoScalingGroupLT extends AutoScalingGroup {
       const userDataToken = Lazy.stringValue({
         produce: () => Fn.base64(this.userData.render()),
       });
-      const securityGroupIds = this.connections.securityGroups.map(sg => sg.securityGroupId);
+      const securityGroupIds = this.connections.securityGroups.map((sg) => sg.securityGroupId);
       const instanceMonitoringMode =
         props.instanceMonitoring !== undefined ? props.instanceMonitoring === Monitoring.DETAILED : undefined;
       const monitoring = {

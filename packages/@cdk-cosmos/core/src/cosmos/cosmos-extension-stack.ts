@@ -45,7 +45,6 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
     Tags.of(this).add('cosmos:extension', this.node.id);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static isCosmosExtension(x: any): x is CosmosExtensionStack {
     return typeof x === 'object' && x !== null && COSMOS_EXTENSION_SYMBOL in x;
   }

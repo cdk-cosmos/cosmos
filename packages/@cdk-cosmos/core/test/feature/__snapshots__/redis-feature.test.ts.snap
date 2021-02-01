@@ -1,0 +1,1161 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Redis Feature for SolarSystem should have a redis nested stack 1`] = `
+Object {
+  "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
+  "Outputs": Object {
+    "PrivateZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysPrivateZoneId",
+      },
+      "Value": Object {
+        "Ref": "PrivateZone",
+      },
+    },
+    "PrivateZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysPrivateZoneName",
+      },
+      "Value": "sys.internal",
+    },
+    "VpcAZs": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcAZs",
+      },
+      "Value": "dummy1a,dummy1b",
+    },
+    "VpcCidrBlock": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcCidrBlock",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Vpc",
+          "CidrBlock",
+        ],
+      },
+    },
+    "VpcId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcId",
+      },
+      "Value": Object {
+        "Ref": "Vpc",
+      },
+    },
+    "VpcIsolatedSubnetRouteTables": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcIsolatedSubnetRouteTableIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Ref": "VpcAppSubnet1RouteTable",
+            },
+            Object {
+              "Ref": "VpcAppSubnet2RouteTable",
+            },
+          ],
+        ],
+      },
+    },
+    "VpcIsolatedSubnets": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcIsolatedSubnetIds",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Array [
+            Object {
+              "Ref": "VpcAppSubnet1Subnet",
+            },
+            Object {
+              "Ref": "VpcAppSubnet2Subnet",
+            },
+          ],
+        ],
+      },
+    },
+    "ZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneId",
+      },
+      "Value": Object {
+        "Ref": "Zone",
+      },
+    },
+    "ZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneName",
+      },
+      "Value": "sys.cos.com",
+    },
+    "ZoneNameServers": Object {
+      "Export": Object {
+        "Name": "CoreGalSysZoneNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "Zone",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81b\\"",
+      "Type": "String",
+    },
+    "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81b\\"",
+      "Type": "String",
+    },
+    "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81b\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "PrivateZone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Private Zone for Sys SolarSystem",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "Name": "sys.internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Ref": "Vpc",
+            },
+            "VPCRegion": "region1",
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "Redis": Object {
+      "Properties": Object {
+        "Parameters": Object {
+          "referencetoCosGalSysVpc054F5599Ref": Object {
+            "Ref": "Vpc",
+          },
+          "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef": Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef": Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "TemplateURL": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://s3.region1.",
+              Object {
+                "Ref": "AWS::URLSuffix",
+              },
+              "/",
+              Object {
+                "Ref": "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bS3Bucket",
+              },
+              "/",
+              Object {
+                "Fn::Select": Array [
+                  0,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bS3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
+              Object {
+                "Fn::Select": Array [
+                  1,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bS3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::Stack",
+    },
+    "Vpc": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/24",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VpcAppSubnet1RouteTable": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet1RouteTableAssociation": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet1RouteTable",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet1Subnet",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet1Subnet": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.0.0/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcAppSubnet2RouteTable": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VpcAppSubnet2RouteTableAssociation": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VpcAppSubnet2RouteTable",
+        },
+        "SubnetId": Object {
+          "Ref": "VpcAppSubnet2Subnet",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VpcAppSubnet2Subnet": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.0.64/26",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "App",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc/AppSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VpcCloudWatchLogsEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcCloudWatchLogsEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region1.logs",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcCloudWatchLogsEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcS3Gateway": Object {
+      "Properties": Object {
+        "RouteTableIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1RouteTable",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2RouteTable",
+          },
+        ],
+        "ServiceName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "com.amazonaws.",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".s3",
+            ],
+          ],
+        },
+        "VpcEndpointType": "Gateway",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region1.ssm",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys/Vpc/SsmEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcSsmMessageEndpoint": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VpcSsmMessageEndpointSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.region1.ssmmessages",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VpcAppSubnet1Subnet",
+          },
+          Object {
+            "Ref": "VpcAppSubnet2Subnet",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VpcSsmMessageEndpointSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Cos/Gal/Sys/Vpc/SsmMessageEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "Vpc",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "Vpc",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "Zone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core Main Zone for Sys SolarSystem",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "Name": "sys.cos.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+    "ZoneDelegation": Object {
+      "Properties": Object {
+        "Comment": "Core Zone Delegation for Sys SolarSystem.",
+        "HostedZoneId": Object {
+          "Fn::ImportValue": "CoreCosCosmos:ExportsOutputRefRootZone2F3E9CEF",
+        },
+        "Name": "sys.cos.com.",
+        "ResourceRecords": Object {
+          "Fn::GetAtt": Array [
+            "Zone",
+            "NameServers",
+          ],
+        },
+        "TTL": "1800",
+        "Type": "NS",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+  },
+}
+`;
+
+exports[`Redis Feature for SolarSystem should have a redis nested stack 2`] = `
+Object {
+  "Description": "Add Redis Features to the SolarSystem",
+  "Outputs": Object {
+    "RedisEndpoint": Object {
+      "Export": Object {
+        "Name": "CoreGalSysRedisEndpoint",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Redis",
+          "PrimaryEndPoint.Address",
+        ],
+      },
+    },
+    "RedisPort": Object {
+      "Export": Object {
+        "Name": "CoreGalSysRedisPort",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Redis",
+          "PrimaryEndPoint.Port",
+        ],
+      },
+    },
+    "RedisProtocol": Object {
+      "Export": Object {
+        "Name": "CoreGalSysRedisProtocol",
+      },
+      "Value": "rediss",
+    },
+    "RedisSecurityGroupId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysRedisSecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "RedisSecurityGroup",
+          "GroupId",
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "referencetoCosGalSysVpc054F5599Ref": Object {
+      "Type": "String",
+    },
+    "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef": Object {
+      "Type": "String",
+    },
+    "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef": Object {
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "Redis": Object {
+      "Properties": Object {
+        "AtRestEncryptionEnabled": true,
+        "AutomaticFailoverEnabled": false,
+        "CacheNodeType": "cache.t3.micro",
+        "CacheSubnetGroupName": Object {
+          "Ref": "RedisSubnetGroup",
+        },
+        "Engine": "redis",
+        "MultiAZEnabled": false,
+        "NumNodeGroups": 1,
+        "ReplicasPerNodeGroup": 0,
+        "ReplicationGroupDescription": "Redis cluster for Cos/Gal/Sys/Redis/Redis",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "RedisSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Redis",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "TransitEncryptionEnabled": true,
+      },
+      "Type": "AWS::ElastiCache::ReplicationGroup",
+    },
+    "RedisSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Redis Security Group for Cos/Gal/Sys/Redis/Redis",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:6379",
+            "FromPort": 6379,
+            "IpProtocol": "tcp",
+            "ToPort": 6379,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Redis",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "referencetoCosGalSysVpc054F5599Ref",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "RedisSubnetGroup": Object {
+      "Properties": Object {
+        "Description": "Redis Subnet group for Cos/Gal/Sys/Redis/Redis",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef",
+          },
+          Object {
+            "Ref": "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef",
+          },
+        ],
+      },
+      "Type": "AWS::ElastiCache::SubnetGroup",
+    },
+  },
+}
+`;
+
+exports[`Redis Feature for SolarSystemExtension should have a redis nested stack 1`] = `
+Object {
+  "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
+  "Parameters": Object {
+    "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"f080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20\\"",
+      "Type": "String",
+    },
+    "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"f080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20\\"",
+      "Type": "String",
+    },
+    "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"f080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "Redis": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "Sys",
+          },
+        ],
+        "TemplateURL": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://s3.region1.",
+              Object {
+                "Ref": "AWS::URLSuffix",
+              },
+              "/",
+              Object {
+                "Ref": "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20S3Bucket",
+              },
+              "/",
+              Object {
+                "Fn::Select": Array [
+                  0,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20S3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
+              Object {
+                "Fn::Select": Array [
+                  1,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20S3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::Stack",
+    },
+  },
+}
+`;
+
+exports[`Redis Feature for SolarSystemExtension should have a redis nested stack 2`] = `
+Object {
+  "Description": "Add Redis Features to the SolarSystem",
+  "Outputs": Object {
+    "RedisEndpoint": Object {
+      "Export": Object {
+        "Name": "AppCosExtGalSysRedisEndpoint",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Redis",
+          "PrimaryEndPoint.Address",
+        ],
+      },
+    },
+    "RedisPort": Object {
+      "Export": Object {
+        "Name": "AppCosExtGalSysRedisPort",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "Redis",
+          "PrimaryEndPoint.Port",
+        ],
+      },
+    },
+    "RedisProtocol": Object {
+      "Export": Object {
+        "Name": "AppCosExtGalSysRedisProtocol",
+      },
+      "Value": "rediss",
+    },
+    "RedisSecurityGroupId": Object {
+      "Export": Object {
+        "Name": "AppCosExtGalSysRedisSecurityGroupId",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "RedisSecurityGroup",
+          "GroupId",
+        ],
+      },
+    },
+  },
+  "Resources": Object {
+    "Redis": Object {
+      "Properties": Object {
+        "AtRestEncryptionEnabled": true,
+        "AutomaticFailoverEnabled": false,
+        "CacheNodeType": "cache.t3.micro",
+        "CacheSubnetGroupName": Object {
+          "Ref": "RedisSubnetGroup",
+        },
+        "Engine": "redis",
+        "MultiAZEnabled": false,
+        "NumNodeGroups": 1,
+        "ReplicasPerNodeGroup": 0,
+        "ReplicationGroupDescription": "Redis cluster for CosExt/Gal/Sys/Redis/Redis",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "RedisSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Redis",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "Sys",
+          },
+        ],
+        "TransitEncryptionEnabled": true,
+      },
+      "Type": "AWS::ElastiCache::ReplicationGroup",
+    },
+    "RedisSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Redis Security Group for CosExt/Gal/Sys/Redis/Redis",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:6379",
+            "FromPort": 6379,
+            "IpProtocol": "tcp",
+            "ToPort": 6379,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Redis",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "Sys",
+          },
+        ],
+        "VpcId": Object {
+          "Fn::ImportValue": "CoreGalSysVpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "RedisSubnetGroup": Object {
+      "Properties": Object {
+        "Description": "Redis Subnet group for CosExt/Gal/Sys/Redis/Redis",
+        "SubnetIds": Array [
+          Object {
+            "Fn::Select": Array [
+              0,
+              Object {
+                "Fn::Split": Array [
+                  ",",
+                  Object {
+                    "Fn::ImportValue": "CoreGalSysVpcIsolatedSubnetIds",
+                  },
+                ],
+              },
+            ],
+          },
+          Object {
+            "Fn::Select": Array [
+              1,
+              Object {
+                "Fn::Split": Array [
+                  ",",
+                  Object {
+                    "Fn::ImportValue": "CoreGalSysVpcIsolatedSubnetIds",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::ElastiCache::SubnetGroup",
+    },
+  },
+}
+`;

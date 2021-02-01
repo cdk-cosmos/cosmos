@@ -20,10 +20,7 @@ export class CdkBootstrap extends Stack {
 
     const source = new Asset(this, 'Source', {
       path: '.',
-      exclude: fs
-        .readFileSync('.gitignore')
-        .toString()
-        .split('\n'),
+      exclude: fs.readFileSync('.gitignore').toString().split('\n'),
     });
 
     const trigger = new AwsCustomResource(this, 'TriggerDeploy', {
@@ -56,7 +53,6 @@ export class CdkBootstrap extends Stack {
 
     const policy = trigger.node.findChild('CustomResourcePolicy');
     trigger.node.tryRemoveChild(policy.node.id);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (trigger as any).customResource.node._actualNode._dependencies.delete(policy);
   }
 }

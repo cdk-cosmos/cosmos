@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Domain Feature for Core sould have a domain at cosmos level 1`] = `
+exports[`Domain Feature for Core should have a domain at cosmos level 1`] = `
 Object {
   "Description": "Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole",
   "Outputs": Object {
@@ -256,27 +256,27 @@ Object {
 }
 `;
 
-exports[`Domain Feature for Core sould have a domain at cosmos level 2`] = `
+exports[`Domain Feature for Core should have a domain at cosmos level 2`] = `
 Object {
   "Description": "Link Feature: Resources to link the Cosmos, like Route53 zone delegation",
   "Resources": Object {
-    "CosGalSys2TstCoreSubdomainExports": Object {
+    "CosGal2Sys2TstCoreSubdomainExports": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
         "ServiceToken": Object {
           "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCustomCrossAccountExportsCustomResourceProviderHandlerArn8CE3D38E",
         },
-        "assumeRoleArn": "arn:aws:iam::account1:role/CoreCdkMasterRole",
+        "assumeRoleArn": "arn:aws:iam::account2:role/CoreCdkCrossAccountRole",
         "exports": Array [
-          "CoreGalSys2TstCoreSubdomainName",
-          "CoreGalSys2TstCoreSubdomainNameServers",
+          "CoreGal2Sys2TstCoreSubdomainName",
+          "CoreGal2Sys2TstCoreSubdomainNameServers",
         ],
         "shouldErrorIfNotFound": true,
       },
       "Type": "Custom::CrossAccountExports",
       "UpdateReplacePolicy": "Delete",
     },
-    "CosGalSys2TstCoreSubdomainZoneDelegation": Object {
+    "CosGal2Sys2TstCoreSubdomainZoneDelegation": Object {
       "Properties": Object {
         "Comment": "Subdomain Delegation for tst.core.domain.com.",
         "HostedZoneId": Object {
@@ -288,11 +288,11 @@ Object {
             Array [
               Object {
                 "Fn::GetAtt": Array [
-                  "CosGalSys2TstCoreSubdomainExports",
-                  "CoreGalSys2TstCoreSubdomainName",
+                  "CosGal2Sys2TstCoreSubdomainExports",
+                  "CoreGal2Sys2TstCoreSubdomainName",
                 ],
               },
-              ".core.domain.com.",
+              ".",
             ],
           ],
         },
@@ -301,8 +301,8 @@ Object {
             ",",
             Object {
               "Fn::GetAtt": Array [
-                "CosGalSys2TstCoreSubdomainExports",
-                "CoreGalSys2TstCoreSubdomainNameServers",
+                "CosGal2Sys2TstCoreSubdomainExports",
+                "CoreGal2Sys2TstCoreSubdomainNameServers",
               ],
             },
           ],
@@ -325,7 +325,7 @@ Object {
               Object {
                 "Fn::GetAtt": Array [
                   "Sys2ZoneDelegationExports",
-                  "CoreGalSys2ZoneName",
+                  "CoreGal2Sys2ZoneName",
                 ],
               },
               ".",
@@ -338,7 +338,7 @@ Object {
             Object {
               "Fn::GetAtt": Array [
                 "Sys2ZoneDelegationExports",
-                "CoreGalSys2ZoneNameServers",
+                "CoreGal2Sys2ZoneNameServers",
               ],
             },
           ],
@@ -354,9 +354,10 @@ Object {
         "ServiceToken": Object {
           "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCustomCrossAccountExportsCustomResourceProviderHandlerArn8CE3D38E",
         },
+        "assumeRoleArn": "arn:aws:iam::account2:role/CoreCdkCrossAccountRole",
         "exports": Array [
-          "CoreGalSys2ZoneName",
-          "CoreGalSys2ZoneNameServers",
+          "CoreGal2Sys2ZoneName",
+          "CoreGal2Sys2ZoneNameServers",
         ],
         "shouldErrorIfNotFound": true,
       },
@@ -367,7 +368,7 @@ Object {
 }
 `;
 
-exports[`Domain Feature for Core sould have a domain at cosmos level 3`] = `
+exports[`Domain Feature for Core should have a domain at cosmos level 3`] = `
 Object {
   "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
@@ -1096,13 +1097,13 @@ Object {
 }
 `;
 
-exports[`Domain Feature for Core sould have a domain at cosmos level 4`] = `
+exports[`Domain Feature for Core should have a domain at cosmos level 4`] = `
 Object {
   "Description": "Cosmos SolarSystem: Resources dependant on each App Env, like Vpc and MainZone.",
   "Outputs": Object {
     "PrivateZoneZoneId": Object {
       "Export": Object {
-        "Name": "CoreGalSys2PrivateZoneId",
+        "Name": "CoreGal2Sys2PrivateZoneId",
       },
       "Value": Object {
         "Ref": "PrivateZone",
@@ -1110,13 +1111,13 @@ Object {
     },
     "PrivateZoneZoneName": Object {
       "Export": Object {
-        "Name": "CoreGalSys2PrivateZoneName",
+        "Name": "CoreGal2Sys2PrivateZoneName",
       },
       "Value": "sys2.internal",
     },
     "TstCoreSubdomainZoneId": Object {
       "Export": Object {
-        "Name": "CoreGalSys2TstCoreSubdomainId",
+        "Name": "CoreGal2Sys2TstCoreSubdomainId",
       },
       "Value": Object {
         "Ref": "TstCoreSubdomain",
@@ -1124,13 +1125,13 @@ Object {
     },
     "TstCoreSubdomainZoneName": Object {
       "Export": Object {
-        "Name": "CoreGalSys2TstCoreSubdomainName",
+        "Name": "CoreGal2Sys2TstCoreSubdomainName",
       },
       "Value": "tst.core.domain.com",
     },
     "TstCoreSubdomainZoneNameServers": Object {
       "Export": Object {
-        "Name": "CoreGalSys2TstCoreSubdomainNameServers",
+        "Name": "CoreGal2Sys2TstCoreSubdomainNameServers",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -1146,13 +1147,13 @@ Object {
     },
     "VpcAZs": Object {
       "Export": Object {
-        "Name": "CoreGalSys2VpcAZs",
+        "Name": "CoreGal2Sys2VpcAZs",
       },
       "Value": "dummy1a,dummy1b",
     },
     "VpcCidrBlock": Object {
       "Export": Object {
-        "Name": "CoreGalSys2VpcCidrBlock",
+        "Name": "CoreGal2Sys2VpcCidrBlock",
       },
       "Value": Object {
         "Fn::GetAtt": Array [
@@ -1163,7 +1164,7 @@ Object {
     },
     "VpcId": Object {
       "Export": Object {
-        "Name": "CoreGalSys2VpcId",
+        "Name": "CoreGal2Sys2VpcId",
       },
       "Value": Object {
         "Ref": "Vpc",
@@ -1171,7 +1172,7 @@ Object {
     },
     "VpcIsolatedSubnetRouteTables": Object {
       "Export": Object {
-        "Name": "CoreGalSys2VpcIsolatedSubnetRouteTableIds",
+        "Name": "CoreGal2Sys2VpcIsolatedSubnetRouteTableIds",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -1189,7 +1190,7 @@ Object {
     },
     "VpcIsolatedSubnets": Object {
       "Export": Object {
-        "Name": "CoreGalSys2VpcIsolatedSubnetIds",
+        "Name": "CoreGal2Sys2VpcIsolatedSubnetIds",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -1207,7 +1208,7 @@ Object {
     },
     "ZoneId": Object {
       "Export": Object {
-        "Name": "CoreGalSys2ZoneId",
+        "Name": "CoreGal2Sys2ZoneId",
       },
       "Value": Object {
         "Ref": "Zone",
@@ -1215,13 +1216,13 @@ Object {
     },
     "ZoneName": Object {
       "Export": Object {
-        "Name": "CoreGalSys2ZoneName",
+        "Name": "CoreGal2Sys2ZoneName",
       },
       "Value": "sys2.cos.com",
     },
     "ZoneNameServers": Object {
       "Export": Object {
-        "Name": "CoreGalSys2ZoneNameServers",
+        "Name": "CoreGal2Sys2ZoneNameServers",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -1249,7 +1250,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem",
@@ -1280,7 +1281,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem",
@@ -1304,7 +1305,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem",
@@ -1312,7 +1313,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys2/Vpc",
+            "Value": "Cos/Gal2/Sys2/Vpc",
           },
         ],
       },
@@ -1327,7 +1328,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem",
@@ -1335,7 +1336,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys2/Vpc/AppSubnet1",
+            "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet1",
           },
         ],
         "VpcId": Object {
@@ -1375,7 +1376,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem",
@@ -1383,7 +1384,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys2/Vpc/AppSubnet1",
+            "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet1",
           },
         ],
         "VpcId": Object {
@@ -1401,7 +1402,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem",
@@ -1409,7 +1410,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys2/Vpc/AppSubnet2",
+            "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet2",
           },
         ],
         "VpcId": Object {
@@ -1449,7 +1450,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem",
@@ -1457,7 +1458,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys2/Vpc/AppSubnet2",
+            "Value": "Cos/Gal2/Sys2/Vpc/AppSubnet2",
           },
         ],
         "VpcId": Object {
@@ -1495,7 +1496,7 @@ Object {
     },
     "VpcCloudWatchLogsEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Gal/Sys2/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal2/Sys2/Vpc/CloudWatchLogsEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1538,7 +1539,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem",
@@ -1546,7 +1547,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys2/Vpc",
+            "Value": "Cos/Gal2/Sys2/Vpc",
           },
         ],
         "VpcId": Object {
@@ -1613,7 +1614,7 @@ Object {
     },
     "VpcSsmEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Gal/Sys2/Vpc/SsmEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal2/Sys2/Vpc/SsmEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1656,7 +1657,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem",
@@ -1664,7 +1665,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys2/Vpc",
+            "Value": "Cos/Gal2/Sys2/Vpc",
           },
         ],
         "VpcId": Object {
@@ -1702,7 +1703,7 @@ Object {
     },
     "VpcSsmMessageEndpointSecurityGroup": Object {
       "Properties": Object {
-        "GroupDescription": "Cos/Gal/Sys2/Vpc/SsmMessageEndpoint/SecurityGroup",
+        "GroupDescription": "Cos/Gal2/Sys2/Vpc/SsmMessageEndpoint/SecurityGroup",
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1745,7 +1746,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem",
@@ -1753,7 +1754,7 @@ Object {
           },
           Object {
             "Key": "Name",
-            "Value": "Cos/Gal/Sys2/Vpc",
+            "Value": "Cos/Gal2/Sys2/Vpc",
           },
         ],
         "VpcId": Object {
@@ -1774,7 +1775,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem",
@@ -1789,7 +1790,7 @@ Object {
 }
 `;
 
-exports[`Domain Feature for Extension sould have a domain at cosmos level 1`] = `
+exports[`Domain Feature for CosmosExtension should have a domain at cosmos level 1`] = `
 Object {
   "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
   "Outputs": Object {
@@ -1858,27 +1859,27 @@ Object {
 }
 `;
 
-exports[`Domain Feature for Extension sould have a domain at cosmos level 2`] = `
+exports[`Domain Feature for CosmosExtension should have a domain at cosmos level 2`] = `
 Object {
   "Description": "Link Feature: Resources to link the Cosmos, like Route53 zone delegation",
   "Resources": Object {
-    "CosExtGalSys2TstAppSubdomainExports": Object {
+    "CosExtGal2Sys2TstAppSubdomainExports": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
         "ServiceToken": Object {
           "Fn::ImportValue": "CoreCrossAccountExportServiceToken",
         },
-        "assumeRoleArn": "arn:aws:iam::account1:role/CoreCdkMasterRole",
+        "assumeRoleArn": "arn:aws:iam::account2:role/CoreCdkCrossAccountRole",
         "exports": Array [
-          "AppCosExtGalSys2TstAppSubdomainName",
-          "AppCosExtGalSys2TstAppSubdomainNameServers",
+          "AppCosExtGal2Sys2TstAppSubdomainName",
+          "AppCosExtGal2Sys2TstAppSubdomainNameServers",
         ],
         "shouldErrorIfNotFound": true,
       },
       "Type": "Custom::CrossAccountExports",
       "UpdateReplacePolicy": "Delete",
     },
-    "CosExtGalSys2TstAppSubdomainZoneDelegation": Object {
+    "CosExtGal2Sys2TstAppSubdomainZoneDelegation": Object {
       "Properties": Object {
         "Comment": "Subdomain Delegation for tst.app.domain.com.",
         "HostedZoneId": Object {
@@ -1890,11 +1891,11 @@ Object {
             Array [
               Object {
                 "Fn::GetAtt": Array [
-                  "CosExtGalSys2TstAppSubdomainExports",
-                  "AppCosExtGalSys2TstAppSubdomainName",
+                  "CosExtGal2Sys2TstAppSubdomainExports",
+                  "AppCosExtGal2Sys2TstAppSubdomainName",
                 ],
               },
-              ".app.domain.com.",
+              ".",
             ],
           ],
         },
@@ -1903,8 +1904,8 @@ Object {
             ",",
             Object {
               "Fn::GetAtt": Array [
-                "CosExtGalSys2TstAppSubdomainExports",
-                "AppCosExtGalSys2TstAppSubdomainNameServers",
+                "CosExtGal2Sys2TstAppSubdomainExports",
+                "AppCosExtGal2Sys2TstAppSubdomainNameServers",
               ],
             },
           ],
@@ -1918,7 +1919,7 @@ Object {
 }
 `;
 
-exports[`Domain Feature for Extension sould have a domain at cosmos level 3`] = `
+exports[`Domain Feature for CosmosExtension should have a domain at cosmos level 3`] = `
 Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
   "Outputs": Object {
@@ -1999,13 +2000,13 @@ Object {
 }
 `;
 
-exports[`Domain Feature for Extension sould have a domain at cosmos level 4`] = `
+exports[`Domain Feature for CosmosExtension should have a domain at cosmos level 4`] = `
 Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
   "Outputs": Object {
     "TstAppSubdomainZoneId": Object {
       "Export": Object {
-        "Name": "AppCosExtGalSys2TstAppSubdomainId",
+        "Name": "AppCosExtGal2Sys2TstAppSubdomainId",
       },
       "Value": Object {
         "Ref": "TstAppSubdomain",
@@ -2013,13 +2014,13 @@ Object {
     },
     "TstAppSubdomainZoneName": Object {
       "Export": Object {
-        "Name": "AppCosExtGalSys2TstAppSubdomainName",
+        "Name": "AppCosExtGal2Sys2TstAppSubdomainName",
       },
       "Value": "tst.app.domain.com",
     },
     "TstAppSubdomainZoneNameServers": Object {
       "Export": Object {
-        "Name": "AppCosExtGalSys2TstAppSubdomainNameServers",
+        "Name": "AppCosExtGal2Sys2TstAppSubdomainNameServers",
       },
       "Value": Object {
         "Fn::Join": Array [
@@ -2047,7 +2048,7 @@ Object {
           },
           Object {
             "Key": "cosmos:galaxy:extension",
-            "Value": "Gal",
+            "Value": "Gal2",
           },
           Object {
             "Key": "cosmos:solarsystem:extension",

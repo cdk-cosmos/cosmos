@@ -66,7 +66,7 @@ declare module '../../cosmos/cosmos-extension-stack' {
   }
 }
 
-CosmosCoreStack.prototype.addDomain = function(id, tld): Domain {
+CosmosCoreStack.prototype.addDomain = function (id, tld): Domain {
   const resource = new Domain(this, id, {
     tld: tld,
     exportName: this.singletonId(id),
@@ -74,7 +74,7 @@ CosmosCoreStack.prototype.addDomain = function(id, tld): Domain {
   return resource;
 };
 
-CosmosExtensionStack.prototype.addDomain = function(id, tld): Domain {
+CosmosExtensionStack.prototype.addDomain = function (id, tld): Domain {
   const resource = new Domain(this, id, {
     tld: tld,
     exportName: this.nodeId(id),

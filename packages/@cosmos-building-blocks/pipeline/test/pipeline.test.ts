@@ -110,7 +110,7 @@ describe('Github Enterprise', () => {
     host: host,
   });
 
-  const cdk = new CdkPipeline(stack, 'Pipeline', {
+  new CdkPipeline(stack, 'Pipeline', {
     cdkSource: new GithubEnterpriseSourceProvider({ connection, repo, branch: 'master' }),
   });
 

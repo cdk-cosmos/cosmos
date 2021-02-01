@@ -31,16 +31,16 @@ export class TransitGatewayAttachment extends Resource implements ITransitGatewa
     this.gateway = gateway;
     this.vpc = vpc;
     this.subnets = subnets
-      .map(selection => this.vpc.selectSubnets(selection))
+      .map((selection) => this.vpc.selectSubnets(selection))
       .reduce<ISubnet[]>((subnets, selection) => {
-        subnets.push(...selection.subnets.filter(x => !subnets.includes(x)));
+        subnets.push(...selection.subnets.filter((x) => !subnets.includes(x)));
         return subnets;
       }, []);
 
     this.resource = new CfnTransitGatewayAttachment(this, 'Resource', {
       transitGatewayId: this.gateway.gatewayId,
       vpcId: this.vpc.vpcId,
-      subnetIds: this.subnets.map(x => x.subnetId),
+      subnetIds: this.subnets.map((x) => x.subnetId),
     });
 
     this.attachmentId = this.resource.ref;

@@ -67,7 +67,7 @@ declare module '../../solar-system/solar-system-extension-stack' {
   }
 }
 
-SolarSystemExtensionStack.prototype.addCiCd = function(
+SolarSystemExtensionStack.prototype.addCiCd = function (
   props?: CiCdFeatureExtensionStackProps
 ): CiCdFeatureExtensionStack {
   this.ciCd = new CiCdFeatureExtensionStack(this, 'CiCd', props);

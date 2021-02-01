@@ -88,7 +88,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
         hostedZone: this.zone,
         domainName: this.zone.zoneName,
         subjectAlternativeNames:
-          typeof certificate === 'object' ? certificate.subDomains.map(x => `${x}.${this.zone.zoneName}`) : undefined,
+          typeof certificate === 'object' ? certificate.subDomains.map((x) => `${x}.${this.zone.zoneName}`) : undefined,
       });
     }
 
@@ -117,7 +117,6 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     Tags.of(this).add('cosmos:solarsystem', this.node.id);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static isSolarSystemCore(x: any): x is SolarSystemCoreStack {
     return typeof x === 'object' && x !== null && SOLAR_SYSTEM_CORE_SYMBOL in x;
   }

@@ -9,6 +9,7 @@ import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar
 import { ISolarSystemExtension, SolarSystemExtensionStack } from '../../solar-system/solar-system-extension-stack';
 import { isCrossAccount } from '../../helpers/utils';
 import { Domain } from './domain-feature-stack';
+import { GalaxyCoreStack, IGalaxyExtension } from '../../galaxy';
 
 export interface SubdomainProps {
   /**
@@ -83,13 +84,17 @@ export class Subdomain extends HostedZone {
           ? this.domain.scope
           : (this.domain.scope as ICosmosExtension).portal;
 
+        const galaxyCore = GalaxyCoreStack.isGalaxyCore(this.scope.galaxy)
+          ? this.scope.galaxy
+          : (this.scope.galaxy as IGalaxyExtension).portal;
+
         if (!this.export.hostedZoneNameServers)
           throw new Error('hostedZoneNameServers export is required for cross account linking');
 
         const crossAccountExports = new CrossAccountExports(zoneScope, `Exports`, {
           serviceToken: cosmosCore.crossAccountExportServiceToken,
           exports: [this.export.zoneName, this.export.hostedZoneNameServers],
-          assumeRoleArn: cosmosCore.cdkMasterRoleStaticArn,
+          assumeRoleArn: galaxyCore.cdkCrossAccountRoleStaticArn,
         });
 
         zoneName = crossAccountExports.get(this.export.zoneName);
@@ -100,7 +105,7 @@ export class Subdomain extends HostedZone {
 
       new ZoneDelegationRecord(zoneScope, 'ZoneDelegation', {
         zone: this.domain,
-        recordName: zoneName,
+        recordName: zoneName + '.',
         nameServers: hostedZoneNameServers,
         ttl: Duration.minutes(5),
         comment: `Subdomain Delegation for ${this.zoneName}.`,
@@ -121,7 +126,7 @@ declare module '../../solar-system/solar-system-extension-stack' {
   }
 }
 
-SolarSystemCoreStack.prototype.addSubdomain = function(id, domain, subdomain): Subdomain {
+SolarSystemCoreStack.prototype.addSubdomain = function (id, domain, subdomain): Subdomain {
   const resource = new Subdomain(this, id, {
     domain: domain,
     subdomain: subdomain,
@@ -130,7 +135,7 @@ SolarSystemCoreStack.prototype.addSubdomain = function(id, domain, subdomain): S
   return resource;
 };
 
-SolarSystemExtensionStack.prototype.addSubdomain = function(id, domain, subdomain): Subdomain {
+SolarSystemExtensionStack.prototype.addSubdomain = function (id, domain, subdomain): Subdomain {
   const resource = new Subdomain(this, id, {
     domain: domain,
     subdomain: subdomain,

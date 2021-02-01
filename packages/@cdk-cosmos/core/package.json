@@ -1,6 +1,6 @@
 {
   "name": "@cdk-cosmos/core",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,24 +26,24 @@
     "clean": "rm -rf lib"
   },
   "dependencies": {
-    "@cosmos-building-blocks/common": "^0.7.2",
-    "@cosmos-building-blocks/pipeline": "^0.7.2"
+    "@cosmos-building-blocks/common": "^0.7.3",
+    "@cosmos-building-blocks/pipeline": "^0.7.3"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-certificatemanager": "^1.70.0",
-    "@aws-cdk/aws-codebuild": "^1.70.0",
-    "@aws-cdk/aws-codecommit": "^1.70.0",
-    "@aws-cdk/aws-codepipeline": "^1.70.0",
-    "@aws-cdk/aws-codepipeline-actions": "^1.70.0",
-    "@aws-cdk/aws-ec2": "^1.70.0",
-    "@aws-cdk/aws-ecr": "^1.70.0",
-    "@aws-cdk/aws-ecs": "^1.70.0",
-    "@aws-cdk/aws-elasticloadbalancingv2": "^1.70.0",
-    "@aws-cdk/aws-elasticloadbalancingv2-targets": "^1.70.0",
-    "@aws-cdk/aws-iam": "^1.70.0",
-    "@aws-cdk/aws-kms": "^1.70.0",
-    "@aws-cdk/aws-lambda": "^1.70.0",
-    "@aws-cdk/aws-route53": "^1.70.0",
-    "@aws-cdk/core": "^1.70.0"
+    "@aws-cdk/aws-certificatemanager": "^1.80.0",
+    "@aws-cdk/aws-codebuild": "^1.80.0",
+    "@aws-cdk/aws-codecommit": "^1.80.0",
+    "@aws-cdk/aws-codepipeline": "^1.80.0",
+    "@aws-cdk/aws-codepipeline-actions": "^1.80.0",
+    "@aws-cdk/aws-ec2": "^1.80.0",
+    "@aws-cdk/aws-ecr": "^1.80.0",
+    "@aws-cdk/aws-ecs": "^1.80.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.80.0",
+    "@aws-cdk/aws-elasticloadbalancingv2-targets": "^1.80.0",
+    "@aws-cdk/aws-iam": "^1.80.0",
+    "@aws-cdk/aws-kms": "^1.80.0",
+    "@aws-cdk/aws-lambda": "^1.80.0",
+    "@aws-cdk/aws-route53": "^1.80.0",
+    "@aws-cdk/core": "^1.80.0"
   }
 }

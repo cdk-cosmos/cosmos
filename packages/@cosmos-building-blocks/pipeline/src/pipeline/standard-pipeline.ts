@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Construct, PhysicalName } from '@aws-cdk/core';
 import { IRepository } from '@aws-cdk/aws-codecommit';
 import { Pipeline, Artifact } from '@aws-cdk/aws-codepipeline';
@@ -22,7 +21,7 @@ export interface StandardPipelineProps {
   readonly pipelineName?: string;
   readonly buildName?: string;
   readonly codeSource?: SourceProvider;
-  readonly codeRepo: IRepository;
+  readonly codeRepo?: IRepository;
   readonly codeBranch?: string;
   readonly codeTrigger?: boolean;
   readonly buildRole?: IRole;

@@ -64,7 +64,6 @@ Object {
             "HostArn",
           ],
         },
-        "ProviderType": "GitHubEnterpriseServer",
       },
       "Type": "AWS::CodeStarConnections::Connection",
     },
@@ -73,17 +72,27 @@ Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
-              "Action": "codestaronnections:CreateHost",
+              "Action": Array [
+                "codestar-connections:CreateHost",
+                "codestar-connections:UpdateHost",
+                "codestar-connections:DeleteHost",
+              ],
               "Effect": "Allow",
               "Resource": "*",
             },
             Object {
-              "Action": "codestaronnections:UpdateHost",
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": "codestaronnections:DeleteHost",
+              "Action": Array [
+                "ec2:CreateNetworkInterface",
+                "ec2:CreateTags",
+                "ec2:DescribeDhcpOptions",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeVpcs",
+                "ec2:CreateVpcEndpoint",
+                "ec2:DeleteVpcEndpoints",
+                "ec2:DescribeVpcEndpoints",
+              ],
               "Effect": "Allow",
               "Resource": "*",
             },
@@ -112,12 +121,14 @@ Object {
             "ProviderEndpoint": "https://ghe.com/",
             "ProviderType": "GitHubEnterpriseServer",
             "VpcConfiguration": Object {
-              "SecurityGroupIds": Object {
-                "Fn::GetAtt": Array [
-                  "GHEHostHostSecurityGroup4F6E9143",
-                  "GroupId",
-                ],
-              },
+              "SecurityGroupIds": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "GHEHostHostSecurityGroup4F6E9143",
+                    "GroupId",
+                  ],
+                },
+              ],
               "SubnetIds": Array [
                 "123",
               ],
@@ -125,19 +136,16 @@ Object {
             },
           },
           "physicalResourceId": Object {
-            "id": "GHEHost",
+            "responsePath": "HostArn",
           },
-          "service": "CodeStaronnections",
+          "service": "CodeStarconnections",
         },
         "Delete": Object {
           "action": "deleteHost",
           "parameters": Object {
             "HostArn": "PHYSICAL:RESOURCEID:",
           },
-          "physicalResourceId": Object {
-            "id": "GHEHost",
-          },
-          "service": "CodeStaronnections",
+          "service": "CodeStarconnections",
         },
         "InstallLatestAwsSdk": true,
         "ServiceToken": Object {
@@ -153,12 +161,14 @@ Object {
             "ProviderEndpoint": "https://ghe.com/",
             "ProviderType": "GitHubEnterpriseServer",
             "VpcConfiguration": Object {
-              "SecurityGroupIds": Object {
-                "Fn::GetAtt": Array [
-                  "GHEHostHostSecurityGroup4F6E9143",
-                  "GroupId",
-                ],
-              },
+              "SecurityGroupIds": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "GHEHostHostSecurityGroup4F6E9143",
+                    "GroupId",
+                  ],
+                },
+              ],
               "SubnetIds": Array [
                 "123",
               ],
@@ -166,9 +176,9 @@ Object {
             },
           },
           "physicalResourceId": Object {
-            "id": "GHEHost",
+            "responsePath": "HostArn",
           },
-          "service": "CodeStaronnections",
+          "service": "CodeStarconnections",
         },
       },
       "Type": "Custom::AWS",
@@ -180,8 +190,33 @@ Object {
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
+            "Description": "from 0.0.0.0/0:443",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:443",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
           },
         ],
         "VpcId": "123",
@@ -423,6 +458,7 @@ Object {
             },
           ],
           "Image": "aws/codebuild/standard:4.0",
+          "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
@@ -1021,6 +1057,7 @@ Object {
             },
           ],
           "Image": "aws/codebuild/standard:4.0",
+          "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
@@ -1562,6 +1599,7 @@ Object {
             },
           ],
           "Image": "aws/codebuild/standard:4.0",
+          "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
@@ -1967,6 +2005,7 @@ Object {
         "Environment": Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "Image": "aws/codebuild/standard:4.0",
+          "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
@@ -2434,6 +2473,7 @@ Object {
             },
           ],
           "Image": "aws/codebuild/standard:4.0",
+          "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": false,
           "Type": "LINUX_CONTAINER",
         },

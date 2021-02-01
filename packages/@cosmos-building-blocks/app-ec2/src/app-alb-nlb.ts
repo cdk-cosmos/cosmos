@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { CfnOutput, Construct, Fn } from '@aws-cdk/core';
 import {
   CfnVPCEndpoint,

@@ -16,9 +16,9 @@ export const getRoutingPriorityFromListenerProps = (props: Partial<ApplicationLi
 
   if (props.conditions) {
     // Note: This solution only supports one value
-    const render = props.conditions.map(x => x.renderRawCondition() as ListenerConditionRender);
-    host = render.find(x => x.field === 'host-header')?.hostHeaderConfig?.values[0] || host;
-    path = render.find(x => x.field === 'path-pattern')?.pathPatternConfig?.values[0] || path;
+    const render = props.conditions.map((x) => x.renderRawCondition() as ListenerConditionRender);
+    host = render.find((x) => x.field === 'host-header')?.hostHeaderConfig?.values[0] || host;
+    path = render.find((x) => x.field === 'path-pattern')?.pathPatternConfig?.values[0] || path;
   }
 
   return getRoutingPriority({ host, path });

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import * as fs from 'fs';
 import * as path from 'path';
 import { Stack, App, NestedStack } from '@aws-cdk/core';
