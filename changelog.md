@@ -1,4 +1,22 @@
 
+## v0.7.3 (2021-02-01)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#233](https://github.com/cdk-cosmos/cosmos/pull/233) Add Redis Feature + Add Github Enterprise Feature + Fix Domain Feature + Fix CDK Pipeline Role issue + Fix Github Enterprise Connection ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/cdk-credentials-plugin`, `@cdk-cosmos/core`, `@cosmos-building-blocks/app-ec2`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/network`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#235](https://github.com/cdk-cosmos/cosmos/pull/235) Fix Fix Github Enterprise Webhook ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`
+  * [#234](https://github.com/cdk-cosmos/cosmos/pull/234) Fix NS Record issue ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#233](https://github.com/cdk-cosmos/cosmos/pull/233) Add Redis Feature + Add Github Enterprise Feature + Fix Domain Feature + Fix CDK Pipeline Role issue + Fix Github Enterprise Connection ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.7.2 (2020-12-16)
 
 #### 🚀 Enhancement:
