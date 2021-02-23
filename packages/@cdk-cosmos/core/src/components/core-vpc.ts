@@ -8,10 +8,14 @@ import {
   IVpc,
   InterfaceVpcEndpoint,
   InterfaceVpcEndpointOptions,
+  CfnDHCPOptions,
+  CfnVPCDHCPOptionsAssociation,
 } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
+import { IHostedZone, PrivateHostedZone } from '@aws-cdk/aws-route53';
 
 export interface ICoreVpc extends IVpc {
+  readonly zone?: IHostedZone;
   readonly disableEndpoints?: boolean;
 }
 
@@ -20,13 +24,15 @@ export interface CoreVpcProps extends Partial<VpcProps> {
   cidrMask?: number;
   subnetMask?: number;
   disableEndpoints?: boolean;
+  privateZone?: boolean;
 }
 
 export class CoreVpc extends Vpc implements ICoreVpc {
+  readonly zone?: PrivateHostedZone;
   readonly disableEndpoints: boolean;
 
   constructor(scope: Construct, id: string, props: CoreVpcProps) {
-    const { networkBuilder, cidrMask = 24, subnetMask = 26, disableEndpoints } = props;
+    const { networkBuilder, cidrMask = 24, subnetMask = 26, disableEndpoints, privateZone } = props;
 
     super(scope, id, {
       maxAzs: 2,
@@ -47,6 +53,24 @@ export class CoreVpc extends Vpc implements ICoreVpc {
       service: GatewayVpcEndpointAwsService.S3,
       subnets: [{ subnetGroupName: 'App' }],
     });
+
+    if (privateZone) {
+      this.zone = new PrivateHostedZone(this, 'PrivateZone', {
+        vpc: this,
+        zoneName: 'internal',
+        comment: `Vpc Private Zone for ${this.nodeId()}`,
+      });
+
+      const dhcp = new CfnDHCPOptions(this, 'Dhcp', {
+        domainName: this.zone.zoneName,
+        domainNameServers: ['AmazonProvidedDNS'],
+      });
+
+      new CfnVPCDHCPOptionsAssociation(this, 'DhcpAssociation', {
+        vpcId: this.vpcId,
+        dhcpOptionsId: dhcp.ref,
+      });
+    }
   }
 
   static addCommonEndpoints(vpc: ICoreVpc): void {
