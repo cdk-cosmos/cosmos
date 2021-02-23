@@ -88,47 +88,6 @@ Object {
             "Actions": Array [
               Object {
                 "ActionTypeId": Object {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"}]",
-                  "ProjectName": Object {
-                    "Ref": "CdkPipelineDeploy",
-                  },
-                },
-                "InputArtifacts": Array [
-                  Object {
-                    "Name": "CdkCodeOutput",
-                  },
-                ],
-                "Name": "CdkDiff",
-                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
-                "RunOrder": 1,
-              },
-              Object {
-                "ActionTypeId": Object {
-                  "Category": "Approval",
-                  "Owner": "AWS",
-                  "Provider": "Manual",
-                  "Version": "1",
-                },
-                "Configuration": Object {
-                  "CustomData": "Please review the CdkDiff build.",
-                },
-                "Name": "CdkDiffApproval",
-                "RoleArn": "arn:aws:iam::account:role/CoreCdkMasterRole",
-                "RunOrder": 2,
-              },
-            ],
-            "Name": "Diff",
-          },
-          Object {
-            "Actions": Array [
-              Object {
-                "ActionTypeId": Object {
                   "Category": "Approval",
                   "Owner": "AWS",
                   "Provider": "Manual",
@@ -146,7 +105,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTestGalSys2SolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"AppTestGalSys2SolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -173,7 +132,7 @@ Object {
                   "Version": "1",
                 },
                 "Configuration": Object {
-                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"false\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem CoreCosLink AppTestGalCiCdSolarSystem\\"}]",
+                  "EnvironmentVariables": "[{\\"name\\":\\"DIFF\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"DEPLOY\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"true\\"},{\\"name\\":\\"STACKS\\",\\"type\\":\\"PLAINTEXT\\",\\"value\\":\\"-e CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem CoreCosLink AppTestGalCiCdSolarSystem\\"}]",
                   "ProjectName": Object {
                     "Ref": "CdkPipelineDeploy",
                   },
@@ -706,6 +665,20 @@ Object {
         ],
       },
     },
+    "VpcZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalCiCdVpcZoneId",
+      },
+      "Value": Object {
+        "Ref": "VpcPrivateZone",
+      },
+    },
+    "VpcZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalCiCdVpcZoneName",
+      },
+      "Value": "internal",
+    },
     "ZoneId": Object {
       "Export": Object {
         "Name": "CoreGalCiCdZoneId",
@@ -1107,6 +1080,79 @@ Object {
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcDhcp": Object {
+      "Properties": Object {
+        "DomainName": "internal",
+        "DomainNameServers": Array [
+          "AmazonProvidedDNS",
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/CiCd/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::DHCPOptions",
+    },
+    "VpcDhcpAssociation": Object {
+      "Properties": Object {
+        "DhcpOptionsId": Object {
+          "Ref": "VpcDhcp",
+        },
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
+    },
+    "VpcPrivateZone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Vpc Private Zone for CoreCosGalCiCdVpc",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "CiCd",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/CiCd/Vpc",
+          },
+        ],
+        "Name": "internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Ref": "Vpc",
+            },
+            "VPCRegion": "region",
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
     },
     "VpcS3Gateway": Object {
       "Properties": Object {

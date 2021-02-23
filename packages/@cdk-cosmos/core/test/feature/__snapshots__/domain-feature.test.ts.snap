@@ -477,6 +477,20 @@ Object {
         ],
       },
     },
+    "VpcZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcZoneId",
+      },
+      "Value": Object {
+        "Ref": "VpcPrivateZone",
+      },
+    },
+    "VpcZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcZoneName",
+      },
+      "Value": "internal",
+    },
     "ZoneId": Object {
       "Export": Object {
         "Name": "CoreGalSysZoneId",
@@ -845,6 +859,79 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
+    "VpcDhcp": Object {
+      "Properties": Object {
+        "DomainName": "internal",
+        "DomainNameServers": Array [
+          "AmazonProvidedDNS",
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::DHCPOptions",
+    },
+    "VpcDhcpAssociation": Object {
+      "Properties": Object {
+        "DhcpOptionsId": Object {
+          "Ref": "VpcDhcp",
+        },
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
+    },
+    "VpcPrivateZone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Vpc Private Zone for CoreCosGalSysVpc",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal/Sys/Vpc",
+          },
+        ],
+        "Name": "internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Ref": "Vpc",
+            },
+            "VPCRegion": "region",
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
     "VpcS3Gateway": Object {
       "Properties": Object {
         "RouteTableIds": Array [
@@ -1206,6 +1293,20 @@ Object {
         ],
       },
     },
+    "VpcZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGal2Sys2VpcZoneId",
+      },
+      "Value": Object {
+        "Ref": "VpcPrivateZone",
+      },
+    },
+    "VpcZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGal2Sys2VpcZoneName",
+      },
+      "Value": "internal",
+    },
     "ZoneId": Object {
       "Export": Object {
         "Name": "CoreGal2Sys2ZoneId",
@@ -1555,6 +1656,79 @@ Object {
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VpcDhcp": Object {
+      "Properties": Object {
+        "DomainName": "internal",
+        "DomainNameServers": Array [
+          "AmazonProvidedDNS",
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal2/Sys2/Vpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::DHCPOptions",
+    },
+    "VpcDhcpAssociation": Object {
+      "Properties": Object {
+        "DhcpOptionsId": Object {
+          "Ref": "VpcDhcp",
+        },
+        "VpcId": Object {
+          "Ref": "Vpc",
+        },
+      },
+      "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
+    },
+    "VpcPrivateZone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Vpc Private Zone for CoreCosGal2Sys2Vpc",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal2",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys2",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "Cos/Gal2/Sys2/Vpc",
+          },
+        ],
+        "Name": "internal.",
+        "VPCs": Array [
+          Object {
+            "VPCId": Object {
+              "Ref": "Vpc",
+            },
+            "VPCRegion": "region",
+          },
+        ],
+      },
+      "Type": "AWS::Route53::HostedZone",
     },
     "VpcS3Gateway": Object {
       "Properties": Object {

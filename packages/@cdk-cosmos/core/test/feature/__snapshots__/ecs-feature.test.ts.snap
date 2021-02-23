@@ -104,6 +104,20 @@ Object {
         ],
       },
     },
+    "VpcZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcZoneId",
+      },
+      "Value": Object {
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcPrivateZone708D6674Ref84EADEB4",
+      },
+    },
+    "VpcZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSysVpcZoneName",
+      },
+      "Value": "internal",
+    },
     "ZoneId": Object {
       "Export": Object {
         "Name": "CoreGalSysZoneId",
@@ -1683,6 +1697,20 @@ Object {
           ],
         ],
       },
+    },
+    "VpcZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreGalSys1VpcZoneId",
+      },
+      "Value": Object {
+        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcPrivateZone708D6674Ref84EADEB4",
+      },
+    },
+    "VpcZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreGalSys1VpcZoneName",
+      },
+      "Value": "internal",
     },
     "ZoneId": Object {
       "Export": Object {

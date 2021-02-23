@@ -39,7 +39,7 @@ export interface SolarSystemCoreStackProps extends BaseStackProps {
 
 export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore {
   readonly galaxy: IGalaxyCore;
-  readonly vpc: Vpc;
+  readonly vpc: CoreVpc;
   readonly zone: PublicHostedZone;
   readonly privateZone: PrivateHostedZone;
   readonly certificate?: Certificate;
@@ -58,7 +58,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
 
     this.galaxy = galaxy;
 
-    if (vpc) this.vpc = vpc as Vpc;
+    if (vpc) this.vpc = vpc as CoreVpc;
     else {
       const networkBuilder = this.networkBuilder || vpcProps.networkBuilder;
       if (!networkBuilder) throw new Error('Network Builder must be provided.');
@@ -110,6 +110,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     }
 
     new RemoteVpc(this.vpc, this.singletonId('Vpc'), this);
+    if (this.vpc.zone) new RemoteZone(this.vpc.zone, this.singletonId('VpcZone'), new Construct(this, 'VpcZone'));
     new RemoteZone(this.zone, this.singletonId('Zone'));
     new RemoteZone(this.privateZone, this.singletonId('PrivateZone'));
 
