@@ -1,4 +1,4 @@
-import { Construct } from '@aws-cdk/core';
+import { Construct, CfnDeletionPolicy, CfnResource } from '@aws-cdk/core';
 import { Role } from '@aws-cdk/aws-iam';
 import { Project, IProject } from '@aws-cdk/aws-codebuild';
 import { IRepository, Repository, RepositoryProps } from '@aws-cdk/aws-codecommit';
@@ -43,6 +43,7 @@ export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatu
         ...cdkRepoProps,
         repositoryName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Repo', '-').toLowerCase(),
       });
+      (this.cdkRepo.node.defaultChild as CfnResource).cfnOptions.deletionPolicy = CfnDeletionPolicy.RETAIN;
     }
 
     this.cdkPipeline = new CdkPipeline(this, 'CdkPipeline', {
