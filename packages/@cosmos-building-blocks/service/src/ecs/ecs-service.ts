@@ -24,10 +24,14 @@ import {
   ApplicationListenerRuleProps,
   ApplicationTargetGroupProps,
   ListenerAction,
+  ILoadBalancerV2,
+  ListenerCondition,
 } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { IVpc } from '@aws-cdk/aws-ec2';
 import { LogGroup, LogGroupProps, RetentionDays } from '@aws-cdk/aws-logs';
 import { EnableScalingProps } from '@aws-cdk/aws-applicationautoscaling';
+import { ARecord, IHostedZone, RecordTarget } from '@aws-cdk/aws-route53';
+import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 import { getRoutingPriorityFromListenerProps } from '../utils';
 
 export interface EcsServiceProps {
@@ -51,7 +55,7 @@ export class EcsService extends Construct {
   readonly container: ContainerDefinition;
   readonly service: Ec2Service;
   readonly targetGroup?: ApplicationTargetGroup;
-  readonly listenerRules?: ApplicationListenerRule[];
+  readonly listenerRules: ApplicationListenerRule[];
   readonly scaling?: ScalableTaskCount;
 
   constructor(scope: Construct, id: string, props: EcsServiceProps) {
@@ -187,4 +191,26 @@ export class EcsService extends Construct {
       targetGroup: this.targetGroup,
     });
   }
+
+  addSubdomain(id: string, props: SubDomainProps) {
+    const { zone, subdomain, target } = props;
+    const _target = target instanceof RecordTarget ? target : RecordTarget.fromAlias(new LoadBalancerTarget(target));
+    const record = new ARecord(this, `${id}Record`, {
+      zone: zone,
+      recordName: subdomain,
+      target: _target,
+    });
+
+    this.listenerRules?.forEach((x) => {
+      x.addCondition(ListenerCondition.hostHeaders([record.domainName]));
+    });
+
+    return record;
+  }
+}
+
+export interface SubDomainProps {
+  zone: IHostedZone;
+  subdomain: string;
+  target: RecordTarget | ILoadBalancerV2;
 }

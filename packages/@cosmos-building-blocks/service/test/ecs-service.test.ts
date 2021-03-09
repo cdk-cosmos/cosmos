@@ -1,10 +1,11 @@
 import '@aws-cdk/assert/jest';
 import { SynthUtils } from '@aws-cdk/assert';
 import { App, Stack } from '@aws-cdk/core';
-import { EcsService } from '../src';
 import { Cluster, ContainerImage } from '@aws-cdk/aws-ecs';
 import { Vpc, SecurityGroup } from '@aws-cdk/aws-ec2';
-import { ApplicationListener, ListenerCondition } from '@aws-cdk/aws-elasticloadbalancingv2';
+import { ApplicationListener, ApplicationLoadBalancer, ListenerCondition } from '@aws-cdk/aws-elasticloadbalancingv2';
+import { HostedZone } from '@aws-cdk/aws-route53';
+import { EcsService } from '../src';
 
 const app = new App();
 const stack = new Stack(app, 'Stack');
@@ -26,7 +27,7 @@ const listener2 = ApplicationListener.fromApplicationListenerAttributes(stack, '
   listenerArn: 'Listener2',
   securityGroup: cluster.connections.securityGroups[0],
 });
-new EcsService(stack, 'EcsService', {
+const service = new EcsService(stack, 'EcsService', {
   cluster,
   vpc,
   httpListener: listener,
@@ -38,6 +39,19 @@ new EcsService(stack, 'EcsService', {
   routingProps: {
     conditions: [ListenerCondition.pathPatterns(['/path'])],
   },
+});
+service.addSubdomain('Test', {
+  zone: HostedZone.fromHostedZoneAttributes(stack, 'Zone', {
+    hostedZoneId: '1234',
+    zoneName: 'cosmos',
+  }),
+  subdomain: 'test',
+  target: ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(stack, 'ALB', {
+    loadBalancerArn: 'ARN::ALB',
+    securityGroupId: 'SG',
+    loadBalancerDnsName: 'ALB',
+    loadBalancerCanonicalHostedZoneId: '4321',
+  }),
 });
 
 const synth = SynthUtils.toCloudFormation(stack);

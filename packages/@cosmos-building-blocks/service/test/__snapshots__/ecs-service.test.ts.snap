@@ -60,6 +60,16 @@ Object {
               ],
             },
           },
+          Object {
+            "Field": "host-header",
+            "HostHeaderConfig": Object {
+              "Values": Array [
+                Object {
+                  "Ref": "EcsServiceTestRecord83349C2C",
+                },
+              ],
+            },
+          },
         ],
         "ListenerArn": "Listener",
         "Priority": 20283,
@@ -82,6 +92,16 @@ Object {
             "PathPatternConfig": Object {
               "Values": Array [
                 "/path",
+              ],
+            },
+          },
+          Object {
+            "Field": "host-header",
+            "HostHeaderConfig": Object {
+              "Values": Array [
+                Object {
+                  "Ref": "EcsServiceTestRecord83349C2C",
+                },
               ],
             },
           },
@@ -226,6 +246,18 @@ Object {
         },
       },
       "Type": "AWS::IAM::Role",
+    },
+    "EcsServiceTestRecord83349C2C": Object {
+      "Properties": Object {
+        "AliasTarget": Object {
+          "DNSName": "dualstack.ALB",
+          "HostedZoneId": "4321",
+        },
+        "HostedZoneId": "1234",
+        "Name": "test.cosmos.",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
     },
     "SecurityGroupfromStackSecurityGroup277A41033276865535DAF39B3F": Object {
       "Properties": Object {
