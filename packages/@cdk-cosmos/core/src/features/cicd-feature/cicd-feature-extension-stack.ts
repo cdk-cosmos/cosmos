@@ -45,7 +45,6 @@ export class CiCdFeatureExtensionStack extends BaseFeatureConstruct implements I
         mutable: false,
       }),
       cdkRepo: this.cdkRepo,
-      deployDiffStage: false,
       ...cdkPipelineProps,
       pipelineName: this.solarSystem.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
       deployName: this.solarSystem.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
