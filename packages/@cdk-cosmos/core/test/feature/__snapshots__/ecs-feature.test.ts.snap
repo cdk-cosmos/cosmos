@@ -104,20 +104,6 @@ Object {
         ],
       },
     },
-    "VpcZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalSysVpcZoneId",
-      },
-      "Value": Object {
-        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcPrivateZone708D6674Ref84EADEB4",
-      },
-    },
-    "VpcZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGalSysVpcZoneName",
-      },
-      "Value": "internal",
-    },
     "ZoneId": Object {
       "Export": Object {
         "Name": "CoreGalSysZoneId",
@@ -150,16 +136,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameterse3ae0d1fe4849792d10c49cba1a019430ef78cb49a6640cfda6bdda2f09ec4a4ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"e3ae0d1fe4849792d10c49cba1a019430ef78cb49a6640cfda6bdda2f09ec4a4\\"",
+    "AssetParameters38a75b2e707de5f169491d9f30a5ed4bf44bc2993cecc5e7719e4028ceaf897dArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"38a75b2e707de5f169491d9f30a5ed4bf44bc2993cecc5e7719e4028ceaf897d\\"",
       "Type": "String",
     },
-    "AssetParameterse3ae0d1fe4849792d10c49cba1a019430ef78cb49a6640cfda6bdda2f09ec4a4S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"e3ae0d1fe4849792d10c49cba1a019430ef78cb49a6640cfda6bdda2f09ec4a4\\"",
+    "AssetParameters38a75b2e707de5f169491d9f30a5ed4bf44bc2993cecc5e7719e4028ceaf897dS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"38a75b2e707de5f169491d9f30a5ed4bf44bc2993cecc5e7719e4028ceaf897d\\"",
       "Type": "String",
     },
-    "AssetParameterse3ae0d1fe4849792d10c49cba1a019430ef78cb49a6640cfda6bdda2f09ec4a4S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"e3ae0d1fe4849792d10c49cba1a019430ef78cb49a6640cfda6bdda2f09ec4a4\\"",
+    "AssetParameters38a75b2e707de5f169491d9f30a5ed4bf44bc2993cecc5e7719e4028ceaf897dS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"38a75b2e707de5f169491d9f30a5ed4bf44bc2993cecc5e7719e4028ceaf897d\\"",
       "Type": "String",
     },
   },
@@ -355,7 +341,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameterse3ae0d1fe4849792d10c49cba1a019430ef78cb49a6640cfda6bdda2f09ec4a4S3Bucket",
+                "Ref": "AssetParameters38a75b2e707de5f169491d9f30a5ed4bf44bc2993cecc5e7719e4028ceaf897dS3Bucket",
               },
               "/",
               Object {
@@ -365,7 +351,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameterse3ae0d1fe4849792d10c49cba1a019430ef78cb49a6640cfda6bdda2f09ec4a4S3VersionKey",
+                        "Ref": "AssetParameters38a75b2e707de5f169491d9f30a5ed4bf44bc2993cecc5e7719e4028ceaf897dS3VersionKey",
                       },
                     ],
                   },
@@ -378,7 +364,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameterse3ae0d1fe4849792d10c49cba1a019430ef78cb49a6640cfda6bdda2f09ec4a4S3VersionKey",
+                        "Ref": "AssetParameters38a75b2e707de5f169491d9f30a5ed4bf44bc2993cecc5e7719e4028ceaf897dS3VersionKey",
                       },
                     ],
                   },
@@ -816,17 +802,17 @@ Object {
           },
           Object {
             "CidrIp": "0.0.0.0/0",
-            "Description": "from 0.0.0.0/0:8080",
-            "FromPort": 8080,
-            "IpProtocol": "tcp",
-            "ToPort": 8080,
-          },
-          Object {
-            "CidrIp": "0.0.0.0/0",
             "Description": "from 0.0.0.0/0:443",
             "FromPort": 443,
             "IpProtocol": "tcp",
             "ToPort": 443,
+          },
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:8080",
+            "FromPort": 8080,
+            "IpProtocol": "tcp",
+            "ToPort": 8080,
           },
           Object {
             "CidrIp": "0.0.0.0/0",
@@ -1697,20 +1683,6 @@ Object {
           ],
         ],
       },
-    },
-    "VpcZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalSys1VpcZoneId",
-      },
-      "Value": Object {
-        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcPrivateZone708D6674Ref84EADEB4",
-      },
-    },
-    "VpcZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGalSys1VpcZoneName",
-      },
-      "Value": "internal",
     },
     "ZoneId": Object {
       "Export": Object {

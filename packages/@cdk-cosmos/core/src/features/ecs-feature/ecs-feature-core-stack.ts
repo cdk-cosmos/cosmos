@@ -39,6 +39,7 @@ export interface EcsSolarSystemCoreStackProps extends BaseFeatureStackProps {
   clusterProps?: ClusterProps;
   albProps?: Partial<ApplicationLoadBalancerProps>;
   albListenerCidr?: string;
+  albInternalListenerCidr?: string;
 }
 
 export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeatureCore {
@@ -58,7 +59,12 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
       ...props,
     });
 
-    const { albListenerCidr = '0.0.0.0/0', clusterProps = {}, albProps = {} } = props || {};
+    const {
+      albListenerCidr = '0.0.0.0/0',
+      albInternalListenerCidr = albListenerCidr as string,
+      clusterProps = {},
+      albProps = {},
+    } = props || {};
 
     this.solarSystem = solarSystem;
 
@@ -138,13 +144,12 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
       });
     }
 
-    for (const listener of [
-      this.httpListener,
-      this.httpInternalListener,
-      this.httpsListener,
-      this.httpsInternalListener,
-    ]) {
+    for (const listener of [this.httpListener, this.httpsListener]) {
       if (listener) configureListener(listener, albListenerCidr);
+    }
+
+    for (const listener of [this.httpInternalListener, this.httpsInternalListener]) {
+      if (listener) configureListener(listener, albInternalListenerCidr);
     }
 
     new RemoteCluster(this.cluster, this.singletonId('Cluster'));

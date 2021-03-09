@@ -667,20 +667,6 @@ Object {
         ],
       },
     },
-    "VpcZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdVpcZoneId",
-      },
-      "Value": Object {
-        "Ref": "VpcPrivateZone",
-      },
-    },
-    "VpcZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGalCiCdVpcZoneName",
-      },
-      "Value": "internal",
-    },
     "ZoneId": Object {
       "Export": Object {
         "Name": "CoreGalCiCdZoneId",
@@ -1082,79 +1068,6 @@ Object {
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcDhcp": Object {
-      "Properties": Object {
-        "DomainName": "internal",
-        "DomainNameServers": Array [
-          "AmazonProvidedDNS",
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::DHCPOptions",
-    },
-    "VpcDhcpAssociation": Object {
-      "Properties": Object {
-        "DhcpOptionsId": Object {
-          "Ref": "VpcDhcp",
-        },
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
-    },
-    "VpcPrivateZone": Object {
-      "Properties": Object {
-        "HostedZoneConfig": Object {
-          "Comment": "Vpc Private Zone for CoreCosGalCiCdVpc",
-        },
-        "HostedZoneTags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/CiCd/Vpc",
-          },
-        ],
-        "Name": "internal.",
-        "VPCs": Array [
-          Object {
-            "VPCId": Object {
-              "Ref": "Vpc",
-            },
-            "VPCRegion": "region",
-          },
-        ],
-      },
-      "Type": "AWS::Route53::HostedZone",
     },
     "VpcS3Gateway": Object {
       "Properties": Object {

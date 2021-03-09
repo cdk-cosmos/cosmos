@@ -70,29 +70,18 @@ Object {
         ],
       },
     },
-    "ExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcPrivateZone708D6674Ref": Object {
-      "Export": Object {
-        "Name": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcPrivateZone708D6674Ref84EADEB4",
-      },
-      "Value": Object {
-        "Fn::GetAtt": Array [
-          "SharedVpc",
-          "Outputs.CosGalSharedVpcPrivateZone708D6674Ref",
-        ],
-      },
-    },
   },
   "Parameters": Object {
-    "AssetParameters5ea6f2f5f24ce91b1cd3dc087254e81c249da4f3a9de4d6ffb81070dfba5a3abArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"5ea6f2f5f24ce91b1cd3dc087254e81c249da4f3a9de4d6ffb81070dfba5a3ab\\"",
+    "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43\\"",
       "Type": "String",
     },
-    "AssetParameters5ea6f2f5f24ce91b1cd3dc087254e81c249da4f3a9de4d6ffb81070dfba5a3abS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"5ea6f2f5f24ce91b1cd3dc087254e81c249da4f3a9de4d6ffb81070dfba5a3ab\\"",
+    "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43\\"",
       "Type": "String",
     },
-    "AssetParameters5ea6f2f5f24ce91b1cd3dc087254e81c249da4f3a9de4d6ffb81070dfba5a3abS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"5ea6f2f5f24ce91b1cd3dc087254e81c249da4f3a9de4d6ffb81070dfba5a3ab\\"",
+    "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43\\"",
       "Type": "String",
     },
   },
@@ -173,7 +162,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters5ea6f2f5f24ce91b1cd3dc087254e81c249da4f3a9de4d6ffb81070dfba5a3abS3Bucket",
+                "Ref": "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43S3Bucket",
               },
               "/",
               Object {
@@ -183,7 +172,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters5ea6f2f5f24ce91b1cd3dc087254e81c249da4f3a9de4d6ffb81070dfba5a3abS3VersionKey",
+                        "Ref": "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43S3VersionKey",
                       },
                     ],
                   },
@@ -196,7 +185,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters5ea6f2f5f24ce91b1cd3dc087254e81c249da4f3a9de4d6ffb81070dfba5a3abS3VersionKey",
+                        "Ref": "AssetParameters63add2c1f5cea0570b97e2560c873581d693384a10295bd61c78dcdba8787d43S3VersionKey",
                       },
                     ],
                   },
@@ -246,11 +235,6 @@ Object {
     "CosGalSharedVpcEA1B9578Ref": Object {
       "Value": Object {
         "Ref": "Vpc",
-      },
-    },
-    "CosGalSharedVpcPrivateZone708D6674Ref": Object {
-      "Value": Object {
-        "Ref": "VpcPrivateZone",
       },
     },
   },
@@ -518,79 +502,6 @@ Object {
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcDhcp": Object {
-      "Properties": Object {
-        "DomainName": "internal",
-        "DomainNameServers": Array [
-          "AmazonProvidedDNS",
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "SharedVpc",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc/Vpc",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::DHCPOptions",
-    },
-    "VpcDhcpAssociation": Object {
-      "Properties": Object {
-        "DhcpOptionsId": Object {
-          "Ref": "VpcDhcp",
-        },
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
-    },
-    "VpcPrivateZone": Object {
-      "Properties": Object {
-        "HostedZoneConfig": Object {
-          "Comment": "Vpc Private Zone for CoreCosGalVpc",
-        },
-        "HostedZoneTags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "SharedVpc",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/SharedVpc/Vpc",
-          },
-        ],
-        "Name": "internal.",
-        "VPCs": Array [
-          Object {
-            "VPCId": Object {
-              "Ref": "Vpc",
-            },
-            "VPCRegion": "region",
-          },
-        ],
-      },
-      "Type": "AWS::Route53::HostedZone",
     },
     "VpcS3Gateway": Object {
       "Properties": Object {
@@ -983,20 +894,6 @@ Object {
         ],
       },
     },
-    "VpcZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGalSysVpcZoneId",
-      },
-      "Value": Object {
-        "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedVpcOutputsCosGalSharedVpcPrivateZone708D6674Ref84EADEB4",
-      },
-    },
-    "VpcZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGalSysVpcZoneName",
-      },
-      "Value": "internal",
-    },
     "ZoneId": Object {
       "Export": Object {
         "Name": "CoreGalSysZoneId",
@@ -1183,20 +1080,6 @@ Object {
           ],
         ],
       },
-    },
-    "VpcZoneZoneId": Object {
-      "Export": Object {
-        "Name": "CoreGal2Sys2VpcZoneId",
-      },
-      "Value": Object {
-        "Ref": "VpcPrivateZone",
-      },
-    },
-    "VpcZoneZoneName": Object {
-      "Export": Object {
-        "Name": "CoreGal2Sys2VpcZoneName",
-      },
-      "Value": "internal",
     },
     "ZoneId": Object {
       "Export": Object {
@@ -1524,79 +1407,6 @@ Object {
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
-    },
-    "VpcDhcp": Object {
-      "Properties": Object {
-        "DomainName": "internal",
-        "DomainNameServers": Array [
-          "AmazonProvidedDNS",
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal2",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys2",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal2/Sys2/Vpc",
-          },
-        ],
-      },
-      "Type": "AWS::EC2::DHCPOptions",
-    },
-    "VpcDhcpAssociation": Object {
-      "Properties": Object {
-        "DhcpOptionsId": Object {
-          "Ref": "VpcDhcp",
-        },
-        "VpcId": Object {
-          "Ref": "Vpc",
-        },
-      },
-      "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
-    },
-    "VpcPrivateZone": Object {
-      "Properties": Object {
-        "HostedZoneConfig": Object {
-          "Comment": "Vpc Private Zone for CoreCosGal2Sys2Vpc",
-        },
-        "HostedZoneTags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal2",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys2",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal2/Sys2/Vpc",
-          },
-        ],
-        "Name": "internal.",
-        "VPCs": Array [
-          Object {
-            "VPCId": Object {
-              "Ref": "Vpc",
-            },
-            "VPCRegion": "region",
-          },
-        ],
-      },
-      "Type": "AWS::Route53::HostedZone",
     },
     "VpcS3Gateway": Object {
       "Properties": Object {

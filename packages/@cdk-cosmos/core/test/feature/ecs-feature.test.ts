@@ -1,4 +1,5 @@
 import '@aws-cdk/assert/jest';
+import { arrayWith } from '@aws-cdk/assert';
 import { App } from '@aws-cdk/core';
 import { synthesizeStacks } from '../../../../../src/test';
 import {
@@ -31,6 +32,16 @@ solarSystem2.ecs?.addDockerConfig({ TEST2: 'test2' });
 solarSystem2.ecs?.addEcsAgentConfig({ TEST: 'test' });
 solarSystem2.ecs?.addEcsAgentConfig({ TEST2: 'test2' });
 
+const solarSystem3 = new SolarSystemCoreStack(galaxy, 'Sys2', {
+  vpc: galaxy.sharedVpc?.vpc,
+  certificate: { subDomains: ['*'] },
+});
+
+solarSystem3.addEcs({
+  albListenerCidr: '10.0.0.0/8',
+  albInternalListenerCidr: '10.0.0.1/24',
+});
+
 const cosmosExtension = new CosmosExtensionStack(app, 'Test');
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal');
 const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys');
@@ -61,17 +72,17 @@ describe('ECS Feature', () => {
       },
       {
         CidrIp: '0.0.0.0/0',
-        Description: 'from 0.0.0.0/0:8080',
-        FromPort: 8080,
-        IpProtocol: 'tcp',
-        ToPort: 8080,
-      },
-      {
-        CidrIp: '0.0.0.0/0',
         Description: 'from 0.0.0.0/0:443',
         FromPort: 443,
         IpProtocol: 'tcp',
         ToPort: 443,
+      },
+      {
+        CidrIp: '0.0.0.0/0',
+        Description: 'from 0.0.0.0/0:8080',
+        FromPort: 8080,
+        IpProtocol: 'tcp',
+        ToPort: 8080,
       },
       {
         CidrIp: '0.0.0.0/0',
@@ -99,6 +110,27 @@ describe('ECS Feature', () => {
       },
     ];
     expect(solarSystem2.ecs).toHaveResource('AWS::EC2::SecurityGroup', { SecurityGroupIngress: httpSgIngress });
+  });
+
+  test('should be an have correct security groups with albInternalListenerCidr', () => {
+    expect(solarSystem3.ecs).toHaveResource('AWS::EC2::SecurityGroup', {
+      SecurityGroupIngress: arrayWith(
+        {
+          CidrIp: '10.0.0.1/24',
+          Description: 'from 10.0.0.1/24:8080',
+          FromPort: 8080,
+          IpProtocol: 'tcp',
+          ToPort: 8080,
+        },
+        {
+          CidrIp: '10.0.0.1/24',
+          Description: 'from 10.0.0.1/24:8443',
+          FromPort: 8443,
+          IpProtocol: 'tcp',
+          ToPort: 8443,
+        }
+      ),
+    });
   });
 
   test('should match snapshot', () => {
