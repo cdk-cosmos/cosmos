@@ -49,7 +49,7 @@ export interface EcsServiceProps {
   targetGroupProps?: Partial<ApplicationTargetGroupProps>;
   routingProps?: Partial<ApplicationListenerRuleProps> & {
     httpsRedirect?: boolean;
-    subDomains?: string[];
+    subdomains?: string[];
     certificate?: boolean;
   };
   scalingProps?: EnableScalingProps;
@@ -64,7 +64,7 @@ export class EcsService extends Construct {
   readonly listenerRules: ApplicationListenerRule[];
   readonly scaling?: ScalableTaskCount;
   readonly certificate?: Certificate;
-  readonly subDomains: ARecord[];
+  readonly subdomains: ARecord[];
 
   constructor(scope: Construct, id: string, props: EcsServiceProps) {
     super(scope, id);
@@ -86,7 +86,7 @@ export class EcsService extends Construct {
     } = props;
 
     this.listenerRules = [];
-    this.subDomains = [];
+    this.subdomains = [];
 
     this.logGroup = new LogGroup(this, 'Logs', {
       retention: RetentionDays.ONE_MONTH,
@@ -118,7 +118,7 @@ export class EcsService extends Construct {
     });
 
     if (routingProps) {
-      const { httpsRedirect, subDomains, certificate } = routingProps;
+      const { httpsRedirect, subdomains, certificate } = routingProps;
 
       const conditions = [...(routingProps.conditions || [])];
       const _routingProps = {
@@ -144,20 +144,20 @@ export class EcsService extends Construct {
         ],
       });
 
-      if (subDomains) {
+      if (subdomains) {
         if (!zone) throw new Error('Please provide zone prop.');
         if (!alb) throw new Error('Please provide alb prop.');
 
-        subDomains.forEach((subdomain, i) => {
+        subdomains.forEach((subdomain, i) => {
           const record = new ARecord(this, `Subdomain${i}`, {
             zone: zone,
             recordName: subdomain,
             target: RecordTarget.fromAlias(new LoadBalancerTarget(alb)),
           });
-          this.subDomains.push(record);
+          this.subdomains.push(record);
         });
 
-        conditions.push(ListenerCondition.hostHeaders(subDomains.map((x) => `${x}.${zone.zoneName}`)));
+        conditions.push(ListenerCondition.hostHeaders(subdomains.map((x) => `${x}.${zone.zoneName}`)));
       }
 
       // Render the priority
@@ -199,12 +199,12 @@ export class EcsService extends Construct {
         if (!zone) throw new Error('Please provide zone prop.');
         if (!alb) throw new Error('Please provide alb prop.');
         if (!httpsListener) throw new Error('Please provide httpsListener prop.');
-        if (!subDomains?.length) throw new Error('Please use subDomains prop with certificate.');
+        if (!subdomains?.length) throw new Error('Please use subDomains prop with certificate.');
 
         this.certificate = new DnsValidatedCertificate(this, 'Certificate', {
           hostedZone: zone,
           domainName: zone.zoneName,
-          subjectAlternativeNames: subDomains.map((x) => `${x}.${zone.zoneName}`),
+          subjectAlternativeNames: subdomains.map((x) => `${x}.${zone.zoneName}`),
         });
 
         httpsListener.addCertificateArns(this.certificate.node.id, [this.certificate.certificateArn]);

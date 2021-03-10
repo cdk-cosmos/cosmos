@@ -66,7 +66,7 @@ new EcsService(stack, 'EcsService2', {
     conditions: [ListenerCondition.pathPatterns(['*'])],
     httpsRedirect: true,
     certificate: true,
-    subDomains: ['test'],
+    subdomains: ['test'],
   },
 });
 
