@@ -1,4 +1,4 @@
-import { Annotations, Construct, Stack } from '@aws-cdk/core';
+import { Construct, Stack } from '@aws-cdk/core';
 import { ApplicationListenerRuleProps } from '@aws-cdk/aws-elasticloadbalancingv2';
 
 interface ListenerConditionRender {
