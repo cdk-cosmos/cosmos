@@ -27,31 +27,47 @@ const listener2 = ApplicationListener.fromApplicationListenerAttributes(stack, '
   listenerArn: 'Listener2',
   securityGroup: cluster.connections.securityGroups[0],
 });
-const service = new EcsService(stack, 'EcsService', {
+const zone = HostedZone.fromHostedZoneAttributes(stack, 'Zone', {
+  hostedZoneId: '1234',
+  zoneName: 'cosmos',
+});
+const alb = ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(stack, 'ALB', {
+  loadBalancerArn: 'ARN::ALB',
+  securityGroupId: 'SG',
+  loadBalancerDnsName: 'ALB',
+  loadBalancerCanonicalHostedZoneId: '4321',
+});
+
+new EcsService(stack, 'EcsService', {
   cluster,
   vpc,
   httpListener: listener,
   httpsListener: listener2,
-  httpsRedirect: true,
   containerProps: {
     image: ContainerImage.fromRegistry('Image'),
   },
   routingProps: {
     conditions: [ListenerCondition.pathPatterns(['/path'])],
+    httpsRedirect: true,
   },
 });
-service.addSubdomain('Test', {
-  zone: HostedZone.fromHostedZoneAttributes(stack, 'Zone', {
-    hostedZoneId: '1234',
-    zoneName: 'cosmos',
-  }),
-  subdomain: 'test',
-  target: ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(stack, 'ALB', {
-    loadBalancerArn: 'ARN::ALB',
-    securityGroupId: 'SG',
-    loadBalancerDnsName: 'ALB',
-    loadBalancerCanonicalHostedZoneId: '4321',
-  }),
+
+new EcsService(stack, 'EcsService2', {
+  cluster,
+  vpc,
+  zone,
+  alb,
+  httpListener: listener,
+  httpsListener: listener2,
+  containerProps: {
+    image: ContainerImage.fromRegistry('Image'),
+  },
+  routingProps: {
+    conditions: [ListenerCondition.pathPatterns(['*'])],
+    httpsRedirect: true,
+    certificate: true,
+    subDomains: ['test'],
+  },
 });
 
 const synth = SynthUtils.toCloudFormation(stack);
