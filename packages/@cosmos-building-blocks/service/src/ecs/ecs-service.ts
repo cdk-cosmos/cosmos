@@ -33,7 +33,7 @@ import { EnableScalingProps } from '@aws-cdk/aws-applicationautoscaling';
 import { ARecord, IHostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 import { Certificate, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
-import { getRoutingPriorityFromListenerProps } from '../utils';
+import { getRoutingPriorityFromListenerProps } from '.';
 
 export interface EcsServiceProps {
   vpc: IVpc;
@@ -119,8 +119,10 @@ export class EcsService extends Construct {
 
     if (routingProps) {
       const { httpsRedirect, subDomains, certificate } = routingProps;
+
       const conditions = [...(routingProps.conditions || [])];
       const _routingProps = {
+        priority: 0,
         ...routingProps,
         conditions: conditions,
       };
@@ -158,10 +160,12 @@ export class EcsService extends Construct {
         conditions.push(ListenerCondition.hostHeaders(subDomains.map((x) => `${x}.${zone.zoneName}`)));
       }
 
+      // Render the priority
+      _routingProps.priority = getRoutingPriorityFromListenerProps(this, _routingProps);
+
       if (httpsListener) {
         this.listenerRules.push(
           new ApplicationListenerRule(this, `HttpsServiceRule`, {
-            priority: getRoutingPriorityFromListenerProps(_routingProps),
             ..._routingProps,
             listener: httpsListener,
             action: ListenerAction.forward([this.targetGroup]),
@@ -173,7 +177,6 @@ export class EcsService extends Construct {
         if (!httpListener) throw new Error('To enable https redirect you must provide an httpListener');
 
         new ApplicationListenerRule(this, 'HttpsRedirect', {
-          priority: getRoutingPriorityFromListenerProps(_routingProps),
           ..._routingProps,
           listener: httpListener,
           action: ListenerAction.redirect({
@@ -185,7 +188,6 @@ export class EcsService extends Construct {
       } else if (httpListener) {
         this.listenerRules.push(
           new ApplicationListenerRule(this, `HttpServiceRule`, {
-            priority: getRoutingPriorityFromListenerProps(_routingProps),
             ..._routingProps,
             listener: httpListener,
             action: ListenerAction.forward([this.targetGroup]),
