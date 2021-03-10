@@ -65,12 +65,9 @@ export class EcsService extends Construct {
   readonly scaling?: ScalableTaskCount;
   readonly certificate?: Certificate;
   readonly subDomains: ARecord[];
-  private props: EcsServiceProps;
 
   constructor(scope: Construct, id: string, props: EcsServiceProps) {
     super(scope, id);
-
-    this.props = props;
 
     const {
       vpc,
@@ -86,7 +83,7 @@ export class EcsService extends Construct {
       targetGroupProps,
       routingProps,
       scalingProps,
-    } = this.props;
+    } = props;
 
     this.listenerRules = [];
     this.subDomains = [];
@@ -122,6 +119,12 @@ export class EcsService extends Construct {
 
     if (routingProps) {
       const { httpsRedirect, subDomains, certificate } = routingProps;
+      const conditions = [...(routingProps.conditions || [])];
+      const _routingProps = {
+        ...routingProps,
+        conditions: conditions,
+      };
+
       if (!httpListener && !httpsListener) throw new Error('To enable routing, an Http Listener is required');
 
       this.targetGroup = new ApplicationTargetGroup(this, 'ServiceTargetGroup', {
@@ -138,13 +141,6 @@ export class EcsService extends Construct {
           }),
         ],
       });
-
-      const conditions = [...(routingProps.conditions || [])];
-
-      const _routingProps = {
-        ...routingProps,
-        conditions: conditions,
-      };
 
       if (subDomains) {
         if (!zone) throw new Error('Please provide zone prop.');
