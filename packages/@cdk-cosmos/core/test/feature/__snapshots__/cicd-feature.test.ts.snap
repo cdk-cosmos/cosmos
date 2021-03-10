@@ -36,6 +36,7 @@ Object {
         ],
       },
       "Type": "AWS::CodeCommit::Repository",
+      "UpdateReplacePolicy": "Retain",
     },
   },
 }
@@ -553,6 +554,7 @@ Object {
         ],
       },
       "Type": "AWS::CodeCommit::Repository",
+      "UpdateReplacePolicy": "Retain",
     },
     "CustomCrossAccountExportsCustomResourceProviderHandler": Object {
       "DependsOn": Array [
