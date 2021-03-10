@@ -1,10 +1,11 @@
 import '@aws-cdk/assert/jest';
 import { SynthUtils } from '@aws-cdk/assert';
 import { App, Stack } from '@aws-cdk/core';
-import { EcsService } from '../src';
 import { Cluster, ContainerImage } from '@aws-cdk/aws-ecs';
 import { Vpc, SecurityGroup } from '@aws-cdk/aws-ec2';
-import { ApplicationListener, ListenerCondition } from '@aws-cdk/aws-elasticloadbalancingv2';
+import { ApplicationListener, ApplicationLoadBalancer, ListenerCondition } from '@aws-cdk/aws-elasticloadbalancingv2';
+import { HostedZone } from '@aws-cdk/aws-route53';
+import { EcsService } from '../src';
 
 const app = new App();
 const stack = new Stack(app, 'Stack');
@@ -26,17 +27,46 @@ const listener2 = ApplicationListener.fromApplicationListenerAttributes(stack, '
   listenerArn: 'Listener2',
   securityGroup: cluster.connections.securityGroups[0],
 });
+const zone = HostedZone.fromHostedZoneAttributes(stack, 'Zone', {
+  hostedZoneId: '1234',
+  zoneName: 'cosmos',
+});
+const alb = ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(stack, 'ALB', {
+  loadBalancerArn: 'ARN::ALB',
+  securityGroupId: 'SG',
+  loadBalancerDnsName: 'ALB',
+  loadBalancerCanonicalHostedZoneId: '4321',
+});
+
 new EcsService(stack, 'EcsService', {
   cluster,
   vpc,
   httpListener: listener,
   httpsListener: listener2,
-  httpsRedirect: true,
   containerProps: {
     image: ContainerImage.fromRegistry('Image'),
   },
   routingProps: {
     conditions: [ListenerCondition.pathPatterns(['/path'])],
+    httpsRedirect: true,
+  },
+});
+
+new EcsService(stack, 'EcsService2', {
+  cluster,
+  vpc,
+  zone,
+  alb,
+  httpListener: listener,
+  httpsListener: listener2,
+  containerProps: {
+    image: ContainerImage.fromRegistry('Image'),
+  },
+  routingProps: {
+    conditions: [ListenerCondition.pathPatterns(['*'])],
+    httpsRedirect: true,
+    certificate: true,
+    subDomains: ['test'],
   },
 });
 
