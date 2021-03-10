@@ -49,8 +49,8 @@ export interface EcsServiceProps {
   targetGroupProps?: Partial<ApplicationTargetGroupProps>;
   routingProps?: Partial<ApplicationListenerRuleProps> & {
     httpsRedirect?: boolean;
-    certificate?: boolean;
     subDomains?: string[];
+    certificate?: boolean;
   };
   scalingProps?: EnableScalingProps;
 }
@@ -199,11 +199,12 @@ export class EcsService extends Construct {
         if (!zone) throw new Error('Please provide zone prop.');
         if (!alb) throw new Error('Please provide alb prop.');
         if (!httpsListener) throw new Error('Please provide httpsListener prop.');
+        if (!subDomains?.length) throw new Error('Please use subDomains prop with certificate.');
 
         this.certificate = new DnsValidatedCertificate(this, 'Certificate', {
           hostedZone: zone,
           domainName: zone.zoneName,
-          subjectAlternativeNames: subDomains?.length ? subDomains.map((x) => `${x}.${zone.zoneName}`) : undefined,
+          subjectAlternativeNames: subDomains.map((x) => `${x}.${zone.zoneName}`),
         });
 
         httpsListener.addCertificateArns(this.certificate.node.id, [this.certificate.certificateArn]);
