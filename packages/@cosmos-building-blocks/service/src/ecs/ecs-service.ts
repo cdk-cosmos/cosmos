@@ -51,6 +51,7 @@ export interface EcsServiceProps {
     httpsRedirect?: boolean;
     subdomains?: string[];
     certificate?: boolean;
+    dns?: boolean;
   };
   scalingProps?: EnableScalingProps;
 }
@@ -118,7 +119,7 @@ export class EcsService extends Construct {
     });
 
     if (routingProps) {
-      const { httpsRedirect, subdomains, certificate } = routingProps;
+      const { httpsRedirect, subdomains, certificate, dns } = routingProps;
 
       const conditions = [...(routingProps.conditions || [])];
       const _routingProps = {
@@ -144,20 +145,36 @@ export class EcsService extends Construct {
         ],
       });
 
-      if (subdomains) {
+      if (subdomains?.length) {
         if (!zone) throw new Error('Please provide zone prop.');
-        if (!alb) throw new Error('Please provide alb prop.');
-
-        subdomains.forEach((subdomain, i) => {
-          const record = new ARecord(this, `Subdomain${i}`, {
-            zone: zone,
-            recordName: subdomain,
-            target: RecordTarget.fromAlias(new LoadBalancerTarget(alb)),
-          });
-          this.subdomains.push(record);
-        });
 
         conditions.push(ListenerCondition.hostHeaders(subdomains.map((x) => `${x}.${zone.zoneName}`)));
+
+        if (dns) {
+          if (!alb) throw new Error('Please provide alb prop.');
+
+          subdomains.forEach((subdomain, i) => {
+            const record = new ARecord(this, `Subdomain${i}`, {
+              zone: zone,
+              recordName: subdomain,
+              target: RecordTarget.fromAlias(new LoadBalancerTarget(alb)),
+            });
+            this.subdomains.push(record);
+          });
+        }
+
+        if (certificate) {
+          if (!alb) throw new Error('Please provide alb prop.');
+          if (!httpsListener) throw new Error('Please provide httpsListener prop.');
+
+          this.certificate = new DnsValidatedCertificate(this, 'Certificate', {
+            hostedZone: zone,
+            domainName: zone.zoneName,
+            subjectAlternativeNames: subdomains.map((x) => `${x}.${zone.zoneName}`),
+          });
+
+          httpsListener.addCertificateArns(this.certificate.node.id, [this.certificate.certificateArn]);
+        }
       }
 
       // Render the priority
@@ -193,21 +210,6 @@ export class EcsService extends Construct {
             action: ListenerAction.forward([this.targetGroup]),
           })
         );
-      }
-
-      if (certificate) {
-        if (!zone) throw new Error('Please provide zone prop.');
-        if (!alb) throw new Error('Please provide alb prop.');
-        if (!httpsListener) throw new Error('Please provide httpsListener prop.');
-        if (!subdomains?.length) throw new Error('Please use subDomains prop with certificate.');
-
-        this.certificate = new DnsValidatedCertificate(this, 'Certificate', {
-          hostedZone: zone,
-          domainName: zone.zoneName,
-          subjectAlternativeNames: subdomains.map((x) => `${x}.${zone.zoneName}`),
-        });
-
-        httpsListener.addCertificateArns(this.certificate.node.id, [this.certificate.certificateArn]);
       }
     }
 
