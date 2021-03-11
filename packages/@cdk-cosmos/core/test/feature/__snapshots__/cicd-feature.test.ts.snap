@@ -24,6 +24,7 @@ Object {
   },
   "Resources": Object {
     "CdkRepo": Object {
+      "DeletionPolicy": "Retain",
       "Properties": Object {
         "RepositoryDescription": "App CDK Repo for Test Cosmos.",
         "RepositoryName": "app-test-cdk-repo",
@@ -35,6 +36,7 @@ Object {
         ],
       },
       "Type": "AWS::CodeCommit::Repository",
+      "UpdateReplacePolicy": "Retain",
     },
   },
 }
@@ -540,6 +542,7 @@ Object {
       "Type": "AWS::IAM::Role",
     },
     "CdkRepo": Object {
+      "DeletionPolicy": "Retain",
       "Properties": Object {
         "RepositoryDescription": "Core CDK Repo for Cos Cosmos.",
         "RepositoryName": "core-cos-cdk-repo",
@@ -551,6 +554,7 @@ Object {
         ],
       },
       "Type": "AWS::CodeCommit::Repository",
+      "UpdateReplacePolicy": "Retain",
     },
     "CustomCrossAccountExportsCustomResourceProviderHandler": Object {
       "DependsOn": Array [
