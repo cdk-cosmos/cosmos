@@ -16,7 +16,7 @@ import { CoreVpc, CoreVpcProps, ICoreVpc } from '../components/core-vpc';
 import { CrossAccountZoneDelegationRecord } from '../components/cross-account';
 import { RemoteVpc, RemoteZone } from '../components/remote';
 
-const SOLAR_SYSTEM_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.CosmosCore');
+const SOLAR_SYSTEM_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.SolarSystemCore');
 
 export interface ISolarSystemCore extends Construct {
   readonly galaxy: IGalaxyCore;

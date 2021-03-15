@@ -222,3 +222,17 @@ describe('SolarSystem Extension', () => {
     expect(solarSystemExtensionStack).toMatchSnapshot();
   });
 });
+
+test('should check is type', () => {
+  expect(CosmosCoreStack.isCosmosCore(cosmos)).toBeTruthy();
+  expect(CosmosCoreStack.isCosmosCore(galaxy)).toBeFalsy();
+  expect(CosmosCoreStack.isCosmosCore(solarSystem)).toBeFalsy();
+
+  expect(GalaxyCoreStack.isGalaxyCore(cosmos)).toBeFalsy();
+  expect(GalaxyCoreStack.isGalaxyCore(galaxy)).toBeTruthy();
+  expect(GalaxyCoreStack.isGalaxyCore(solarSystem)).toBeFalsy();
+
+  expect(SolarSystemCoreStack.isSolarSystemCore(cosmos)).toBeFalsy();
+  expect(SolarSystemCoreStack.isSolarSystemCore(galaxy)).toBeFalsy();
+  expect(SolarSystemCoreStack.isSolarSystemCore(solarSystem)).toBeTruthy();
+});

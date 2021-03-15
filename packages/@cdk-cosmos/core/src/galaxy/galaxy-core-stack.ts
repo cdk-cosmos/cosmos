@@ -6,7 +6,7 @@ import { BaseStack, BaseStackProps } from '../components/base';
 import { ICosmosCore } from '../cosmos/cosmos-core-stack';
 import { isCrossAccount } from '../helpers/utils';
 
-const GALAXY_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.CosmosCore');
+const GALAXY_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.GalaxyCore');
 
 export interface IGalaxyCore extends Construct {
   cosmos: ICosmosCore;
