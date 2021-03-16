@@ -1,8 +1,8 @@
 import { Construct, Tags, CfnOutput, IConstruct } from '@aws-cdk/core';
+import { getPackageVersion } from '@cosmos-building-blocks/common/lib/utils';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { ICosmosCore } from './cosmos-core-stack';
 import { CosmosCoreImportProps, CosmosCoreImport } from './cosmos-core-import';
-import { getPackageVersion } from '../helpers/utils';
 
 const COSMOS_EXTENSION_SYMBOL = Symbol.for('@cdk-cosmos/core.CosmosExtensionStack');
 
@@ -35,7 +35,7 @@ export class CosmosExtensionStack extends BaseStack implements ICosmosExtension 
       ...portalProps,
     });
 
-    this.libVersion = getPackageVersion();
+    this.libVersion = getPackageVersion(__dirname);
 
     new CfnOutput(this, 'AppLibVersion', {
       exportName: this.nodeId('LibVersion'),

@@ -1,5 +1,6 @@
 import { Construct, Stack, Fn } from '@aws-cdk/core';
 import { IHostedZone } from '@aws-cdk/aws-route53';
+import { Config } from '@cosmos-building-blocks/common';
 import { ICosmosCore } from '../cosmos/cosmos-core-stack';
 import { BaseConstruct, BaseConstructProps } from '../components/base';
 import { RemoteZone } from '../components/remote';
@@ -7,6 +8,7 @@ import { RemoteZone } from '../components/remote';
 export interface CosmosCoreImportProps extends BaseConstructProps {}
 
 export class CosmosCoreImport extends BaseConstruct implements ICosmosCore {
+  readonly config: Config;
   readonly name: string;
   readonly libVersion: string;
   readonly rootZone: IHostedZone;
@@ -20,6 +22,7 @@ export class CosmosCoreImport extends BaseConstruct implements ICosmosCore {
       ...props,
     });
 
+    this.config = new Config(this, 'Config', 'Cosmos');
     this.libVersion = Fn.importValue(this.singletonId('LibVersion'));
     this.rootZone = RemoteZone.import(this, 'RootZone', this.singletonId('RootZone'));
     this.crossAccountExportServiceToken = Fn.importValue(this.singletonId('CrossAccountExportServiceToken'));

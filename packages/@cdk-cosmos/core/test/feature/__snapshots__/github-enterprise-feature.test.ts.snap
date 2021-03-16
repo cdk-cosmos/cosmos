@@ -125,6 +125,19 @@ Object {
     },
   },
   "Resources": Object {
+    "ConfigVpcAzs": Object {
+      "Properties": Object {
+        "Name": "/Cosmos/Gal/Sys/VpcAzs",
+        "Tags": Object {
+          "cosmos": "Cos",
+          "cosmos:galaxy": "Gal",
+          "cosmos:solarsystem": "Sys",
+        },
+        "Type": "String",
+        "Value": "2",
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
     "GithubEnterprise": Object {
       "Properties": Object {
         "Parameters": Object {

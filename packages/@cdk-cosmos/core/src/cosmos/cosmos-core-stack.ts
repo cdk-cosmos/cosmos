@@ -2,19 +2,20 @@ import { Construct, Stack, CfnOutput, Tags, IConstruct } from '@aws-cdk/core';
 import { IHostedZone, HostedZone } from '@aws-cdk/aws-route53';
 import { Role, ServicePrincipal, ManagedPolicy, CompositePrincipal } from '@aws-cdk/aws-iam';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
-import { createCrossAccountExportProvider } from '@cosmos-building-blocks/common';
+import { Config, createCrossAccountExportProvider } from '@cosmos-building-blocks/common';
+import { getPackageVersion } from '@cosmos-building-blocks/common/lib/utils';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { RemoteZone } from '../components/remote';
-import { getPackageVersion } from '../helpers/utils';
 
 const COSMOS_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.CosmosCore');
 
 export interface ICosmosCore extends Construct {
-  libVersion: string;
-  networkBuilder?: NetworkBuilder;
-  rootZone: IHostedZone;
-  cdkMasterRoleStaticArn: string;
-  crossAccountExportServiceToken: string;
+  readonly config: Config;
+  readonly libVersion: string;
+  readonly networkBuilder?: NetworkBuilder;
+  readonly rootZone: IHostedZone;
+  readonly cdkMasterRoleStaticArn: string;
+  readonly crossAccountExportServiceToken: string;
 }
 
 export interface CosmosCoreStackProps extends BaseStackProps {
@@ -22,6 +23,7 @@ export interface CosmosCoreStackProps extends BaseStackProps {
 }
 
 export class CosmosCoreStack extends BaseStack implements ICosmosCore {
+  readonly config: Config;
   readonly libVersion: string;
   readonly rootZone: HostedZone;
   readonly cdkMasterRole: Role;
@@ -40,7 +42,9 @@ export class CosmosCoreStack extends BaseStack implements ICosmosCore {
 
     const { tld } = props;
 
-    this.libVersion = getPackageVersion();
+    this.config = new Config(this, 'Config', 'Cosmos');
+
+    this.libVersion = getPackageVersion(__dirname);
 
     this.rootZone = new HostedZone(this, 'RootZone', {
       zoneName: `${tld}`.toLowerCase(),

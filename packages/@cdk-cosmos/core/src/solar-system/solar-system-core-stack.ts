@@ -9,7 +9,8 @@ import {
   PrivateHostedZone,
   ZoneDelegationRecord,
 } from '@aws-cdk/aws-route53';
-import { isCrossAccount } from '../helpers/utils';
+import { Config } from '@cosmos-building-blocks/common';
+import { isCrossAccount } from '@cosmos-building-blocks/common/lib/utils';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { IGalaxyCore } from '../galaxy/galaxy-core-stack';
 import { CoreVpc, CoreVpcProps, ICoreVpc } from '../components/core-vpc';
@@ -20,6 +21,7 @@ const SOLAR_SYSTEM_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.SolarSystemCore');
 
 export interface ISolarSystemCore extends Construct {
   readonly galaxy: IGalaxyCore;
+  readonly config: Config;
   readonly vpc: ICoreVpc;
   readonly zone: IPublicHostedZone;
   readonly privateZone: IPrivateHostedZone;
@@ -39,6 +41,7 @@ export interface SolarSystemCoreStackProps extends BaseStackProps {
 
 export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore {
   readonly galaxy: IGalaxyCore;
+  readonly config: Config;
   readonly vpc: CoreVpc;
   readonly zone: PublicHostedZone;
   readonly privateZone: PrivateHostedZone;
@@ -57,6 +60,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     const { linkZone = true, ttl = Duration.minutes(30) } = zoneProps;
 
     this.galaxy = galaxy;
+    this.config = new Config(this, 'Config', id, this.galaxy.config);
 
     if (vpc) this.vpc = vpc as CoreVpc;
     else {
@@ -111,6 +115,7 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
 
     new RemoteVpc(this.vpc, this.singletonId('Vpc'), this);
     if (this.vpc.zone) new RemoteZone(this.vpc.zone, this.singletonId('VpcZone'), new Construct(this, 'VpcZone'));
+    this.config.set('VpcAzs', String(this.vpc.availabilityZones.length));
     new RemoteZone(this.zone, this.singletonId('Zone'));
     new RemoteZone(this.privateZone, this.singletonId('PrivateZone'));
 

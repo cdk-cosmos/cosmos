@@ -509,6 +509,19 @@ Object {
     },
   },
   "Resources": Object {
+    "ConfigVpcAzs": Object {
+      "Properties": Object {
+        "Name": "/Cosmos/Gal/Sys/VpcAzs",
+        "Tags": Object {
+          "cosmos": "Cos",
+          "cosmos:galaxy": "Gal",
+          "cosmos:solarsystem": "Sys",
+        },
+        "Type": "String",
+        "Value": "2",
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
     "DevCoreSubdomain": Object {
       "Properties": Object {
         "HostedZoneConfig": Object {
@@ -1238,6 +1251,19 @@ Object {
     },
   },
   "Resources": Object {
+    "ConfigVpcAzs": Object {
+      "Properties": Object {
+        "Name": "/Cosmos/Gal2/Sys2/VpcAzs",
+        "Tags": Object {
+          "cosmos": "Cos",
+          "cosmos:galaxy": "Gal2",
+          "cosmos:solarsystem": "Sys2",
+        },
+        "Type": "String",
+        "Value": "2",
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
     "PrivateZone": Object {
       "Properties": Object {
         "HostedZoneConfig": Object {
