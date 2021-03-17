@@ -2,6 +2,12 @@ import { Construct, Lazy } from '@aws-cdk/core';
 import { IStringParameter, StringParameter, StringParameterProps } from '@aws-cdk/aws-ssm';
 import { isCrossAccount } from './utils';
 
+/**
+ * Use SSM params to store global config that maybe be refereed to in a decoupled manner.
+ * @example Vpc AZ Number or Ca Certificates or Proxy Settings
+ * @class Config
+ * @extends {Construct}
+ */
 export class Config extends Construct {
   readonly parent?: Config;
   readonly namespace: string;
