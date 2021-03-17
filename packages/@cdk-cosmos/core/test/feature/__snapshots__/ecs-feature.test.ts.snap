@@ -300,6 +300,19 @@ Object {
       "Type": "AWS::CloudFormation::CustomResource",
       "UpdateReplacePolicy": "Delete",
     },
+    "ConfigVpcAzs": Object {
+      "Properties": Object {
+        "Name": "/Cosmos/Gal/Sys/VpcAzs",
+        "Tags": Object {
+          "cosmos": "Cos",
+          "cosmos:galaxy": "Gal",
+          "cosmos:solarsystem": "Sys",
+        },
+        "Type": "String",
+        "Value": "2",
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
     "Ecs": Object {
       "Properties": Object {
         "Parameters": Object {
@@ -1730,6 +1743,19 @@ Object {
     },
   },
   "Resources": Object {
+    "ConfigVpcAzs": Object {
+      "Properties": Object {
+        "Name": "/Cosmos/Gal/Sys1/VpcAzs",
+        "Tags": Object {
+          "cosmos": "Cos",
+          "cosmos:galaxy": "Gal",
+          "cosmos:solarsystem": "Sys1",
+        },
+        "Type": "String",
+        "Value": "2",
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
     "Ecs": Object {
       "Properties": Object {
         "Parameters": Object {

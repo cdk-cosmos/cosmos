@@ -14,6 +14,7 @@ export interface SsmStateProps {
 export class SsmState extends Construct implements IState {
   readonly name: string;
   readonly value: string;
+  readonly rawValue?: string;
   readonly param: StringParameter;
 
   constructor(scope: Construct, id: string, props: SsmStateProps) {
@@ -23,7 +24,7 @@ export class SsmState extends Construct implements IState {
     let _value = value;
 
     if (_value) {
-      Annotations.of(this).addInfo(`Using '${value}' value for ${name} state.`);
+      Annotations.of(this).addInfo(`Using '${_value}' value for ${name} state.`);
     } else {
       const param = new CfnParameter(this, 'CurrentState', {
         type: 'AWS::SSM::Parameter::Value<String>',
@@ -40,5 +41,6 @@ export class SsmState extends Construct implements IState {
 
     this.name = name;
     this.value = this.param.stringValue;
+    this.rawValue = value;
   }
 }

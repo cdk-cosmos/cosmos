@@ -12,7 +12,9 @@ import {
 } from '../../src';
 
 const app = new App();
-const cosmos = new CosmosCoreStack(app, 'Cos', { tld: 'cos.com' });
+const cosmos = new CosmosCoreStack(app, 'Cos', {
+  tld: 'cos.com',
+});
 const galaxy = new GalaxyCoreStack(cosmos, 'Gal', { cidr: '10.0.1.0/22' });
 galaxy.addSharedVpc();
 const solarSystem = new SolarSystemCoreStack(galaxy, 'Sys', {
@@ -42,7 +44,12 @@ solarSystem3.addEcs({
   albInternalListenerCidr: '10.0.0.1/24',
 });
 
-const cosmosExtension = new CosmosExtensionStack(app, 'Test');
+const cosmosExtension = new CosmosExtensionStack(app, 'Test', {
+  env: {
+    account: '1234',
+    region: 'ap-southeast-2',
+  },
+});
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal');
 const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys');
 

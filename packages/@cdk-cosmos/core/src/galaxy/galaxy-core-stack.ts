@@ -2,23 +2,26 @@ import { Construct, Stack, Tags, IConstruct } from '@aws-cdk/core';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
 import { Role, ArnPrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 import { IKey, Key } from '@aws-cdk/aws-kms';
+import { Config } from '@cosmos-building-blocks/common';
+import { isCrossAccount } from '@cosmos-building-blocks/common/lib/utils';
 import { BaseStack, BaseStackProps } from '../components/base';
 import { ICosmosCore } from '../cosmos/cosmos-core-stack';
-import { isCrossAccount } from '../helpers/utils';
 
 const GALAXY_CORE_SYMBOL = Symbol.for('@cdk-cosmos/core.GalaxyCore');
 
 export interface IGalaxyCore extends Construct {
-  cosmos: ICosmosCore;
-  sharedKey?: IKey;
-  cdkCrossAccountRoleStaticArn?: string;
-  networkBuilder?: NetworkBuilder;
+  readonly cosmos: ICosmosCore;
+  readonly config: Config;
+  readonly sharedKey?: IKey;
+  readonly cdkCrossAccountRoleStaticArn?: string;
+  readonly networkBuilder?: NetworkBuilder;
 }
 
 export interface GalaxyCoreStackProps extends BaseStackProps {}
 
 export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
   readonly cosmos: ICosmosCore;
+  readonly config: Config;
   readonly sharedKey: Key;
   readonly cdkCrossAccountRole?: Role;
   readonly cdkCrossAccountRoleStaticArn?: string;
@@ -33,6 +36,7 @@ export class GalaxyCoreStack extends BaseStack implements IGalaxyCore {
     Object.defineProperty(this, GALAXY_CORE_SYMBOL, { value: true });
 
     this.cosmos = cosmos;
+    this.config = new Config(this, 'Config', id, this.cosmos.config);
 
     this.sharedKey = new Key(this, 'SharedKey', {
       description: 'Share key for aws account.',

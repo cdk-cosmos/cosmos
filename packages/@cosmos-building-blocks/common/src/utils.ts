@@ -14,7 +14,12 @@ export const isCrossStack = (x: IConstruct, y: IConstruct): boolean => {
   return Stack.of(x) !== Stack.of(y);
 };
 
-export const getPackageVersion: () => string = () => {
-  const file = fs.readFileSync(path.resolve(__dirname, '../../package.json')).toString();
+export const getPackageVersion = (dirname: string) => {
+  let filePath = path.join(dirname, 'package.json');
+  while (!fs.existsSync(filePath)) {
+    filePath = path.join(filePath, '../..', 'package.json');
+    if (path.dirname(filePath) === '/' || path.dirname(filePath) === '\\') break;
+  }
+  const file = fs.readFileSync(filePath).toString();
   return JSON.parse(file).version as string;
 };
