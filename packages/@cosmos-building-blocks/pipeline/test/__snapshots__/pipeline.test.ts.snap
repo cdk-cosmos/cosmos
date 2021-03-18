@@ -157,9 +157,8 @@ Object {
         "Update": Object {
           "action": "updateHost",
           "parameters": Object {
-            "Name": "GHEHost",
+            "HostArn": "PHYSICAL:RESOURCEID:",
             "ProviderEndpoint": "https://ghe.com/",
-            "ProviderType": "GitHubEnterpriseServer",
             "VpcConfiguration": Object {
               "SecurityGroupIds": Array [
                 Object {
@@ -271,7 +270,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "PipelineSourceCdkCheckoutCodePipelineActionRole1C03D8F5",
+                    "PipelineRoleD68726F7",
                     "Arn",
                   ],
                 },
@@ -660,18 +659,18 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "PipelineSourceCdkCheckoutCodePipelineActionRole1C03D8F5",
+                  "PipelineRoleD68726F7",
                   "Arn",
                 ],
               },
             },
             Object {
-              "Action": "sts:AssumeRole",
+              "Action": "codestar-connections:UseConnection",
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "PipelineRoleD68726F7",
-                  "Arn",
+                  "GHE13E186DE",
+                  "ConnectionArn",
                 ],
               },
             },
@@ -730,38 +729,6 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
-    },
-    "PipelineSourceCdkCheckoutCodePipelineActionRole1C03D8F5": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::",
-                      Object {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
     },
   },
 }

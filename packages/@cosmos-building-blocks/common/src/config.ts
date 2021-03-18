@@ -11,14 +11,14 @@ import { isCrossAccount } from './utils';
 export class Config extends Construct {
   readonly parent?: Config;
   readonly namespace: string;
-  private states: Map<string, IParam>;
+  protected params: Map<string, IParam>;
 
   constructor(scope: Construct, id: string, namespace: string, parent?: Config) {
     super(scope, id);
 
     this.parent = parent;
     this.namespace = namespace;
-    this.states = new Map();
+    this.params = new Map();
   }
 
   key(id: string): string {
@@ -29,7 +29,7 @@ export class Config extends Construct {
 
   getState(id: string, raw = false): IParam | undefined {
     const key = this.key(id);
-    if (!this.states.has(key)) {
+    if (!this.params.has(key)) {
       if (this.parent) {
         if (isCrossAccount(this, this.parent)) {
           const _state = this.parent.getState(id, true);
@@ -38,23 +38,23 @@ export class Config extends Construct {
               parameterName: key,
               stringValue: _state.rawStringValue,
             });
-            this.states.set(key, state);
+            this.params.set(key, state);
           }
         } else {
           const state = this.parent.getState(id, raw);
-          if (state) this.states.set(key, state);
+          if (state) this.params.set(key, state);
         }
       }
 
-      if (!this.states.has(key) && !raw) {
+      if (!this.params.has(key) && !raw) {
         const state = Param.fromStringParameterAttributes(this, id, {
           parameterName: key,
         }) as IParam;
-        this.states.set(key, state);
+        this.params.set(key, state);
       }
     }
 
-    const state = this.states.get(key);
+    const state = this.params.get(key);
     if (!state) return undefined;
     if (raw && !state.rawStringValue) return undefined;
     return state;
@@ -76,13 +76,26 @@ export class Config extends Construct {
       parameterName: key,
       stringValue: value,
     });
-    this.states.set(key, state);
+    this.params.set(key, state);
   }
 
   lookup(id: string): string {
     const state = this.getState(id, true);
     if (state) return StringParameter.valueFromLookup(state, state.parameterName);
     return StringParameter.valueFromLookup(this, this.key(id));
+  }
+
+  onPrepare() {
+    super.onPrepare();
+
+    if (this.parent) {
+      const params = Array.from(this.parent.params.keys())
+        .filter((x) => !this.params.has(x))
+        .filter((x) => isCrossAccount(this, this.parent?.params.get(x) as Construct));
+
+      // Copy Params that are cross account and have a raw value
+      params.forEach((x) => this.get(x, true));
+    }
   }
 }
 
