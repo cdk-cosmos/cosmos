@@ -48,6 +48,7 @@ export class GithubEnterpriseSourceProvider extends SourceProvider<string> {
 
     return new GithubEnterpriseSourceAction({
       actionName: name,
+      role: role,
       connection: this.connection,
       repo: repo,
       branch: branch || this.branch,
