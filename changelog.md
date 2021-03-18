@@ -1,4 +1,22 @@
 
+## v0.8.0 (2021-03-11)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/common`
+  * [#245](https://github.com/cdk-cosmos/cosmos/pull/245) Add State pattern + Closes [#243](https://github.com/cdk-cosmos/cosmos/issues/243) CodeCommit deletion policy ([@timpur](https://github.com/timpur))
+* `@cosmos-building-blocks/service`
+  * [#246](https://github.com/cdk-cosmos/cosmos/pull/246) Add Subdomain feature to ECS service ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`
+  * [#244](https://github.com/cdk-cosmos/cosmos/pull/244) Add VPC Private Zone for Shared DNS Feature ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/common`
+  * [#245](https://github.com/cdk-cosmos/cosmos/pull/245) Add State pattern + Closes [#243](https://github.com/cdk-cosmos/cosmos/issues/243) CodeCommit deletion policy ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 
 
 ## v0.7.3 (2021-02-01)

@@ -1,47 +1,47 @@
-import { getRoutingPriorityFromListenerProps, getRoutingPriority } from '../src/utils';
+import { getRoutingPriorityFromListenerProps, getRoutingPriority } from '../src/ecs';
 import { ListenerCondition } from '@aws-cdk/aws-elasticloadbalancingv2';
+import { Stack } from '@aws-cdk/core';
 
 test('Should generate routing priority in order of path.', () => {
-  expect(getRoutingPriority({})).toBe(20456);
-  expect(getRoutingPriority({ path: '*' })).toBe(20455);
-  expect(getRoutingPriority({ path: 'a' })).toBe(20442);
-  expect(getRoutingPriority({ path: 'A' })).toBe(20416);
-  expect(getRoutingPriority({ path: '0' })).toBe(20390);
+  expect(getRoutingPriority([])).toBe(50000);
+  expect(getRoutingPriority(['*'])).toBe(49994);
+  expect(getRoutingPriority(['a'])).toBe(49929);
+  expect(getRoutingPriority(['A'])).toBe(49798);
+  expect(getRoutingPriority(['0'])).toBe(49667);
 
-  expect(getRoutingPriority({ path: '?' })).toBeLessThan(getRoutingPriority({ path: '*' }));
-  expect(getRoutingPriority({ path: 'a' })).toBeLessThan(getRoutingPriority({ path: '*' }));
-  expect(getRoutingPriority({ path: 'A' })).toBeLessThan(getRoutingPriority({ path: 'a' }));
+  expect(getRoutingPriority(['?'])).toBeLessThan(getRoutingPriority(['*']));
+  expect(getRoutingPriority(['a'])).toBeLessThan(getRoutingPriority(['*']));
+  expect(getRoutingPriority(['A'])).toBeLessThan(getRoutingPriority(['a']));
 
-  expect(getRoutingPriority({ path: '/test1' })).toBeLessThan(getRoutingPriority({ path: '/test' }));
-  expect(getRoutingPriority({ path: '/test/test' })).toBeLessThan(getRoutingPriority({ path: '/test' }));
-  expect(getRoutingPriority({ path: '/Test' })).toBeLessThan(getRoutingPriority({ path: '/test' }));
+  expect(getRoutingPriority(['/test1'])).toBeLessThan(getRoutingPriority(['/test']));
+  expect(getRoutingPriority(['/test/test'])).toBeLessThan(getRoutingPriority(['/test']));
+  expect(getRoutingPriority(['/Test'])).toBeLessThan(getRoutingPriority(['/test']));
 
-  expect(getRoutingPriority({ path: '/test2' })).toBeLessThan(getRoutingPriority({ path: '/test1' }));
-  expect(getRoutingPriority({ path: '/test/v2' })).toBeLessThan(getRoutingPriority({ path: '/test/v1' }));
+  expect(getRoutingPriority(['/test2'])).toBeLessThan(getRoutingPriority(['/test1']));
+  expect(getRoutingPriority(['/test/v2'])).toBeLessThan(getRoutingPriority(['/test/v1']));
 
-  expect(getRoutingPriority({ host: 'www.google.com' })).toBeLessThan(getRoutingPriority({ host: 'google.com' }));
+  expect(getRoutingPriority(['www.google.com'])).toBeLessThan(getRoutingPriority(['google.com']));
 
-  expect(getRoutingPriority({ host: 'www.google.com', path: '/test' })).toBeLessThan(
-    getRoutingPriority({ path: '/*' })
-  );
+  expect(getRoutingPriority(['www.google.com', '/test'])).toBeLessThan(getRoutingPriority(['/*']));
 });
 
 test('Should test routing conditions', () => {
+  const stack = new Stack();
   expect(
-    getRoutingPriorityFromListenerProps({
+    getRoutingPriorityFromListenerProps(stack, {
       conditions: [ListenerCondition.hostHeaders(['host'])],
     })
-  ).toEqual(getRoutingPriority({ host: 'host' }));
+  ).toEqual(getRoutingPriority(['host']));
 
   expect(
-    getRoutingPriorityFromListenerProps({
+    getRoutingPriorityFromListenerProps(stack, {
       conditions: [ListenerCondition.pathPatterns(['path'])],
     })
-  ).toEqual(getRoutingPriority({ path: 'path' }));
+  ).toEqual(getRoutingPriority(['path']));
 
   expect(
-    getRoutingPriorityFromListenerProps({
+    getRoutingPriorityFromListenerProps(stack, {
       conditions: [ListenerCondition.hostHeaders(['host']), ListenerCondition.pathPatterns(['path'])],
     })
-  ).toEqual(getRoutingPriority({ host: 'host', path: 'path' }));
+  ).toEqual(getRoutingPriority(['host', 'path']));
 });
