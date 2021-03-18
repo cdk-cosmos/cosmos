@@ -2,12 +2,12 @@ import { Construct, Duration, Fn } from '@aws-cdk/core';
 import { HostedZone, ZoneDelegationRecord } from '@aws-cdk/aws-route53';
 import { IVpc } from '@aws-cdk/aws-ec2';
 import { CrossAccountExports } from '@cosmos-building-blocks/common';
+import { isCrossAccount } from '@cosmos-building-blocks/common/lib/utils';
 import { RemoteZone } from '../../components/remote';
 import { CosmosCoreStack } from '../../cosmos/cosmos-core-stack';
 import { ICosmosExtension } from '../../cosmos/cosmos-extension-stack';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
 import { ISolarSystemExtension, SolarSystemExtensionStack } from '../../solar-system/solar-system-extension-stack';
-import { isCrossAccount } from '../../helpers/utils';
 import { Domain } from './domain-feature-stack';
 import { GalaxyCoreStack, IGalaxyExtension } from '../../galaxy';
 

@@ -817,6 +817,19 @@ Object {
       },
       "Type": "AWS::CloudFormation::Stack",
     },
+    "ConfigVpcAzs": Object {
+      "Properties": Object {
+        "Name": "/Cosmos/Gal/CiCd/VpcAzs",
+        "Tags": Object {
+          "cosmos": "Cos",
+          "cosmos:galaxy": "Gal",
+          "cosmos:solarsystem": "CiCd",
+        },
+        "Type": "String",
+        "Value": "2",
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
     "PrivateZone": Object {
       "Properties": Object {
         "HostedZoneConfig": Object {

@@ -1,5 +1,6 @@
 import { Construct } from '@aws-cdk/core';
 import { IPublicHostedZone, IPrivateHostedZone } from '@aws-cdk/aws-route53';
+import { Config } from '@cosmos-building-blocks/common';
 import { IGalaxyCore } from '../galaxy/galaxy-core-stack';
 import { BaseConstruct, BaseConstructProps } from '../components/base';
 import { RemoteVpc, RemoteZone, RemoteVpcImportProps } from '../components/remote';
@@ -8,11 +9,12 @@ import { ICoreVpc } from '../components/core-vpc';
 
 export interface SolarSystemCoreImportProps extends BaseConstructProps {
   galaxy: IGalaxyCore;
-  vpcProps?: Partial<RemoteVpcImportProps>;
+  vpcProps?: Partial<RemoteVpcImportProps> & { aZsLookup?: boolean };
 }
 
 export class SolarSystemCoreImport extends BaseConstruct implements ISolarSystemCore {
   readonly galaxy: IGalaxyCore;
+  readonly config: Config;
   readonly vpc: ICoreVpc;
   readonly zone: IPublicHostedZone;
   readonly privateZone: IPrivateHostedZone;
@@ -25,10 +27,12 @@ export class SolarSystemCoreImport extends BaseConstruct implements ISolarSystem
     });
 
     const { galaxy, vpcProps = {} } = props || {};
+    const { aZsLookup } = vpcProps;
 
     this.galaxy = galaxy;
+    this.config = new Config(this, 'Config', id, this.galaxy.config);
     this.vpc = RemoteVpc.import(this, 'Vpc', this.singletonId('Vpc'), {
-      aZs: 2,
+      aZs: aZsLookup ? Number(this.config.lookup('VpcAzs')) : 2,
       isolatedSubnetNames: ['App'],
       ...vpcProps,
     });

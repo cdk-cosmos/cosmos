@@ -111,20 +111,33 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"e0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06\\"",
+    "AssetParameters3b1ced5b2d971440b76a2256e1c8b5eca23bac834d0bfbeece9ba07b30558e06ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"3b1ced5b2d971440b76a2256e1c8b5eca23bac834d0bfbeece9ba07b30558e06\\"",
       "Type": "String",
     },
-    "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"e0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06\\"",
+    "AssetParameters3b1ced5b2d971440b76a2256e1c8b5eca23bac834d0bfbeece9ba07b30558e06S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"3b1ced5b2d971440b76a2256e1c8b5eca23bac834d0bfbeece9ba07b30558e06\\"",
       "Type": "String",
     },
-    "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"e0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06\\"",
+    "AssetParameters3b1ced5b2d971440b76a2256e1c8b5eca23bac834d0bfbeece9ba07b30558e06S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"3b1ced5b2d971440b76a2256e1c8b5eca23bac834d0bfbeece9ba07b30558e06\\"",
       "Type": "String",
     },
   },
   "Resources": Object {
+    "ConfigVpcAzs": Object {
+      "Properties": Object {
+        "Name": "/Cosmos/Gal/Sys/VpcAzs",
+        "Tags": Object {
+          "cosmos": "Cos",
+          "cosmos:galaxy": "Gal",
+          "cosmos:solarsystem": "Sys",
+        },
+        "Type": "String",
+        "Value": "2",
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
     "GithubEnterprise": Object {
       "Properties": Object {
         "Parameters": Object {
@@ -162,7 +175,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06S3Bucket",
+                "Ref": "AssetParameters3b1ced5b2d971440b76a2256e1c8b5eca23bac834d0bfbeece9ba07b30558e06S3Bucket",
               },
               "/",
               Object {
@@ -172,7 +185,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06S3VersionKey",
+                        "Ref": "AssetParameters3b1ced5b2d971440b76a2256e1c8b5eca23bac834d0bfbeece9ba07b30558e06S3VersionKey",
                       },
                     ],
                   },
@@ -185,7 +198,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameterse0aac8bcc6ee10399391dc79fe7d35948117bdf5389cc2d026b11a870fe62d06S3VersionKey",
+                        "Ref": "AssetParameters3b1ced5b2d971440b76a2256e1c8b5eca23bac834d0bfbeece9ba07b30558e06S3VersionKey",
                       },
                     ],
                   },
@@ -946,9 +959,8 @@ Object {
         "Update": Object {
           "action": "updateHost",
           "parameters": Object {
-            "Name": "GithubEnterpriseHost",
+            "HostArn": "PHYSICAL:RESOURCEID:",
             "ProviderEndpoint": "https://test.com",
-            "ProviderType": "GitHubEnterpriseServer",
             "VpcConfiguration": Object {
               "SecurityGroupIds": Array [
                 Object {
@@ -1248,7 +1260,7 @@ Object {
                 ],
                 "RoleArn": Object {
                   "Fn::GetAtt": Array [
-                    "TestPipelineSourceCodeCheckoutCodePipelineActionRole",
+                    "TestRole",
                     "Arn",
                   ],
                 },
@@ -1306,48 +1318,6 @@ Object {
         ],
       },
       "Type": "AWS::CodePipeline::Pipeline",
-    },
-    "TestPipelineSourceCodeCheckoutCodePipelineActionRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "arn:",
-                      Object {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::account1:root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos:extension",
-            "Value": "CosExt",
-          },
-          Object {
-            "Key": "cosmos:galaxy:extension",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem:extension",
-            "Value": "Sys",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
     },
     "TestRole": Object {
       "Properties": Object {
@@ -1492,19 +1462,16 @@ Object {
               "Effect": "Allow",
               "Resource": Object {
                 "Fn::GetAtt": Array [
-                  "TestPipelineSourceCodeCheckoutCodePipelineActionRole",
+                  "TestRole",
                   "Arn",
                 ],
               },
             },
             Object {
-              "Action": "sts:AssumeRole",
+              "Action": "codestar-connections:UseConnection",
               "Effect": "Allow",
               "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "TestRole",
-                  "Arn",
-                ],
+                "Fn::ImportValue": "CoreGalSysGithubEnterpriseConnectionArn",
               },
             },
             Object {

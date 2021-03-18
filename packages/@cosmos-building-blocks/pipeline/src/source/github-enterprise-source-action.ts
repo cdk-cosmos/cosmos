@@ -4,7 +4,7 @@ import {
   ActionCategory,
   ActionConfig,
   Artifact,
-  CommonActionProps,
+  CommonAwsActionProps,
   IStage,
 } from '@aws-cdk/aws-codepipeline';
 import { Action } from '@aws-cdk/aws-codepipeline-actions';
@@ -26,9 +26,9 @@ export interface GitHubEnterpriseSourceVariables {
   readonly repositoryName: string;
 }
 
-export interface GithubEnterpriseSourceActionProps extends CommonActionProps {
+export interface GithubEnterpriseSourceActionProps extends CommonAwsActionProps {
   /**
-   *
+   * S3 Bucket for Output Artifact
    */
   readonly output: Artifact;
   /**
@@ -85,6 +85,13 @@ export class GithubEnterpriseSourceAction extends Action {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected bound(scope: Construct, stage: IStage, options: ActionBindOptions): ActionConfig {
+    // the Action will write the contents of the Git repository to the Bucket,
+    // so its Role needs write permissions to the Pipeline Bucket
+    options.bucket.grantReadWrite(options.role);
+
+    // The action will require access to the connection
+    this.props.connection.grantRead(options.role);
+
     return {
       configuration: {
         ConnectionArn: this.props.connection.connectionArn,

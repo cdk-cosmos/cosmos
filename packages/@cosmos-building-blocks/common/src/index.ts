@@ -7,3 +7,5 @@ export {
 export { SecureBucket } from './s3';
 
 export { SsmState } from './state';
+
+export { Config } from './config';

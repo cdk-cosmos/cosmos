@@ -1,4 +1,22 @@
 
+## v0.8.1 (2021-03-18)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/common`
+  * [#251](https://github.com/cdk-cosmos/cosmos/pull/251) Config Pattern ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/pipeline`
+  * [#252](https://github.com/cdk-cosmos/cosmos/pull/252) Fix GHE Source IAM Issue + Config Copy cross account Params ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/common`
+  * [#251](https://github.com/cdk-cosmos/cosmos/pull/251) Config Pattern ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`
+  * [#250](https://github.com/cdk-cosmos/cosmos/pull/250) Fix is type functions ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.8.0 (2021-03-11)
 
 #### 🚀 Enhancement:

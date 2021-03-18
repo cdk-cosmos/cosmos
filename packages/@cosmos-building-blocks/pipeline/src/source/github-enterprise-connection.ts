@@ -7,7 +7,7 @@ import {
   PhysicalResourceIdReference,
 } from '@aws-cdk/custom-resources';
 import { ISubnet, IVpc, SecurityGroup, SubnetSelection, Peer, Port } from '@aws-cdk/aws-ec2';
-import { PolicyStatement } from '@aws-cdk/aws-iam';
+import { Grant, IGrantable, PolicyStatement } from '@aws-cdk/aws-iam';
 
 export interface GithubEnterpriseHostProps {
   hostName: string;
@@ -103,6 +103,12 @@ export class GithubEnterpriseHost extends Resource {
       onUpdate: {
         ...defaultAwsCall,
         action: 'updateHost',
+        parameters: {
+          ...defaultAwsCall.parameters,
+          Name: undefined,
+          ProviderType: undefined,
+          HostArn: new PhysicalResourceIdReference(),
+        },
       },
       onDelete: {
         ...defaultAwsCall,
@@ -120,13 +126,27 @@ export class GithubEnterpriseHost extends Resource {
 
 export interface IGithubEnterpriseConnection extends IConstruct {
   readonly connectionArn: string;
+  grantRead(grantee: IGrantable): Grant;
 }
 
 export interface GithubEnterpriseConnectionProps {
   connectionName: string;
   host: GithubEnterpriseHost;
 }
-export class GithubEnterpriseConnection extends Resource implements IGithubEnterpriseConnection {
+
+export abstract class GithubEnterpriseConnectionBase extends Resource implements IGithubEnterpriseConnection {
+  public readonly connectionArn: string;
+
+  grantRead(grantee: IGrantable): Grant {
+    return Grant.addToPrincipal({
+      grantee: grantee,
+      actions: ['codestar-connections:UseConnection'],
+      resourceArns: [this.connectionArn],
+    });
+  }
+}
+
+export class GithubEnterpriseConnection extends GithubEnterpriseConnectionBase {
   public readonly connectionArn: string;
   public readonly connectionStatus: string;
   public readonly ownerAccountId: string;
@@ -160,8 +180,8 @@ export class GithubEnterpriseConnection extends Resource implements IGithubEnter
   }
 }
 
-class GithubEnterpriseConnectionImport extends Construct implements IGithubEnterpriseConnection {
-  readonly connectionArn: string;
+class GithubEnterpriseConnectionImport extends GithubEnterpriseConnectionBase {
+  public readonly connectionArn: string;
 
   constructor(scope: Construct, id: string, connectionArn: string) {
     super(scope, id);
