@@ -41,7 +41,7 @@ export const getRoutingPriorityFromListenerProps = (
   const stack = Stack.of(scope);
   const rendered = routes.map((x) => {
     const r = stack.resolve(x);
-    return typeof r !== 'string' ? x : r;
+    return typeof r !== 'string' ? `${r}` : r;
   });
 
   return getRoutingPriority(rendered);

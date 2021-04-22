@@ -10,6 +10,10 @@ Object {
       "Properties": Object {
         "Cluster": "Cluster",
         "DeploymentConfiguration": Object {
+          "DeploymentCircuitBreaker": Object {
+            "Enable": true,
+            "Rollback": true,
+          },
           "MaximumPercent": 200,
           "MinimumHealthyPercent": 50,
         },
@@ -239,6 +243,10 @@ Object {
       "Properties": Object {
         "Cluster": "Cluster",
         "DeploymentConfiguration": Object {
+          "DeploymentCircuitBreaker": Object {
+            "Enable": true,
+            "Rollback": true,
+          },
           "MaximumPercent": 200,
           "MinimumHealthyPercent": 50,
         },
