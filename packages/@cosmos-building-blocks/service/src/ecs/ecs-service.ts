@@ -113,6 +113,7 @@ export class EcsService extends Construct {
     this.service = new Ec2Service(this, 'Service', {
       desiredCount: 1,
       placementStrategies: [PlacementStrategy.spreadAcross(BuiltInAttributes.AVAILABILITY_ZONE)],
+      circuitBreaker: { rollback: true },
       ...serviceProps,
       taskDefinition: this.taskDefinition,
       cluster: cluster,

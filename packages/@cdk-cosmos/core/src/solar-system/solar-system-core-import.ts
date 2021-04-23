@@ -32,7 +32,7 @@ export class SolarSystemCoreImport extends BaseConstruct implements ISolarSystem
     this.galaxy = galaxy;
     this.config = new Config(this, 'Config', id, this.galaxy.config);
     this.vpc = RemoteVpc.import(this, 'Vpc', this.singletonId('Vpc'), {
-      aZs: aZsLookup ? Number(this.config.lookup('VpcAzs')) : 2,
+      aZs: (aZsLookup && Number(this.config.lookup('VpcAzs'))) || 2,
       isolatedSubnetNames: ['App'],
       ...vpcProps,
     });
