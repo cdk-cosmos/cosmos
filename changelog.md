@@ -1,4 +1,18 @@
 
+## v0.8.2 (2021-04-29)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/cdk-credentials-plugin`, `@cdk-cosmos/core`, `@cosmos-building-blocks/app-ec2`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/network`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#266](https://github.com/cdk-cosmos/cosmos/pull/266) Small fixes + circuitBreaker default enabled ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/cdk-credentials-plugin`, `@cdk-cosmos/core`, `@cosmos-building-blocks/app-ec2`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/network`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#269](https://github.com/cdk-cosmos/cosmos/pull/269) Fix Ecs Routing Priority Bug + Small Fixes ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.8.1 (2021-03-18)
 
 #### 🚀 Enhancement:
