@@ -38,6 +38,10 @@ export class CdkBootstrap extends Stack {
               name: 'STACKS',
               value: stacks.join(' '),
             },
+            {
+              name: 'TIME_STAMP',
+              value: Date.now().toString(),
+            },
           ],
         },
         physicalResourceId: PhysicalResourceId.fromResponse('build.id'),

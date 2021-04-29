@@ -113,6 +113,7 @@ export class EcsService extends Construct {
     this.service = new Ec2Service(this, 'Service', {
       desiredCount: 1,
       placementStrategies: [PlacementStrategy.spreadAcross(BuiltInAttributes.AVAILABILITY_ZONE)],
+      circuitBreaker: { rollback: true },
       ...serviceProps,
       taskDefinition: this.taskDefinition,
       cluster: cluster,
@@ -172,13 +173,13 @@ export class EcsService extends Construct {
             domainName: zone.zoneName,
             subjectAlternativeNames: subdomains.map((x) => `${x}.${zone.zoneName}`),
           });
-
+          this.certificate.node.addDependency(...this.subdomains);
           httpsListener.addCertificateArns(this.certificate.node.id, [this.certificate.certificateArn]);
         }
       }
 
       // Render the priority
-      _routingProps.priority = getRoutingPriorityFromListenerProps(this, _routingProps);
+      if (!_routingProps.priority) _routingProps.priority = getRoutingPriorityFromListenerProps(this, _routingProps);
 
       if (httpsListener) {
         this.listenerRules.push(

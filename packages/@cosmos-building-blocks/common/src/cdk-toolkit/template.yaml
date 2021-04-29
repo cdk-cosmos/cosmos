@@ -132,8 +132,6 @@ Resources:
                       - UseAwsManagedKey
                       - Ref: AWS::NoValue
                       - Fn::Sub: '${FileAssetsBucketKmsKeyId}'
-      LoggingConfiguration:
-        LogFilePrefix: BucketAccessLogs/
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
   StagingBucketPolicy:

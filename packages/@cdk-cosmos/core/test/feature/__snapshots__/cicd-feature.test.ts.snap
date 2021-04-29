@@ -322,7 +322,7 @@ Object {
               "Value": "CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem CoreCosLink AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
             },
           ],
-          "Image": "aws/codebuild/standard:4.0",
+          "Image": "aws/codebuild/standard:5.0",
           "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
@@ -336,7 +336,7 @@ Object {
     \\"install\\": {
       \\"commands\\": [],
       \\"runtime-versions\\": {
-        \\"nodejs\\": \\"12\\"
+        \\"nodejs\\": \\"14\\"
       }
     },
     \\"pre_build\\": {
@@ -742,16 +742,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6\\"",
+    "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbee\\"",
       "Type": "String",
     },
-    "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6\\"",
+    "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbee\\"",
       "Type": "String",
     },
-    "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6\\"",
+    "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbee\\"",
       "Type": "String",
     },
   },
@@ -782,7 +782,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6S3Bucket",
+                "Ref": "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeS3Bucket",
               },
               "/",
               Object {
@@ -792,7 +792,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6S3VersionKey",
+                        "Ref": "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeS3VersionKey",
                       },
                     ],
                   },
@@ -805,7 +805,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters01bea5bcf6d9227d9822d872f46b5a60374634c04f878792b30bf828dcb1a8c6S3VersionKey",
+                        "Ref": "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeS3VersionKey",
                       },
                     ],
                   },
@@ -1657,7 +1657,7 @@ Object {
               "Value": "CoreCosCosmos CoreCosGalGalaxy CoreCosGalCiCdSolarSystem CoreCosGalSys2SolarSystem CoreCosLink AppTestCosmos AppTestGalGalaxy AppTestGalCiCdSolarSystem AppTestGalSys2SolarSystem",
             },
           ],
-          "Image": "aws/codebuild/standard:4.0",
+          "Image": "aws/codebuild/standard:5.0",
           "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
@@ -1671,7 +1671,7 @@ Object {
     \\"install\\": {
       \\"commands\\": [],
       \\"runtime-versions\\": {
-        \\"nodejs\\": \\"12\\"
+        \\"nodejs\\": \\"14\\"
       }
     },
     \\"pre_build\\": {

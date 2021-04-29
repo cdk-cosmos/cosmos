@@ -10,7 +10,7 @@ import {
   ComputeType,
   IBuildImage,
 } from '@aws-cdk/aws-codebuild';
-import { IRole, Role, CompositePrincipal, ServicePrincipal } from '@aws-cdk/aws-iam';
+import { IRole, Role, CompositePrincipal, ServicePrincipal, PolicyStatement, PolicyDocument } from '@aws-cdk/aws-iam';
 import { IVpc, SubnetSelection } from '@aws-cdk/aws-ec2';
 import { SecureBucket } from '@cosmos-building-blocks/common';
 import { BuildSpecObject, BuildSpecBuilder } from '../build-spec';
@@ -55,7 +55,7 @@ export class StandardPipeline extends Construct {
       buildSubnets,
       buildEnvs,
       buildSpec,
-      buildImage = LinuxBuildImage.STANDARD_4_0,
+      buildImage = LinuxBuildImage.STANDARD_5_0,
       buildComputeType = ComputeType.SMALL,
       buildPrivileged = false,
     } = props;
@@ -79,6 +79,22 @@ export class StandardPipeline extends Construct {
           new ServicePrincipal('codepipeline.amazonaws.com'),
           new ServicePrincipal('codebuild.amazonaws.com')
         ),
+        inlinePolicies: {
+          // https://docs.aws.amazon.com/codebuild/latest/userguide/session-manager.html
+          sessionManager: new PolicyDocument({
+            statements: [
+              new PolicyStatement({
+                resources: ['*'],
+                actions: [
+                  'ssmmessages:CreateControlChannel',
+                  'ssmmessages:CreateDataChannel',
+                  'ssmmessages:OpenControlChannel',
+                  'ssmmessages:OpenDataChannel',
+                ],
+              }),
+            ],
+          }),
+        },
       });
 
     const artifactBucket = new SecureBucket(this, 'CodeArtifactBucket');
