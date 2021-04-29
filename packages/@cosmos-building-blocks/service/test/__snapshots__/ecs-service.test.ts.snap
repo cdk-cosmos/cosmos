@@ -47,6 +47,7 @@ Object {
       "DependsOn": Array [
         "EcsService2CertificateCertificateRequestorFunctionServiceRoleDefaultPolicyD0E1BCD4",
         "EcsService2CertificateCertificateRequestorFunctionServiceRole478DDD0C",
+        "EcsService2Subdomain0BB9A15FB",
       ],
       "Properties": Object {
         "Code": Object {
@@ -66,6 +67,9 @@ Object {
       "Type": "AWS::Lambda::Function",
     },
     "EcsService2CertificateCertificateRequestorFunctionServiceRole478DDD0C": Object {
+      "DependsOn": Array [
+        "EcsService2Subdomain0BB9A15FB",
+      ],
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -97,6 +101,9 @@ Object {
       "Type": "AWS::IAM::Role",
     },
     "EcsService2CertificateCertificateRequestorFunctionServiceRoleDefaultPolicyD0E1BCD4": Object {
+      "DependsOn": Array [
+        "EcsService2Subdomain0BB9A15FB",
+      ],
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -144,6 +151,9 @@ Object {
     },
     "EcsService2CertificateCertificateRequestorResource32940D2F": Object {
       "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "EcsService2Subdomain0BB9A15FB",
+      ],
       "Properties": Object {
         "DomainName": "cosmos",
         "HostedZoneId": "1234",
@@ -191,7 +201,7 @@ Object {
           },
         ],
         "ListenerArn": "Listener",
-        "Priority": 49269,
+        "Priority": 49710,
       },
       "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },
@@ -224,7 +234,7 @@ Object {
           },
         ],
         "ListenerArn": "Listener2",
-        "Priority": 49269,
+        "Priority": 49710,
       },
       "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },
@@ -439,7 +449,7 @@ Object {
           },
         ],
         "ListenerArn": "Listener",
-        "Priority": 49128,
+        "Priority": 49827,
       },
       "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },
@@ -464,7 +474,7 @@ Object {
           },
         ],
         "ListenerArn": "Listener2",
-        "Priority": 49128,
+        "Priority": 49827,
       },
       "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },

@@ -107,7 +107,7 @@ export class CdkPipeline extends Construct {
     const changeDir = cdkWorkingDir ? `cd ${cdkWorkingDir}` : null;
 
     this.deploySpec = new BuildSpecBuilder()
-      .addRuntime('nodejs', '12')
+      .addRuntime('nodejs', '14')
       .addCommands('pre_build', changeDir, npmKey ? NPM_LOGIN : null, NPM_INSTALL)
       .addCommands(
         'build',
@@ -154,7 +154,7 @@ export class CdkPipeline extends Construct {
       buildSpec: this.deploySpec,
       environment: {
         computeType: ComputeType.SMALL,
-        buildImage: LinuxBuildImage.STANDARD_4_0,
+        buildImage: LinuxBuildImage.STANDARD_5_0,
         environmentVariables: parseEnvs(envs),
         privileged: true,
       },

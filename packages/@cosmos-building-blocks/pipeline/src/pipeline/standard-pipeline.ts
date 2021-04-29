@@ -55,7 +55,7 @@ export class StandardPipeline extends Construct {
       buildSubnets,
       buildEnvs,
       buildSpec,
-      buildImage = LinuxBuildImage.STANDARD_4_0,
+      buildImage = LinuxBuildImage.STANDARD_5_0,
       buildComputeType = ComputeType.SMALL,
       buildPrivileged = false,
     } = props;

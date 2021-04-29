@@ -4,10 +4,6 @@ import { Stack } from '@aws-cdk/core';
 
 test('Should generate routing priority in order of path.', () => {
   expect(getRoutingPriority([])).toBe(50000);
-  expect(getRoutingPriority(['*'])).toBe(49994);
-  expect(getRoutingPriority(['a'])).toBe(49929);
-  expect(getRoutingPriority(['A'])).toBe(49798);
-  expect(getRoutingPriority(['0'])).toBe(49667);
 
   expect(getRoutingPriority(['?'])).toBeLessThan(getRoutingPriority(['*']));
   expect(getRoutingPriority(['a'])).toBeLessThan(getRoutingPriority(['*']));
@@ -23,6 +19,10 @@ test('Should generate routing priority in order of path.', () => {
   expect(getRoutingPriority(['www.google.com'])).toBeLessThan(getRoutingPriority(['google.com']));
 
   expect(getRoutingPriority(['www.google.com', '/test'])).toBeLessThan(getRoutingPriority(['/*']));
+
+  expect(getRoutingPriority(['www.google.com', '/test', '/test2'])).toBeLessThan(
+    getRoutingPriority(['www.google.com', '/test'])
+  );
 });
 
 test('Should test routing conditions', () => {

@@ -22,7 +22,7 @@ export class NodePipeline extends StandardPipeline {
 
   static DefaultBuildSpec(): BuildSpecBuilder {
     return new BuildSpecBuilder()
-      .addRuntime('nodejs', '12')
+      .addRuntime('nodejs', '14')
       .addCommands('pre_build', NPM_LOGIN, NPM_INSTALL, NPM_EXPORT_APP_BUILD_VERSION)
       .addCommands('build', NPM_BUILD)
       .addExportedVariables('APP_BUILD_VERSION');
