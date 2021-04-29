@@ -6,8 +6,6 @@ import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar
 import { BaseFeatureStack, BaseFeatureStackProps } from '../../components/base';
 import { CdkPipeline, CdkPipelineProps, AddDeployStackStageProps } from '@cosmos-building-blocks/pipeline';
 
-export const CDK_PIPELINE_PATTERN = '{Partition}{Cosmos}{Resource}';
-
 export interface ICiCdFeatureCore extends Construct {
   readonly solarSystem: ISolarSystemCore;
   readonly cdkRepo?: IRepository;
@@ -52,8 +50,8 @@ export class CiCdFeatureCoreStack extends BaseFeatureStack implements ICiCdFeatu
       }),
       cdkRepo: this.cdkRepo,
       ...cdkPipelineProps,
-      pipelineName: this.solarSystem.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
-      deployName: this.solarSystem.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
+      pipelineName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Pipeline', '-'),
+      deployName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Deploy', '-'),
     });
     this.deployProject = this.cdkPipeline.deploy;
   }

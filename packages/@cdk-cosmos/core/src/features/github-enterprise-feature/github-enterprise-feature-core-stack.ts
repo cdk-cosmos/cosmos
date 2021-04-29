@@ -45,7 +45,7 @@ export class GithubEnterpriseFeatureCoreStack extends BaseFeatureStack implement
       host: this.host,
     });
 
-    new RemoteGithubEnterpriseConnection(this.connection, this.singletonId('GithubEnterpriseConnection'));
+    new RemoteGithubEnterpriseConnection(this.connection, this.singletonId('Connection'));
   }
 }
 

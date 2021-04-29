@@ -5,7 +5,6 @@ import { IRepository, Repository } from '@aws-cdk/aws-codecommit';
 import { ISolarSystemExtension, SolarSystemExtensionStack } from '../../solar-system/solar-system-extension-stack';
 import { BaseFeatureConstruct, BaseFeatureConstructProps } from '../../components/base';
 import { CdkPipeline, CdkPipelineProps, AddDeployStackStageProps } from '@cosmos-building-blocks/pipeline';
-import { CDK_PIPELINE_PATTERN } from './cicd-feature-core-stack';
 
 export interface ICiCdFeatureExtension extends Construct {
   readonly solarSystem: ISolarSystemExtension;
@@ -46,8 +45,8 @@ export class CiCdFeatureExtensionStack extends BaseFeatureConstruct implements I
       }),
       cdkRepo: this.cdkRepo,
       ...cdkPipelineProps,
-      pipelineName: this.solarSystem.nodeId('Cdk-Pipeline', '-', CDK_PIPELINE_PATTERN),
-      deployName: this.solarSystem.nodeId('Cdk-Deploy', '-', CDK_PIPELINE_PATTERN),
+      pipelineName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Pipeline', '-'),
+      deployName: this.solarSystem.galaxy.cosmos.nodeId('Cdk-Deploy', '-'),
     });
     this.deployProject = this.cdkPipeline.deploy;
   }

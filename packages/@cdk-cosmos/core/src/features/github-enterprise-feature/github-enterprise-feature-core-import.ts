@@ -21,11 +21,7 @@ export class GithubEnterpriseFeatureCoreImport extends BaseFeatureConstruct impl
 
     this.solarSystem = solarSystem;
 
-    this.connection = RemoteGithubEnterpriseConnection.import(
-      this,
-      'Connection',
-      this.singletonId('GithubEnterpriseConnection')
-    );
+    this.connection = RemoteGithubEnterpriseConnection.import(this, 'Connection', this.singletonId('Connection'));
   }
 }
 

@@ -73,7 +73,7 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
     this.cluster = new Cluster(this, 'Cluster', {
       containerInsights: true,
       ...clusterProps,
-      clusterName: this.singletonId('Cluster'),
+      clusterName: this.solarSystem.singletonId('Cluster'),
       vpc: this.solarSystem.vpc,
       capacity:
         clusterProps.capacity !== false
@@ -110,7 +110,7 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
       ...albProps,
       vpc: this.solarSystem.vpc,
       securityGroup: albSecurityGroup,
-      loadBalancerName: this.singletonId('Alb'),
+      loadBalancerName: this.solarSystem.singletonId('Alb'),
     });
 
     new ARecord(this, 'AlbRecord', {
@@ -152,13 +152,14 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
       if (listener) configureListener(listener, albInternalListenerCidr);
     }
 
-    new RemoteCluster(this.cluster, this.singletonId('Cluster'));
-    new RemoteAlb(this.alb, this.singletonId('Alb'));
-    new RemoteApplicationListener(this.httpListener, this.singletonId('HttpListener'));
-    new RemoteApplicationListener(this.httpInternalListener, this.singletonId('HttpInternalListener'));
-    if (this.httpsListener) new RemoteApplicationListener(this.httpsListener, this.singletonId('HttpsListener'));
+    new RemoteCluster(this.cluster, this.solarSystem.singletonId('Cluster'));
+    new RemoteAlb(this.alb, this.solarSystem.singletonId('Alb'));
+    new RemoteApplicationListener(this.httpListener, this.solarSystem.singletonId('HttpListener'));
+    new RemoteApplicationListener(this.httpInternalListener, this.solarSystem.singletonId('HttpInternalListener'));
+    if (this.httpsListener)
+      new RemoteApplicationListener(this.httpsListener, this.solarSystem.singletonId('HttpsListener'));
     if (this.httpsInternalListener)
-      new RemoteApplicationListener(this.httpsInternalListener, this.singletonId('HttpsInternalListener'));
+      new RemoteApplicationListener(this.httpsInternalListener, this.solarSystem.singletonId('HttpsInternalListener'));
   }
 
   addDockerConfig(config: Record<string, string>): void {

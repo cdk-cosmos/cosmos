@@ -27,19 +27,27 @@ export class EcsFeatureCoreImport extends BaseFeatureConstruct implements IEcsFe
 
     this.solarSystem = solarSystem;
 
-    this.cluster = RemoteCluster.import(this, 'Cluster', this.singletonId('Cluster'), this.solarSystem.vpc);
-    this.alb = RemoteAlb.import(this, 'Alb', this.singletonId('Alb'), this.solarSystem.vpc);
-    this.httpListener = RemoteApplicationListener.import(this, 'HttpListener', this.singletonId('HttpListener'));
+    this.cluster = RemoteCluster.import(this, 'Cluster', this.solarSystem.singletonId('Cluster'), this.solarSystem.vpc);
+    this.alb = RemoteAlb.import(this, 'Alb', this.solarSystem.singletonId('Alb'), this.solarSystem.vpc);
+    this.httpListener = RemoteApplicationListener.import(
+      this,
+      'HttpListener',
+      this.solarSystem.singletonId('HttpListener')
+    );
     this.httpInternalListener = RemoteApplicationListener.import(
       this,
       'HttpInternalListener',
-      this.singletonId('HttpInternalListener')
+      this.solarSystem.singletonId('HttpInternalListener')
     );
-    this.httpsListener = RemoteApplicationListener.import(this, 'HttpsListener', this.singletonId('HttpsListener'));
+    this.httpsListener = RemoteApplicationListener.import(
+      this,
+      'HttpsListener',
+      this.solarSystem.singletonId('HttpsListener')
+    );
     this.httpsInternalListener = RemoteApplicationListener.import(
       this,
       'HttpsInternalListener',
-      this.singletonId('HttpsInternalListener')
+      this.solarSystem.singletonId('HttpsInternalListener')
     );
   }
 }
