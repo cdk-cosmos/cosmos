@@ -41,25 +41,21 @@ export const getRoutingPriorityFromListenerProps = (
   const stack = Stack.of(scope);
   const rendered = routes.map((x) => {
     const r = stack.resolve(x);
-    return typeof r !== 'string' ? `${r}` : r;
+    return typeof r !== 'string' ? JSON.stringify(r) : r;
   });
 
   return getRoutingPriority(rendered);
 };
 
 export const getRoutingPriority = (routes: string[]): number => {
-  const val = !routes.length ? 0 : routes.map(getStringValue).reduce((r, v) => r + v) / routes.length;
-  const inMin = 0;
-  const inMax = 128 * charMapping.length;
+  const val = !routes.length ? 0 : routes.map(getStringValue).reduce((r, v) => r + v);
+
   const outMin = 1000; // Offset
   const outMax = 50000;
 
-  // Since lower numbers are more important in Listener Rules for ALB, then flip out min and max
-  return mapNumber(val, inMin, inMax, outMax, outMin);
-};
-
-const mapNumber = (value: number, inMin: number, inMax: number, outMin: number, outMax: number): number => {
-  return Math.floor(((value - inMin) / (inMax - inMin)) * (outMax - outMin) + outMin);
+  const mappedValue = Math.floor(outMax - val);
+  if (mappedValue < outMin) throw new Error('Routing Pirority is outside of boundry, please set manually.');
+  return mappedValue;
 };
 
 const getStringValue = (str?: string): number => {

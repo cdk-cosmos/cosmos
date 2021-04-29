@@ -456,7 +456,7 @@ Object {
               "Value": "Test",
             },
           ],
-          "Image": "aws/codebuild/standard:4.0",
+          "Image": "aws/codebuild/standard:5.0",
           "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
@@ -474,7 +474,7 @@ Object {
     \\"install\\": {
       \\"commands\\": [],
       \\"runtime-versions\\": {
-        \\"nodejs\\": \\"12\\"
+        \\"nodejs\\": \\"14\\"
       }
     },
     \\"pre_build\\": {
@@ -1023,7 +1023,7 @@ Object {
               "Value": "Test Test2 Test3",
             },
           ],
-          "Image": "aws/codebuild/standard:4.0",
+          "Image": "aws/codebuild/standard:5.0",
           "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
@@ -1041,7 +1041,7 @@ Object {
     \\"install\\": {
       \\"commands\\": [],
       \\"runtime-versions\\": {
-        \\"nodejs\\": \\"12\\"
+        \\"nodejs\\": \\"14\\"
       }
     },
     \\"pre_build\\": {
@@ -1565,7 +1565,7 @@ Object {
               "Value": "Test",
             },
           ],
-          "Image": "aws/codebuild/standard:4.0",
+          "Image": "aws/codebuild/standard:5.0",
           "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
@@ -1583,7 +1583,7 @@ Object {
     \\"install\\": {
       \\"commands\\": [],
       \\"runtime-versions\\": {
-        \\"nodejs\\": \\"12\\"
+        \\"nodejs\\": \\"14\\"
       }
     },
     \\"pre_build\\": {
@@ -1971,7 +1971,7 @@ Object {
         "EncryptionKey": "alias/aws/s3",
         "Environment": Object {
           "ComputeType": "BUILD_GENERAL1_SMALL",
-          "Image": "aws/codebuild/standard:4.0",
+          "Image": "aws/codebuild/standard:5.0",
           "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
@@ -2459,7 +2459,7 @@ Object {
               "Value": "",
             },
           ],
-          "Image": "aws/codebuild/standard:4.0",
+          "Image": "aws/codebuild/standard:5.0",
           "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": false,
           "Type": "LINUX_CONTAINER",
@@ -2477,7 +2477,7 @@ Object {
     \\"install\\": {
       \\"commands\\": [],
       \\"runtime-versions\\": {
-        \\"nodejs\\": \\"12\\"
+        \\"nodejs\\": \\"14\\"
       }
     },
     \\"pre_build\\": {
