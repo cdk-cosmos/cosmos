@@ -6,8 +6,19 @@ import { IRole } from '@aws-cdk/aws-iam';
 import { IRepository } from '@aws-cdk/aws-ecr';
 
 export interface SourceProviderProps<Repo> {
+  /**
+   * The repo to use.
+   *
+   */
   readonly repo: Repo;
+  /**
+   * The branch to use.
+   *
+   */
   readonly branch: string;
+  /**
+   *  Controls automatically starting your pipeline when a new commit is made.
+   */
   readonly trigger: boolean;
 }
 

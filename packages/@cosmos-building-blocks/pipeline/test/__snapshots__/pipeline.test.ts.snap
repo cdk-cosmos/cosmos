@@ -258,6 +258,7 @@ Object {
                       "ConnectionArn",
                     ],
                   },
+                  "DetectChanges": true,
                   "FullRepositoryId": "timpur/test",
                   "OutputArtifactFormat": "CODE_ZIP",
                 },

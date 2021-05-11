@@ -1248,6 +1248,7 @@ Object {
                   "ConnectionArn": Object {
                     "Fn::ImportValue": "CoreGalSysGithubEnterpriseConnectionArn",
                   },
+                  "DetectChanges": true,
                   "FullRepositoryId": "test/test",
                   "OutputArtifactFormat": "CODE_ZIP",
                 },
