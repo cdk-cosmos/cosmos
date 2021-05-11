@@ -1983,12 +1983,28 @@ Object {
           ],
         },
         "Source": Object {
-          "BuildSpec": "{
+          "BuildSpec": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "{
   \\"version\\": \\"0.2\\",
   \\"phases\\": {
     \\"pre_build\\": {
       \\"commands\\": [
-        \\"$(aws ecr get-login --no-include-email --region \${AWS_REGION})\\",
+        \\"aws ecr get-login-password --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ") | docker login --username AWS --password-stdin https://",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ".dkr.ecr.",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ".amazonaws.com\\",
         \\"export APP_BUILD_VERSION=$(make version)\\"
       ]
     },
@@ -2009,6 +2025,9 @@ Object {
     ]
   }
 }",
+              ],
+            ],
+          },
           "Location": Object {
             "Fn::GetAtt": Array [
               "Repo02AC86CF",
