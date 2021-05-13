@@ -1,4 +1,20 @@
 
+## v0.8.3 (2021-05-13)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`
+  * [#273](https://github.com/cdk-cosmos/cosmos/pull/273) ECS Login Bug + GHE trigger prop ([@timpur](https://github.com/timpur))
+* `@cosmos-building-blocks/common`
+  * [#272](https://github.com/cdk-cosmos/cosmos/pull/272) Clean up State Construct to use cfn param always ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`
+  * [#273](https://github.com/cdk-cosmos/cosmos/pull/273) ECS Login Bug + GHE trigger prop ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.8.2 (2021-04-29)
 
 #### 🚀 Enhancement:

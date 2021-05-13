@@ -9,16 +9,32 @@ import { IGithubEnterpriseConnection } from './github-enterprise-connection';
 import { URL } from 'url';
 
 export interface GithubEnterpriseSourceProviderProps {
+  /**
+   * The Github Enterprise Connection to use
+   */
   readonly connection: IGithubEnterpriseConnection;
+  /**
+   * The url of the repo, with the .git eg. https://ghe.com/user/repo.git
+   */
   readonly repo: string;
-  readonly branch: string;
+  /**
+   * The branch to use.
+   *
+   * @default "master"
+   */
+  readonly branch?: string;
+  /**
+   *  Controls automatically starting your pipeline when a new commit is made.
+   *  @default true
+   */
+  readonly trigger?: boolean;
 }
 
 export class GithubEnterpriseSourceProvider extends SourceProvider<string> {
   connection: IGithubEnterpriseConnection;
 
   constructor(props: GithubEnterpriseSourceProviderProps) {
-    super({ ...props, trigger: false });
+    super({ ...props, branch: 'master', trigger: true });
 
     const { connection } = props;
 
@@ -54,6 +70,7 @@ export class GithubEnterpriseSourceProvider extends SourceProvider<string> {
       branch: branch || this.branch,
       output: sourceOutput,
       variablesNamespace: name,
+      detectChanges: this.trigger,
     });
   }
 }
