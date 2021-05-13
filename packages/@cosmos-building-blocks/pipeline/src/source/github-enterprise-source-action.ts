@@ -51,6 +51,12 @@ export interface GithubEnterpriseSourceActionProps extends CommonAwsActionProps 
    *  @default "CODE_ZIP"
    */
   readonly outputFormat?: string;
+
+  /**
+   *  Controls automatically starting your pipeline when a new commit is made.
+   *  @default true
+   */
+  readonly detectChanges?: boolean;
 }
 
 export class GithubEnterpriseSourceAction extends Action {
@@ -98,6 +104,7 @@ export class GithubEnterpriseSourceAction extends Action {
         FullRepositoryId: this.props.repo,
         BranchName: this.props.branch || 'master',
         OutputArtifactFormat: this.props.outputFormat || 'CODE_ZIP',
+        DetectChanges: this.props.detectChanges || true,
       },
     };
   }
