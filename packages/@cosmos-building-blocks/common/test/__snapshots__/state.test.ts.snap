@@ -3,11 +3,11 @@
 exports[`SSM State 1`] = `
 Object {
   "Parameters": Object {
-    "SsmState2Param98E52CC8": Object {
+    "SsmState2CurrentValueB6CA156C": Object {
       "Default": "SsmState2",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "SsmStateParam179295CF": Object {
+    "SsmStateNewValue9F12516E": Object {
       "Default": "new",
       "Type": "String",
     },
@@ -18,7 +18,7 @@ Object {
         "Name": "SsmState2",
         "Type": "String",
         "Value": Object {
-          "Ref": "SsmState2Param98E52CC8",
+          "Ref": "SsmState2CurrentValueB6CA156C",
         },
       },
       "Type": "AWS::SSM::Parameter",
@@ -28,7 +28,7 @@ Object {
         "Name": "SsmState",
         "Type": "String",
         "Value": Object {
-          "Ref": "SsmStateParam179295CF",
+          "Ref": "SsmStateNewValue9F12516E",
         },
       },
       "Type": "AWS::SSM::Parameter",
