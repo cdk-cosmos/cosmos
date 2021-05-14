@@ -24,13 +24,13 @@ export class SsmState extends Construct implements IState {
     const { name, value } = props;
 
     if (value) {
-      this.param = new CfnParameter(this, 'Param', {
+      this.param = new CfnParameter(this, 'NewValue', {
         type: 'String',
         default: value,
       });
       Annotations.of(this).addInfo(`Using '${value}' value for ${name} state.`);
     } else {
-      this.param = new CfnParameter(this, 'Param', {
+      this.param = new CfnParameter(this, 'CurrentValue', {
         type: 'AWS::SSM::Parameter::Value<String>',
         default: name,
       });
