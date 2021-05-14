@@ -1,6 +1,6 @@
 import { Construct } from '@aws-cdk/core';
 import { StandardPipeline, StandardPipelineProps } from './standard-pipeline';
-import { ECR_LOGIN_V2, DOCKER_EXPORT_APP_BUILD_VERSION, DOCKER_BUILD, DOCKER_PUSH } from '../commands';
+import { ECR_LOGIN, DOCKER_EXPORT_APP_BUILD_VERSION, DOCKER_BUILD, DOCKER_PUSH } from '../commands';
 import { BuildSpecBuilder } from '../build-spec';
 
 export interface DockerPipelineProps extends StandardPipelineProps {}
@@ -16,7 +16,7 @@ export class DockerPipeline extends StandardPipeline {
 
   static DefaultBuildSpec(): BuildSpecBuilder {
     return new BuildSpecBuilder()
-      .addCommands('pre_build', ECR_LOGIN_V2, DOCKER_EXPORT_APP_BUILD_VERSION)
+      .addCommands('pre_build', ECR_LOGIN, DOCKER_EXPORT_APP_BUILD_VERSION)
       .addCommands('build', DOCKER_BUILD)
       .addCommands('post_build', DOCKER_PUSH)
       .addExportedVariables('APP_BUILD_VERSION');
