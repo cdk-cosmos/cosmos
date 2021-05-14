@@ -1,8 +1,7 @@
 import { Aws } from '@aws-cdk/core';
 import { IRepository } from '@aws-cdk/aws-ecr';
 
-export const ECR_LOGIN = '$(aws ecr get-login --no-include-email --region ${AWS_REGION})';
-export const ECR_LOGIN_V2 = `aws ecr get-login-password --region ${Aws.REGION} | docker login --username AWS --password-stdin https://${Aws.ACCOUNT_ID}.dkr.ecr.${Aws.REGION}.amazonaws.com`;
+export const ECR_LOGIN = `aws ecr get-login-password --region ${Aws.REGION} | docker login --username AWS --password-stdin https://${Aws.ACCOUNT_ID}.dkr.ecr.${Aws.REGION}.amazonaws.com`;
 export const getEcrLogin = (registry: IRepository) =>
   `aws ecr get-login-password --region ${registry.env.region} | docker login --username AWS --password-stdin ${registry.repositoryUri}`;
 
