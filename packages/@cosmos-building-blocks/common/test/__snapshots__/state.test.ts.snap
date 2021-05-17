@@ -7,10 +7,6 @@ Object {
       "Default": "SsmState2",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "SsmStateNewValue9F12516E": Object {
-      "Default": "new",
-      "Type": "String",
-    },
   },
   "Resources": Object {
     "SsmState2StateD3EE94E1": Object {
@@ -27,9 +23,7 @@ Object {
       "Properties": Object {
         "Name": "SsmState",
         "Type": "String",
-        "Value": Object {
-          "Ref": "SsmStateNewValue9F12516E",
-        },
+        "Value": "new",
       },
       "Type": "AWS::SSM::Parameter",
     },
