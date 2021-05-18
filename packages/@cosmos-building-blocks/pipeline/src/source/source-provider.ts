@@ -15,11 +15,11 @@ export interface SourceProviderProps<Repo> {
    * The branch to use.
    *
    */
-  readonly branch: string;
+  readonly branch?: string;
   /**
    *  Controls automatically starting your pipeline when a new commit is made.
    */
-  readonly trigger: boolean;
+  readonly trigger?: boolean;
 }
 
 export abstract class SourceProvider<Repo = IRepository | string> {
@@ -30,8 +30,8 @@ export abstract class SourceProvider<Repo = IRepository | string> {
   constructor(props: SourceProviderProps<Repo>) {
     const { repo, branch, trigger } = props;
     this.repo = repo;
-    this.branch = branch;
-    this.trigger = trigger;
+    this.branch = branch || 'master';
+    this.trigger = trigger || true;
   }
 
   abstract setup(scope: Construct): void;
