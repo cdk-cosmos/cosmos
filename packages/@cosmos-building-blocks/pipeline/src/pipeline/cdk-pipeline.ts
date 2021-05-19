@@ -84,8 +84,8 @@ export class CdkPipeline extends Construct {
     const source = cdkRepo
       ? ((new CodeCommitSourceProvider({
           repo: cdkRepo,
-          branch: cdkBranch || 'master',
-          trigger: cdkTrigger || false,
+          branch: cdkBranch,
+          trigger: cdkTrigger,
         }) as any) as SourceProvider)
       : cdkSource;
     if (!source) throw new Error('A source repository could not be found.');
@@ -180,7 +180,7 @@ export class CdkPipeline extends Construct {
 
     this.pipeline.addStage({
       stageName: 'Source',
-      actions: [this.cdkSource.sourceAction('CdkCheckout', this.pipeline.role, sourceOutput)],
+      actions: [this.cdkSource.sourceAction('CdkCheckout', this.pipeline.role, sourceOutput, cdkBranch, cdkTrigger)],
     });
 
     if (deployDiffStage) {
