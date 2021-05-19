@@ -1,4 +1,4 @@
-import { Construct } from '@aws-cdk/core';
+import { Construct, Duration } from '@aws-cdk/core';
 import { InstanceType, SecurityGroup, Peer, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
 import { Cluster, ICluster, ClusterProps as EcsClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
 import {
@@ -14,7 +14,7 @@ import {
 import { ManagedPolicy } from '@aws-cdk/aws-iam';
 import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
-import { AutoScalingGroup, UpdateType } from '@aws-cdk/aws-autoscaling';
+import { AutoScalingGroup, Signals, UpdatePolicy } from '@aws-cdk/aws-autoscaling';
 import { Key } from '@aws-cdk/aws-kms';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
 import { CoreVpc } from '../../components/core-vpc';
@@ -82,7 +82,12 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
               instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
               minCapacity: 1,
               maxCapacity: this.solarSystem.vpc.availabilityZones.length * 2,
-              updateType: UpdateType.ROLLING_UPDATE,
+              signals: Signals.waitForMinCapacity(),
+              updatePolicy: UpdatePolicy.rollingUpdate({
+                minSuccessPercentage: 100,
+                pauseTime: Duration.minutes(10),
+              }),
+              updateType: undefined,
               topicEncryptionKey:
                 this.solarSystem.galaxy.sharedKey &&
                 Key.fromKeyArn(this, 'SharedKey', this.solarSystem.galaxy.sharedKey.keyArn),
@@ -92,9 +97,9 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
           : undefined,
     });
     this.clusterAutoScalingGroup = this.cluster.autoscalingGroup as AutoScalingGroup | undefined;
-
     if (this.clusterAutoScalingGroup) {
       this.clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
+      this.clusterAutoScalingGroup.userData.addSignalOnExitCommand(this.clusterAutoScalingGroup);
     }
 
     const albSecurityGroup =
