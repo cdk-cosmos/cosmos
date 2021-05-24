@@ -16,6 +16,7 @@ import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 import { AutoScalingGroup, UpdateType } from '@aws-cdk/aws-autoscaling';
 import { Key } from '@aws-cdk/aws-kms';
+import { EcsEc2ServiceRebalance } from '@cosmos-building-blocks/service';
 import { ISolarSystemCore, SolarSystemCoreStack } from '../../solar-system/solar-system-core-stack';
 import { CoreVpc } from '../../components/core-vpc';
 import { RemoteCluster, RemoteAlb, RemoteApplicationListener } from '../../components/remote';
@@ -33,6 +34,7 @@ export interface IEcsFeatureCore extends Construct {
 
 export interface ClusterProps extends Partial<Omit<EcsClusterProps, 'capacity'>> {
   capacity?: Partial<AddCapacityOptions> | false;
+  rebalance?: boolean;
 }
 
 export interface EcsSolarSystemCoreStackProps extends BaseFeatureStackProps {
@@ -92,9 +94,11 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
           : undefined,
     });
     this.clusterAutoScalingGroup = this.cluster.autoscalingGroup as AutoScalingGroup | undefined;
-
     if (this.clusterAutoScalingGroup) {
       this.clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
+      if (clusterProps.rebalance !== false) {
+        new EcsEc2ServiceRebalance(this, 'Rebalance', { cluster: this.cluster });
+      }
     }
 
     const albSecurityGroup =
