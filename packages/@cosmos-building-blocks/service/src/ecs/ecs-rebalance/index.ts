@@ -7,6 +7,8 @@ import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 
 export interface EcsEc2ServiceRebalanceProps {
   cluster: ICluster;
+  timeoutPerService?: Duration;
+  totalTimeout?: Duration;
 }
 
 export class EcsEc2ServiceRebalance extends Construct {
@@ -17,7 +19,7 @@ export class EcsEc2ServiceRebalance extends Construct {
   constructor(scope: Construct, id: string, props: EcsEc2ServiceRebalanceProps) {
     super(scope, id);
 
-    const { cluster } = props;
+    const { cluster, timeoutPerService = Duration.minutes(2), totalTimeout = Duration.minutes(10) } = props;
 
     this.role = new Role(this, 'Role', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
@@ -44,10 +46,10 @@ export class EcsEc2ServiceRebalance extends Construct {
       code: Code.fromAsset(`${__dirname}/handler`),
       handler: 'index.handler',
       role: this.role,
-      timeout: Duration.minutes(10),
+      timeout: totalTimeout,
       environment: {
         CLUSTER: cluster.clusterName,
-        TIMEOUT: (2 * 60).toString(),
+        TIMEOUT: timeoutPerService.toSeconds().toString(),
       },
     });
 
