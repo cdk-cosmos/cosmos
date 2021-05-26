@@ -23,17 +23,17 @@
     "clean": "rm -rf lib"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-ec2": "^1.84.0",
-    "@aws-cdk/aws-ecs": "^1.84.0",
-    "@aws-cdk/aws-elasticloadbalancingv2": "^1.84.0",
-    "@aws-cdk/aws-events": "^1.84.0",
-    "@aws-cdk/aws-events-targets": "^1.84.0",
-    "@aws-cdk/aws-iam": "^1.84.0",
-    "@aws-cdk/aws-lambda": "^1.84.0",
-    "@aws-cdk/aws-route53": "^1.84.0",
-    "@aws-cdk/aws-route53-targets": "^1.84.0",
-    "@aws-cdk/aws-s3": "^1.84.0",
-    "@aws-cdk/aws-ssm": "^1.84.0",
-    "@aws-cdk/core": "^1.84.0"
+    "@aws-cdk/aws-ec2": "^1.89.0",
+    "@aws-cdk/aws-ecs": "^1.89.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.89.0",
+    "@aws-cdk/aws-events": "^1.89.0",
+    "@aws-cdk/aws-events-targets": "^1.89.0",
+    "@aws-cdk/aws-iam": "^1.89.0",
+    "@aws-cdk/aws-lambda": "^1.89.0",
+    "@aws-cdk/aws-route53": "^1.89.0",
+    "@aws-cdk/aws-route53-targets": "^1.89.0",
+    "@aws-cdk/aws-s3": "^1.89.0",
+    "@aws-cdk/aws-ssm": "^1.89.0",
+    "@aws-cdk/core": "^1.89.0"
   }
 }
