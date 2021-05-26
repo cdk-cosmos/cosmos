@@ -136,16 +136,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters40a3b5d84a2b452862485b1cd4f7d7f2a07ccda751cbfe3eed863d100f6c1588ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"40a3b5d84a2b452862485b1cd4f7d7f2a07ccda751cbfe3eed863d100f6c1588\\"",
+    "AssetParameters9c202e2dfecf40919ce5a201490671a23e21ce3e7e0562d752c4cff4c3380e9cArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"9c202e2dfecf40919ce5a201490671a23e21ce3e7e0562d752c4cff4c3380e9c\\"",
       "Type": "String",
     },
-    "AssetParameters40a3b5d84a2b452862485b1cd4f7d7f2a07ccda751cbfe3eed863d100f6c1588S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"40a3b5d84a2b452862485b1cd4f7d7f2a07ccda751cbfe3eed863d100f6c1588\\"",
+    "AssetParameters9c202e2dfecf40919ce5a201490671a23e21ce3e7e0562d752c4cff4c3380e9cS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"9c202e2dfecf40919ce5a201490671a23e21ce3e7e0562d752c4cff4c3380e9c\\"",
       "Type": "String",
     },
-    "AssetParameters40a3b5d84a2b452862485b1cd4f7d7f2a07ccda751cbfe3eed863d100f6c1588S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"40a3b5d84a2b452862485b1cd4f7d7f2a07ccda751cbfe3eed863d100f6c1588\\"",
+    "AssetParameters9c202e2dfecf40919ce5a201490671a23e21ce3e7e0562d752c4cff4c3380e9cS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"9c202e2dfecf40919ce5a201490671a23e21ce3e7e0562d752c4cff4c3380e9c\\"",
       "Type": "String",
     },
   },
@@ -354,7 +354,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters40a3b5d84a2b452862485b1cd4f7d7f2a07ccda751cbfe3eed863d100f6c1588S3Bucket",
+                "Ref": "AssetParameters9c202e2dfecf40919ce5a201490671a23e21ce3e7e0562d752c4cff4c3380e9cS3Bucket",
               },
               "/",
               Object {
@@ -364,7 +364,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters40a3b5d84a2b452862485b1cd4f7d7f2a07ccda751cbfe3eed863d100f6c1588S3VersionKey",
+                        "Ref": "AssetParameters9c202e2dfecf40919ce5a201490671a23e21ce3e7e0562d752c4cff4c3380e9cS3VersionKey",
                       },
                     ],
                   },
@@ -377,7 +377,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters40a3b5d84a2b452862485b1cd4f7d7f2a07ccda751cbfe3eed863d100f6c1588S3VersionKey",
+                        "Ref": "AssetParameters9c202e2dfecf40919ce5a201490671a23e21ce3e7e0562d752c4cff4c3380e9cS3VersionKey",
                       },
                     ],
                   },
@@ -890,6 +890,11 @@ Object {
       "Type": "AWS::ECS::Cluster",
     },
     "ClusterDefaultAutoScalingGroupASG": Object {
+      "CreationPolicy": Object {
+        "ResourceSignal": Object {
+          "Count": 1,
+        },
+      },
       "Properties": Object {
         "LaunchConfigurationName": Object {
           "Ref": "ClusterDefaultAutoScalingGroupLaunchConfig",
@@ -935,7 +940,8 @@ Object {
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "UpdatePolicy": Object {
         "AutoScalingRollingUpdate": Object {
-          "PauseTime": "PT0S",
+          "MinSuccessfulInstancesPercent": 100,
+          "PauseTime": "PT10M",
           "SuspendProcesses": Array [
             "HealthCheck",
             "ReplaceUnhealthy",
@@ -943,7 +949,7 @@ Object {
             "AlarmNotification",
             "ScheduledActions",
           ],
-          "WaitOnResourceSignals": false,
+          "WaitOnResourceSignals": true,
         },
         "AutoScalingScheduledAction": Object {
           "IgnoreUnmodifiedGroupSizeProperties": true,
@@ -1335,6 +1341,13 @@ def pick(dct, *keys):
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
+              "Action": "cloudformation:SignalResource",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "AWS::StackId",
+              },
+            },
+            Object {
               "Action": Array [
                 "ecs:DeregisterContainerInstance",
                 "ecs:RegisterContainerInstance",
@@ -1453,6 +1466,19 @@ def pick(dct, *keys):
               "",
               Array [
                 "#!/bin/bash
+function exitTrap(){
+exitCode=$?
+/opt/aws/bin/cfn-signal --stack ",
+                Object {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource ClusterDefaultAutoScalingGroupASG --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                " -e $exitCode || echo 'Failed to send Cloudformation Signal'
+}
+trap exitTrap EXIT
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 echo ECS_CLUSTER=",
                 Object {
@@ -1894,16 +1920,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters70dd1fad4f9ffc1b39b15aa30a0f4632f806ebee37c3b3472daeff00960ae4c5ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"70dd1fad4f9ffc1b39b15aa30a0f4632f806ebee37c3b3472daeff00960ae4c5\\"",
+    "AssetParametersddd251626d8a83746b4182e1221a02db78ae8f95cf2b8a7e96490832aa86fba9ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"ddd251626d8a83746b4182e1221a02db78ae8f95cf2b8a7e96490832aa86fba9\\"",
       "Type": "String",
     },
-    "AssetParameters70dd1fad4f9ffc1b39b15aa30a0f4632f806ebee37c3b3472daeff00960ae4c5S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"70dd1fad4f9ffc1b39b15aa30a0f4632f806ebee37c3b3472daeff00960ae4c5\\"",
+    "AssetParametersddd251626d8a83746b4182e1221a02db78ae8f95cf2b8a7e96490832aa86fba9S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"ddd251626d8a83746b4182e1221a02db78ae8f95cf2b8a7e96490832aa86fba9\\"",
       "Type": "String",
     },
-    "AssetParameters70dd1fad4f9ffc1b39b15aa30a0f4632f806ebee37c3b3472daeff00960ae4c5S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"70dd1fad4f9ffc1b39b15aa30a0f4632f806ebee37c3b3472daeff00960ae4c5\\"",
+    "AssetParametersddd251626d8a83746b4182e1221a02db78ae8f95cf2b8a7e96490832aa86fba9S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"ddd251626d8a83746b4182e1221a02db78ae8f95cf2b8a7e96490832aa86fba9\\"",
       "Type": "String",
     },
   },
@@ -1956,7 +1982,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters70dd1fad4f9ffc1b39b15aa30a0f4632f806ebee37c3b3472daeff00960ae4c5S3Bucket",
+                "Ref": "AssetParametersddd251626d8a83746b4182e1221a02db78ae8f95cf2b8a7e96490832aa86fba9S3Bucket",
               },
               "/",
               Object {
@@ -1966,7 +1992,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters70dd1fad4f9ffc1b39b15aa30a0f4632f806ebee37c3b3472daeff00960ae4c5S3VersionKey",
+                        "Ref": "AssetParametersddd251626d8a83746b4182e1221a02db78ae8f95cf2b8a7e96490832aa86fba9S3VersionKey",
                       },
                     ],
                   },
@@ -1979,7 +2005,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters70dd1fad4f9ffc1b39b15aa30a0f4632f806ebee37c3b3472daeff00960ae4c5S3VersionKey",
+                        "Ref": "AssetParametersddd251626d8a83746b4182e1221a02db78ae8f95cf2b8a7e96490832aa86fba9S3VersionKey",
                       },
                     ],
                   },
@@ -2383,6 +2409,11 @@ Object {
       "Type": "AWS::ECS::Cluster",
     },
     "ClusterDefaultAutoScalingGroupASG": Object {
+      "CreationPolicy": Object {
+        "ResourceSignal": Object {
+          "Count": 1,
+        },
+      },
       "Properties": Object {
         "LaunchConfigurationName": Object {
           "Ref": "ClusterDefaultAutoScalingGroupLaunchConfig",
@@ -2428,7 +2459,8 @@ Object {
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "UpdatePolicy": Object {
         "AutoScalingRollingUpdate": Object {
-          "PauseTime": "PT0S",
+          "MinSuccessfulInstancesPercent": 100,
+          "PauseTime": "PT10M",
           "SuspendProcesses": Array [
             "HealthCheck",
             "ReplaceUnhealthy",
@@ -2436,7 +2468,7 @@ Object {
             "AlarmNotification",
             "ScheduledActions",
           ],
-          "WaitOnResourceSignals": false,
+          "WaitOnResourceSignals": true,
         },
         "AutoScalingScheduledAction": Object {
           "IgnoreUnmodifiedGroupSizeProperties": true,
@@ -2828,6 +2860,13 @@ def pick(dct, *keys):
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
+              "Action": "cloudformation:SignalResource",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "AWS::StackId",
+              },
+            },
+            Object {
               "Action": Array [
                 "ecs:DeregisterContainerInstance",
                 "ecs:RegisterContainerInstance",
@@ -2948,6 +2987,15 @@ def pick(dct, *keys):
                 "#!/bin/bash
 function exitTrap(){
 exitCode=$?
+/opt/aws/bin/cfn-signal --stack ",
+                Object {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource ClusterDefaultAutoScalingGroupASG --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                " -e $exitCode || echo 'Failed to send Cloudformation Signal'
 service docker restart
 }
 trap exitTrap EXIT
