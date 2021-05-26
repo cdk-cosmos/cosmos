@@ -63,8 +63,8 @@ export class StandardPipeline extends Construct {
     const source = codeRepo
       ? ((new CodeCommitSourceProvider({
           repo: codeRepo,
-          branch: codeBranch || 'master',
-          trigger: codeTrigger || false,
+          branch: codeBranch,
+          trigger: codeTrigger,
         }) as any) as SourceProvider)
       : codeSource;
     if (!source) throw new Error('A source repository could not be found.');
@@ -124,7 +124,9 @@ export class StandardPipeline extends Construct {
 
     this.pipeline.addStage({
       stageName: 'Source',
-      actions: [this.codeSource.sourceAction('CodeCheckout', this.pipeline.role, sourceOutput)],
+      actions: [
+        this.codeSource.sourceAction('CodeCheckout', this.pipeline.role, sourceOutput, codeBranch, codeTrigger),
+      ],
     });
 
     this.pipeline.addStage({

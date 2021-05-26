@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ecs Rebalance Snapshot 1`] = `
+Object {
+  "Resources": Object {
+    "RebalanceEvent9BA67F25": Object {
+      "Properties": Object {
+        "EventPattern": Object {
+          "detail-type": Array [
+            "ECS Container Instance State Change",
+          ],
+          "source": Array [
+            "aws.ecs",
+          ],
+        },
+        "State": "ENABLED",
+        "Targets": Array [
+          Object {
+            "Arn": Object {
+              "Fn::GetAtt": Array [
+                "RebalanceFnCB27FA27",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "RebalanceEventAllowEventRuleStackRebalanceEventBA943763F7C4B3AB": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "RebalanceFnCB27FA27",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::GetAtt": Array [
+            "RebalanceEvent9BA67F25",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "RebalanceFnCB27FA27": Object {
+      "DependsOn": Array [
+        "RebalanceRoleCE608448",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "s3BucketName",
+          "S3Key": "s3ObjectKey",
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "CLUSTER": "Test",
+            "TIMEOUT": "120",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "RebalanceRoleCE608448",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 600,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "RebalanceRoleCE608448": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Policies": Array [
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": "ecs:*",
+                  "Condition": Object {
+                    "ArnEquals": Object {
+                      "ecs:cluster": Object {
+                        "Fn::Join": Array [
+                          "",
+                          Array [
+                            "arn:",
+                            Object {
+                              "Ref": "AWS::Partition",
+                            },
+                            ":ecs:",
+                            Object {
+                              "Ref": "AWS::Region",
+                            },
+                            ":",
+                            Object {
+                              "Ref": "AWS::AccountId",
+                            },
+                            ":cluster/Test",
+                          ],
+                        ],
+                      },
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "default",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+}
+`;
