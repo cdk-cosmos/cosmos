@@ -1,6 +1,6 @@
 {
   "name": "@cosmos-building-blocks/network",
-  "version": "0.8.7",
+  "version": "0.8.8",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,8 +26,8 @@
     "clean": "rm -rf lib"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-ec2": "^1.84.0",
-    "@aws-cdk/aws-route53resolver": "^1.84.0",
-    "@aws-cdk/core": "^1.84.0"
+    "@aws-cdk/aws-ec2": "^1.89.0",
+    "@aws-cdk/aws-route53resolver": "^1.89.0",
+    "@aws-cdk/core": "^1.89.0"
   }
 }

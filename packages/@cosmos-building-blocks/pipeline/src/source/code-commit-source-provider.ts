@@ -21,13 +21,14 @@ export class CodeCommitSourceProvider extends SourceProvider<IRepository> {
   }
 
   sourceAction(name: string, role: IRole, sourceOutput: Artifact, branch?: string, trigger?: boolean): Action {
+    const _trigger = trigger !== undefined ? trigger : this.trigger;
     return new CodeCommitSourceAction({
       actionName: name,
       role: role,
       repository: this.repo,
       branch: branch || this.branch,
       output: sourceOutput,
-      trigger: trigger || this.trigger ? CodeCommitTrigger.EVENTS : CodeCommitTrigger.NONE,
+      trigger: _trigger ? CodeCommitTrigger.EVENTS : CodeCommitTrigger.NONE,
       variablesNamespace: name,
     });
   }
