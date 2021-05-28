@@ -1,4 +1,23 @@
 
+## v0.8.8 (2021-05-28)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`
+  * [#284](https://github.com/cdk-cosmos/cosmos/pull/284) Add CFN-Singals for EC2 Update Rollovers ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/cdk-credentials-plugin`, `@cdk-cosmos/core`, `@cosmos-building-blocks/app-ec2`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/network`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#285](https://github.com/cdk-cosmos/cosmos/pull/285) Add ECS rebalance pattern for services ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`
+  * [#286](https://github.com/cdk-cosmos/cosmos/pull/286) Small bug with cfn-init not installed on ami ([@timpur](https://github.com/timpur))
+  * [#284](https://github.com/cdk-cosmos/cosmos/pull/284) Add CFN-Singals for EC2 Update Rollovers ([@timpur](https://github.com/timpur))
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`
+  * [#283](https://github.com/cdk-cosmos/cosmos/pull/283) Fix Pipeline Trigger Issue ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 
 
 
