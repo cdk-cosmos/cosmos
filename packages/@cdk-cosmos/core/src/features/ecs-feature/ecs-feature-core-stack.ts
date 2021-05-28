@@ -101,6 +101,9 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
     this.clusterAutoScalingGroup = this.cluster.autoscalingGroup as AutoScalingGroup | undefined;
     if (this.clusterAutoScalingGroup) {
       this.clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
+      this.clusterAutoScalingGroup.userData.addCommands(
+        "yum -y install aws-cfn-bootstrap || echo 'Failed to install aws-cfn-bootstrap for cfn-signal bin'"
+      );
       this.clusterAutoScalingGroup.userData.addSignalOnExitCommand(this.clusterAutoScalingGroup);
       if (clusterProps.rebalance !== false) {
         new EcsEc2ServiceRebalance(this, 'Rebalance', { cluster: this.cluster });
