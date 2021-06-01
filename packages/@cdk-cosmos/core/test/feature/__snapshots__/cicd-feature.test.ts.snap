@@ -290,72 +290,6 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "CdkPipelineCdkRepoTestGalCiCdCdkPipeline5FD10019EventRule": Object {
-      "Properties": Object {
-        "EventPattern": Object {
-          "detail": Object {
-            "event": Array [
-              "referenceCreated",
-              "referenceUpdated",
-            ],
-            "referenceName": Array [
-              "master",
-            ],
-          },
-          "detail-type": Array [
-            "CodeCommit Repository State Change",
-          ],
-          "resources": Array [
-            Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "arn:",
-                  Object {
-                    "Ref": "AWS::Partition",
-                  },
-                  ":codecommit:region:account:",
-                  Object {
-                    "Fn::ImportValue": "AppTestCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
-                  },
-                ],
-              ],
-            },
-          ],
-          "source": Array [
-            "aws.codecommit",
-          ],
-        },
-        "State": "ENABLED",
-        "Targets": Array [
-          Object {
-            "Arn": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "arn:",
-                  Object {
-                    "Ref": "AWS::Partition",
-                  },
-                  ":codepipeline:region:account:",
-                  Object {
-                    "Ref": "CdkPipeline",
-                  },
-                ],
-              ],
-            },
-            "Id": "Target0",
-            "RoleArn": Object {
-              "Fn::GetAtt": Array [
-                "CdkPipelineEventsRole",
-                "Arn",
-              ],
-            },
-          },
-        ],
-      },
-      "Type": "AWS::Events::Rule",
-    },
     "CdkPipelineDeploy": Object {
       "Properties": Object {
         "Artifacts": Object {
@@ -463,76 +397,6 @@ Object {
         ],
       },
       "Type": "AWS::CodeBuild::Project",
-    },
-    "CdkPipelineEventsRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "events.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos:extension",
-            "Value": "Test",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy:extension",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem:extension",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineEventsRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "codepipeline:StartPipelineExecution",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":codepipeline:region:account:",
-                    Object {
-                      "Ref": "CdkPipeline",
-                    },
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineEventsRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineEventsRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
     },
   },
 }
@@ -878,16 +742,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters140a400100de2a36bc86489789006c92c972b1dd3a7eb1db805efd5dc224b0e5ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"140a400100de2a36bc86489789006c92c972b1dd3a7eb1db805efd5dc224b0e5\\"",
+    "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbee\\"",
       "Type": "String",
     },
-    "AssetParameters140a400100de2a36bc86489789006c92c972b1dd3a7eb1db805efd5dc224b0e5S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"140a400100de2a36bc86489789006c92c972b1dd3a7eb1db805efd5dc224b0e5\\"",
+    "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbee\\"",
       "Type": "String",
     },
-    "AssetParameters140a400100de2a36bc86489789006c92c972b1dd3a7eb1db805efd5dc224b0e5S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"140a400100de2a36bc86489789006c92c972b1dd3a7eb1db805efd5dc224b0e5\\"",
+    "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbee\\"",
       "Type": "String",
     },
   },
@@ -918,7 +782,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters140a400100de2a36bc86489789006c92c972b1dd3a7eb1db805efd5dc224b0e5S3Bucket",
+                "Ref": "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeS3Bucket",
               },
               "/",
               Object {
@@ -928,7 +792,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters140a400100de2a36bc86489789006c92c972b1dd3a7eb1db805efd5dc224b0e5S3VersionKey",
+                        "Ref": "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeS3VersionKey",
                       },
                     ],
                   },
@@ -941,7 +805,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters140a400100de2a36bc86489789006c92c972b1dd3a7eb1db805efd5dc224b0e5S3VersionKey",
+                        "Ref": "AssetParameters61ff8a935dce0cbd1ebcae946354c5cf318e85a31a4b808e4dc1ace5543ebbeeS3VersionKey",
                       },
                     ],
                   },
@@ -1761,72 +1625,6 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "CdkPipelineCdkRepoCosGalCiCdCdkPipeline8275857CEventRule": Object {
-      "Properties": Object {
-        "EventPattern": Object {
-          "detail": Object {
-            "event": Array [
-              "referenceCreated",
-              "referenceUpdated",
-            ],
-            "referenceName": Array [
-              "master",
-            ],
-          },
-          "detail-type": Array [
-            "CodeCommit Repository State Change",
-          ],
-          "resources": Array [
-            Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "arn:",
-                  Object {
-                    "Ref": "AWS::Partition",
-                  },
-                  ":codecommit:region:account:",
-                  Object {
-                    "Fn::ImportValue": "CoreCosCosmos:ExportsOutputFnGetAttCdkRepoNameE40A1139",
-                  },
-                ],
-              ],
-            },
-          ],
-          "source": Array [
-            "aws.codecommit",
-          ],
-        },
-        "State": "ENABLED",
-        "Targets": Array [
-          Object {
-            "Arn": Object {
-              "Fn::Join": Array [
-                "",
-                Array [
-                  "arn:",
-                  Object {
-                    "Ref": "AWS::Partition",
-                  },
-                  ":codepipeline:region:account:",
-                  Object {
-                    "Ref": "CdkPipeline",
-                  },
-                ],
-              ],
-            },
-            "Id": "Target0",
-            "RoleArn": Object {
-              "Fn::GetAtt": Array [
-                "CdkPipelineEventsRole",
-                "Arn",
-              ],
-            },
-          },
-        ],
-      },
-      "Type": "AWS::Events::Rule",
-    },
     "CdkPipelineDeploy": Object {
       "Properties": Object {
         "Artifacts": Object {
@@ -1934,76 +1732,6 @@ Object {
         ],
       },
       "Type": "AWS::CodeBuild::Project",
-    },
-    "CdkPipelineEventsRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "events.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "CiCd",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "CiCd",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CdkPipelineEventsRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "codepipeline:StartPipelineExecution",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":codepipeline:region:account:",
-                    Object {
-                      "Ref": "CdkPipeline",
-                    },
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPipelineEventsRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CdkPipelineEventsRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
     },
   },
 }
