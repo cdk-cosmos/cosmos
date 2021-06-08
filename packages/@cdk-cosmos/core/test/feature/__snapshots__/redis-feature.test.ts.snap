@@ -111,16 +111,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81b\\"",
+    "AssetParameters78f290be73639c3f0a83de7363e0b7c7a63df46c1c39e9dd78d2ba9fdaacc2f3ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"78f290be73639c3f0a83de7363e0b7c7a63df46c1c39e9dd78d2ba9fdaacc2f3\\"",
       "Type": "String",
     },
-    "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81b\\"",
+    "AssetParameters78f290be73639c3f0a83de7363e0b7c7a63df46c1c39e9dd78d2ba9fdaacc2f3S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"78f290be73639c3f0a83de7363e0b7c7a63df46c1c39e9dd78d2ba9fdaacc2f3\\"",
       "Type": "String",
     },
-    "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81b\\"",
+    "AssetParameters78f290be73639c3f0a83de7363e0b7c7a63df46c1c39e9dd78d2ba9fdaacc2f3S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"78f290be73639c3f0a83de7363e0b7c7a63df46c1c39e9dd78d2ba9fdaacc2f3\\"",
       "Type": "String",
     },
   },
@@ -170,6 +170,7 @@ Object {
       "Type": "AWS::Route53::HostedZone",
     },
     "Redis": Object {
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "Parameters": Object {
           "referencetoCosGalSysVpc054F5599Ref": Object {
@@ -206,7 +207,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bS3Bucket",
+                "Ref": "AssetParameters78f290be73639c3f0a83de7363e0b7c7a63df46c1c39e9dd78d2ba9fdaacc2f3S3Bucket",
               },
               "/",
               Object {
@@ -216,7 +217,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bS3VersionKey",
+                        "Ref": "AssetParameters78f290be73639c3f0a83de7363e0b7c7a63df46c1c39e9dd78d2ba9fdaacc2f3S3VersionKey",
                       },
                     ],
                   },
@@ -229,7 +230,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters07ee70942029d81429f40c1b2fb2e67262252dfa382b1892c6b3043f13e8f81bS3VersionKey",
+                        "Ref": "AssetParameters78f290be73639c3f0a83de7363e0b7c7a63df46c1c39e9dd78d2ba9fdaacc2f3S3VersionKey",
                       },
                     ],
                   },
@@ -240,6 +241,7 @@ Object {
         },
       },
       "Type": "AWS::CloudFormation::Stack",
+      "UpdateReplacePolicy": "Delete",
     },
     "Vpc": Object {
       "Properties": Object {
@@ -912,6 +914,24 @@ Object {
             "Ref": "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef",
           },
         ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Redis",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
       },
       "Type": "AWS::ElastiCache::SubnetGroup",
     },
@@ -923,21 +943,22 @@ exports[`Redis Feature for SolarSystemExtension should have a redis nested stack
 Object {
   "Description": "Cosmos SolarSystem Extension: App resources dependant on each App Env, like Services and Databases.",
   "Parameters": Object {
-    "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"f080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20\\"",
+    "AssetParameters7b9448cfd55e4ae187488988c666c84c38136b09b6f0000b55a0ce6619b854b5ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"7b9448cfd55e4ae187488988c666c84c38136b09b6f0000b55a0ce6619b854b5\\"",
       "Type": "String",
     },
-    "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"f080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20\\"",
+    "AssetParameters7b9448cfd55e4ae187488988c666c84c38136b09b6f0000b55a0ce6619b854b5S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"7b9448cfd55e4ae187488988c666c84c38136b09b6f0000b55a0ce6619b854b5\\"",
       "Type": "String",
     },
-    "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"f080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20\\"",
+    "AssetParameters7b9448cfd55e4ae187488988c666c84c38136b09b6f0000b55a0ce6619b854b5S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"7b9448cfd55e4ae187488988c666c84c38136b09b6f0000b55a0ce6619b854b5\\"",
       "Type": "String",
     },
   },
   "Resources": Object {
     "Redis": Object {
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "Tags": Array [
           Object {
@@ -963,7 +984,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20S3Bucket",
+                "Ref": "AssetParameters7b9448cfd55e4ae187488988c666c84c38136b09b6f0000b55a0ce6619b854b5S3Bucket",
               },
               "/",
               Object {
@@ -973,7 +994,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20S3VersionKey",
+                        "Ref": "AssetParameters7b9448cfd55e4ae187488988c666c84c38136b09b6f0000b55a0ce6619b854b5S3VersionKey",
                       },
                     ],
                   },
@@ -986,7 +1007,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParametersf080bf5e502768f8f95ce04d23c4a4924f782f810ca2a9ebaf58f4002b13dc20S3VersionKey",
+                        "Ref": "AssetParameters7b9448cfd55e4ae187488988c666c84c38136b09b6f0000b55a0ce6619b854b5S3VersionKey",
                       },
                     ],
                   },
@@ -997,6 +1018,7 @@ Object {
         },
       },
       "Type": "AWS::CloudFormation::Stack",
+      "UpdateReplacePolicy": "Delete",
     },
   },
 }
@@ -1164,6 +1186,24 @@ Object {
                 ],
               },
             ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos:extension",
+            "Value": "CosExt",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Redis",
+          },
+          Object {
+            "Key": "cosmos:galaxy:extension",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem:extension",
+            "Value": "Sys",
           },
         ],
       },

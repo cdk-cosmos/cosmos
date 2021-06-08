@@ -28,7 +28,7 @@ Object {
       },
       "Type": "AWS::Events::Rule",
     },
-    "RebalanceEventAllowEventRuleStackRebalanceEventBA943763F7C4B3AB": Object {
+    "RebalanceEventAllowEventRuleStackRebalanceFn0CC033FAD576B9F9": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {

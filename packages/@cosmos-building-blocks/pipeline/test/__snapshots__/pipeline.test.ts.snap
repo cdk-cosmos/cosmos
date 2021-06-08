@@ -115,38 +115,21 @@ Object {
       ],
       "Properties": Object {
         "Create": Object {
-          "action": "createHost",
-          "parameters": Object {
-            "Name": "GHEHost",
-            "ProviderEndpoint": "https://ghe.com/",
-            "ProviderType": "GitHubEnterpriseServer",
-            "VpcConfiguration": Object {
-              "SecurityGroupIds": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "GHEHostHostSecurityGroup4F6E9143",
-                    "GroupId",
-                  ],
-                },
-              ],
-              "SubnetIds": Array [
-                "123",
-              ],
-              "VpcId": "123",
-            },
-          },
-          "physicalResourceId": Object {
-            "responsePath": "HostArn",
-          },
-          "service": "CodeStarconnections",
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"CodeStarconnections\\",\\"physicalResourceId\\":{\\"responsePath\\":\\"HostArn\\"},\\"parameters\\":{\\"Name\\":\\"GHEHost\\",\\"ProviderEndpoint\\":\\"https://ghe.com/\\",\\"ProviderType\\":\\"GitHubEnterpriseServer\\",\\"VpcConfiguration\\":{\\"VpcId\\":\\"123\\",\\"SubnetIds\\":[\\"123\\"],\\"SecurityGroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "GHEHostHostSecurityGroup4F6E9143",
+                  "GroupId",
+                ],
+              },
+              "\\"]}},\\"action\\":\\"createHost\\"}",
+            ],
+          ],
         },
-        "Delete": Object {
-          "action": "deleteHost",
-          "parameters": Object {
-            "HostArn": "PHYSICAL:RESOURCEID:",
-          },
-          "service": "CodeStarconnections",
-        },
+        "Delete": "{\\"service\\":\\"CodeStarconnections\\",\\"parameters\\":{\\"HostArn\\":\\"PHYSICAL:RESOURCEID:\\"},\\"action\\":\\"deleteHost\\"}",
         "InstallLatestAwsSdk": true,
         "ServiceToken": Object {
           "Fn::GetAtt": Array [
@@ -155,29 +138,19 @@ Object {
           ],
         },
         "Update": Object {
-          "action": "updateHost",
-          "parameters": Object {
-            "HostArn": "PHYSICAL:RESOURCEID:",
-            "ProviderEndpoint": "https://ghe.com/",
-            "VpcConfiguration": Object {
-              "SecurityGroupIds": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "GHEHostHostSecurityGroup4F6E9143",
-                    "GroupId",
-                  ],
-                },
-              ],
-              "SubnetIds": Array [
-                "123",
-              ],
-              "VpcId": "123",
-            },
-          },
-          "physicalResourceId": Object {
-            "responsePath": "HostArn",
-          },
-          "service": "CodeStarconnections",
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"CodeStarconnections\\",\\"physicalResourceId\\":{\\"responsePath\\":\\"HostArn\\"},\\"parameters\\":{\\"ProviderEndpoint\\":\\"https://ghe.com/\\",\\"VpcConfiguration\\":{\\"VpcId\\":\\"123\\",\\"SubnetIds\\":[\\"123\\"],\\"SecurityGroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "GHEHostHostSecurityGroup4F6E9143",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"HostArn\\":\\"PHYSICAL:RESOURCEID:\\"},\\"action\\":\\"updateHost\\"}",
+            ],
+          ],
         },
       },
       "Type": "Custom::AWS",

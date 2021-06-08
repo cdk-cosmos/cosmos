@@ -111,16 +111,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters7f92c52f00101c92b7c19f86ee7aecc2ac773d1e84eb09bd3de672b4d07547a4ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"7f92c52f00101c92b7c19f86ee7aecc2ac773d1e84eb09bd3de672b4d07547a4\\"",
+    "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4\\"",
       "Type": "String",
     },
-    "AssetParameters7f92c52f00101c92b7c19f86ee7aecc2ac773d1e84eb09bd3de672b4d07547a4S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"7f92c52f00101c92b7c19f86ee7aecc2ac773d1e84eb09bd3de672b4d07547a4\\"",
+    "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4\\"",
       "Type": "String",
     },
-    "AssetParameters7f92c52f00101c92b7c19f86ee7aecc2ac773d1e84eb09bd3de672b4d07547a4S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"7f92c52f00101c92b7c19f86ee7aecc2ac773d1e84eb09bd3de672b4d07547a4\\"",
+    "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4\\"",
       "Type": "String",
     },
   },
@@ -139,6 +139,7 @@ Object {
       "Type": "AWS::SSM::Parameter",
     },
     "GithubEnterprise": Object {
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "Parameters": Object {
           "referencetoCosGalSysVpc054F5599Ref": Object {
@@ -175,7 +176,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters7f92c52f00101c92b7c19f86ee7aecc2ac773d1e84eb09bd3de672b4d07547a4S3Bucket",
+                "Ref": "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4S3Bucket",
               },
               "/",
               Object {
@@ -185,7 +186,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters7f92c52f00101c92b7c19f86ee7aecc2ac773d1e84eb09bd3de672b4d07547a4S3VersionKey",
+                        "Ref": "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4S3VersionKey",
                       },
                     ],
                   },
@@ -198,7 +199,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters7f92c52f00101c92b7c19f86ee7aecc2ac773d1e84eb09bd3de672b4d07547a4S3VersionKey",
+                        "Ref": "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4S3VersionKey",
                       },
                     ],
                   },
@@ -209,6 +210,7 @@ Object {
         },
       },
       "Type": "AWS::CloudFormation::Stack",
+      "UpdateReplacePolicy": "Delete",
     },
     "PrivateZone": Object {
       "Properties": Object {
@@ -910,45 +912,33 @@ Object {
       ],
       "Properties": Object {
         "Create": Object {
-          "action": "createHost",
-          "parameters": Object {
-            "Name": "GithubEnterpriseHost",
-            "ProviderEndpoint": "https://test.com",
-            "ProviderType": "GitHubEnterpriseServer",
-            "VpcConfiguration": Object {
-              "SecurityGroupIds": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "HostSecurityGroup",
-                    "GroupId",
-                  ],
-                },
-              ],
-              "SubnetIds": Array [
-                Object {
-                  "Ref": "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef",
-                },
-                Object {
-                  "Ref": "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef",
-                },
-              ],
-              "VpcId": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"CodeStarconnections\\",\\"physicalResourceId\\":{\\"responsePath\\":\\"HostArn\\"},\\"parameters\\":{\\"Name\\":\\"GithubEnterpriseHost\\",\\"ProviderEndpoint\\":\\"https://test.com\\",\\"ProviderType\\":\\"GitHubEnterpriseServer\\",\\"VpcConfiguration\\":{\\"VpcId\\":\\"",
+              Object {
                 "Ref": "referencetoCosGalSysVpc054F5599Ref",
               },
-            },
-          },
-          "physicalResourceId": Object {
-            "responsePath": "HostArn",
-          },
-          "service": "CodeStarconnections",
+              "\\",\\"SubnetIds\\":[\\"",
+              Object {
+                "Ref": "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef",
+              },
+              "\\",\\"",
+              Object {
+                "Ref": "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef",
+              },
+              "\\"],\\"SecurityGroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "HostSecurityGroup",
+                  "GroupId",
+                ],
+              },
+              "\\"]}},\\"action\\":\\"createHost\\"}",
+            ],
+          ],
         },
-        "Delete": Object {
-          "action": "deleteHost",
-          "parameters": Object {
-            "HostArn": "PHYSICAL:RESOURCEID:",
-          },
-          "service": "CodeStarconnections",
-        },
+        "Delete": "{\\"service\\":\\"CodeStarconnections\\",\\"parameters\\":{\\"HostArn\\":\\"PHYSICAL:RESOURCEID:\\"},\\"action\\":\\"deleteHost\\"}",
         "InstallLatestAwsSdk": true,
         "ServiceToken": Object {
           "Fn::GetAtt": Array [
@@ -957,36 +947,31 @@ Object {
           ],
         },
         "Update": Object {
-          "action": "updateHost",
-          "parameters": Object {
-            "HostArn": "PHYSICAL:RESOURCEID:",
-            "ProviderEndpoint": "https://test.com",
-            "VpcConfiguration": Object {
-              "SecurityGroupIds": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "HostSecurityGroup",
-                    "GroupId",
-                  ],
-                },
-              ],
-              "SubnetIds": Array [
-                Object {
-                  "Ref": "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef",
-                },
-                Object {
-                  "Ref": "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef",
-                },
-              ],
-              "VpcId": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"CodeStarconnections\\",\\"physicalResourceId\\":{\\"responsePath\\":\\"HostArn\\"},\\"parameters\\":{\\"ProviderEndpoint\\":\\"https://test.com\\",\\"VpcConfiguration\\":{\\"VpcId\\":\\"",
+              Object {
                 "Ref": "referencetoCosGalSysVpc054F5599Ref",
               },
-            },
-          },
-          "physicalResourceId": Object {
-            "responsePath": "HostArn",
-          },
-          "service": "CodeStarconnections",
+              "\\",\\"SubnetIds\\":[\\"",
+              Object {
+                "Ref": "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef",
+              },
+              "\\",\\"",
+              Object {
+                "Ref": "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef",
+              },
+              "\\"],\\"SecurityGroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "HostSecurityGroup",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"HostArn\\":\\"PHYSICAL:RESOURCEID:\\"},\\"action\\":\\"updateHost\\"}",
+            ],
+          ],
         },
       },
       "Type": "Custom::AWS",
