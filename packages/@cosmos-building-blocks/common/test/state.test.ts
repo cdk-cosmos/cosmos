@@ -16,7 +16,7 @@ const state2 = new SsmState(stack, 'SsmState2', {
 const synth = SynthUtils.toCloudFormation(stack);
 
 test('SSM State', () => {
-  expect(state.value).toEqual('${Token[TOKEN.11]}');
-  expect(state2.value).toEqual('${Token[TOKEN.18]}');
+  expect(state.value).toMatch(/.+Token.+/);
+  expect(state2.value).toMatch(/.+Token.+/);
   expect(synth).toMatchSnapshot();
 });

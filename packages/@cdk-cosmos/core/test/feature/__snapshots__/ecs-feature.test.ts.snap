@@ -136,16 +136,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters4d73407598afe9cd24161a5b0961d50a0486b20d8c0179721dfd2527a8105efbArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"4d73407598afe9cd24161a5b0961d50a0486b20d8c0179721dfd2527a8105efb\\"",
+    "AssetParametersf714f06cfd467a01415e8993d84fd08fc770e82d89beda41426615fad0f873b4ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"f714f06cfd467a01415e8993d84fd08fc770e82d89beda41426615fad0f873b4\\"",
       "Type": "String",
     },
-    "AssetParameters4d73407598afe9cd24161a5b0961d50a0486b20d8c0179721dfd2527a8105efbS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"4d73407598afe9cd24161a5b0961d50a0486b20d8c0179721dfd2527a8105efb\\"",
+    "AssetParametersf714f06cfd467a01415e8993d84fd08fc770e82d89beda41426615fad0f873b4S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"f714f06cfd467a01415e8993d84fd08fc770e82d89beda41426615fad0f873b4\\"",
       "Type": "String",
     },
-    "AssetParameters4d73407598afe9cd24161a5b0961d50a0486b20d8c0179721dfd2527a8105efbS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"4d73407598afe9cd24161a5b0961d50a0486b20d8c0179721dfd2527a8105efb\\"",
+    "AssetParametersf714f06cfd467a01415e8993d84fd08fc770e82d89beda41426615fad0f873b4S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"f714f06cfd467a01415e8993d84fd08fc770e82d89beda41426615fad0f873b4\\"",
       "Type": "String",
     },
   },
@@ -167,7 +167,7 @@ Object {
             "Arn",
           ],
         },
-        "Runtime": "nodejs10.x",
+        "Runtime": "nodejs14.x",
         "Tags": Array [
           Object {
             "Key": "cosmos",
@@ -240,6 +240,7 @@ Object {
                 "acm:RequestCertificate",
                 "acm:DescribeCertificate",
                 "acm:DeleteCertificate",
+                "acm:AddTagsToCertificate",
               ],
               "Effect": "Allow",
               "Resource": "*",
@@ -296,6 +297,11 @@ Object {
         "SubjectAlternativeNames": Array [
           "*.sys.cos.com",
         ],
+        "Tags": Object {
+          "cosmos": "Cos",
+          "cosmos:galaxy": "Gal",
+          "cosmos:solarsystem": "Sys",
+        },
       },
       "Type": "AWS::CloudFormation::CustomResource",
       "UpdateReplacePolicy": "Delete",
@@ -314,6 +320,7 @@ Object {
       "Type": "AWS::SSM::Parameter",
     },
     "Ecs": Object {
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "Parameters": Object {
           "referencetoCosGalSysCertificateCertificateRequestorResourceA8D7E5EEArn": Object {
@@ -354,7 +361,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters4d73407598afe9cd24161a5b0961d50a0486b20d8c0179721dfd2527a8105efbS3Bucket",
+                "Ref": "AssetParametersf714f06cfd467a01415e8993d84fd08fc770e82d89beda41426615fad0f873b4S3Bucket",
               },
               "/",
               Object {
@@ -364,7 +371,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters4d73407598afe9cd24161a5b0961d50a0486b20d8c0179721dfd2527a8105efbS3VersionKey",
+                        "Ref": "AssetParametersf714f06cfd467a01415e8993d84fd08fc770e82d89beda41426615fad0f873b4S3VersionKey",
                       },
                     ],
                   },
@@ -377,7 +384,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters4d73407598afe9cd24161a5b0961d50a0486b20d8c0179721dfd2527a8105efbS3VersionKey",
+                        "Ref": "AssetParametersf714f06cfd467a01415e8993d84fd08fc770e82d89beda41426615fad0f873b4S3VersionKey",
                       },
                     ],
                   },
@@ -388,6 +395,7 @@ Object {
         },
       },
       "Type": "AWS::CloudFormation::Stack",
+      "UpdateReplacePolicy": "Delete",
     },
     "PrivateZone": Object {
       "Properties": Object {
@@ -859,6 +867,39 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
+    "AsgCapacityProvider": Object {
+      "Properties": Object {
+        "AutoScalingGroupProvider": Object {
+          "AutoScalingGroupArn": Object {
+            "Ref": "ClusterDefaultAutoScalingGroupASG",
+          },
+          "ManagedScaling": Object {
+            "Status": "ENABLED",
+            "TargetCapacity": 80,
+          },
+          "ManagedTerminationProtection": "ENABLED",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::CapacityProvider",
+    },
     "Cluster": Object {
       "Properties": Object {
         "ClusterName": "CoreGalSysCluster",
@@ -889,6 +930,26 @@ Object {
       },
       "Type": "AWS::ECS::Cluster",
     },
+    "ClusterCapacityProviderAssociations": Object {
+      "Properties": Object {
+        "CapacityProviders": Array [
+          Object {
+            "Ref": "AsgCapacityProvider",
+          },
+        ],
+        "Cluster": Object {
+          "Ref": "Cluster",
+        },
+        "DefaultCapacityProviderStrategy": Array [
+          Object {
+            "CapacityProvider": Object {
+              "Ref": "AsgCapacityProvider",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
+    },
     "ClusterDefaultAutoScalingGroupASG": Object {
       "CreationPolicy": Object {
         "ResourceSignal": Object {
@@ -901,6 +962,7 @@ Object {
         },
         "MaxSize": "4",
         "MinSize": "1",
+        "NewInstancesProtectedFromScaleIn": true,
         "Tags": Array [
           Object {
             "Key": "cosmos",
@@ -955,313 +1017,6 @@ Object {
           "IgnoreUnmodifiedGroupSizeProperties": true,
         },
       },
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunction": Object {
-      "DependsOn": Array [
-        "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy",
-        "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "ZipFile": "import boto3, json, os, time
-
-ecs = boto3.client('ecs')
-autoscaling = boto3.client('autoscaling')
-
-
-def lambda_handler(event, context):
-  print(json.dumps(event))
-  cluster = os.environ['CLUSTER']
-  snsTopicArn = event['Records'][0]['Sns']['TopicArn']
-  lifecycle_event = json.loads(event['Records'][0]['Sns']['Message'])
-  instance_id = lifecycle_event.get('EC2InstanceId')
-  if not instance_id:
-    print('Got event without EC2InstanceId: %s', json.dumps(event))
-    return
-
-  instance_arn = container_instance_arn(cluster, instance_id)
-  print('Instance %s has container instance ARN %s' % (lifecycle_event['EC2InstanceId'], instance_arn))
-
-  if not instance_arn:
-    return
-
-  while has_tasks(cluster, instance_arn):
-    time.sleep(10)
-
-  try:
-    print('Terminating instance %s' % instance_id)
-    autoscaling.complete_lifecycle_action(
-        LifecycleActionResult='CONTINUE',
-        **pick(lifecycle_event, 'LifecycleHookName', 'LifecycleActionToken', 'AutoScalingGroupName'))
-  except Exception as e:
-    # Lifecycle action may have already completed.
-    print(str(e))
-
-
-def container_instance_arn(cluster, instance_id):
-  \\"\\"\\"Turn an instance ID into a container instance ARN.\\"\\"\\"
-  arns = ecs.list_container_instances(cluster=cluster, filter='ec2InstanceId==' + instance_id)['containerInstanceArns']
-  if not arns:
-    return None
-  return arns[0]
-
-
-def has_tasks(cluster, instance_arn):
-  \\"\\"\\"Return True if the instance is running tasks for the given cluster.\\"\\"\\"
-  instances = ecs.describe_container_instances(cluster=cluster, containerInstances=[instance_arn])['containerInstances']
-  if not instances:
-    return False
-  instance = instances[0]
-
-  if instance['status'] == 'ACTIVE':
-    # Start draining, then try again later
-    set_container_instance_to_draining(cluster, instance_arn)
-    return True
-
-  tasks = instance['runningTasksCount'] + instance['pendingTasksCount']
-  print('Instance %s has %s tasks' % (instance_arn, tasks))
-
-  return tasks > 0
-
-
-def set_container_instance_to_draining(cluster, instance_arn):
-  ecs.update_container_instances_state(
-      cluster=cluster,
-      containerInstances=[instance_arn], status='DRAINING')
-
-
-def pick(dct, *keys):
-  \\"\\"\\"Pick a subset of a dict.\\"\\"\\"
-  return {k: v for k, v in dct.items() if k in keys}
-",
-        },
-        "Environment": Object {
-          "Variables": Object {
-            "CLUSTER": Object {
-              "Ref": "Cluster",
-            },
-          },
-        },
-        "Handler": "index.lambda_handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-            "Arn",
-          ],
-        },
-        "Runtime": "python3.6",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-        "Timeout": 310,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionAllowInvokeCosGalSysEcsClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic4E49EAF2": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunction",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "ec2:DescribeInstances",
-                "ec2:DescribeInstanceAttribute",
-                "ec2:DescribeInstanceStatus",
-                "ec2:DescribeHosts",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": "autoscaling:CompleteLifecycleAction",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":autoscaling:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":autoScalingGroup:*:autoScalingGroupName/",
-                    Object {
-                      "Ref": "ClusterDefaultAutoScalingGroupASG",
-                    },
-                  ],
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "ecs:DescribeContainerInstances",
-                "ecs:DescribeTasks",
-              ],
-              "Condition": Object {
-                "ArnEquals": Object {
-                  "ecs:cluster": Object {
-                    "Fn::GetAtt": Array [
-                      "Cluster",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": Array [
-                "ecs:ListContainerInstances",
-                "ecs:SubmitContainerStateChange",
-                "ecs:SubmitTaskStateChange",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "Cluster",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "ecs:UpdateContainerInstancesState",
-                "ecs:ListTasks",
-              ],
-              "Condition": Object {
-                "ArnEquals": Object {
-                  "ecs:cluster": Object {
-                    "Fn::GetAtt": Array [
-                      "Cluster",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionTopic": Object {
-      "Properties": Object {
-        "Endpoint": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunction",
-            "Arn",
-          ],
-        },
-        "Protocol": "lambda",
-        "TopicArn": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
     },
     "ClusterDefaultAutoScalingGroupInstanceProfile": Object {
       "Properties": Object {
@@ -1496,132 +1251,6 @@ yum -y install aws-cfn-bootstrap || echo 'Failed to install aws-cfn-bootstrap fo
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHook": Object {
-      "DependsOn": Array [
-        "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy",
-        "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-      ],
-      "Properties": Object {
-        "AutoScalingGroupName": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupASG",
-        },
-        "DefaultResult": "CONTINUE",
-        "HeartbeatTimeout": 300,
-        "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
-        "NotificationTargetARN": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-        "RoleARN": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::AutoScaling::LifecycleHook",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "autoscaling.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "kms:Decrypt",
-                "kms:GenerateDataKey",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
-              },
-            },
-            Object {
-              "Action": "sns:Publish",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic": Object {
-      "Properties": Object {
-        "KmsMasterKeyId": Object {
-          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys/Ecs/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::SNS::Topic",
-    },
     "RebalanceEvent": Object {
       "Properties": Object {
         "EventPattern": Object {
@@ -1647,7 +1276,7 @@ yum -y install aws-cfn-bootstrap || echo 'Failed to install aws-cfn-bootstrap fo
       },
       "Type": "AWS::Events::Rule",
     },
-    "RebalanceEventAllowEventRuleCosGalSysEcsRebalanceEventC168DC2A": Object {
+    "RebalanceEventAllowEventRuleCosGalSysEcsRebalanceFn951CE96C": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {
@@ -1921,16 +1550,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters5592d3aa4316ff737ae82359489ac2ec781f6887a46589fe1caf2932bab6a0e7ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"5592d3aa4316ff737ae82359489ac2ec781f6887a46589fe1caf2932bab6a0e7\\"",
+    "AssetParameters118c6f8d864f3073d1e408a1fea7ee71b83cb30c8784109813cd5ba0fe927b8bArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"118c6f8d864f3073d1e408a1fea7ee71b83cb30c8784109813cd5ba0fe927b8b\\"",
       "Type": "String",
     },
-    "AssetParameters5592d3aa4316ff737ae82359489ac2ec781f6887a46589fe1caf2932bab6a0e7S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"5592d3aa4316ff737ae82359489ac2ec781f6887a46589fe1caf2932bab6a0e7\\"",
+    "AssetParameters118c6f8d864f3073d1e408a1fea7ee71b83cb30c8784109813cd5ba0fe927b8bS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"118c6f8d864f3073d1e408a1fea7ee71b83cb30c8784109813cd5ba0fe927b8b\\"",
       "Type": "String",
     },
-    "AssetParameters5592d3aa4316ff737ae82359489ac2ec781f6887a46589fe1caf2932bab6a0e7S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"5592d3aa4316ff737ae82359489ac2ec781f6887a46589fe1caf2932bab6a0e7\\"",
+    "AssetParameters118c6f8d864f3073d1e408a1fea7ee71b83cb30c8784109813cd5ba0fe927b8bS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"118c6f8d864f3073d1e408a1fea7ee71b83cb30c8784109813cd5ba0fe927b8b\\"",
       "Type": "String",
     },
   },
@@ -1949,6 +1578,7 @@ Object {
       "Type": "AWS::SSM::Parameter",
     },
     "Ecs": Object {
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "Parameters": Object {
           "referencetoCosGalSys1ZoneD618DEF9Ref": Object {
@@ -1983,7 +1613,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters5592d3aa4316ff737ae82359489ac2ec781f6887a46589fe1caf2932bab6a0e7S3Bucket",
+                "Ref": "AssetParameters118c6f8d864f3073d1e408a1fea7ee71b83cb30c8784109813cd5ba0fe927b8bS3Bucket",
               },
               "/",
               Object {
@@ -1993,7 +1623,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters5592d3aa4316ff737ae82359489ac2ec781f6887a46589fe1caf2932bab6a0e7S3VersionKey",
+                        "Ref": "AssetParameters118c6f8d864f3073d1e408a1fea7ee71b83cb30c8784109813cd5ba0fe927b8bS3VersionKey",
                       },
                     ],
                   },
@@ -2006,7 +1636,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters5592d3aa4316ff737ae82359489ac2ec781f6887a46589fe1caf2932bab6a0e7S3VersionKey",
+                        "Ref": "AssetParameters118c6f8d864f3073d1e408a1fea7ee71b83cb30c8784109813cd5ba0fe927b8bS3VersionKey",
                       },
                     ],
                   },
@@ -2017,6 +1647,7 @@ Object {
         },
       },
       "Type": "AWS::CloudFormation::Stack",
+      "UpdateReplacePolicy": "Delete",
     },
     "PrivateZone": Object {
       "Properties": Object {
@@ -2379,6 +2010,39 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
+    "AsgCapacityProvider": Object {
+      "Properties": Object {
+        "AutoScalingGroupProvider": Object {
+          "AutoScalingGroupArn": Object {
+            "Ref": "ClusterDefaultAutoScalingGroupASG",
+          },
+          "ManagedScaling": Object {
+            "Status": "ENABLED",
+            "TargetCapacity": 80,
+          },
+          "ManagedTerminationProtection": "ENABLED",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Ecs",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys1",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::CapacityProvider",
+    },
     "Cluster": Object {
       "Properties": Object {
         "ClusterName": "CoreGalSys1Cluster",
@@ -2409,6 +2073,26 @@ Object {
       },
       "Type": "AWS::ECS::Cluster",
     },
+    "ClusterCapacityProviderAssociations": Object {
+      "Properties": Object {
+        "CapacityProviders": Array [
+          Object {
+            "Ref": "AsgCapacityProvider",
+          },
+        ],
+        "Cluster": Object {
+          "Ref": "Cluster",
+        },
+        "DefaultCapacityProviderStrategy": Array [
+          Object {
+            "CapacityProvider": Object {
+              "Ref": "AsgCapacityProvider",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::ECS::ClusterCapacityProviderAssociations",
+    },
     "ClusterDefaultAutoScalingGroupASG": Object {
       "CreationPolicy": Object {
         "ResourceSignal": Object {
@@ -2421,6 +2105,7 @@ Object {
         },
         "MaxSize": "4",
         "MinSize": "1",
+        "NewInstancesProtectedFromScaleIn": true,
         "Tags": Array [
           Object {
             "Key": "cosmos",
@@ -2475,313 +2160,6 @@ Object {
           "IgnoreUnmodifiedGroupSizeProperties": true,
         },
       },
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunction": Object {
-      "DependsOn": Array [
-        "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy",
-        "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "ZipFile": "import boto3, json, os, time
-
-ecs = boto3.client('ecs')
-autoscaling = boto3.client('autoscaling')
-
-
-def lambda_handler(event, context):
-  print(json.dumps(event))
-  cluster = os.environ['CLUSTER']
-  snsTopicArn = event['Records'][0]['Sns']['TopicArn']
-  lifecycle_event = json.loads(event['Records'][0]['Sns']['Message'])
-  instance_id = lifecycle_event.get('EC2InstanceId')
-  if not instance_id:
-    print('Got event without EC2InstanceId: %s', json.dumps(event))
-    return
-
-  instance_arn = container_instance_arn(cluster, instance_id)
-  print('Instance %s has container instance ARN %s' % (lifecycle_event['EC2InstanceId'], instance_arn))
-
-  if not instance_arn:
-    return
-
-  while has_tasks(cluster, instance_arn):
-    time.sleep(10)
-
-  try:
-    print('Terminating instance %s' % instance_id)
-    autoscaling.complete_lifecycle_action(
-        LifecycleActionResult='CONTINUE',
-        **pick(lifecycle_event, 'LifecycleHookName', 'LifecycleActionToken', 'AutoScalingGroupName'))
-  except Exception as e:
-    # Lifecycle action may have already completed.
-    print(str(e))
-
-
-def container_instance_arn(cluster, instance_id):
-  \\"\\"\\"Turn an instance ID into a container instance ARN.\\"\\"\\"
-  arns = ecs.list_container_instances(cluster=cluster, filter='ec2InstanceId==' + instance_id)['containerInstanceArns']
-  if not arns:
-    return None
-  return arns[0]
-
-
-def has_tasks(cluster, instance_arn):
-  \\"\\"\\"Return True if the instance is running tasks for the given cluster.\\"\\"\\"
-  instances = ecs.describe_container_instances(cluster=cluster, containerInstances=[instance_arn])['containerInstances']
-  if not instances:
-    return False
-  instance = instances[0]
-
-  if instance['status'] == 'ACTIVE':
-    # Start draining, then try again later
-    set_container_instance_to_draining(cluster, instance_arn)
-    return True
-
-  tasks = instance['runningTasksCount'] + instance['pendingTasksCount']
-  print('Instance %s has %s tasks' % (instance_arn, tasks))
-
-  return tasks > 0
-
-
-def set_container_instance_to_draining(cluster, instance_arn):
-  ecs.update_container_instances_state(
-      cluster=cluster,
-      containerInstances=[instance_arn], status='DRAINING')
-
-
-def pick(dct, *keys):
-  \\"\\"\\"Pick a subset of a dict.\\"\\"\\"
-  return {k: v for k, v in dct.items() if k in keys}
-",
-        },
-        "Environment": Object {
-          "Variables": Object {
-            "CLUSTER": Object {
-              "Ref": "Cluster",
-            },
-          },
-        },
-        "Handler": "index.lambda_handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-            "Arn",
-          ],
-        },
-        "Runtime": "python3.6",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys1",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-        "Timeout": 310,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionAllowInvokeCosGalSys1EcsClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic29C1AC8A": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunction",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys1",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "ec2:DescribeInstances",
-                "ec2:DescribeInstanceAttribute",
-                "ec2:DescribeInstanceStatus",
-                "ec2:DescribeHosts",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": "autoscaling:CompleteLifecycleAction",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":autoscaling:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":autoScalingGroup:*:autoScalingGroupName/",
-                    Object {
-                      "Ref": "ClusterDefaultAutoScalingGroupASG",
-                    },
-                  ],
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "ecs:DescribeContainerInstances",
-                "ecs:DescribeTasks",
-              ],
-              "Condition": Object {
-                "ArnEquals": Object {
-                  "ecs:cluster": Object {
-                    "Fn::GetAtt": Array [
-                      "Cluster",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": Array [
-                "ecs:ListContainerInstances",
-                "ecs:SubmitContainerStateChange",
-                "ecs:SubmitTaskStateChange",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "Cluster",
-                  "Arn",
-                ],
-              },
-            },
-            Object {
-              "Action": Array [
-                "ecs:UpdateContainerInstancesState",
-                "ecs:ListTasks",
-              ],
-              "Condition": Object {
-                "ArnEquals": Object {
-                  "ecs:cluster": Object {
-                    "Fn::GetAtt": Array [
-                      "Cluster",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ClusterDefaultAutoScalingGroupDrainECSHookFunctionTopic": Object {
-      "Properties": Object {
-        "Endpoint": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupDrainECSHookFunction",
-            "Arn",
-          ],
-        },
-        "Protocol": "lambda",
-        "TopicArn": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-      },
-      "Type": "AWS::SNS::Subscription",
     },
     "ClusterDefaultAutoScalingGroupInstanceProfile": Object {
       "Properties": Object {
@@ -3029,132 +2407,6 @@ EOF",
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHook": Object {
-      "DependsOn": Array [
-        "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy",
-        "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-      ],
-      "Properties": Object {
-        "AutoScalingGroupName": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupASG",
-        },
-        "DefaultResult": "CONTINUE",
-        "HeartbeatTimeout": 300,
-        "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
-        "NotificationTargetARN": Object {
-          "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-        },
-        "RoleARN": Object {
-          "Fn::GetAtt": Array [
-            "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::AutoScaling::LifecycleHook",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "autoscaling.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys1",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "kms:Decrypt",
-                "kms:GenerateDataKey",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
-              },
-            },
-            Object {
-              "Action": "sns:Publish",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic": Object {
-      "Properties": Object {
-        "KmsMasterKeyId": Object {
-          "Fn::ImportValue": "CoreCosGalGalaxy:GalExportsOutputFnGetAttSharedKeyArn962CB6B9",
-        },
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys1",
-          },
-          Object {
-            "Key": "Name",
-            "Value": "Cos/Gal/Sys1/Ecs/Cluster/DefaultAutoScalingGroup",
-          },
-        ],
-      },
-      "Type": "AWS::SNS::Topic",
-    },
     "RebalanceEvent": Object {
       "Properties": Object {
         "EventPattern": Object {
@@ -3180,7 +2432,7 @@ EOF",
       },
       "Type": "AWS::Events::Rule",
     },
-    "RebalanceEventAllowEventRuleCosGalSys1EcsRebalanceEvent63DA801C": Object {
+    "RebalanceEventAllowEventRuleCosGalSys1EcsRebalanceFn1568AC8D": Object {
       "Properties": Object {
         "Action": "lambda:InvokeFunction",
         "FunctionName": Object {

@@ -1,6 +1,14 @@
 import { Construct, Duration } from '@aws-cdk/core';
 import { InstanceType, SecurityGroup, Peer, InstanceClass, InstanceSize, UserData } from '@aws-cdk/aws-ec2';
-import { Cluster, ICluster, ClusterProps as EcsClusterProps, AddCapacityOptions } from '@aws-cdk/aws-ecs';
+import {
+  Cluster,
+  ICluster,
+  ClusterProps as EcsClusterProps,
+  AddCapacityOptions,
+  AsgCapacityProviderProps,
+  AsgCapacityProvider,
+  CfnClusterCapacityProviderAssociations,
+} from '@aws-cdk/aws-ecs';
 import {
   ApplicationLoadBalancer,
   ApplicationListener,
@@ -33,8 +41,9 @@ export interface IEcsFeatureCore extends Construct {
 }
 
 export interface ClusterProps extends Partial<Omit<EcsClusterProps, 'capacity'>> {
-  capacity?: Partial<AddCapacityOptions> | false;
+  capacity?: (Partial<AddCapacityOptions> & Partial<AsgCapacityProviderProps>) | false;
   rebalance?: boolean;
+  asgCapacityProvider?: boolean;
 }
 
 export interface EcsSolarSystemCoreStackProps extends BaseFeatureStackProps {
@@ -48,6 +57,7 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
   readonly solarSystem: ISolarSystemCore;
   readonly cluster: Cluster;
   readonly clusterAutoScalingGroup?: AutoScalingGroup;
+  readonly asgCapacityProvider: AsgCapacityProvider;
   readonly alb: ApplicationLoadBalancer;
   readonly httpListener: ApplicationListener;
   readonly httpInternalListener: ApplicationListener;
@@ -93,20 +103,42 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
               topicEncryptionKey:
                 this.solarSystem.galaxy.sharedKey &&
                 Key.fromKeyArn(this, 'SharedKey', this.solarSystem.galaxy.sharedKey.keyArn),
+              taskDrainTime:
+                clusterProps.capacity?.enableManagedTerminationProtection ?? true
+                  ? Duration.seconds(0)
+                  : clusterProps.capacity?.taskDrainTime,
               userData: defaultUserData(),
               ...clusterProps.capacity,
             }
           : undefined,
     });
+
     this.clusterAutoScalingGroup = this.cluster.autoscalingGroup as AutoScalingGroup | undefined;
     if (this.clusterAutoScalingGroup) {
+      // Add access for ssm terminal sessions
       this.clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
+      // Install aws-cfn-bootstrap to add cfn-signal command.
       this.clusterAutoScalingGroup.userData.addCommands(
         "yum -y install aws-cfn-bootstrap || echo 'Failed to install aws-cfn-bootstrap for cfn-signal bin'"
       );
+      // Add signal command on exit of startup
       this.clusterAutoScalingGroup.userData.addSignalOnExitCommand(this.clusterAutoScalingGroup);
+      // If rebalance enabled then add rebalance lambda function for ecs services
       if (clusterProps.rebalance !== false) {
         new EcsEc2ServiceRebalance(this, 'Rebalance', { cluster: this.cluster });
+      }
+      // If ASG Capacity Provider enabled then add provider + association
+      if (clusterProps.asgCapacityProvider !== false) {
+        this.asgCapacityProvider = new AsgCapacityProvider(this, 'AsgCapacityProvider', {
+          targetCapacityPercent: 80,
+          ...clusterProps.capacity,
+          autoScalingGroup: this.clusterAutoScalingGroup,
+        });
+        new CfnClusterCapacityProviderAssociations(this, 'ClusterCapacityProviderAssociations', {
+          cluster: this.cluster.clusterName,
+          defaultCapacityProviderStrategy: [{ capacityProvider: this.asgCapacityProvider.capacityProviderName }],
+          capacityProviders: [this.asgCapacityProvider.capacityProviderName],
+        });
       }
     }
 

@@ -893,6 +893,7 @@ Object {
   },
   "Resources": Object {
     "CiCd": Object {
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "Tags": Array [
           Object {
@@ -952,6 +953,7 @@ Object {
         },
       },
       "Type": "AWS::CloudFormation::Stack",
+      "UpdateReplacePolicy": "Delete",
     },
     "ConfigVpcAzs": Object {
       "Properties": Object {

@@ -32,7 +32,7 @@ const zone = HostedZone.fromHostedZoneAttributes(stack, 'Zone', {
   zoneName: 'cosmos',
 });
 const alb = ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(stack, 'ALB', {
-  loadBalancerArn: 'ARN::ALB',
+  loadBalancerArn: 'arn:aws:elasticloadbalancing:ap-southeast-2:1234:loadbalancer/alb',
   securityGroupId: 'SG',
   loadBalancerDnsName: 'ALB',
   loadBalancerCanonicalHostedZoneId: '4321',

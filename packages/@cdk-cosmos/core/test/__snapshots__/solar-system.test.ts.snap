@@ -141,6 +141,7 @@ Object {
       "Type": "AWS::KMS::Alias",
     },
     "SharedVpc": Object {
+      "DeletionPolicy": "Delete",
       "Properties": Object {
         "Tags": Array [
           Object {
@@ -196,6 +197,7 @@ Object {
         },
       },
       "Type": "AWS::CloudFormation::Stack",
+      "UpdateReplacePolicy": "Delete",
     },
   },
 }
