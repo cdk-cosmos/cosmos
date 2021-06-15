@@ -62,7 +62,7 @@ export class CdkPipeline extends Construct {
       cdkSource,
       cdkRepo,
       cdkBranch,
-      cdkTrigger,
+      cdkTrigger = false,
       cdkWorkingDir,
       deployRole,
       deployVpc,
