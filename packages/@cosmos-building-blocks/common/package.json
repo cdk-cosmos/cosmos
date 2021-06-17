@@ -1,6 +1,6 @@
 {
   "name": "@cosmos-building-blocks/common",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,9 +26,9 @@
     "clean": "rm -rf lib"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-iam": "^1.89.0",
-    "@aws-cdk/aws-s3": "^1.89.0",
-    "@aws-cdk/core": "^1.89.0",
-    "@aws-cdk/custom-resources": "^1.89.0"
+    "@aws-cdk/aws-iam": "^1.104.0",
+    "@aws-cdk/aws-s3": "^1.104.0",
+    "@aws-cdk/core": "^1.104.0",
+    "@aws-cdk/custom-resources": "^1.104.0"
   }
 }

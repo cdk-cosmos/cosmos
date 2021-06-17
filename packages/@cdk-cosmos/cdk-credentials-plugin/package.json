@@ -1,6 +1,6 @@
 {
   "name": "@cdk-cosmos/cdk-credentials-plugin",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -29,6 +29,6 @@
     "proxy-agent": "^3.1.1"
   },
   "peerDependencies": {
-    "aws-cdk": "^1.89.0"
+    "aws-cdk": "^1.104.0"
   }
 }

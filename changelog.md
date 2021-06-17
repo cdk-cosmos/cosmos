@@ -1,4 +1,18 @@
 
+## v0.8.9 (2021-06-15)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/cdk-credentials-plugin`, `@cdk-cosmos/core`, `@cosmos-building-blocks/app-ec2`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/network`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#291](https://github.com/cdk-cosmos/cosmos/pull/291) Add Ecs Capacity Provider ([@timpur](https://github.com/timpur))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`
+  * [#290](https://github.com/cdk-cosmos/cosmos/pull/290) Fix CDK Pipeline Trigger default enabled ([@timpur](https://github.com/timpur))
+
+#### Committers: 1
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.8.8 (2021-05-28)
 
 #### 🚀 Enhancement:
