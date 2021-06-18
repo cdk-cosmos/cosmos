@@ -199,13 +199,14 @@ Object {
             "Field": "host-header",
             "HostHeaderConfig": Object {
               "Values": Array [
+                "existing.com",
                 "test.cosmos",
               ],
             },
           },
         ],
         "ListenerArn": "Listener",
-        "Priority": 49710,
+        "Priority": 49418,
       },
       "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },
@@ -232,13 +233,14 @@ Object {
             "Field": "host-header",
             "HostHeaderConfig": Object {
               "Values": Array [
+                "existing.com",
                 "test.cosmos",
               ],
             },
           },
         ],
         "ListenerArn": "Listener2",
-        "Priority": 49710,
+        "Priority": 49418,
       },
       "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },

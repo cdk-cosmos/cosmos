@@ -35,6 +35,8 @@ import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
 import { Certificate, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
 import { getRoutingPriorityFromListenerProps } from '.';
 
+type MutableListenerCondition = ListenerCondition & { values: string[] };
+
 export interface EcsServiceProps {
   vpc: IVpc;
   zone?: IHostedZone;
@@ -62,6 +64,7 @@ export class EcsService extends Construct {
   readonly container: ContainerDefinition;
   readonly service: Ec2Service;
   readonly targetGroup?: ApplicationTargetGroup;
+  readonly listenerConditions: ListenerCondition[];
   readonly listenerRules: ApplicationListenerRule[];
   readonly scaling?: ScalableTaskCount;
   readonly certificate?: Certificate;
@@ -122,12 +125,12 @@ export class EcsService extends Construct {
     if (routingProps) {
       const { httpsRedirect, subdomains, certificate, dns } = routingProps;
 
-      const conditions = [...(routingProps.conditions || [])];
       const _routingProps = {
         priority: 0,
+        conditions: [],
         ...routingProps,
-        conditions: conditions,
       };
+      this.listenerConditions = _routingProps.conditions;
 
       if (!httpListener && !httpsListener) throw new Error('To enable routing, an Http Listener is required');
 
@@ -149,7 +152,14 @@ export class EcsService extends Construct {
       if (subdomains?.length) {
         if (!zone) throw new Error('Please provide zone prop.');
 
-        conditions.push(ListenerCondition.hostHeaders(subdomains.map((x) => `${x}.${zone.zoneName}`)));
+        let hostHeaderCondition: MutableListenerCondition | undefined = this.listenerConditions.find(
+          (x) => x.renderRawCondition().field === 'host-header'
+        ) as MutableListenerCondition;
+        if (!hostHeaderCondition) {
+          hostHeaderCondition = ListenerCondition.hostHeaders([]) as MutableListenerCondition;
+          this.listenerConditions.push(hostHeaderCondition);
+        }
+        hostHeaderCondition.values.push(...subdomains.map((x) => `${x}.${zone.zoneName}`));
 
         if (dns) {
           if (!alb) throw new Error('Please provide alb prop.');

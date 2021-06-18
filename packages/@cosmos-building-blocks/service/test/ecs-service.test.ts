@@ -63,7 +63,7 @@ new EcsService(stack, 'EcsService2', {
     image: ContainerImage.fromRegistry('Image'),
   },
   routingProps: {
-    conditions: [ListenerCondition.pathPatterns(['*'])],
+    conditions: [ListenerCondition.pathPatterns(['*']), ListenerCondition.hostHeaders(['existing.com'])],
     httpsRedirect: true,
     subdomains: ['test'],
     dns: true,
