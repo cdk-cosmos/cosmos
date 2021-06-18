@@ -1,4 +1,15 @@
 
+## v0.8.10 (2021-06-18)
+
+#### 🐛 Bug Fix
+* `@cosmos-building-blocks/service`
+  * [#296](https://github.com/cdk-cosmos/cosmos/pull/296) #294 merging host header config instead of duplicating it ([@unerh](https://github.com/unerh))
+
+#### Committers: 2
+- Hakan Uner ([@unerh](https://github.com/unerh))
+- Tim P ([@timpur](https://github.com/timpur))
+
+
 ## v0.8.9 (2021-06-15)
 
 #### 🚀 Enhancement:
