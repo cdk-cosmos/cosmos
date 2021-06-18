@@ -11,7 +11,7 @@
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
     "watch": "lerna run watch",
-    "test": "lerna run test",
+    "test": "jest",
     "lint": "lerna run lint",
     "format": "lerna run format",
     "clean": "lerna run clean",
