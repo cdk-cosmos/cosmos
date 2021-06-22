@@ -14,8 +14,8 @@ const cosmos = new CosmosCoreStack(app, 'Cos', {
 });
 cosmos.addCert({ certsDir: path.join(__dirname, './certs') });
 
-const galaxy1 = new GalaxyCoreStack(cosmos, 'Gal1', { cidr: '10.0.1.0/22' });
-const galaxy2 = new GalaxyCoreStack(cosmos, 'Gal2', { cidr: '10.0.2.0/22', env: env2 });
+new GalaxyCoreStack(cosmos, 'Gal1', { cidr: '10.0.1.0/22' });
+new GalaxyCoreStack(cosmos, 'Gal2', { cidr: '10.0.2.0/22', env: env2 });
 
 const cosmosExtension = new CosmosExtensionStack(app, 'Test');
 cosmosExtension.portal.addCert();

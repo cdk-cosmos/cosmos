@@ -34,13 +34,8 @@ solarSystemExtension.ciCd?.addDeployStackStage({
   stacks: [solarSystemExtension2],
 });
 
-const [
-  cosmosStack,
-  solarSystemStack,
-  cicdSolarSystemStack,
-  cosmosExtensionStack,
-  cicdSolarSystemExtensionStack,
-] = synthesizeStacks(cosmos, solarSystem, solarSystem.ciCd, cosmosExtension, solarSystemExtension);
+const [cosmosStack, solarSystemStack, cicdSolarSystemStack, cosmosExtensionStack, cicdSolarSystemExtensionStack] =
+  synthesizeStacks(cosmos, solarSystem, solarSystem.ciCd, cosmosExtension, solarSystemExtension);
 
 describe('CICD Feature', () => {
   test('should be a CICD Feature', () => {
