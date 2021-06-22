@@ -8,7 +8,7 @@ Object {
       "Export": Object {
         "Name": "AppTestLibVersion",
       },
-      "Value": "0.8.9",
+      "Value": "0.8.10",
     },
   },
 }
@@ -22,7 +22,7 @@ Object {
       "Export": Object {
         "Name": "CoreLibVersion",
       },
-      "Value": "0.8.9",
+      "Value": "0.8.10",
     },
     "CrossAccountExportServiceToken": Object {
       "Export": Object {
