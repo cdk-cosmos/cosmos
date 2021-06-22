@@ -1,4 +1,19 @@
 
+## v0.8.11 (2021-06-22)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/pipeline`
+  * [#298](https://github.com/cdk-cosmos/cosmos/pull/298) #241 cert bucket feature ([@thomasguerneyiag](https://github.com/thomasguerneyiag))
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/pipeline`
+  * [#299](https://github.com/cdk-cosmos/cosmos/pull/299) Bug: Disable Updates for GHE Connection Host ([@timpur](https://github.com/timpur))
+
+#### Committers: 2
+- Tim P ([@timpur](https://github.com/timpur))
+- Tom Guerney ([@thomasguerneyiag](https://github.com/thomasguerneyiag))
+
+
 ## v0.8.10 (2021-06-18)
 
 #### 🐛 Bug Fix
