@@ -53,13 +53,8 @@ const cosmosExtension = new CosmosExtensionStack(app, 'Test', {
 const galaxyExtension = new GalaxyExtensionStack(cosmosExtension, 'Gal');
 const solarSystemExtension = new SolarSystemExtensionStack(galaxyExtension, 'Sys');
 
-const [
-  solarSystemStack,
-  ecsSolarSystemStack,
-  solarSystem2Stack,
-  ecsSolarSystem2Stack,
-  solarSystemExtensionStack,
-] = synthesizeStacks(solarSystem, solarSystem.ecs, solarSystem2, solarSystem2.ecs, solarSystemExtension);
+const [solarSystemStack, ecsSolarSystemStack, solarSystem2Stack, ecsSolarSystem2Stack, solarSystemExtensionStack] =
+  synthesizeStacks(solarSystem, solarSystem.ecs, solarSystem2, solarSystem2.ecs, solarSystemExtension);
 
 describe('ECS Feature', () => {
   test('should be an Ecs Feature', () => {

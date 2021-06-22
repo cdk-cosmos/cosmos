@@ -9,6 +9,7 @@ Date.now = jest.fn(() => 1577836800000);
 jest.mock('@aws-cdk/core/lib/asset-staging', () => ({
   ...jest.requireActual<object>('@aws-cdk/core/lib/asset-staging'),
   AssetStaging: jest.fn().mockImplementation(() => ({
+    stageMocked: true,
     stagedPath: 'stagedPath',
     sourcePath: 'sourcePath',
     sourceHash: 'sourceHash',
@@ -20,11 +21,14 @@ jest.mock('@aws-cdk/core/lib/asset-staging', () => ({
 jest.mock('@aws-cdk/aws-s3-assets/lib/asset', () => ({
   ...jest.requireActual<object>('@aws-cdk/aws-s3-assets/lib/asset'),
   Asset: jest.fn().mockImplementation(() => ({
+    assetMocked: true,
     s3BucketName: 's3BucketName',
     s3ObjectKey: 's3ObjectKey',
     s3Url: 's3Url',
     isZipArchive: true,
+    bucket: { bucketName: 's3BucketName' },
     addResourceMetadata() {},
+    grantRead() {},
   })),
 }));
 
