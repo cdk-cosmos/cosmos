@@ -137,21 +137,6 @@ Object {
             "Arn",
           ],
         },
-        "Update": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "{\\"service\\":\\"CodeStarconnections\\",\\"physicalResourceId\\":{\\"responsePath\\":\\"HostArn\\"},\\"parameters\\":{\\"ProviderEndpoint\\":\\"https://ghe.com/\\",\\"VpcConfiguration\\":{\\"VpcId\\":\\"123\\",\\"SubnetIds\\":[\\"123\\"],\\"SecurityGroupIds\\":[\\"",
-              Object {
-                "Fn::GetAtt": Array [
-                  "GHEHostHostSecurityGroup4F6E9143",
-                  "GroupId",
-                ],
-              },
-              "\\"]},\\"HostArn\\":\\"PHYSICAL:RESOURCEID:\\"},\\"action\\":\\"updateHost\\"}",
-            ],
-          ],
-        },
       },
       "Type": "Custom::AWS",
       "UpdateReplacePolicy": "Delete",

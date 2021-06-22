@@ -16,7 +16,7 @@ export interface CosmosExtensionStackProps extends BaseStackProps {
 }
 
 export class CosmosExtensionStack extends BaseStack implements ICosmosExtension {
-  readonly portal: ICosmosCore;
+  readonly portal: CosmosCoreImport;
   readonly libVersion: string;
 
   constructor(scope: Construct, id: string, props?: CosmosExtensionStackProps) {

@@ -61,11 +61,11 @@ export class StandardPipeline extends Construct {
     } = props;
 
     const source = codeRepo
-      ? ((new CodeCommitSourceProvider({
+      ? (new CodeCommitSourceProvider({
           repo: codeRepo,
           branch: codeBranch,
           trigger: codeTrigger,
-        }) as any) as SourceProvider)
+        }) as any as SourceProvider)
       : codeSource;
     if (!source) throw new Error('A source repository could not be found.');
     this.codeSource = source;

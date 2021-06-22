@@ -54,7 +54,7 @@ describe('Cosmos Extension', () => {
   test('should allow resourced to be created in portal', () => {
     const app = new App();
     const cosmosExtension = new CosmosExtensionStack(app, 'Test');
-    new CnameRecord((cosmosExtension.portal.rootZone as any) as Construct, 'Test', {
+    new CnameRecord(cosmosExtension.portal.rootZone as any as Construct, 'Test', {
       zone: cosmosExtension.portal.rootZone,
       recordName: 'test',
       domainName: 'test',

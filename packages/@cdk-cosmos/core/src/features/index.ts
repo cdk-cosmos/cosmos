@@ -39,3 +39,7 @@ export {
   GithubEnterpriseFeatureCoreImport,
   GithubEnterpriseFeatureCoreImportProps,
 } from './github-enterprise-feature/github-enterprise-feature-core-import';
+
+export { CertFeatureCoreStack, CertFeatureCoreStackProps } from './cert-feature/cert-feature-core-stack';
+
+export { CertFeatureCoreImport, CertFeatureCoreImportProps } from './cert-feature/cert-feature-core-import';

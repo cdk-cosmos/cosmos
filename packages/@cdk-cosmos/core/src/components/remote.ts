@@ -16,6 +16,24 @@ import {
   GithubEnterpriseConnection,
   IGithubEnterpriseConnection,
 } from '@cosmos-building-blocks/pipeline/lib/source/github-enterprise-connection';
+import { Bucket, IBucket } from '@aws-cdk/aws-s3';
+
+export class RemoteBucket {
+  readonly bucketName: string;
+
+  constructor(bucket: IBucket & Construct, exportName: string, scope: Construct = bucket) {
+    this.bucketName = new CfnOutput(scope, 'BucketName', {
+      exportName: `${exportName}Name`,
+      value: bucket.bucketName,
+    }).exportName as string;
+  }
+
+  static import(scope: Construct, id: string, exportName: string): IBucket {
+    const bucketName = Fn.importValue(`${exportName}Name`);
+
+    return Bucket.fromBucketName(scope, id, bucketName);
+  }
+}
 
 export class RemoteZone {
   readonly hostedZoneId: string;
