@@ -15,7 +15,7 @@ interface Attributes {
 export const handler = async (
   event: CloudFormationCustomResourceEvent
 ): Promise<Partial<CloudFormationCustomResourceResponse> | undefined> => {
-  const { exports, shouldErrorIfNotFound, assumeRoleArn } = (event.ResourceProperties as any) as Props;
+  const { exports, shouldErrorIfNotFound, assumeRoleArn } = event.ResourceProperties as any as Props;
   const attributes: Attributes = {};
 
   console.log('Event:', JSON.stringify(event, null, 2));

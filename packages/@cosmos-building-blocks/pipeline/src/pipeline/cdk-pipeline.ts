@@ -82,11 +82,11 @@ export class CdkPipeline extends Construct {
     });
 
     const source = cdkRepo
-      ? ((new CodeCommitSourceProvider({
+      ? (new CodeCommitSourceProvider({
           repo: cdkRepo,
           branch: cdkBranch,
           trigger: cdkTrigger,
-        }) as any) as SourceProvider)
+        }) as any as SourceProvider)
       : cdkSource;
     if (!source) throw new Error('A source repository could not be found.');
     this.cdkSource = source;
@@ -219,8 +219,14 @@ export class CdkPipeline extends Construct {
   }
 
   addDeployStackStage(props: AddDeployStackStageProps): void {
-    const { name, stacks, pipeline = this.pipeline, envs = {}, isManualApprovalRequired = true, exclusive = false } =
-      props || {};
+    const {
+      name,
+      stacks,
+      pipeline = this.pipeline,
+      envs = {},
+      isManualApprovalRequired = true,
+      exclusive = false,
+    } = props || {};
 
     if (stacks && stacks.length === 0) {
       throw new Error('Stacks must be >= 1');
