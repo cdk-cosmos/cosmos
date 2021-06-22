@@ -23,13 +23,25 @@ const [cosmosStack, certStack, cosmosExtensionStack] = synthesizeStacks(cosmos, 
 
 describe('Cert Feature', () => {
   test('should match snapshot', () => {
-    expect(cosmosStack).toMatchSnapshot();
+    expect(cosmosStack).toMatchSnapshot({
+      Outputs: {
+        CoreLibVersion: {
+          Value: expect.any(String),
+        },
+      },
+    });
     expect(certStack).toMatchSnapshot();
   });
 });
 
 describe('Cert Feature Extension', () => {
   test('should match snapshot', () => {
-    expect(cosmosExtensionStack).toMatchSnapshot();
+    expect(cosmosExtensionStack).toMatchSnapshot({
+      Outputs: {
+        AppLibVersion: {
+          Value: expect.any(String),
+        },
+      },
+    });
   });
 });
