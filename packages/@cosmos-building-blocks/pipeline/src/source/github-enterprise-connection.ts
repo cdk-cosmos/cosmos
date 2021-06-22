@@ -100,16 +100,17 @@ export class GithubEnterpriseHost extends Resource {
         ...defaultAwsCall,
         action: 'createHost',
       },
-      onUpdate: {
-        ...defaultAwsCall,
-        action: 'updateHost',
-        parameters: {
-          ...defaultAwsCall.parameters,
-          Name: undefined,
-          ProviderType: undefined,
-          HostArn: new PhysicalResourceIdReference(),
-        },
-      },
+      // Update to a host doesn't seem to be possible when its active...
+      // onUpdate: {
+      //   ...defaultAwsCall,
+      //   action: 'updateHost',
+      //   parameters: {
+      //     ...defaultAwsCall.parameters,
+      //     Name: undefined,
+      //     ProviderType: undefined,
+      //     HostArn: new PhysicalResourceIdReference(),
+      //   },
+      // },
       onDelete: {
         ...defaultAwsCall,
         action: 'deleteHost',
