@@ -1,0 +1,605 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cert Feature Extension should match snapshot 1`] = `
+Object {
+  "Description": "Cosmos Extension: Singleton resources for the Cosmos, like CdkRepo and EcrRepo",
+  "Outputs": Object {
+    "AppLibVersion": Object {
+      "Export": Object {
+        "Name": "AppTestLibVersion",
+      },
+      "Value": "0.8.9",
+    },
+  },
+}
+`;
+
+exports[`Cert Feature should match snapshot 1`] = `
+Object {
+  "Description": "Cosmos: Singleton resources for the Cosmos, like RootZone, CdkRepo and CdkMasterRole",
+  "Outputs": Object {
+    "CoreLibVersion": Object {
+      "Export": Object {
+        "Name": "CoreLibVersion",
+      },
+      "Value": "0.8.9",
+    },
+    "CrossAccountExportServiceToken": Object {
+      "Export": Object {
+        "Name": "CoreCrossAccountExportServiceToken",
+      },
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "CustomCrossAccountExportsCustomResourceProviderHandler",
+          "Arn",
+        ],
+      },
+    },
+    "RootZoneZoneId": Object {
+      "Export": Object {
+        "Name": "CoreRootZoneId",
+      },
+      "Value": Object {
+        "Ref": "RootZone",
+      },
+    },
+    "RootZoneZoneName": Object {
+      "Export": Object {
+        "Name": "CoreRootZoneName",
+      },
+      "Value": "cos.com",
+    },
+    "RootZoneZoneNameServers": Object {
+      "Export": Object {
+        "Name": "CoreRootZoneNameServers",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          ",",
+          Object {
+            "Fn::GetAtt": Array [
+              "RootZone",
+              "NameServers",
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "AssetParameters1fee2d2e3810eb71af5210fa50f48381a9c1eca9b4422d3c7e99870bb8217fd6ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"1fee2d2e3810eb71af5210fa50f48381a9c1eca9b4422d3c7e99870bb8217fd6\\"",
+      "Type": "String",
+    },
+    "AssetParameters1fee2d2e3810eb71af5210fa50f48381a9c1eca9b4422d3c7e99870bb8217fd6S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"1fee2d2e3810eb71af5210fa50f48381a9c1eca9b4422d3c7e99870bb8217fd6\\"",
+      "Type": "String",
+    },
+    "AssetParameters1fee2d2e3810eb71af5210fa50f48381a9c1eca9b4422d3c7e99870bb8217fd6S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"1fee2d2e3810eb71af5210fa50f48381a9c1eca9b4422d3c7e99870bb8217fd6\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"sourceHash\\"",
+      "Type": "String",
+    },
+    "AssetParameterssourceHashS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"sourceHash\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "CdkMasterRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Array [
+                  "codebuild.amazonaws.com",
+                  "codepipeline.amazonaws.com",
+                  "lambda.amazonaws.com",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AdministratorAccess",
+              ],
+            ],
+          },
+        ],
+        "RoleName": "CoreCdkMasterRole",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "Cert": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+        ],
+        "TemplateURL": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://s3.region.",
+              Object {
+                "Ref": "AWS::URLSuffix",
+              },
+              "/",
+              Object {
+                "Ref": "AssetParameters1fee2d2e3810eb71af5210fa50f48381a9c1eca9b4422d3c7e99870bb8217fd6S3Bucket",
+              },
+              "/",
+              Object {
+                "Fn::Select": Array [
+                  0,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameters1fee2d2e3810eb71af5210fa50f48381a9c1eca9b4422d3c7e99870bb8217fd6S3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
+              Object {
+                "Fn::Select": Array [
+                  1,
+                  Object {
+                    "Fn::Split": Array [
+                      "||",
+                      Object {
+                        "Ref": "AssetParameters1fee2d2e3810eb71af5210fa50f48381a9c1eca9b4422d3c7e99870bb8217fd6S3VersionKey",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::Stack",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "CustomCrossAccountExportsCustomResourceProviderHandler": Object {
+      "DependsOn": Array [
+        "CdkMasterRole",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameterssourceHashS3Bucket",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CdkMasterRole",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs12.x",
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "RootZone": Object {
+      "Properties": Object {
+        "HostedZoneConfig": Object {
+          "Comment": "Core TLD Root Zone for Cos Cosmos.",
+        },
+        "HostedZoneTags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+        ],
+        "Name": "cos.com.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
+  },
+}
+`;
+
+exports[`Cert Feature should match snapshot 2`] = `
+Object {
+  "Description": "Add Cert Bucket Features to the Cosmos",
+  "Outputs": Object {
+    "CertBucketBucketName": Object {
+      "Export": Object {
+        "Name": "CoreCertBucketName",
+      },
+      "Value": Object {
+        "Ref": "CertBucket",
+      },
+    },
+    "CombinedCertCrt": Object {
+      "Export": Object {
+        "Name": "CoreCombinedCertCrt",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "https://s3.region.",
+            Object {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            Object {
+              "Ref": "CertBucket",
+            },
+            "/combined-certs.crt",
+          ],
+        ],
+      },
+    },
+    "CombinedCertPem": Object {
+      "Export": Object {
+        "Name": "CoreCombinedCertPem",
+      },
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            "https://s3.region.",
+            Object {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            Object {
+              "Ref": "CertBucket",
+            },
+            "/combined-certs.pem",
+          ],
+        ],
+      },
+    },
+  },
+  "Resources": Object {
+    "CertBucket": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketName": "core-cert-bucket",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Cert",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "CertBucketPolicy": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "CertBucket",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account1:root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "CertBucket",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "CertBucket",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::account2:root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "CertBucket",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "CertBucket",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C": Object {
+      "DependsOn": Array [
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy",
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": "s3BucketName",
+          "S3Key": "s3ObjectKey",
+        },
+        "Handler": "index.handler",
+        "Layers": Array [
+          Object {
+            "Ref": "DeployFilesAwsCliLayer",
+          },
+        ],
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.6",
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Cert",
+          },
+        ],
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:feature",
+            "Value": "Cert",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject*",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "CertBucket",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "CertBucket",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy",
+        "Roles": Array [
+          Object {
+            "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DeployFilesAwsCliLayer": Object {
+      "Properties": Object {
+        "Content": Object {
+          "S3Bucket": "s3BucketName",
+          "S3Key": "s3ObjectKey",
+        },
+        "Description": "/opt/awscli/aws",
+      },
+      "Type": "AWS::Lambda::LayerVersion",
+    },
+    "DeployFilesCustomResource": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "DestinationBucketName": Object {
+          "Ref": "CertBucket",
+        },
+        "Prune": true,
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C",
+            "Arn",
+          ],
+        },
+        "SourceBucketNames": Array [
+          "s3BucketName",
+        ],
+        "SourceObjectKeys": Array [
+          "s3ObjectKey",
+        ],
+      },
+      "Type": "Custom::CDKBucketDeployment",
+      "UpdateReplacePolicy": "Delete",
+    },
+  },
+}
+`;

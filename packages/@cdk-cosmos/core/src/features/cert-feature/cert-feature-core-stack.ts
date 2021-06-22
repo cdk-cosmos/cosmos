@@ -3,14 +3,17 @@ import * as fs from 'fs';
 import { AccountPrincipal } from '@aws-cdk/aws-iam';
 import { Bucket, IBucket } from '@aws-cdk/aws-s3';
 import { BucketDeployment, Source } from '@aws-cdk/aws-s3-deployment';
-import { Construct, Environment } from '@aws-cdk/core';
+import { CfnOutput, Construct, Environment } from '@aws-cdk/core';
 import { BaseFeatureStack, BaseFeatureStackProps } from '../../components/base';
-import { ICosmosCore } from '../../cosmos';
+import { CosmosCoreStack, ICosmosCore } from '../../cosmos';
 import { GalaxyCoreStack } from '../../galaxy';
+import { RemoteBucket } from '../../components/remote';
 
 export interface ICertFeatureCore extends Construct {
   readonly cosmos: ICosmosCore;
   readonly bucket: IBucket;
+  readonly combinedCrt: string;
+  readonly combinedPem: string;
 }
 
 export interface CertFeatureCoreStackProps extends BaseFeatureStackProps {
@@ -22,6 +25,8 @@ export interface CertFeatureCoreStackProps extends BaseFeatureStackProps {
 export class CertFeatureCoreStack extends BaseFeatureStack implements ICertFeatureCore {
   readonly cosmos: ICosmosCore;
   readonly bucket: Bucket;
+  readonly combinedCrt: string;
+  readonly combinedPem: string;
   private useGalaxyAccounts: boolean;
   private allowedAccounts: string[];
 
@@ -30,6 +35,8 @@ export class CertFeatureCoreStack extends BaseFeatureStack implements ICertFeatu
       description: 'Add Cert Bucket Features to the Cosmos',
       ...props,
     });
+
+    this.cosmos = cosmos;
 
     const { allowedAccounts = [], useGalaxyAccounts = true, certsDir } = props;
 
@@ -42,7 +49,7 @@ export class CertFeatureCoreStack extends BaseFeatureStack implements ICertFeatu
       bucketName: this.singletonId('Cert-Bucket', '-').toLowerCase(),
     });
 
-    const certs = fs.readdirSync(certsDir);
+    const certs = fs.readdirSync(certsDir).filter((x) => !x.startsWith('combined-certs'));
 
     let combinedCerts = '';
 
@@ -50,13 +57,29 @@ export class CertFeatureCoreStack extends BaseFeatureStack implements ICertFeatu
       combinedCerts += fs.readFileSync(path.join(certsDir, cert), { encoding: 'utf-8' });
     }
 
-    for (const fileType of ['.pem', '.crt']) {
-      fs.writeFileSync(path.join(certsDir, `combined-certs${fileType}`), combinedCerts);
+    const combinedPem = 'combined-certs.pem';
+    const combinedCrt = 'combined-certs.crt';
+
+    for (const fileName of [combinedPem, combinedCrt]) {
+      fs.writeFileSync(path.join(certsDir, fileName), combinedCerts);
     }
 
     new BucketDeployment(this, 'DeployFiles', {
       sources: [Source.asset(certsDir)],
       destinationBucket: this.bucket,
+    });
+
+    this.combinedPem = this.bucket.urlForObject(combinedPem);
+    this.combinedCrt = this.bucket.urlForObject(combinedCrt);
+
+    new RemoteBucket(this.bucket, this.singletonId('CertBucket'));
+    new CfnOutput(this, 'CombinedCertPem', {
+      exportName: this.singletonId('CombinedCertPem'),
+      value: this.combinedPem,
+    });
+    new CfnOutput(this, 'CombinedCertCrt', {
+      exportName: this.singletonId('CombinedCertCrt'),
+      value: this.combinedCrt,
     });
   }
 
@@ -71,3 +94,19 @@ export class CertFeatureCoreStack extends BaseFeatureStack implements ICertFeatu
       .forEach((x) => this.bucket.grantRead(new AccountPrincipal(x)));
   }
 }
+
+declare module '../../cosmos/cosmos-core-stack' {
+  export interface ICosmosCore {
+    readonly cert?: ICertFeatureCore;
+  }
+
+  interface CosmosCoreStack {
+    cert?: CertFeatureCoreStack;
+    addCert(props: CertFeatureCoreStackProps): CertFeatureCoreStack;
+  }
+}
+
+CosmosCoreStack.prototype.addCert = function (props: CertFeatureCoreStackProps): CertFeatureCoreStack {
+  this.cert = new CertFeatureCoreStack(this, 'Cert', props);
+  return this.cert;
+};
