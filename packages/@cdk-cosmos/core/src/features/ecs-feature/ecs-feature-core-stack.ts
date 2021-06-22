@@ -104,7 +104,7 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
                 this.solarSystem.galaxy.sharedKey &&
                 Key.fromKeyArn(this, 'SharedKey', this.solarSystem.galaxy.sharedKey.keyArn),
               taskDrainTime:
-                clusterProps.capacity?.enableManagedTerminationProtection ?? true
+                clusterProps.asgCapacityProvider && (clusterProps.capacity?.enableManagedTerminationProtection ?? true)
                   ? Duration.seconds(0)
                   : clusterProps.capacity?.taskDrainTime,
               userData: defaultUserData(),
@@ -128,7 +128,7 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
         new EcsEc2ServiceRebalance(this, 'Rebalance', { cluster: this.cluster });
       }
       // If ASG Capacity Provider enabled then add provider + association
-      if (clusterProps.asgCapacityProvider !== false) {
+      if (clusterProps.asgCapacityProvider) {
         this.asgCapacityProvider = new AsgCapacityProvider(this, 'AsgCapacityProvider', {
           targetCapacityPercent: 80,
           ...clusterProps.capacity,
