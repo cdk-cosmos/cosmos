@@ -1,7 +1,7 @@
 import { Construct, Stack, Duration, Tags, IConstruct } from '@aws-cdk/core';
 import { Vpc } from '@aws-cdk/aws-ec2';
 import { NetworkBuilder } from '@aws-cdk/aws-ec2/lib/network-util';
-import { Certificate, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
+import { Certificate, CertificateValidation } from '@aws-cdk/aws-certificatemanager';
 import {
   IPublicHostedZone,
   IPrivateHostedZone,
@@ -88,8 +88,8 @@ export class SolarSystemCoreStack extends BaseStack implements ISolarSystemCore 
     });
 
     if (certificate) {
-      this.certificate = new DnsValidatedCertificate(this, 'Certificate', {
-        hostedZone: this.zone,
+      this.certificate = new Certificate(this, 'Certificate', {
+        validation: CertificateValidation.fromDns(this.zone),
         domainName: this.zone.zoneName,
         subjectAlternativeNames:
           typeof certificate === 'object' ? certificate.subDomains.map((x) => `${x}.${this.zone.zoneName}`) : undefined,

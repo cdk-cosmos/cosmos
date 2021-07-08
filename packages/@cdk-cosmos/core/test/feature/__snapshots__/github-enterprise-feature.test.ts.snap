@@ -111,16 +111,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters1c11d53815e832c138c163a2aafa9381672f98dfa99ec8b5be1eefe818df2e49ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"1c11d53815e832c138c163a2aafa9381672f98dfa99ec8b5be1eefe818df2e49\\"",
+    "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4\\"",
       "Type": "String",
     },
-    "AssetParameters1c11d53815e832c138c163a2aafa9381672f98dfa99ec8b5be1eefe818df2e49S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"1c11d53815e832c138c163a2aafa9381672f98dfa99ec8b5be1eefe818df2e49\\"",
+    "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4\\"",
       "Type": "String",
     },
-    "AssetParameters1c11d53815e832c138c163a2aafa9381672f98dfa99ec8b5be1eefe818df2e49S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"1c11d53815e832c138c163a2aafa9381672f98dfa99ec8b5be1eefe818df2e49\\"",
+    "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4\\"",
       "Type": "String",
     },
   },
@@ -176,7 +176,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters1c11d53815e832c138c163a2aafa9381672f98dfa99ec8b5be1eefe818df2e49S3Bucket",
+                "Ref": "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4S3Bucket",
               },
               "/",
               Object {
@@ -186,7 +186,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters1c11d53815e832c138c163a2aafa9381672f98dfa99ec8b5be1eefe818df2e49S3VersionKey",
+                        "Ref": "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4S3VersionKey",
                       },
                     ],
                   },
@@ -199,7 +199,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters1c11d53815e832c138c163a2aafa9381672f98dfa99ec8b5be1eefe818df2e49S3VersionKey",
+                        "Ref": "AssetParameters4d2fd067ad34cbf8ae572b0fb1ebfc0774bd49555a3fe18e767c1fd2fb63c6a4S3VersionKey",
                       },
                     ],
                   },
@@ -944,6 +944,33 @@ Object {
           "Fn::GetAtt": Array [
             "AWS679f53fac002430cb0da5b7982bd2287",
             "Arn",
+          ],
+        },
+        "Update": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "{\\"service\\":\\"CodeStarconnections\\",\\"physicalResourceId\\":{\\"responsePath\\":\\"HostArn\\"},\\"parameters\\":{\\"ProviderEndpoint\\":\\"https://test.com\\",\\"VpcConfiguration\\":{\\"VpcId\\":\\"",
+              Object {
+                "Ref": "referencetoCosGalSysVpc054F5599Ref",
+              },
+              "\\",\\"SubnetIds\\":[\\"",
+              Object {
+                "Ref": "referencetoCosGalSysVpcAppSubnet1Subnet812BC56CRef",
+              },
+              "\\",\\"",
+              Object {
+                "Ref": "referencetoCosGalSysVpcAppSubnet2Subnet8F9AE9ACRef",
+              },
+              "\\"],\\"SecurityGroupIds\\":[\\"",
+              Object {
+                "Fn::GetAtt": Array [
+                  "HostSecurityGroup",
+                  "GroupId",
+                ],
+              },
+              "\\"]},\\"HostArn\\":\\"PHYSICAL:RESOURCEID:\\"},\\"action\\":\\"updateHost\\"}",
+            ],
           ],
         },
       },

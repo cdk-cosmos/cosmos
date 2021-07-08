@@ -46,133 +46,28 @@ Object {
       },
       "Type": "AWS::ECS::Service",
     },
-    "EcsService2CertificateCertificateRequestorFunction1ED9D6F1": Object {
-      "DependsOn": Array [
-        "EcsService2CertificateCertificateRequestorFunctionServiceRoleDefaultPolicyD0E1BCD4",
-        "EcsService2CertificateCertificateRequestorFunctionServiceRole478DDD0C",
-        "EcsService2Subdomain0BB9A15FB",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": "s3BucketName",
-          "S3Key": "s3ObjectKey",
-        },
-        "Handler": "index.certificateRequestHandler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "EcsService2CertificateCertificateRequestorFunctionServiceRole478DDD0C",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs14.x",
-        "Timeout": 900,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "EcsService2CertificateCertificateRequestorFunctionServiceRole478DDD0C": Object {
-      "DependsOn": Array [
-        "EcsService2Subdomain0BB9A15FB",
-      ],
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "EcsService2CertificateCertificateRequestorFunctionServiceRoleDefaultPolicyD0E1BCD4": Object {
-      "DependsOn": Array [
-        "EcsService2Subdomain0BB9A15FB",
-      ],
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "acm:RequestCertificate",
-                "acm:DescribeCertificate",
-                "acm:DeleteCertificate",
-                "acm:AddTagsToCertificate",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": "route53:GetChange",
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": "route53:changeResourceRecordSets",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":route53:::hostedzone/1234",
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "EcsService2CertificateCertificateRequestorFunctionServiceRoleDefaultPolicyD0E1BCD4",
-        "Roles": Array [
-          Object {
-            "Ref": "EcsService2CertificateCertificateRequestorFunctionServiceRole478DDD0C",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "EcsService2CertificateCertificateRequestorResource32940D2F": Object {
-      "DeletionPolicy": "Delete",
+    "EcsService2Certificate508426ED": Object {
       "DependsOn": Array [
         "EcsService2Subdomain0BB9A15FB",
       ],
       "Properties": Object {
         "DomainName": "cosmos",
-        "HostedZoneId": "1234",
-        "ServiceToken": Object {
-          "Fn::GetAtt": Array [
-            "EcsService2CertificateCertificateRequestorFunction1ED9D6F1",
-            "Arn",
-          ],
-        },
+        "DomainValidationOptions": Array [
+          Object {
+            "DomainName": "cosmos",
+            "HostedZoneId": "1234",
+          },
+          Object {
+            "DomainName": "test.cosmos",
+            "HostedZoneId": "1234",
+          },
+        ],
         "SubjectAlternativeNames": Array [
           "test.cosmos",
         ],
+        "ValidationMethod": "DNS",
       },
-      "Type": "AWS::CloudFormation::CustomResource",
-      "UpdateReplacePolicy": "Delete",
+      "Type": "AWS::CertificateManager::Certificate",
     },
     "EcsService2HttpsRedirectC9FF3DDB": Object {
       "Properties": Object {
@@ -628,10 +523,7 @@ Object {
         "Certificates": Array [
           Object {
             "CertificateArn": Object {
-              "Fn::GetAtt": Array [
-                "EcsService2CertificateCertificateRequestorResource32940D2F",
-                "Arn",
-              ],
+              "Ref": "EcsService2Certificate508426ED",
             },
           },
         ],
