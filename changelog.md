@@ -1,4 +1,15 @@
 
+## v0.8.12 (2021-07-20)
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/core`, `@cosmos-building-blocks/service`
+  * [#308](https://github.com/cdk-cosmos/cosmos/pull/308) Bug/#305 cfn certs ([@unerh](https://github.com/unerh))
+
+#### Committers: 2
+- Hakan Uner ([@unerh](https://github.com/unerh))
+- Tom Guerney ([@thomasguerneyiag](https://github.com/thomasguerneyiag))
+
+
 ## v0.8.11 (2021-06-22)
 
 #### 🚀 Enhancement:
