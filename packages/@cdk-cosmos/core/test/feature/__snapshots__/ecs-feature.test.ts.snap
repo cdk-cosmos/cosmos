@@ -136,175 +136,51 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters2900d576bfd82d4be3ef85e81362a86453634bfb7d28d01d22c6626280c837a5ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"2900d576bfd82d4be3ef85e81362a86453634bfb7d28d01d22c6626280c837a5\\"",
+    "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303\\"",
       "Type": "String",
     },
-    "AssetParameters2900d576bfd82d4be3ef85e81362a86453634bfb7d28d01d22c6626280c837a5S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"2900d576bfd82d4be3ef85e81362a86453634bfb7d28d01d22c6626280c837a5\\"",
+    "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303\\"",
       "Type": "String",
     },
-    "AssetParameters2900d576bfd82d4be3ef85e81362a86453634bfb7d28d01d22c6626280c837a5S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"2900d576bfd82d4be3ef85e81362a86453634bfb7d28d01d22c6626280c837a5\\"",
+    "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303\\"",
       "Type": "String",
     },
   },
   "Resources": Object {
-    "CertificateRequestorFunction": Object {
-      "DependsOn": Array [
-        "CertificateRequestorFunctionServiceRoleDefaultPolicy",
-        "CertificateRequestorFunctionServiceRole",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": "s3BucketName",
-          "S3Key": "s3ObjectKey",
-        },
-        "Handler": "index.certificateRequestHandler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "CertificateRequestorFunctionServiceRole",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs14.x",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys",
-          },
-        ],
-        "Timeout": 900,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "CertificateRequestorFunctionServiceRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CertificateRequestorFunctionServiceRoleDefaultPolicy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "acm:RequestCertificate",
-                "acm:DescribeCertificate",
-                "acm:DeleteCertificate",
-                "acm:AddTagsToCertificate",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": "route53:GetChange",
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            Object {
-              "Action": "route53:changeResourceRecordSets",
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:",
-                    Object {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":route53:::hostedzone/",
-                    Object {
-                      "Ref": "Zone",
-                    },
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CertificateRequestorFunctionServiceRoleDefaultPolicy",
-        "Roles": Array [
-          Object {
-            "Ref": "CertificateRequestorFunctionServiceRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "CertificateRequestorResource": Object {
-      "DeletionPolicy": "Delete",
+    "Certificate": Object {
       "Properties": Object {
         "DomainName": "sys.cos.com",
-        "HostedZoneId": Object {
-          "Ref": "Zone",
-        },
-        "ServiceToken": Object {
-          "Fn::GetAtt": Array [
-            "CertificateRequestorFunction",
-            "Arn",
-          ],
-        },
+        "DomainValidationOptions": Array [
+          Object {
+            "DomainName": "sys.cos.com",
+            "HostedZoneId": Object {
+              "Ref": "Zone",
+            },
+          },
+        ],
         "SubjectAlternativeNames": Array [
           "*.sys.cos.com",
         ],
-        "Tags": Object {
-          "cosmos": "Cos",
-          "cosmos:galaxy": "Gal",
-          "cosmos:solarsystem": "Sys",
-        },
+        "Tags": Array [
+          Object {
+            "Key": "cosmos",
+            "Value": "Cos",
+          },
+          Object {
+            "Key": "cosmos:galaxy",
+            "Value": "Gal",
+          },
+          Object {
+            "Key": "cosmos:solarsystem",
+            "Value": "Sys",
+          },
+        ],
+        "ValidationMethod": "DNS",
       },
-      "Type": "AWS::CloudFormation::CustomResource",
-      "UpdateReplacePolicy": "Delete",
+      "Type": "AWS::CertificateManager::Certificate",
     },
     "ConfigVpcAzs": Object {
       "Properties": Object {
@@ -323,11 +199,8 @@ Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
         "Parameters": Object {
-          "referencetoCosGalSysCertificateCertificateRequestorResourceA8D7E5EEArn": Object {
-            "Fn::GetAtt": Array [
-              "CertificateRequestorResource",
-              "Arn",
-            ],
+          "referencetoCosGalSysCertificate8E37F9F3Ref": Object {
+            "Ref": "Certificate",
           },
           "referencetoCosGalSysZone702627E2Ref": Object {
             "Ref": "Zone",
@@ -361,7 +234,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters2900d576bfd82d4be3ef85e81362a86453634bfb7d28d01d22c6626280c837a5S3Bucket",
+                "Ref": "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303S3Bucket",
               },
               "/",
               Object {
@@ -371,7 +244,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters2900d576bfd82d4be3ef85e81362a86453634bfb7d28d01d22c6626280c837a5S3VersionKey",
+                        "Ref": "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303S3VersionKey",
                       },
                     ],
                   },
@@ -384,7 +257,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters2900d576bfd82d4be3ef85e81362a86453634bfb7d28d01d22c6626280c837a5S3VersionKey",
+                        "Ref": "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303S3VersionKey",
                       },
                     ],
                   },
@@ -621,7 +494,7 @@ Object {
       "Default": "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id",
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
     },
-    "referencetoCosGalSysCertificateCertificateRequestorResourceA8D7E5EEArn": Object {
+    "referencetoCosGalSysCertificate8E37F9F3Ref": Object {
       "Type": "String",
     },
     "referencetoCosGalSysZone702627E2Ref": Object {
@@ -722,7 +595,7 @@ Object {
         "Certificates": Array [
           Object {
             "CertificateArn": Object {
-              "Ref": "referencetoCosGalSysCertificateCertificateRequestorResourceA8D7E5EEArn",
+              "Ref": "referencetoCosGalSysCertificate8E37F9F3Ref",
             },
           },
         ],
@@ -749,7 +622,7 @@ Object {
         "Certificates": Array [
           Object {
             "CertificateArn": Object {
-              "Ref": "referencetoCosGalSysCertificateCertificateRequestorResourceA8D7E5EEArn",
+              "Ref": "referencetoCosGalSysCertificate8E37F9F3Ref",
             },
           },
         ],

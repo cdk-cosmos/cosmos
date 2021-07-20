@@ -32,7 +32,7 @@ import { LogGroup, LogGroupProps, RetentionDays } from '@aws-cdk/aws-logs';
 import { EnableScalingProps } from '@aws-cdk/aws-applicationautoscaling';
 import { ARecord, IHostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { LoadBalancerTarget } from '@aws-cdk/aws-route53-targets';
-import { Certificate, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
+import { Certificate, CertificateValidation } from '@aws-cdk/aws-certificatemanager';
 import { getRoutingPriorityFromListenerProps } from '.';
 
 type MutableListenerCondition = ListenerCondition & { values: string[] };
@@ -178,9 +178,9 @@ export class EcsService extends Construct {
           if (!alb) throw new Error('Please provide alb prop.');
           if (!httpsListener) throw new Error('Please provide httpsListener prop.');
 
-          this.certificate = new DnsValidatedCertificate(this, 'Certificate', {
-            hostedZone: zone,
+          this.certificate = new Certificate(this, 'Certificate', {
             domainName: zone.zoneName,
+            validation: CertificateValidation.fromDns(zone),
             subjectAlternativeNames: subdomains.map((x) => `${x}.${zone.zoneName}`),
           });
           this.certificate.node.addDependency(...this.subdomains);
