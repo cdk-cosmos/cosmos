@@ -51,6 +51,7 @@ export interface EcsSolarSystemCoreStackProps extends BaseFeatureStackProps {
   albProps?: Partial<ApplicationLoadBalancerProps>;
   albListenerCidr?: string;
   albInternalListenerCidr?: string;
+  proxy?: string;
 }
 
 export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeatureCore {
@@ -64,6 +65,8 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
   readonly httpsListener?: ApplicationListener;
   readonly httpsInternalListener?: ApplicationListener;
   private dockerDaemonRestart = false;
+
+  private proxy?: string;
 
   constructor(solarSystem: ISolarSystemCore, id: string, props?: EcsSolarSystemCoreStackProps) {
     super(solarSystem, id, {
@@ -79,6 +82,7 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
     } = props || {};
 
     this.solarSystem = solarSystem;
+    this.proxy = props?.proxy;
 
     CoreVpc.addEcsEndpoints(this.solarSystem.vpc);
 
@@ -118,6 +122,9 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
       // Add access for ssm terminal sessions
       this.clusterAutoScalingGroup.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMFullAccess'));
       // Install aws-cfn-bootstrap to add cfn-signal command.
+      if (this.proxy) {
+        this.clusterAutoScalingGroup.userData.addCommands('echo `proxy={proxy}` | sudo tee -a /etc/yum.conf');
+      }
       this.clusterAutoScalingGroup.userData.addCommands(
         "yum -y install aws-cfn-bootstrap || echo 'Failed to install aws-cfn-bootstrap for cfn-signal bin'"
       );
