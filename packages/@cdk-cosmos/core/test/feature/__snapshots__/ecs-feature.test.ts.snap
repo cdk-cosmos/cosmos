@@ -1822,16 +1822,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters37f8b276c10274bf10644e176e9aa54bd9a440ca1000b019f9d56390fc0f6f0bArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"37f8b276c10274bf10644e176e9aa54bd9a440ca1000b019f9d56390fc0f6f0b\\"",
+    "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47a\\"",
       "Type": "String",
     },
-    "AssetParameters37f8b276c10274bf10644e176e9aa54bd9a440ca1000b019f9d56390fc0f6f0bS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"37f8b276c10274bf10644e176e9aa54bd9a440ca1000b019f9d56390fc0f6f0b\\"",
+    "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47a\\"",
       "Type": "String",
     },
-    "AssetParameters37f8b276c10274bf10644e176e9aa54bd9a440ca1000b019f9d56390fc0f6f0bS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"37f8b276c10274bf10644e176e9aa54bd9a440ca1000b019f9d56390fc0f6f0b\\"",
+    "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47a\\"",
       "Type": "String",
     },
   },
@@ -1885,7 +1885,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters37f8b276c10274bf10644e176e9aa54bd9a440ca1000b019f9d56390fc0f6f0bS3Bucket",
+                "Ref": "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aS3Bucket",
               },
               "/",
               Object {
@@ -1895,7 +1895,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters37f8b276c10274bf10644e176e9aa54bd9a440ca1000b019f9d56390fc0f6f0bS3VersionKey",
+                        "Ref": "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aS3VersionKey",
                       },
                     ],
                   },
@@ -1908,7 +1908,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters37f8b276c10274bf10644e176e9aa54bd9a440ca1000b019f9d56390fc0f6f0bS3VersionKey",
+                        "Ref": "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aS3VersionKey",
                       },
                     ],
                   },
@@ -2932,6 +2932,7 @@ echo ECS_CLUSTER=",
 sudo iptables --insert FORWARD 1 --in-interface docker+ --destination 169.254.169.254/32 --jump DROP
 sudo service iptables save
 echo ECS_AWSVPC_BLOCK_IMDS=true >> /etc/ecs/ecs.config
+echo proxy=http://proxy:8080 | sudo tee -a /etc/yum.conf
 yum -y install aws-cfn-bootstrap || echo 'Failed to install aws-cfn-bootstrap for cfn-signal bin'
 cat <<EOF >> /etc/sysconfig/docker
 TEST=test

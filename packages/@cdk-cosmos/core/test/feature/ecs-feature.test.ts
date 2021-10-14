@@ -28,6 +28,7 @@ const solarSystem2 = new SolarSystemCoreStack(galaxy, 'Sys1', {
 });
 solarSystem2.addEcs({
   albListenerCidr: '10.0.0.0/8',
+  proxy: 'http://proxy:8080',
 });
 solarSystem2.ecs?.addDockerConfig({ TEST: 'test' });
 solarSystem2.ecs?.addDockerConfig({ TEST2: 'test2' });
