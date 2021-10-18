@@ -26,10 +26,15 @@ if (!TIMEOUT_MS) throw new Error('Timeout env is not set.');
 const client = new ECS();
 
 export const handler = async (event: EcsEvent): Promise<any> => {
-  const { source, 'detail-type': detailType, detail } = event;
+  const { source, 'detail-type': detailType, detail, resources } = event;
 
   if (source !== 'aws.ecs' || detailType !== 'ECS Container Instance State Change') {
     console.log('Invalid Event');
+    return;
+  }
+
+  if (resources.filter((res) => res.includes(CLUSTER)).length === 0) {
+    console.log(`Event is not for ${CLUSTER}`);
     return;
   }
 
