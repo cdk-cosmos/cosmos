@@ -131,7 +131,7 @@ export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeature
       // Add signal command on exit of startup
       this.clusterAutoScalingGroup.userData.addSignalOnExitCommand(this.clusterAutoScalingGroup);
       // If rebalance enabled then add rebalance lambda function for ecs services
-      if (clusterProps.rebalance !== false) {
+      if (clusterProps.rebalance) {
         new EcsEc2ServiceRebalance(this, 'Rebalance', { cluster: this.cluster });
       }
       // If ASG Capacity Provider enabled then add provider + association

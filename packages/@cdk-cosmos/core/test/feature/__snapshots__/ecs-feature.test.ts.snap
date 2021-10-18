@@ -136,16 +136,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303ArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303\\"",
+    "AssetParameters89529fbfbbd33c20fb1e0907e3b09bc8033e62d5c5f66ac4a5eebe8ea7ecc605ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"89529fbfbbd33c20fb1e0907e3b09bc8033e62d5c5f66ac4a5eebe8ea7ecc605\\"",
       "Type": "String",
     },
-    "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303S3Bucket": Object {
-      "Description": "S3 bucket for asset \\"0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303\\"",
+    "AssetParameters89529fbfbbd33c20fb1e0907e3b09bc8033e62d5c5f66ac4a5eebe8ea7ecc605S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"89529fbfbbd33c20fb1e0907e3b09bc8033e62d5c5f66ac4a5eebe8ea7ecc605\\"",
       "Type": "String",
     },
-    "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303S3VersionKey": Object {
-      "Description": "S3 key for asset version \\"0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303\\"",
+    "AssetParameters89529fbfbbd33c20fb1e0907e3b09bc8033e62d5c5f66ac4a5eebe8ea7ecc605S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"89529fbfbbd33c20fb1e0907e3b09bc8033e62d5c5f66ac4a5eebe8ea7ecc605\\"",
       "Type": "String",
     },
   },
@@ -234,7 +234,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303S3Bucket",
+                "Ref": "AssetParameters89529fbfbbd33c20fb1e0907e3b09bc8033e62d5c5f66ac4a5eebe8ea7ecc605S3Bucket",
               },
               "/",
               Object {
@@ -244,7 +244,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303S3VersionKey",
+                        "Ref": "AssetParameters89529fbfbbd33c20fb1e0907e3b09bc8033e62d5c5f66ac4a5eebe8ea7ecc605S3VersionKey",
                       },
                     ],
                   },
@@ -257,7 +257,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters0406e4b9adc9a2f91033ebc890a380a6420a59d68ab5afe229d0a58ef6a49303S3VersionKey",
+                        "Ref": "AssetParameters89529fbfbbd33c20fb1e0907e3b09bc8033e62d5c5f66ac4a5eebe8ea7ecc605S3VersionKey",
                       },
                     ],
                   },
@@ -1523,171 +1523,6 @@ yum -y install aws-cfn-bootstrap || echo 'Failed to install aws-cfn-bootstrap fo
       },
       "Type": "AWS::SNS::Topic",
     },
-    "RebalanceEvent": Object {
-      "Properties": Object {
-        "EventPattern": Object {
-          "detail-type": Array [
-            "ECS Container Instance State Change",
-          ],
-          "source": Array [
-            "aws.ecs",
-          ],
-        },
-        "State": "ENABLED",
-        "Targets": Array [
-          Object {
-            "Arn": Object {
-              "Fn::GetAtt": Array [
-                "RebalanceFn",
-                "Arn",
-              ],
-            },
-            "Id": "Target0",
-          },
-        ],
-      },
-      "Type": "AWS::Events::Rule",
-    },
-    "RebalanceEventAllowEventRuleCosGalSysEcsRebalanceFn951CE96C": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "RebalanceFn",
-            "Arn",
-          ],
-        },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::GetAtt": Array [
-            "RebalanceEvent",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "RebalanceFn": Object {
-      "DependsOn": Array [
-        "RebalanceRole",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": "s3BucketName",
-          "S3Key": "s3ObjectKey",
-        },
-        "Environment": Object {
-          "Variables": Object {
-            "CLUSTER": Object {
-              "Ref": "Cluster",
-            },
-            "TIMEOUT": "120",
-          },
-        },
-        "Handler": "index.handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "RebalanceRole",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs14.x",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys",
-          },
-        ],
-        "Timeout": 600,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "RebalanceRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Policies": Array [
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": "ecs:*",
-                  "Condition": Object {
-                    "ArnEquals": Object {
-                      "ecs:cluster": Object {
-                        "Fn::GetAtt": Array [
-                          "Cluster",
-                          "Arn",
-                        ],
-                      },
-                    },
-                  },
-                  "Effect": "Allow",
-                  "Resource": "*",
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "default",
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
   },
 }
 `;
@@ -1822,16 +1657,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47a\\"",
+    "AssetParametersaa043eaa2b720bd7ada2bd8cd1c24ed086d3ef3956dbe70fc511e1d3f34061e8ArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"aa043eaa2b720bd7ada2bd8cd1c24ed086d3ef3956dbe70fc511e1d3f34061e8\\"",
       "Type": "String",
     },
-    "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47a\\"",
+    "AssetParametersaa043eaa2b720bd7ada2bd8cd1c24ed086d3ef3956dbe70fc511e1d3f34061e8S3Bucket": Object {
+      "Description": "S3 bucket for asset \\"aa043eaa2b720bd7ada2bd8cd1c24ed086d3ef3956dbe70fc511e1d3f34061e8\\"",
       "Type": "String",
     },
-    "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47a\\"",
+    "AssetParametersaa043eaa2b720bd7ada2bd8cd1c24ed086d3ef3956dbe70fc511e1d3f34061e8S3VersionKey": Object {
+      "Description": "S3 key for asset version \\"aa043eaa2b720bd7ada2bd8cd1c24ed086d3ef3956dbe70fc511e1d3f34061e8\\"",
       "Type": "String",
     },
   },
@@ -1885,7 +1720,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aS3Bucket",
+                "Ref": "AssetParametersaa043eaa2b720bd7ada2bd8cd1c24ed086d3ef3956dbe70fc511e1d3f34061e8S3Bucket",
               },
               "/",
               Object {
@@ -1895,7 +1730,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aS3VersionKey",
+                        "Ref": "AssetParametersaa043eaa2b720bd7ada2bd8cd1c24ed086d3ef3956dbe70fc511e1d3f34061e8S3VersionKey",
                       },
                     ],
                   },
@@ -1908,7 +1743,7 @@ Object {
                     "Fn::Split": Array [
                       "||",
                       Object {
-                        "Ref": "AssetParameters33c20315a51285e22e351662b76f3c7d66b913f3bf5b4afc1c80d5f8c6c6c47aS3VersionKey",
+                        "Ref": "AssetParametersaa043eaa2b720bd7ada2bd8cd1c24ed086d3ef3956dbe70fc511e1d3f34061e8S3VersionKey",
                       },
                     ],
                   },
@@ -3078,171 +2913,6 @@ EOF",
         ],
       },
       "Type": "AWS::SNS::Topic",
-    },
-    "RebalanceEvent": Object {
-      "Properties": Object {
-        "EventPattern": Object {
-          "detail-type": Array [
-            "ECS Container Instance State Change",
-          ],
-          "source": Array [
-            "aws.ecs",
-          ],
-        },
-        "State": "ENABLED",
-        "Targets": Array [
-          Object {
-            "Arn": Object {
-              "Fn::GetAtt": Array [
-                "RebalanceFn",
-                "Arn",
-              ],
-            },
-            "Id": "Target0",
-          },
-        ],
-      },
-      "Type": "AWS::Events::Rule",
-    },
-    "RebalanceEventAllowEventRuleCosGalSys1EcsRebalanceFn1568AC8D": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "RebalanceFn",
-            "Arn",
-          ],
-        },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::GetAtt": Array [
-            "RebalanceEvent",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "RebalanceFn": Object {
-      "DependsOn": Array [
-        "RebalanceRole",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": "s3BucketName",
-          "S3Key": "s3ObjectKey",
-        },
-        "Environment": Object {
-          "Variables": Object {
-            "CLUSTER": Object {
-              "Ref": "Cluster",
-            },
-            "TIMEOUT": "120",
-          },
-        },
-        "Handler": "index.handler",
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "RebalanceRole",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs14.x",
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys1",
-          },
-        ],
-        "Timeout": 600,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "RebalanceRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Policies": Array [
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": "ecs:*",
-                  "Condition": Object {
-                    "ArnEquals": Object {
-                      "ecs:cluster": Object {
-                        "Fn::GetAtt": Array [
-                          "Cluster",
-                          "Arn",
-                        ],
-                      },
-                    },
-                  },
-                  "Effect": "Allow",
-                  "Resource": "*",
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "default",
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "cosmos",
-            "Value": "Cos",
-          },
-          Object {
-            "Key": "cosmos:feature",
-            "Value": "Ecs",
-          },
-          Object {
-            "Key": "cosmos:galaxy",
-            "Value": "Gal",
-          },
-          Object {
-            "Key": "cosmos:solarsystem",
-            "Value": "Sys1",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
     },
   },
 }
