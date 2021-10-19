@@ -1,4 +1,12 @@
 
+## v0.9.0 (2021-10-18)
+
+#### 🐛 Bug Fix
+* `@cdk-cosmos/cdk-credentials-plugin`, `@cdk-cosmos/core`, `@cosmos-building-blocks/service`
+  * [#322](https://github.com/cdk-cosmos/cosmos/pull/322) Fixing #309, #312 and #321 ([@unerh](https://github.com/unerh))
+
+#### Committers: 1
+- Hakan Uner ([@unerh](https://github.com/unerh))
 
 
 ## v0.8.12 (2021-07-20)
