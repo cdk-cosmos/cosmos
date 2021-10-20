@@ -1,4 +1,13 @@
 
+## v0.9.1 (2021-10-20)
+
+#### 🧹 Miscellaneous Chores
+* [#325](https://github.com/cdk-cosmos/cosmos/pull/325) #324 Adding documentation for contribution and missing release notes ([@unerh](https://github.com/unerh))
+
+#### Committers: 1
+- Hakan Uner ([@unerh](https://github.com/unerh))
+
+
 ## v0.9.0 (2021-10-18)
 
 #### 🐛 Bug Fix
