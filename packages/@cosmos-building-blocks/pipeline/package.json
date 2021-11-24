@@ -29,13 +29,13 @@
     "@cosmos-building-blocks/common": "^0.9.1"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-codebuild": "^1.104.0",
-    "@aws-cdk/aws-codecommit": "^1.104.0",
-    "@aws-cdk/aws-codepipeline": "^1.104.0",
-    "@aws-cdk/aws-codepipeline-actions": "^1.104.0",
-    "@aws-cdk/aws-codestarconnections": "^1.104.0",
-    "@aws-cdk/aws-iam": "^1.104.0",
-    "@aws-cdk/core": "^1.104.0",
-    "@aws-cdk/custom-resources": "^1.104.0"
+    "@aws-cdk/aws-codebuild": "^1.134.0",
+    "@aws-cdk/aws-codecommit": "^1.134.0",
+    "@aws-cdk/aws-codepipeline": "^1.134.0",
+    "@aws-cdk/aws-codepipeline-actions": "^1.134.0",
+    "@aws-cdk/aws-codestarconnections": "^1.134.0",
+    "@aws-cdk/aws-iam": "^1.134.0",
+    "@aws-cdk/core": "^1.134.0",
+    "@aws-cdk/custom-resources": "^1.134.0"
   }
 }

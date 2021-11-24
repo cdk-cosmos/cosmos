@@ -200,6 +200,10 @@ Object {
             "Key": "deregistration_delay.timeout_seconds",
             "Value": "0",
           },
+          Object {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
         ],
         "TargetType": "instance",
         "VpcId": "Vpc",
@@ -399,6 +403,10 @@ Object {
           Object {
             "Key": "deregistration_delay.timeout_seconds",
             "Value": "0",
+          },
+          Object {
+            "Key": "stickiness.enabled",
+            "Value": "false",
           },
         ],
         "TargetType": "instance",

@@ -29,6 +29,6 @@
     "proxy-agent": "^4.0.1"
   },
   "peerDependencies": {
-    "aws-cdk": "^1.104.0"
+    "aws-cdk": "^1.134.0"
   }
 }
