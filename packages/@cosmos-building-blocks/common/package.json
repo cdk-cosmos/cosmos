@@ -26,9 +26,9 @@
     "clean": "rm -rf lib"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-iam": "^1.104.0",
-    "@aws-cdk/aws-s3": "^1.104.0",
-    "@aws-cdk/core": "^1.104.0",
-    "@aws-cdk/custom-resources": "^1.104.0"
+    "@aws-cdk/aws-iam": "^1.134.0",
+    "@aws-cdk/aws-s3": "^1.134.0",
+    "@aws-cdk/core": "^1.134.0",
+    "@aws-cdk/custom-resources": "^1.134.0"
   }
 }

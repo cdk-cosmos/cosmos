@@ -26,8 +26,8 @@
     "clean": "rm -rf lib"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-ec2": "^1.104.0",
-    "@aws-cdk/aws-route53resolver": "^1.104.0",
-    "@aws-cdk/core": "^1.104.0"
+    "@aws-cdk/aws-ec2": "^1.134.0",
+    "@aws-cdk/aws-route53resolver": "^1.134.0",
+    "@aws-cdk/core": "^1.134.0"
   }
 }

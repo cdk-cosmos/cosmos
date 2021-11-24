@@ -110,16 +110,16 @@ Object {
     },
   },
   "Parameters": Object {
-    "AssetParameterssourceHashArtifactHash": Object {
-      "Description": "Artifact hash for asset \\"sourceHash\\"",
+    "AssetParametersassetHashArtifactHash": Object {
+      "Description": "Artifact hash for asset \\"assetHash\\"",
       "Type": "String",
     },
-    "AssetParameterssourceHashS3Bucket": Object {
-      "Description": "S3 bucket for asset \\"sourceHash\\"",
+    "AssetParametersassetHashS3Bucket": Object {
+      "Description": "S3 bucket for asset \\"assetHash\\"",
       "Type": "String",
     },
-    "AssetParameterssourceHashS3VersionKey": Object {
-      "Description": "S3 key for asset version \\"sourceHash\\"",
+    "AssetParametersassetHashS3VersionKey": Object {
+      "Description": "S3 key for asset version \\"assetHash\\"",
       "Type": "String",
     },
   },
@@ -188,7 +188,7 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": Object {
-            "Ref": "AssetParameterssourceHashS3Bucket",
+            "Ref": "AssetParametersassetHashS3Bucket",
           },
           "S3Key": Object {
             "Fn::Join": Array [
@@ -201,7 +201,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                          "Ref": "AssetParametersassetHashS3VersionKey",
                         },
                       ],
                     },
@@ -214,7 +214,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameterssourceHashS3VersionKey",
+                          "Ref": "AssetParametersassetHashS3VersionKey",
                         },
                       ],
                     },
