@@ -1,4 +1,14 @@
 
+## v0.9.2 (2021-11-24)
+
+#### 🧹 Miscellaneous Chores
+* `@cdk-cosmos/cdk-credentials-plugin`, `@cdk-cosmos/core`, `@cosmos-building-blocks/app-ec2`, `@cosmos-building-blocks/common`, `@cosmos-building-blocks/network`, `@cosmos-building-blocks/pipeline`, `@cosmos-building-blocks/service`
+  * [#328](https://github.com/cdk-cosmos/cosmos/pull/328) #327 update to 1.134 ([@unerh](https://github.com/unerh))
+
+#### Committers: 1
+- Hakan Uner ([@unerh](https://github.com/unerh))
+
+
 ## v0.9.1 (2021-10-20)
 
 #### 🧹 Miscellaneous Chores
