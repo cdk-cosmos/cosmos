@@ -104,7 +104,7 @@ export class GithubEnterpriseSourceAction extends Action {
         FullRepositoryId: this.props.repo,
         BranchName: this.props.branch || 'master',
         OutputArtifactFormat: this.props.outputFormat || 'CODE_ZIP',
-        DetectChanges: this.props.detectChanges || true,
+        DetectChanges: this.props.detectChanges !== undefined ? this.props.detectChanges : true,
       },
     };
   }
