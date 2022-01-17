@@ -1,4 +1,14 @@
 
+## v0.9.3 (2022-01-17)
+
+#### 🐛 Bug Fix
+* `@cosmos-building-blocks/pipeline`
+  * [#332](https://github.com/cdk-cosmos/cosmos/pull/332) #331 fix GithubEnterpriseSourceAction trigger always true bug ([@thomasguerneyiag](https://github.com/thomasguerneyiag))
+
+#### Committers: 1
+- Tom Guerney ([@thomasguerneyiag](https://github.com/thomasguerneyiag))
+
+
 ## v0.9.2 (2021-11-24)
 
 #### 🧹 Miscellaneous Chores

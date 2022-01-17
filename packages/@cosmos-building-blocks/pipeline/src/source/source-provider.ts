@@ -28,10 +28,11 @@ export abstract class SourceProvider<Repo = IRepository | string> {
   trigger: boolean;
 
   constructor(props: SourceProviderProps<Repo>) {
-    const { repo, branch, trigger } = props;
+    const { repo, branch = 'master', trigger = true } = props;
+
     this.repo = repo;
-    this.branch = branch || 'master';
-    this.trigger = trigger || true;
+    this.branch = branch;
+    this.trigger = trigger;
   }
 
   abstract setup(scope: Construct): void;
