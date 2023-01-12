@@ -1,4 +1,14 @@
 
+## v0.9.4 (2023-01-12)
+
+#### 🚀 Enhancement:
+* `@cdk-cosmos/core`
+  * [#342](https://github.com/cdk-cosmos/cosmos/pull/342) Enable IMDSv2 Support in ECS Stack ([@achakoteIAG](https://github.com/achakoteIAG))
+
+#### Committers: 1
+- Amit Chakote ([@achakoteIAG](https://github.com/achakoteIAG))
+
+
 ## v0.9.3 (2022-01-17)
 
 #### 🐛 Bug Fix
