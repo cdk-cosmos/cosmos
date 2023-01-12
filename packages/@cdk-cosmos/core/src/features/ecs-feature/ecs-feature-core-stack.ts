@@ -52,6 +52,7 @@ export interface EcsSolarSystemCoreStackProps extends BaseFeatureStackProps {
   albListenerCidr?: string;
   albInternalListenerCidr?: string;
   proxy?: string;
+  requireImdsv2?: boolean;
 }
 
 export class EcsFeatureCoreStack extends BaseFeatureStack implements IEcsFeatureCore {
